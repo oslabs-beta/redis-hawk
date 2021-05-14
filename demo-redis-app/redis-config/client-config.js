@@ -22,6 +22,3 @@ client.on('error', (error) => {
 });
 
 module.exports = client;
-
-
-
