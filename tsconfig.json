@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "rootDir": "./server",
+    "outDir": "./dist/server",
+    "allowJs": true,
+    "sourceMap": true,
+    "removeComments": true
+  },
+  "include": [
+    "./server"
+  ]
+}
