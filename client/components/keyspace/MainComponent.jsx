@@ -3,10 +3,35 @@ import React, { Component } from 'react';
 class MainComponent extends Component {
   constructor(props) {
     super(props);
+    state = {
+      displayValue: ''
+    }
+    this.renderValue = this.renderValue.bind.this;
+  }
+
+  renderValue(e){
+    e.preventDefault();
+    const value = e.target.props.keyspace.value;
+    this.state.displayValue = value;
   }
 
   render() {
-    return <div>Main Component!</div>;
+    //functionality to render the proper number of KeyListComponents -- obj.props.keyspace???
+    const listOfKeys = this.props.keyspace.map((obj) => {
+      <KeyListComponent keyspace={obj.props.keyspace} handleClick={this.renderValue}/>
+    })
+    return (
+      <div>
+        <div id='keyListHolder'>
+          <ul id='keyList'>
+            {listOfKeys}
+          </ul>
+        </div>
+        <div id='valueDisplay'>
+          <h3>{this.state.displayValue}</h3>
+        </div>
+      </div>
+    )
   }
 }
 
