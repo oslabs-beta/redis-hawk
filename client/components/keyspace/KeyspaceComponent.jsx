@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import MainComponent from './MainComponent.jsx'
+import PaginationComponent from '../navbars/PaginationComponent.jsx'
+
+//withRouter??? -- for props.history -- stretch??
 
 const mapStateToProps = (store) => {
   return{
