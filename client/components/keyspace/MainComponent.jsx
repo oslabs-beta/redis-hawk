@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import KeyListComponent from './KeyListComponent.jsx'
+import KeyListComponent from './KeyListComponent.jsx';
 
 class MainComponent extends Component {
   constructor(props) {
     super(props);
     state = {
-      displayValue: ''
-    }
+      displayValue: '',
+    };
     this.renderValue = this.renderValue.bind.this;
   }
 
-  renderValue(e){
+  renderValue(e) {
     e.preventDefault();
     const value = e.target.props.keyspace.value;
     this.state.displayValue = value;
@@ -19,20 +19,21 @@ class MainComponent extends Component {
   render() {
     //functionality to render the proper number of KeyListComponents -- obj.props.keyspace???
     const listOfKeys = this.props.keyspace.map((obj) => {
-      <KeyListComponent keyspace={obj.props.keyspace} handleClick={this.renderValue}/>
-    })
+      <KeyListComponent
+        keyspace={obj.props.keyspace}
+        handleClick={this.renderValue}
+      />;
+    });
     return (
       <div>
         <div id='keyListHolder'>
-          <ul id='keyList'>
-            {listOfKeys}
-          </ul>
+          <ul id='keyList'>{listOfKeys}</ul>
         </div>
         <div id='valueDisplay'>
           <h3>{this.state.displayValue}</h3>
         </div>
       </div>
-    )
+    );
   }
 }
 

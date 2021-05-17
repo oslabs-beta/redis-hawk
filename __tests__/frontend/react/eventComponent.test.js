@@ -7,7 +7,7 @@ import toJson from 'enzyme-to-json';
 import renderer from 'react-test-renderer';
 
 import EventComponent from '../../../client/components/events/EventComponent.jsx';
-import EventHolder from '../../../client/components/events/EventHolder.jsx';
+import KeyEventComponent from '../../../client/components/events/KeyEventComponent.jsx';
 
 configure({ adapter: new Adapter() });
 
@@ -29,24 +29,24 @@ describe('React Events unit tests', () => {
       wrapper = shallow(<EventComponent {...props} />);
     });
 
-    it('render a div with the id keyListEvent and pagination component, with events props passed to EventComponent and totalKeys prop passed to PaginationComponent', () => {
+    it('render a div with the id keyEventsDiv and pagination component, with events props passed to EventComponent and totalKeys prop passed to PaginationComponent', () => {
       expect(
         wrapper.containsAllMatchingElements([
-          <div id='keyEventDiv' />,
+          <div id='keyEventsDiv' />,
           <PaginationComponent totalEvents={props.totalEvents} />,
         ])
       ).toEqual(true);
     });
   });
 
-  describe('keyEventsDiv', () => {
+  describe('keyEventDiv', () => {
     let wrapper;
     beforeAll(() => {
-      wrapper = shallow(<div id='keyEventsDiv' />);
+      wrapper = shallow(<div events={props.events} id='keyEventDiv' />);
     });
 
     it('renders a ul element with the id keyEventList', () => {
-      expect(wrapper.find('keyEventsDiv')).toHaveLength(1);
+      expect(wrapper.find('keyEventList')).toHaveLength(1);
     });
   });
 
@@ -64,7 +64,7 @@ describe('React Events unit tests', () => {
     };
 
     beforeAll(() => {
-      wrapper = shallow(<KeyEventList {...props} />);
+      wrapper = shallow(<div id='keyEventList' />);
     });
 
     it('renders a ul element with the id keyEvenstList', () => {
