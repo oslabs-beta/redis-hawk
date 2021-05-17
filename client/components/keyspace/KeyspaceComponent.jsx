@@ -24,7 +24,7 @@ class KeyspaceComponent extends Component {
 
   render() {
     return (
-      <div>
+      <div id="keyspaceComponentContainer">
         <MainComponent database={this.props.database} keyspace={this.props.keyspace}/>
         <PaginationComponent database={this.props.database} keys={this.props.keyspace} />
       </div>

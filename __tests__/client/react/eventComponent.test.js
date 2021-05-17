@@ -29,11 +29,10 @@ describe('React Events unit tests', () => {
       wrapper = shallow(<EventComponent {...props} />);
     });
 
-    it('render a div with the id keyEventsDiv and pagination component, with events props passed to EventComponent and totalKeys prop passed to PaginationComponent', () => {
+    it('render a div with the id keyEventsDiv and pagination component, with events props passed from EventComponent', () => {
       expect(
         wrapper.containsAllMatchingElements([
           <div id='keyEventsDiv' />,
-          <PaginationComponent totalEvents={props.totalEvents} />,
         ])
       ).toEqual(true);
     });

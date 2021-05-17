@@ -6,7 +6,7 @@ import renderer from 'react-test-renderer';
 
 import FilterNav from '../../../client/components/navbars/FilterNav.jsx';
 import SearchFilter from '../../../client/components/navbars/SearchFilter.jsx';
-
+ 
 configure({ adapter: new Adapter() });
 
 describe('React FilterNav tests', () => {
@@ -94,12 +94,12 @@ describe('React FilterNav tests', () => {
 
     it('should render three divs with classname filterType when whichPage is equal to events', () => {
       wrapper = shallow(<SearchFilter whichPage={'events'} />);
-      expect(wrapper.find('.filterType')).toHaveLength(2);
+      expect(wrapper.find('.filterType')).toHaveLength(3);
     });
 
-    it('should render three divs with classname filterType when whichPage is equal to graphs', () => {
+    it('should render four divs with classname filterType when whichPage is equal to graphs', () => {
       wrapper = shallow(<SearchFilter whichPage={'graphs'} />);
-      expect(wrapper.find('.filterType')).toHaveLength(2);
+      expect(wrapper.find('.filterType')).toHaveLength(4);
     });
   });
 });

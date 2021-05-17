@@ -38,7 +38,7 @@ describe('React Keyspace unit tests', () => {
       wrapper = shallow(<KeyspaceComponent {...props} />);
     });
 
-    it('render the main component and pagination div, with keyspace props passed to MainComponent and totalKeys prop passed to PaginationComponent', () => {
+    it('render the main component and pagination div, with keyspace props passed to MainComponent', () => {
       expect(
         wrapper.containsAllMatchingElements([
           <MainComponent
@@ -50,7 +50,6 @@ describe('React Keyspace unit tests', () => {
               },
             ]}
           />,
-          <PaginationComponent totalkeys={[{ totalKeys: 50 }]} />,
         ])
       ).toEqual(true);
     });

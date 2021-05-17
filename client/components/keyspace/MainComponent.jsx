@@ -25,7 +25,7 @@ class MainComponent extends Component {
       />;
     });
     return (
-      <div>
+      <div id="mainComponentContainer">
         <div id='keyListHolder'>
           <ul id='keyList'>{listOfKeys}</ul>
         </div>
