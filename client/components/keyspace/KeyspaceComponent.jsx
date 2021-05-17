@@ -1,9 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import MainComponent from './MainComponent.jsx'
+import PaginationComponent from '../navbars/PaginationComponent.jsx'
 
-const mapDispatchToProps = (dispatch) => ({
-  processSomething: () => dispatch(deleteMediaActionCreator(mediaId, userId)),
-});
+//withRouter??? -- for props.history -- stretch??
+
+const mapStateToProps = (store) => {
+  return{
+    database: store.database,
+    keyspace: store.keyspace,
+  }
+  
+}
+
+// const mapDispatchToProps = (dispatch) => ({
+//   processSomething: () => dispatch(deleteMediaActionCreator(mediaId, userId)),
+// });
 
 class KeyspaceComponent extends Component {
   constructor(props) {
@@ -12,12 +24,12 @@ class KeyspaceComponent extends Component {
 
   render() {
     return (
-      <div>
-        Keyspace Component!
-        <button onClick={this.props.processSomething}></button>
+      <div id="keyspaceComponentContainer">
+        <MainComponent database={this.props.database} keyspace={this.props.keyspace}/>
+        <PaginationComponent database={this.props.database} keys={this.props.keyspace} />
       </div>
     );
   }
 }
 
-export default connect(null, mapDispatchToProps)(KeyspaceComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(KeyspaceComponent);
