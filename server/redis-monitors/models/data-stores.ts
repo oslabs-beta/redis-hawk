@@ -7,7 +7,7 @@ Data stores include:
 
 */
 
-function EventLog(): void {
+export function EventLog(): void {
 /*
 Represents a running log of events for a given monitored keyspace.
 Implemented as a doubly-linked list.
@@ -22,7 +22,7 @@ Implemented as a doubly-linked list.
   this.eventTotal = 0
 }
 
-function KeyspaceEvent(key: string, event: string): void {
+export function KeyspaceEvent(key: string, event: string): void {
 /*
 Used to instantiate a new KeyspaceEvent. 
 The event will be timestamped based on the time of instantiation.
