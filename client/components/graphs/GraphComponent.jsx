@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
+import GraphHolder from "./GraphHolder.jsx";
 
 class GraphComponent extends Component {
   constructor(props) {

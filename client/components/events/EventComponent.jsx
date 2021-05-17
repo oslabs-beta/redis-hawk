@@ -23,7 +23,7 @@ class EventComponent extends Component {
       />;
     });
     return (
-      <div>
+      <div id="eventComponentContainer">
         <div id='KeyEventsDiv'>
           <ul id='keyEventList'>{listOfEVents}</ul>
         </div>
