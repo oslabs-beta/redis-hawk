@@ -17,14 +17,22 @@ import EventComponent from './events/EventComponent.jsx';
 class App extends Component {
   constructor(props) {
     super(props);
+    state = {
+      whichPage: ''
+    }
   }
+  // changePage(e) {
+    //const page = e.target.innerHtml
+    //this.state.whichPage = page
+  // }
+  //declare a fuction that's going to update whichPage state
 
   render() {
     return (
       <div>
         Hello world!
-        <FilterNav />
-        <PageNav />
+        <FilterNav whichPage={this.props.whichPage}/>
+        <PageNav whichPage={this.props.whichPage}/>
         <DatabaseNav />
         {/* create a react router to switch between the main area of divs */}
         <BrowserRouter>
