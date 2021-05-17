@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 const mapDispatchToProps = (dispatch) => ({
-  processSomething: () => dispatch(deleteMediaActionCreator(mediaId, userId))
-})
+  processSomething: () => dispatch(deleteMediaActionCreator(mediaId, userId)),
+});
 
 class KeyspaceComponent extends Component {
   constructor(props) {
@@ -10,10 +11,12 @@ class KeyspaceComponent extends Component {
   }
 
   render() {
-    return (<div>Keyspace Component!
-
-      <button onClick={this.props.processSomething}></button>
-    </div>);
+    return (
+      <div>
+        Keyspace Component!
+        <button onClick={this.props.processSomething}></button>
+      </div>
+    );
   }
 }
 
