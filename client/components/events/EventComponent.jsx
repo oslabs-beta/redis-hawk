@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import KeyEventComponent from './KeyEventComponent.jsx';
 import PaginationComponent from '../navbars/PaginationComponent.jsx';
 
@@ -32,4 +33,4 @@ class EventComponent extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EventComponent);
+export default connect(mapStateToProps, null)(EventComponent);

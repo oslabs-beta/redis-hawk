@@ -11,4 +11,4 @@ const KeyEventComponent = (props) => {
   );
 };
 
-export default EventHolder;
+export default KeyEventComponent;
