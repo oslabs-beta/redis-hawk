@@ -9,6 +9,8 @@ import renderer from 'react-test-renderer';
 import KeyspaceComponent from '../../../client/components/keyspace/KeyspaceComponent.jsx';
 import MainComponent from '../../../client/components/keyspace/MainComponent.jsx';
 import PaginationComponent from '../../../client/components/navbars/PaginationComponent.jsx';
+import KeyListComponent from '../../../client/components/keyspace/KeyListComponent.jsx';
+
 configure({ adapter: new Adapter() });
 
 describe('React Keyspace unit tests', () => {
@@ -123,7 +125,7 @@ describe('React Keyspace unit tests', () => {
     });
 
     it('should render a ul element with the id keyList', () => {
-      expect(wrapper.find('keyList'));
+      expect(wrapper.find('keyList')).toHaveLength(1);
     });
   });
 
@@ -142,7 +144,7 @@ describe('React Keyspace unit tests', () => {
       wrapper = shallow(<KeyListComponent props={props.keyspace} />);
     });
     it('should render a list item with the id keynameandtype', () => {
-      expect(wrapper.find('keylist'));
+      expect(wrapper.find('keynameandtype'));
       expect(
         wrapper.containsAllMatchingElements([
           <li

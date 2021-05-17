@@ -47,12 +47,14 @@ describe('React FilterNav tests', () => {
 
     it('the div with the id totals should render the number of total keys if on the keyspace page', () => {
       wrapper = shallow(<FilterNav whichPage={props.keyspace} />);
-      expect(wrapper.containsMatchingElement(<div id='totals'>1</div>));
+      expect(wrapper.find('totals')).toHaveLength(1);
+      expect(wrapper.containsAllMatchingElements([<div id='totals'>1</div>]));
     });
 
     it('the div with the id totals should render the number of total events if on the events page', () => {
       wrapper = shallow(<FilterNav whichPage={props.events} />);
-      expect(wrapper.containsMatchingElement(<div id='totals'>1</div>));
+      expect(wrapper.find('totals')).toHaveLength(1);
+      expect(wrapper.containsAllMatchingElements([<div id='totals'>1</div>]));
     });
   });
 
