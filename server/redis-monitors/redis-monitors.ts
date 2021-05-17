@@ -14,13 +14,13 @@ const redis = require('redis');
 import { RedisInstance, RedisMonitor, Keyspace } from './models/interfaces';
 import { EventLog } from './models/data-stores';
 
-const instances: RedisInstance[] = JSON.parse(fs.readFileSync(path.resolve(__dirname, './config.json')));
+const instances: RedisInstance[] = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../configs/config.json')));
 const redisMonitors: RedisMonitor[] = [];
 
 instances.forEach((instance: RedisInstance, idx: number): void => {
 
   const monitor: RedisMonitor = {
-    redisClient: redis.createClient({host: instance.host, port: instance.port}),
+    redisClient: redis.createClient({ host: instance.host, port: instance.port }),
     host: instance.host,
     port: instance.port,
     keyspaces: []
@@ -32,7 +32,7 @@ instances.forEach((instance: RedisInstance, idx: number): void => {
     //Sets the number of databases present in this monitored Redis instance
     monitor.databases = +res[1];
     console.log(`Instance at ${monitor.host}:${monitor.port} has ${monitor.databases} databases`);
-    
+
     //Configures each keyspace with a event subscriber and event log
     //This should be futher modularized for readability and maintanability
     for (let dbIndex = 0; dbIndex < monitor.databases; dbIndex++) {
