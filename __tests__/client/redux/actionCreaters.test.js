@@ -1,75 +1,86 @@
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
-import * as actions from '../../actions/TodoActions'
-import * as types from '../../constants/ActionTypes'
-import fetchMock from 'fetch-mock'
-import expect from 'expect' // You can use any testing library
+import configureMockStore from "redux-mock-store";
+import thunk from "redux-thunk";
+import connections from "../../../client/action-creators/connections";
+import * as types from "../../../client/actions/actionTypes";
+import fetchMock from "fetch-mock";
+import expect from "expect"; // You can use any testing library
 
-const middlewares = [thunk]
-const mockStore = configureMockStore(middlewares)
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
 
-describe('async actions', () => {
+describe("keyspaceUpdateActionCreator", () => {
   afterEach(() => {
-    fetchMock.restore()
-  })
+    fetchMock.restore();
+  });
 
-  it('creates FETCH_TODOS_SUCCESS when fetching todos has been done', () => {
-    fetchMock.getOnce('/todos', {
-      body: { todos: ['do something'] },
-      headers: { 'content-type': 'application/json' }
-    })
+  it("creates UPDATE_KEYSPACE when fetching keyspace has been done", () => {
+    fetchMock.getOnce("/api/keyspace/0/1", {
+      headers: { "content-type": "application/json" },
+    });
 
-    const expectedActions = [
-      { type: types.FETCH_TODOS_REQUEST },
-      { type: types.FETCH_TODOS_SUCCESS, body: { todos: ['do something'] } }
-    ]
-    const store = mockStore({ todos: [] })
+    const expectedActions = [{ type: types.UPDATE_KEYSPACE }];
+    const store = mockStore({ keyspace: [] });
 
-    return store.dispatch(actions.fetchTodos()).then(() => {
+    return store
+      .dispatch(connections.keyspaceUpdateActionCreator())
+      .then(() => {
+        // return of async actions
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+  });
+});
+
+describe("updateEventActionCreator", () => {
+  afterEach(() => {
+    fetchMock.restore();
+  });
+
+  it("creates UPDATE_EVENTS when fetching is done", () => {
+    fetchMock.getOnce("/api/events/0/1", {
+      headers: { "content-type": "application/json" },
+    });
+
+    const expectedActions = [{ type: types.UPDATE_EVENTS }];
+    const store = mockStore({ events: [] });
+
+    return store.dispatch(connections.updateEventsActionCreator()).then(() => {
       // return of async actions
-      expect(store.getActions()).toEqual(expectedActions)
-    })
-  })
-})
+      expect(store.getActions()).toEqual(expectedActions);
+    });
+  });
+});
 
+//NEEDS TO TRANSITION TO KEYGRAPHACTIONCREATOR - ONCE WE GET THE LOOK AT DATA
+describe("updateEventGraphActionCreator", () => {
+  afterEach(() => {
+    fetchMock.restore();
+  });
 
+  it("creates UPDATE_KEYGRAPH when fetching is done", () => {
+    fetchMock.getOnce("/api/graphs/0/1/events", {
+      headers: { "content-type": "application/json" },
+    });
 
-// const { updateKeyspace, updateKeyGraph, switchDatabase, updateTotalKeys, updateEvents } = require('../../../client/action-creators/connections.js');
+    const expectedActions = [{ type: types.UPDATE_KEYGRAPH }];
+    const store = mockStore({ events: [] });
 
-// describe('UPDATE_KEYSPACE', () => {
-//     beforeEach(() => {
-//         action = {
-//             type: '',
-//             payload: [],
-//         }
-//     })
-//     it('should send an object with type and payload fields updated to the corresponding reducer', () => {
-//         const testAction = {
-//             type: 'UPDATE_KEYSPACE',
-//             payload: [{message: 'hello friend'}],
-//         }
-//         expect(testAction.type).toEqual('UPDATE_KEYSPACE');
-//         expect(testAction.payload[0]).toEqual({message: 'hello friend'})
-//     })
-// })
+    return store.dispatch(connections.updateEventsActionCreator()).then(() => {
+      // return of async actions
+      expect(store.getActions()).toEqual(expectedActions);
+    });
+  });
+});
 
+//SWITCH DATABASE
 
+describe("switchDatabaseActionCreator", () => {
+  afterEach(() => {
+    fetchMock.restore();
+  });
 
-// describe('update keygraph actionCreator', () => {
-//   beforeEach(() => {
-//     action = {
-//       type: '',
-//       payload: ''
-//     }
-//   });
-//   it('should send an object with type and payload fields updated to the corresponding reducer', () => {
-//     const action = {
-//       type: 'UPDATE_KEYGRAPH',
-//       payload: {
-//         name: 'keynamne',
-//         time: '8:30',
-//         memory: '1kb'
-//       }
-//     }
-//   })
-// })
+  it("creates SWITCH_DATABASE when fetching is done", () => {
+    const expectedActions = [{ type: types.UPDATE_DATABASE }];
+    const store = mockStore({ currDatabase: 0 });
+    expect(store.getActions().toEqual(expectedActions));
+  });
+});
