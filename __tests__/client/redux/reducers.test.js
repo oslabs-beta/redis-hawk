@@ -1,22 +1,22 @@
-// import keyspaceSubject from '../../../client/reducers/keyspaceReducer.js';
-// import databaseSubject from '../../../client/reducers/databaseReducer.js';
-// import eventSubject from '../../../client/reducers/eventsReducer.js';
-// import keygraphSubject from '../../../client/reducers/graphReducer.js';
+import keyspaceSubject from '../../../client/reducers/keyspaceReducer.js';
+import databaseSubject from '../../../client/reducers/databaseReducer.js';
+import eventSubject from '../../../client/reducers/eventsReducer.js';
+import keygraphSubject from '../../../client/reducers/graphReducer.js';
 
-const keyspaceSubject = require("../../../client/reducers/keyspaceReducer.js");
+// const keyspaceSubject = require('../../../client/reducers/keyspaceReducer.js');
 
-const databaseSubject = require("../../../client/reducers/databaseReducer.js");
+// const databaseSubject = require('../../../client/reducers/databaseReducer.js');
 
-const eventSubject = require("../../../client/reducers/eventsReducer.js");
+// const eventSubject = require('../../../client/reducers/eventsReducer.js');
 
-const keygraphSubject = require("../../../client/reducers/graphsReducer.js");
+// const keygraphSubject = require('../../../client/reducers/graphsReducer.js');
 
-describe("database reducer", () => {
+describe('database reducer', () => {
   let state;
   beforeEach(() => {
     state = {
       databaseInfo: {
-        host: "",
+        host: '',
         port: 6739,
         dataNum: 0,
       },
@@ -25,38 +25,38 @@ describe("database reducer", () => {
     };
   });
 
-  describe("default state for databases", () => {
-    it("should return a default state when given an undefined input", () => {
+  describe('default state for databases', () => {
+    it('should return a default state when given an undefined input', () => {
       expect(databaseSubject(undefined, { type: undefined })).toEqual(state);
     });
   });
 
-  describe("unrecognized action types", () => {
-    it("should return the original without any duplication", () => {
+  describe('unrecognized action types', () => {
+    it('should return the original without any duplication', () => {
       const action = {
-        type: "ao;wiehf;aoie",
+        type: 'ao;wiehf;aoie',
       };
       expect(databaseSubject(state, action)).toBe(state);
     });
   });
 
-  describe("SWITCH_DATABASE", () => {
+  describe('SWITCH_DATABASE', () => {
     const action = {
-      type: "SWITCH_DATABASE",
+      type: 'SWITCH_DATABASE',
       payload: 2,
     };
 
-    it("switches database to #2", () => {
+    it('switches database to #2', () => {
       const { currDatabase } = databaseSubject(state, action);
       expect(currDatabase).toEqual(2);
     });
 
-    it("returns a state object not strictly equal to the original", () => {
+    it('returns a state object not strictly equal to the original', () => {
       const resultState = databaseSubject(state);
       expect(resultState).not.toBe(state);
     });
 
-    it("includes a database not equal to the original", () => {
+    it('includes a database not equal to the original', () => {
       const { currDatabase } = databaseSubject(state, action);
       expect(currDatabase).not.toBe(state.currentDB);
     });
@@ -65,7 +65,7 @@ describe("database reducer", () => {
 
 //keyspace reducer testing actions UPDATE_KEYSPACE and UPDATE_TOTALKEYS
 
-describe("keyspace reducer", () => {
+describe('keyspace reducer', () => {
   let state;
   beforeEach(() => {
     state = {
@@ -73,45 +73,45 @@ describe("keyspace reducer", () => {
     };
   });
 
-  describe("default state for keyspace", () => {
-    it("should return a default state when given an undefined input", () => {
+  describe('default state for keyspace', () => {
+    it('should return a default state when given an undefined input', () => {
       expect(keyspaceSubject(undefined, { type: undefined })).toEqual(state);
     });
   });
-  describe("unrecognized action types", () => {
-    it("should return the original state without any duplication", () => {
-      const action = { type: "whaaaaat?" };
+  describe('unrecognized action types', () => {
+    it('should return the original state without any duplication', () => {
+      const action = { type: 'whaaaaat?' };
       expect(keyspaceSubject(state, action)).toBe(state);
     });
   });
 
-  describe("UPDATE_KEYSPACE", () => {
+  describe('UPDATE_KEYSPACE', () => {
     const action = {
-      type: "UPDATE_KEYSPACE",
+      type: 'UPDATE_KEYSPACE',
       payload: [
         {
-          name: "Abigail",
-          value: "isAwesome",
-          type: "hash",
+          name: 'Abigail',
+          value: 'isAwesome',
+          type: 'hash',
         },
       ],
     };
 
-    it("updates the keyspace", () => {
+    it('updates the keyspace', () => {
       const { keyspaces } = keyspaceSubject(state, action);
       expect(keyspaces[0]).toEqual({
-        name: "Abigail",
-        value: "isAwesome",
-        type: "hash",
+        name: 'Abigail',
+        value: 'isAwesome',
+        type: 'hash',
       });
     });
 
-    it("returns a state object not strictly equal to the original", () => {
+    it('returns a state object not strictly equal to the original', () => {
       const resultState = keyspaceSubject(state, action);
       expect(resultState).not.toBe(state);
     });
 
-    it("includes a keyspace not equal to the original", () => {
+    it('includes a keyspace not equal to the original', () => {
       const { keyspaces } = keyspaceSubject(state, action);
       expect(keyspaces).not.toBe(state.keyspaces);
     });
@@ -141,7 +141,7 @@ describe("keyspace reducer", () => {
 
 //events reducer testing UPDATE_EVENTS
 
-describe("events reducer", () => {
+describe('events reducer', () => {
   let state;
 
   beforeEach(() => {
@@ -149,38 +149,38 @@ describe("events reducer", () => {
       events: [],
     };
   });
-  describe("default state", () => {
-    it("should return a default state when given an undefined input", () => {
+  describe('default state', () => {
+    it('should return a default state when given an undefined input', () => {
       expect(eventSubject(undefined, { type: undefined })).toEqual(state);
     });
   });
 
-  describe("unrecognized action types", () => {
-    it("should return the original value without any duplication", () => {
-      const action = { type: "wannabemyfriend?" };
+  describe('unrecognized action types', () => {
+    it('should return the original value without any duplication', () => {
+      const action = { type: 'wannabemyfriend?' };
       expect(eventSubject(state, action)).toBe(state);
     });
   });
 
-  describe("UPDATE_EVENTS", () => {
+  describe('UPDATE_EVENTS', () => {
     const action = {
-      type: "UPDATE_EVENTS",
-      payload: [{ name: "abigail", event: "SET", time: "8:30" }],
+      type: 'UPDATE_EVENTS',
+      payload: [{ name: 'abigail', event: 'SET', time: '8:30' }],
     };
-    it("updates the events", () => {
+    it('updates the events', () => {
       const { events } = eventSubject(state, action);
       expect(events[0]).toEqual({
-        name: "abigail",
-        event: "SET",
-        time: "8:30",
+        name: 'abigail',
+        event: 'SET',
+        time: '8:30',
       });
     });
-    it("returns a state object not strictly equal to the original", () => {
+    it('returns a state object not strictly equal to the original', () => {
       const eventState = eventSubject(state, action);
       // expect(eventState).toEqual(state)
       expect(eventState).not.toBe(state);
     });
-    it("returns an events value not strictly equal to the original", () => {
+    it('returns an events value not strictly equal to the original', () => {
       const { events } = eventSubject(state, action);
       expect(events).not.toBe(state.events);
     });
@@ -189,75 +189,75 @@ describe("events reducer", () => {
 
 ///we have to fix this later
 
-describe("update keygraph", () => {
+describe('update keygraph', () => {
   let state;
   beforeEach(() => {
     state = {
-      name: "",
-      time: "",
-      memory: "",
+      name: '',
+      time: '',
+      memory: '',
     };
   });
 
-  describe("default state for keygraph", () => {
-    it("should return a default state hwne given an undefined input", () => {
+  describe('default state for keygraph', () => {
+    it('should return a default state hwne given an undefined input', () => {
       expect(keygraphSubject(undefined, { type: undefined })).toEqual(state);
     });
   });
 
-  describe("unrecognized action types", () => {
-    it("should return the original without any duplication", () => {
+  describe('unrecognized action types', () => {
+    it('should return the original without any duplication', () => {
       const action = {
-        type: "ao;wiehf;aoie",
+        type: 'ao;wiehf;aoie',
       };
       expect(keygraphSubject(state, action)).toBe(state);
     });
   });
 
-  describe("UPDATE_KEYGRAPH", () => {
+  describe('UPDATE_KEYGRAPH', () => {
     const action = {
-      type: "UPDATE_KEYGRAPH",
+      type: 'UPDATE_KEYGRAPH',
       payload: {
-        name: "message123",
-        time: "Sat May 15 2021 15:18:35 GMT-0400 (Eastern Daylight Time)",
-        memory: "1kb",
+        name: 'message123',
+        time: 'Sat May 15 2021 15:18:35 GMT-0400 (Eastern Daylight Time)',
+        memory: '1kb',
       },
     };
 
-    it("updates the name property", () => {
+    it('updates the name property', () => {
       const { name } = keygraphSubject(state, action);
-      expect(name).toEqual("message123");
+      expect(name).toEqual('message123');
     });
 
-    it("updates the time property", () => {
+    it('updates the time property', () => {
       const { time } = keygraphSubject(state, action);
       expect(time).toEqual(
-        "Sat May 15 2021 15:18:35 GMT-0400 (Eastern Daylight Time)"
+        'Sat May 15 2021 15:18:35 GMT-0400 (Eastern Daylight Time)'
       );
     });
 
-    it("updates the memory property", () => {
+    it('updates the memory property', () => {
       const { memory } = keygraphSubject(state, action);
-      expect(memory).toEqual("1kb");
+      expect(memory).toEqual('1kb');
     });
 
-    it("returns a state object not strictly equal to the original", () => {
+    it('returns a state object not strictly equal to the original', () => {
       const resultState = keygraphSubject(state, action);
       expect(resultState).not.toBe(state);
       // expect(resultState).toEqual(state);
     });
 
-    it("includes a name prop not equal to the original", () => {
+    it('includes a name prop not equal to the original', () => {
       const { name } = keygraphSubject(state, action);
       expect(name).not.toBe(state.name);
     });
 
-    it("includes a time prop not equal to the original", () => {
+    it('includes a time prop not equal to the original', () => {
       const { time } = keygraphSubject(state, action);
       expect(time).not.toBe(state.time);
     });
 
-    it("includes a memory prop not equal to the original", () => {
+    it('includes a memory prop not equal to the original', () => {
       const { memory } = keygraphSubject(state, action);
       expect(memory).not.toBe(state.memory);
     });

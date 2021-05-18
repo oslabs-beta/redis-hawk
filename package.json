@@ -12,7 +12,8 @@
   },
   "jest": {
     "transform": {
-      "^.+\\.(ts|tsx)$": "ts-jest"
+      "^.+\\.(ts|tsx)$": "ts-jest",
+      "^.+\\.jsx?$": "babel-jest"
     },
     "roots": [
       "<rootDir>/"
