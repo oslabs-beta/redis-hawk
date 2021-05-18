@@ -25,11 +25,11 @@ class App extends Component {
     return (
       <div id='app'>
         Hello world!
-        <FilterNav whichPage={this.props.whichPage} />
-        <PageNav whichPage={this.props.whichPage} />
-        <DatabaseNav />
-        {/* create a react router to switch between the main area of divs */}
         <BrowserRouter>
+          <FilterNav whichPage={this.props.whichPage} />
+          <PageNav whichPage={this.props.whichPage} />
+          <DatabaseNav />
+          {/* create a react router to switch between the main area of divs */}
           <Switch>
             <Route path='/main' render={() => <KeyspaceComponent />} />
             <Route path='/events' render={() => <EventComponent />} />

@@ -2,6 +2,7 @@ import keyspaceSubject from '../../../client/reducers/keyspaceReducer.js';
 import databaseSubject from '../../../client/reducers/databaseReducer.js';
 import eventSubject from '../../../client/reducers/eventsReducer.js';
 import keygraphSubject from '../../../client/reducers/graphReducer.js';
+import dbInfoSubject from '../../../client/reducers/dbInfoReducer.js';
 
 // const keyspaceSubject = require('../../../client/reducers/keyspaceReducer.js');
 
@@ -117,29 +118,6 @@ describe('keyspace reducer', () => {
     });
   });
 });
-
-//   describe("UPDATE_TOTALKEYS", () => {
-//     const action = {
-//       type: "UPDATE_TOTALKEYS",
-//       payload: [{ totalKeys: 1987493 }],
-//     };
-//     it("updates the totalKeys", () => {
-//       const { totalKeys } = keyspaceSubject(state, action);
-//       expect(totalKeys[0]).toEqual({ totalKeys: 1987493 });
-//     });
-//     it("returns a state object not strictly equal to the original", () => {
-//       const totalKeysState = keyspaceSubject(state, action);
-//       // expect(totalKeyState).toEqual(state)
-//       expect(totalKeysState).not.toBe(state);
-//     });
-//     it("includes a totalKey value not strictly equal to the original", () => {
-//       const { totalKeys } = keyspaceSubject(state, action);
-//       expect(totalKeys).not.toBe(state.totalKeys);
-//     });
-//   });
-// });
-
-//events reducer testing UPDATE_EVENTS
 
 describe('events reducer', () => {
   let state;
@@ -263,3 +241,83 @@ describe('update keygraph', () => {
     });
   });
 });
+
+describe('updateDBInfo', () => {
+  let state;
+  beforeEach(() => {
+    state = {
+      databaseInfo: {
+        host: '',
+        port: 0,
+        dataNum: 0,
+      },
+    };
+  });
+
+  describe('default state for databaseInfo', () => {
+    it('should return a default state when given an undefined input', () => {
+      expect(dbInfoSubject(undefined, { type: undefined })).toEqual(state);
+    });
+  });
+  describe('unrecognized action types', () => {
+    it('should return the original state without any duplication', () => {
+      const action = { type: 'awefh;a' };
+      expect(dbInfoSubject(state, action)).toBe(state);
+    });
+  });
+
+  describe('UPDATE_DBINFO', () => {
+    const action = {
+      type: 'UPDATE_DBINFO',
+      payload: [
+        {
+          host: 'localhost:8080',
+          port: 6379,
+          dataNum: 16,
+        },
+      ],
+    };
+
+    it('updates the keyspace', () => {
+      const { databaseInfo } = dbInfoSubject(state, action);
+      expect(databaseInfo[0]).toEqual({
+        host: 'localhost:8080',
+        port: 6379,
+        dataNum: 16,
+      });
+    });
+
+    it('returns a state object not strictly equal to the original', () => {
+      const resultState = dbInfoSubject(state, action);
+      expect(resultState).not.toBe(state);
+    });
+
+    it('includes dbInfo prop not equal to the original', () => {
+      const { databaseInfo } = dbInfoSubject(state, action);
+      expect(databaseInfo).not.toBe(state.databaseInfo);
+    });
+  });
+});
+
+//   describe("UPDATE_TOTALKEYS", () => {
+//     const action = {
+//       type: "UPDATE_TOTALKEYS",
+//       payload: [{ totalKeys: 1987493 }],
+//     };
+//     it("updates the totalKeys", () => {
+//       const { totalKeys } = keyspaceSubject(state, action);
+//       expect(totalKeys[0]).toEqual({ totalKeys: 1987493 });
+//     });
+//     it("returns a state object not strictly equal to the original", () => {
+//       const totalKeysState = keyspaceSubject(state, action);
+//       // expect(totalKeyState).toEqual(state)
+//       expect(totalKeysState).not.toBe(state);
+//     });
+//     it("includes a totalKey value not strictly equal to the original", () => {
+//       const { totalKeys } = keyspaceSubject(state, action);
+//       expect(totalKeys).not.toBe(state.totalKeys);
+//     });
+//   });
+// });
+
+//events reducer testing UPDATE_EVENTS

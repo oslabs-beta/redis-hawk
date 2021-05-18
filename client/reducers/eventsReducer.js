@@ -3,7 +3,15 @@ import * as types from '../actions/actionTypes.js';
 
 const initialState = {
   currDatabase: 0,
-  events: [],
+  events: [
+    [
+      {
+        name: 'Arthur',
+        event: 'SET',
+        time: 'Sat May 15 2021 15:18:35 GMT-0400 (Eastern Daylight Time)',
+      },
+    ],
+  ],
 };
 
 const eventsReducer = (state = initialState, action) => {

@@ -3,7 +3,9 @@ import * as types from '../actions/actionTypes.js';
 
 const initialState = {
   currDatabase: 0,
-  keyspace: [],
+  keyspace: [
+    [{ name: 'Abigail The Queen', value: 'know she is queen', type: 'hash' }],
+  ],
 };
 
 const keyspaceReducer = (state = initialState, action) => {

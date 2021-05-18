@@ -2,7 +2,7 @@ import * as types from '../actions/actionTypes.js';
 
 const initialState = {
   currDatabase: 0,
-  keyGraph: [],
+  keyGraph: [[{ name: 'Abigail', memory: '1GB', time: '11:30' }]],
 };
 
 const keygraphReducer = (state = initialState, action) => {

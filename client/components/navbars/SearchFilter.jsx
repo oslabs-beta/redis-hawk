@@ -42,7 +42,7 @@ const SearchFilter = (props) => {
         <div className='filterType'>Filter By Time</div>
       </div>
     );
-  }
+  } else return null;
 };
 
 export default SearchFilter;
