@@ -4,6 +4,8 @@ import DatabaseComponent from './DatabaseComponent.jsx';
 
 const mapStateToProps = (store) => {
   databaseInfo: store.databaseInfo;
+  currInstance: store.currInstance;
+  currDatabase: store.currDatabase;
 };
 // dispatchToProps: current instance and current database
 

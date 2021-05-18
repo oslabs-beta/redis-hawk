@@ -15,14 +15,15 @@ describe('React Events unit tests', () => {
   describe('EventComponent', () => {
     let wrapper;
     const props = {
-      events: [
+      events: [[
         {
           name: 'hey!',
           event: 'scan',
           time: '8:30',
         },
-      ],
+      ]],
       totalEvents: 1,
+      currDatabase: 0
     };
 
     beforeAll(() => {
@@ -41,7 +42,7 @@ describe('React Events unit tests', () => {
   describe('keyEventDiv', () => {
     let wrapper;
     beforeAll(() => {
-      wrapper = shallow(<div events={props.events} id='keyEventDiv' />);
+      wrapper = shallow(<div events={props.events[props.currDatabase]} id='keyEventDiv' />);
     });
 
     it('renders a ul element with the id keyEventList', () => {
@@ -52,14 +53,15 @@ describe('React Events unit tests', () => {
   describe('keyEventList', () => {
     let wrapper;
     const props = {
-      events: [
+      events: [[
         {
           name: 'hey!',
           event: 'scan',
           time: '8:30',
         },
-      ],
+      ]],
       totalEvents: 1,
+      currDatabase: 0
     };
 
     beforeAll(() => {
@@ -70,25 +72,26 @@ describe('React Events unit tests', () => {
       expect(wrapper.find('keyEventsList'));
     });
     it('renders a single event for each event in the event prop', () => {
-      expect(wrapper.find('keyEventsList').toHaveLength(props.events.length));
+      expect(wrapper.find('keyEventsList').toHaveLength(props.events[props.currDatabase].length));
     });
   });
 
   describe('KeyEventComponent', () => {
     let wrapper;
     const props = {
-      events: [
+      events: [[
         {
           name: 'hey!',
           event: 'scan',
           time: '8:30',
         },
-      ],
+      ]],
       totalEvents: 1,
+      currDatabase: 0
     };
 
     beforeAll(() => {
-      wrapper = shallow(<KeyEventComponent events={props.events} />);
+      wrapper = shallow(<KeyEventComponent events={props.events[props.currDatabase]} />);
     });
 
     it('renders an li element with the id keyEvenstList', () => {
