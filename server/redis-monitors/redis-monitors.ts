@@ -31,7 +31,6 @@ instances.forEach((instance: RedisInstance, idx: number): void => {
 
     //Sets the number of databases present in this monitored Redis instance
     monitor.databases = +res[1];
-    console.log(`Instance at ${monitor.host}:${monitor.port} has ${monitor.databases} databases`);
 
     //Configures each keyspace with a event subscriber and event log
     //This should be futher modularized for readability and maintanability
@@ -48,7 +47,6 @@ instances.forEach((instance: RedisInstance, idx: number): void => {
         if (+message.match(/[0-9*]/)[0] === dbIndex) {
           const key = message.replace(/__keyspace@[0-9]*__/, '');
           monitor.keyspaces[dbIndex].eventLog.add(key, event);
-          console.log(monitor.keyspaces[dbIndex].eventLog);
         }
       })
     }
