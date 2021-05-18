@@ -13,6 +13,7 @@ module.exports = {
   mode: isDevelopment ? 'development' : 'production',
   devServer: {
     publicPath: '/dist/',
+    contentBase: './server/assets',
     port: 8080,
     proxy: {
       '/api': 'http://localhost:3000/',
