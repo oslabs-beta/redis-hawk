@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+var Router = require('express').Router;
+var router = Router();
 var redisMonitors = require('../redis-monitors/redis-monitors');
 router.get('/', function (req, res, next) {
     res.locals.connections = [];
