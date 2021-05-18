@@ -1,4 +1,7 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var express = require('express');
+var path = require('path');
 var app = express();
 var monitors = require('./redis-monitors/redis-monitors');
 var connectionsRouter = require('./routes/connectionsRouter');
@@ -19,7 +22,7 @@ app.get('/api/events', function (req, res) {
     res.status(200).json(log);
 });
 app.get('/', function (req, res) {
-    res.status(200).sendFile('../index.html');
+    res.status(200).sendFile(path.resolve(__dirname, './assets/index.html'));
 });
 app.use(function (err, req, res, next) {
     var defaultErr = {
@@ -34,4 +37,4 @@ app.use(function (err, req, res, next) {
 app.listen(PORT, function () {
     console.log("Listening on port " + PORT);
 });
-module.exports = app;
+exports.default = app;
