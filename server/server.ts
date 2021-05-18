@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const app = express();
 
 const monitors = require('./redis-monitors/redis-monitors');
@@ -7,7 +8,6 @@ const PORT = +process.env.PORT || 3000;
 
 //connections routes
 app.use('/api/connections', connectionsRouter);
-
 
 //Sample route for fetching events (not production ready)
 app.get('/api/events', (req, res) => {
@@ -28,7 +28,7 @@ app.get('/api/events', (req, res) => {
 })
 
 app.get('/', (req, res): void => {
-  res.status(200).sendFile('../index.html');
+  res.status(200).sendFile(path.resolve(__dirname, './assets/index.html'));
 })
 
 app.use((err, req, res, next) => {
@@ -59,4 +59,4 @@ app.listen(PORT, (): void => {
   console.log(`Listening on port ${PORT}`);
 });
 
-module.exports = app;
+export default app;

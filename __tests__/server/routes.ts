@@ -1,34 +1,15 @@
-const request = require('supertest');
-const SERVER_URL = 'http://localhost:3000'
-let expressApp = require('../../server/server');
+import * as request from 'supertest';
+import app from '../../server/server';
 
-describe('Route Integration Tests', () => {
+describe('Something', () => {
 
-  let redisMonitors;
-  beforeAll(async () => {
-    redisMonitors = require('../../server/redis-monitors/redis-monitors');
+  afterAll( async () => {
+    await app.close();
   });
 
-  afterAll(async () => {
-    await expressApp.close();
-    redisMonitors.forEach((monitor) => {
-      monitor.redisClient.quit();
-    });
-  });
+  it('hello', async () => {
+    await request(app).get('/')
+      .expect(200)
+  })
+})
 
-  describe('/api/connections', () => {
-
-    describe("GET '/'", () => {
-
-      let response;
-      beforeAll(async () => {
-        response = await request(expressApp)
-          .get(SERVER_URL);
-      })
-
-      it('should return a 200 status code', () => {
-        response.expect(200);
-      });
-    });
-  });
-});

@@ -8,7 +8,7 @@
     "test": "jest --verbose",
     "start": "NODE_ENV=production nodemon dist/server/server.js",
     "dev": "NODE_ENV=development webpack serve --open & nodemon dist/server/server.js",
-    "cp": "copyfiles -u 2 server/configs/* dist/server/configs"
+    "cp": "copyfiles -u 1 server/configs/* server/assets/* dist/server/"
   },
   "jest": {
     "transform": {
@@ -59,6 +59,7 @@
     "@babel/preset-react": "^7.13.13",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
     "@types/jest": "^26.0.23",
+    "@types/supertest": "^2.0.11",
     "babel-jest": "^23.6.0",
     "babel-loader": "^8.2.2",
     "copyfiles": "^2.4.1",
