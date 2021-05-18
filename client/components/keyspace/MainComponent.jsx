@@ -4,7 +4,7 @@ import KeyListComponent from './KeyListComponent.jsx';
 class MainComponent extends Component {
   constructor(props) {
     super(props);
-    state = {
+    const state = {
       displayValue: '',
     };
     this.renderValue = this.renderValue.bind.this;
@@ -25,7 +25,7 @@ class MainComponent extends Component {
       />;
     });
     return (
-      <div id="mainComponentContainer">
+      <div id='mainComponentContainer'>
         <div id='keyListHolder'>
           <ul id='keyList'>{listOfKeys}</ul>
         </div>

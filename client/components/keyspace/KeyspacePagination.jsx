@@ -1,6 +1,7 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Pagination from "@material-ui/lab/Pagination";
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Pagination from '@material-ui/lab/Pagination';
+import { connect } from 'react-redux';
 
 const mapStateToProps = (store) => {
   return {
@@ -10,13 +11,13 @@ const mapStateToProps = (store) => {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    "& > *": {
+    '& > *': {
       marginTop: theme.spacing(2),
     },
   },
 }));
 
-const PaginationComponent = (props) => {
+const KeyspacePagination = (props) => {
   const classes = useStyles();
 
   return (
@@ -29,4 +30,4 @@ const PaginationComponent = (props) => {
   );
 };
 
-export default KeyspacePagination;
+export default connect(mapStateToProps, null)(KeyspacePagination);

@@ -2,7 +2,7 @@
   "name": "redis-hawk",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./client/index.js",
   "scripts": {
     "build": "webpack",
     "test": "jest --verbose",
@@ -24,6 +24,7 @@
     "@babel/plugin-transform-async-to-generator": "^7.13.0",
     "@babel/runtime": "^7.13.10",
     "@material-ui/core": "^4.11.4",
+    "@material-ui/lab": "^4.0.0-alpha.58",
     "express": "^4.17.1",
     "nodemon": "^2.0.7",
     "react": "^17.0.2",

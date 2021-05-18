@@ -1,4 +1,6 @@
 // combine reducers
-combineReducers({
-  keyspace: keyspaceReducer
-})
+import { combineReducers } from 'redux';
+
+export default combineReducers({
+  keyspace: keyspaceReducer,
+});

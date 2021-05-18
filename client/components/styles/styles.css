@@ -1,0 +1,52 @@
+#graphsComponentContainer {
+  position: 'relative';
+  top: 500;
+  left: 400;
+  height: 55%;
+  width: 75%;
+  background-color: orange;
+}
+
+#eventsComponentContainer {
+  position: 'relative';
+  top: 500;
+  left: 400;
+  height: 55%;
+  width: 75%;
+  background-color: red;
+}
+
+#keyspaceComponent Container {
+  position: 'relative';
+  top: 500;
+  left: 400;
+  height: 55%;
+  width: 75%;
+  background-color: yellow;
+}
+
+.searchFilterContainer {
+  position: 'relative';
+  top: 300;
+  left: 300;
+  height: 8%;
+  width: 75%;
+  background-color: purple;
+}
+
+#databaseNavContainer {
+  position: 'relative';
+  top: 150;
+  height: 70%;
+  width: 10%;
+  background-color: lightBlue;
+}
+
+#pageNavContainer {
+  position: 'relative';
+  top: 150;
+  left: 300;
+  height: 15%;
+  width: 75%;
+  background-color: lightPink;
+}

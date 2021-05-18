@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import KeyEventComponent from './KeyEventComponent.jsx';
-import PaginationComponent from '../navbars/PaginationComponent.jsx';
+import EventsPagination from './EventsPagination.jsx';
 
 const mapStateToProps = (store) => {
   return {
@@ -23,11 +23,11 @@ class EventComponent extends Component {
       />;
     });
     return (
-      <div id="eventComponentContainer">
+      <div id='eventComponentContainer'>
         <div id='KeyEventsDiv'>
           <ul id='keyEventList'>{listOfEVents}</ul>
         </div>
-        <PaginationComponent />
+        <EventsPagination />
       </div>
     );
   }
