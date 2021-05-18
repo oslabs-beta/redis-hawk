@@ -1,17 +1,16 @@
 const request = require('supertest');
-
 const SERVER_URL = 'http://localhost:3000'
+let expressApp = require('../../server/server');
 
 describe('Route Integration Tests', () => {
 
-  let app, redisMonitors;
+  let redisMonitors;
   beforeAll(async () => {
-    app = await require('../../server/server');
     redisMonitors = require('../../server/redis-monitors/redis-monitors');
   });
 
   afterAll(async () => {
-    await app.close();
+    await expressApp.close();
     redisMonitors.forEach((monitor) => {
       monitor.redisClient.quit();
     });
@@ -23,7 +22,7 @@ describe('Route Integration Tests', () => {
 
       let response;
       beforeAll(async () => {
-        response = await request(app)
+        response = await request(expressApp)
           .get(SERVER_URL);
       })
 

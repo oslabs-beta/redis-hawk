@@ -55,6 +55,8 @@ app.use((err, req, res, next) => {
 
 })
 
-module.exports = app.listen(PORT, (): void => {
+app.listen(PORT, (): void => {
   console.log(`Listening on port ${PORT}`);
 });
+
+module.exports = app;
