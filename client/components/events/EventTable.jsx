@@ -119,7 +119,7 @@ const useStyles2 = makeStyles({
   },
 });
 
-function KeyspaceTable() {
+function EventTable() {
   const classes = useStyles2();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -208,4 +208,4 @@ function KeyspaceTable() {
   );
 }
 
-export default KeyspaceTable;
+export default EventTable;

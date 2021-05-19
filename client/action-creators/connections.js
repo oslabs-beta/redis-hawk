@@ -1,48 +1,64 @@
-import ReduxThunk from 'redux-thunk';
+import ReduxThunk from "redux-thunk";
 
-import * as types from '../actions/actionTypes';
+import * as types from "../actions/actionTypes";
 
 export const updateKeyspaceActionCreator =
   (instanceId, dbIndex) => (dispatch) => {
+    let url;
+    //if parameters, url is
+    if (instanceId && dbIndex) {
+      url = `/api/keyspaces/${instanceId}/${dbIndex}`;
+    } else {
+      url = "/api/keyspaces";
+    }
     //dont need the options object on GET requests for fetch - GET is assumed;
     //content-type headers is not needed bc you send no body
-    fetch(`/api/keyspaces/${instanceId}/${dbIndex}`)
+    fetch(url)
       .then((res) => res.json())
       .then((data) => {
         //the response be the deleted object, and we will grab the id off of that and we then go and fileter that out of state.
 
-        //data[0].keyspaces[0] to get the specific keyspace for the individual
-        console.log('keyspace', data[0].keyspaces[0]);
-        const keyspace = data[0].keyspaces[0];
-        dispatch({
-          type: actions.UPDATE_KEYSPACE,
-          //is this the proper syntax to grab dbIndex too????
-          payload: [keyspaces, dbIndex],
-        });
+        // //data[0].keyspaces[0] to get the specific keyspace for the individual
+        const keyspaces = data[0].keyspaces[0];
+        if (keyspaces) {
+          dispatch({
+            type: types.UPDATE_KEYSPACE,
+            //is this the proper syntax to grab dbIndex too????
+            payload: [keyspaces, dbIndex],
+          });
+        }
       })
       .catch((err) => {
-        console.log('error in keyspaceUpdateActionCreator: ', err);
+        console.log("error in keyspaceUpdateActionCreator: ", err);
       });
   };
 
 export const updateEventsActionCreator =
   (instanceId, dbIndex) => (dispatch) => {
-    fetch(`/api/events/${instanceId}/${dbIndex}`)
+    let url;
+    if (instanceId && dbIndex) {
+      url = `/api/events/${instanceId}/${dbIndex}`;
+    } else {
+      url = "/api/events";
+    }
+    fetch(url)
       .then((res) => res.json())
       .then((data) => {
         //the response be the deleted object, and we will grab the id off of that and we then go and fileter that out of state.
 
         //data[0].events[0] to get the events for a single dbindex
-        console.log('events', data[0].events[0]);
+        console.log("events", data);
         const events = data[0].events[0];
-        dispatch({
-          type: actions.UPDATE_EVENTS,
-          //is this the proper syntax to add dbIndex???
-          payload: [events, dbIndex],
-        });
+        if (events) {
+          dispatch({
+            type: types.UPDATE_EVENTS,
+            //is this the proper syntax to add dbIndex???
+            payload: [events, dbIndex],
+          });
+        }
       })
       .catch((err) => {
-        console.log('error in keyspaceUpdateActionCreator: ', err);
+        console.log("error in keyspaceUpdateActionCreator: ", err);
       });
   };
 
@@ -54,15 +70,15 @@ export const updateKeyGraphActionCreator =
       .then((data) => {
         //the response be the deleted object, and we will grab the id off of that and we then go and fileter that out of state.
 
-        console.log('events', data.keyspaceHistory);
-        const eventsHistory = data.keyspaceHistory;
+        console.log("events", data.keyspaceHistory);
+        const keyspaceHistory = data.keyspaceHistory;
         dispatch({
-          type: actions.UPDATE_KEYGRAPH,
-          payload: events,
+          type: types.UPDATE_KEYGRAPH,
+          payload: keyspaceHistory,
         });
       })
       .catch((err) => {
-        console.log('error in keyspaceUpdateActionCreator: ', err);
+        console.log("error in keyspaceUpdateActionCreator: ", err);
       });
   };
 
@@ -73,22 +89,30 @@ export const switchDatabaseActionCreator = (dbIndex) => ({
 });
 
 export const updateDBInfoActionCreator = () => (dispatch) => {
-  fetch('/api/connections')
+  fetch("/api/connections")
     .then((res) => res.json())
     .then((data) => {
       //for stretch features, there may be multiple instances here
-      console.log('first db data returned', data.instances[0]);
-      const dbInfo = data.instances[0];
-      console.log('dbInfo', dbInfo);
+      const dbInfo = data;
       dispatch({
-        type: actions.UPDATE_DBINFO,
-        payload: dbInfo,
+        type: types.UPDATE_DBINFO,
+        payload: data.instances[0],
       });
     })
     .catch((err) => {
       console.log(
-        'error fetching databaseInfo in updateDBInfoActionCreator:',
+        "error fetching databaseInfo in updateDBInfoActionCreator:",
         err
       );
     });
 };
+
+export const updatePageActionCreator = (newPage) => ({
+  type: types.UPDATE_PAGE,
+  payload: newPage,
+});
+
+export const updateCurrentDisplayActionCreator = (display) => ({
+  type: types.UPDATE_CURRDISPLAY,
+  payload: display,
+});

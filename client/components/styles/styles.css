@@ -31,15 +31,25 @@ body {
   width: 60%;
   left: 30%;
   background-color: orange;
+  border: 1px solid #000000;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 #eventComponentContainer {
   position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   top: 30%;
   left: 30%;
   height: 55%;
   width: 60%;
   background-color: red;
+  border: 1px solid #000000;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 #keyspaceComponentContainer {
@@ -51,6 +61,9 @@ body {
   left: 30%;
   height: 55%;
   width: 60%;
+  border: 1px solid #000000;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 
   background-color: green;
 }
@@ -65,13 +78,32 @@ body {
 #tableBody {
   /* color: white; */
 }
-.searchFilterContainer {
+.filterNavContainer {
   position: absolute;
+  display: flex;
+  justify-content: space-between;
   top: 20%;
   left: 30%;
-  height: 8%;
+  height: 10%;
   width: 60%;
   background-color: purple;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.searchFilterDiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.filterContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 40%;
 }
 
 #databaseNavContainer {
@@ -81,19 +113,23 @@ body {
   height: 80%;
   width: 15%;
   background-color: blue;
+  border: 1px solid #000000;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 #pageNavContainer {
   position: absolute;
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
   top: 2%;
   left: 25%;
   height: 15%;
   width: 70%;
   background-color: lightPink;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 #keyListComponentContainer {
@@ -105,6 +141,7 @@ body {
 }
 
 #refreshButton {
+  position: relative;
   margin-left: 300px;
   z-index: 1;
 }

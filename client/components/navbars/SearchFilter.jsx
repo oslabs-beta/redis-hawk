@@ -5,41 +5,47 @@ import React from "react";
 const SearchFilter = (props) => {
   if (props.keyspace) {
     return (
-      <div>
-        <div className='searchFilterContainer'>
+      <div className='searchFilterDiv'>
+        <div className='filterContainer'>
+          <div className='filter'>Filter By Keyname</div>
+          <div className='filter'>Filter By KeyType</div>
+        </div>
+        <div>
           <input id='searchInput' />
           <button id='searchButton'>Search</button>
         </div>
-        <div className='filterType'>Filter By Keyname</div>
-        <div className='filterType'>Filter By KeyType</div>
       </div>
     );
   }
   if (props.events) {
     return (
-      <div>
-        <div className='searchFilterContainer'>
+      <div className='searchFilterDiv'>
+        <div className='filterContainer'>
+          <div className='filter'>Filter By Keyname</div>
+          <div className='filter'>Filter By KeyType</div>
+          <div className='filter'>Filter By Event</div>
+        </div>
+        <div>
           <input id='searchInput' />
           <button>Search</button>
         </div>
-        <div className='filterType'>Filter By Keyname</div>
-        <div className='filterType'>Filter By KeyType</div>
-        <div className='filterType'>Filter By Event</div>
       </div>
     );
   }
 
   if (props.graphs) {
     return (
-      <div>
-        <div className='searchFilterContainer'>
+      <div className='searchFilterDiv'>
+        <div className='filterContainer'>
+          <div className='filter'>Filter By KeyType</div>
+          <div className='filter'>Filter By KeyEvent</div>
+          <div className='filter'>Filter By Time</div>
+        </div>
+        <div>
           <input id='searchInput' />
           <button>Search</button>
         </div>
-        <div className='filterType'>Filter By Keyname</div>
-        <div className='filterType'>Filter By KeyType</div>
-        <div className='filterType'>Filter By KeyEvent</div>
-        <div className='filterType'>Filter By Time</div>
+        <div className='filter'>Filter By Keyname</div>
       </div>
     );
   } else return null;
