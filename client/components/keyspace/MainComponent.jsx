@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import KeyListComponent from "./KeyListComponent.jsx";
 
+
 class MainComponent extends Component {
   constructor(props) {
     super(props);
@@ -32,6 +33,7 @@ class MainComponent extends Component {
     }
     return (
       <div id='mainComponentContainer'>
+        {/* //this would be our filterNav */}
         <div id='keyListHolder'>
           <ul id='keyList'>{myKeys}</ul>
         </div>
