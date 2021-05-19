@@ -23,7 +23,6 @@ export function EventLog(): void {
 }
 
 export function KeyspaceEvent(key: string, event: string): void {
-<<<<<<< HEAD
   /*
   Used to instantiate a new KeyspaceEvent. 
   The event will be timestamped based on the time of instantiation.
@@ -31,16 +30,7 @@ export function KeyspaceEvent(key: string, event: string): void {
   if (typeof (key) !== 'string' || typeof (event) !== 'string') {
     throw new TypeError('KeyspaceEvent must be constructed with string args');
   }
-=======
-/*
-Used to instantiate a new KeyspaceEvent. 
-The event will be timestamped based on the time of instantiation.
-*/
-  if (typeof(key) !== 'string' || typeof(event) !== 'string') {
-    throw new TypeError('KeyspaceEvent must be constructed with string args');
-  }
 
->>>>>>> main
   this.key = key;
   this.event = event;
   this.timestamp = Date.now();
@@ -69,12 +59,12 @@ EventLog.prototype.add = function (key: string, event: string): void {
 
 
 //need method to convert DLL into object -- returnLogAsArray
-EventLog.prototype.returnLogAsArray = function (eventTotalIdx = 0) {
+EventLog.prototype.returnLogAsArray = function (eventTotal = 0) {
   //this should probably return some sort of error
-  if (eventTotalIdx < 0 || eventTotalIdx >= this.eventTotal) return;
+  if (eventTotal < 0 || eventTotal >= this.eventTotal) return [];
 
   const logAsArray = [];
-  let count = this.eventTotal - eventTotalIdx;
+  let count = this.eventTotal - eventTotal;
   let current = this.tail;
 
   while (count > 0) {

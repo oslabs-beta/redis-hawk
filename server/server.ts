@@ -4,12 +4,13 @@ const app = express();
 
 const monitors = require('./redis-monitors/redis-monitors');
 const connectionsRouter = require('./routes/connectionsRouter');
+const eventsRouter = require('./routes/eventsRouter');
 const PORT = +process.env.PORT || 3000;
 
 //connections routes
 app.use('/api/connections', connectionsRouter);
 //events routes
-app.use('/api/events, eventsRouter');
+app.use('/api/events', eventsRouter);
 
 //Sample route for fetching events (not production ready)
 // app.get('/api/events', (req, res) => {
