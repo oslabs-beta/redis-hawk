@@ -1,14 +1,15 @@
-import React, { Component } from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import FilterNav from "./navbars/FilterNav.jsx";
-import PageNav from "./navbars/PageNav.jsx";
-import DatabaseNav from "./navbars/DatabaseNav.jsx";
-import KeyspaceComponent from "./keyspace/KeyspaceComponent.jsx";
-import GraphComponent from "./graphs/GraphComponent.jsx";
-import EventComponent from "./events/EventComponent.jsx";
-import "./styles/styles.css";
-import { connect } from "react-redux";
-import * as actions from "../action-creators/connections";
+import React, { Component } from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import FilterNav from './navbars/FilterNav.jsx';
+import PageNav from './navbars/PageNav.jsx';
+import DatabaseNav from './navbars/DatabaseNav.jsx';
+import KeyspaceComponent from './keyspace/KeyspaceComponent.jsx';
+import GraphComponent from './graphs/GraphComponent.jsx';
+import EventComponent from './events/EventComponent.jsx';
+import './styles/styles.css';
+import { connect } from 'react-redux';
+import * as actions from '../action-creators/connections';
+import '../../node_modules/react-vis/dist/style.css';
 
 ///still need to check dispatchers here
 
@@ -23,13 +24,14 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(actions.updateKeyspaceActionCreator(keyspace)),
   updateEvents: (dbIndex) =>
     dispatch(actions.updateEventsActionCreator(dbIndex)),
+  updateDBInfo: () => dispatch(actions.updateDBInfoActionCreator()),
 });
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      whichPage: "Keyspace Page",
+      whichPage: 'Keyspace Page',
     };
     this.changePage = this.changePage.bind(this);
   }
@@ -41,22 +43,23 @@ class App extends Component {
   componentDidMount() {
     this.props.updateKeyspace(1, this.props.database);
     this.props.updateEvents(1, this.props.database);
+    this.props.updateDBInfo();
   }
 
   changePage(e) {
-    if (e.target.id === "keyspaceLink") {
-      this.state.whichPage = "Keyspace Page";
-      console.log("switched to keyspace page");
+    if (e.target.id === 'keyspaceLink') {
+      this.state.whichPage = 'Keyspace Page';
+      console.log('switched to keyspace page');
       return;
     }
-    if (e.target.id === "eventsLink") {
-      this.state.whichPage = "Events Page";
-      console.log("switched to events page");
+    if (e.target.id === 'eventsLink') {
+      this.state.whichPage = 'Events Page';
+      console.log('switched to events page');
       return;
     }
-    if (e.target.id === "graphsLink") {
-      this.state.whichPage = "Graph Page";
-      console.log("switched to graph page");
+    if (e.target.id === 'graphsLink') {
+      this.state.whichPage = 'Graph Page';
+      console.log('switched to graph page');
       return;
     }
   }

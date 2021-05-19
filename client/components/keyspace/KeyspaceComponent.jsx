@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import MainComponent from "./MainComponent.jsx";
 import KeyspacePagination from "./KeyspacePagination.jsx";
+import KeyspaceTable from "./KeyspaceTable.jsx";
 
 //withRouter??? -- for props.history -- stretch??
 
@@ -12,7 +13,6 @@ const mapStateToProps = (store) => {
   };
 };
 
-
 class KeyspaceComponent extends Component {
   constructor(props) {
     super(props);
@@ -21,11 +21,12 @@ class KeyspaceComponent extends Component {
   render() {
     return (
       <div id='keyspaceComponentContainer'>
-        <MainComponent
+        {/* <MainComponent
         
           database={this.props.database}
           keyspace={this.props.keyspace}
-        />
+        /> */}
+        <KeyspaceTable />
         {/* <KeyspacePagination
           database={this.props.database}
           keys={this.props.keyspace}
