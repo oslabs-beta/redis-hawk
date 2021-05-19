@@ -97,3 +97,5 @@ typings/
 .tern-port
 
 .DS_Store
+
+dump.rdb
