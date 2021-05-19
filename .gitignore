@@ -97,3 +97,6 @@ typings/
 .tern-port
 
 .DS_Store
+
+#Ignore redis dumps
+dump.rdb

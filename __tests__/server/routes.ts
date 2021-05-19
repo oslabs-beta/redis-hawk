@@ -92,16 +92,23 @@ describe('Route Integration Tests', () => {
 
   describe('/api/events', () => {
 
-    xdescribe("GET '/' (no instanceId or dbIndex specified as route parameters", () => {
-
-      let response;
-      let instanceId;
-      beforeAll(async () => {
+    //Emit keyspace events prior to all tests
+    beforeAll(async () => {
 
         //Emit a keyspace event to be captured by the server
-        await redisModels[1].client.set('key', 'value');
-        instanceId = redisModels[1].instanceId;
+        await redisModels[0].client.set('key:1', 'value1');
+        await redisModels[1].client.set('key:2', 'value2');
 
+        //Switch to dbIndex 2 for an instance (3rd database)
+        await redisModels[1].client.select(2);
+        await redisModels[1].client.set('key:3', 'value3');
+        await redisModels[1].client.set('key:4', 'value4');
+    });
+
+    describe("GET '/' (no instanceId or dbIndex specified as route parameters) ", () => {
+
+      let response;
+      beforeAll(async () => {
         //Get all events, not specific to an instanceId or dbIndex
         response = await request(app).get('/api/events');
       });
@@ -119,19 +126,28 @@ describe('Route Integration Tests', () => {
         checkApiEventsRouteBodyShape(response.body);
       });
 
-      it('should be able to capture an emitted keyspace event', () => {
+      it('should be able to capture the emitted keyspace events', () => {
 
-        response.body.data.forEach(instance => {
-          if (instance.instanceId === instanceId) {
-            expect(instance.keyspaces[0][0].key).toEqual('key');
-            expect(instance.keyspaces[0][0].value).toEqual('value');
-            expect(Date.now() - instance.keyspaces[0][0].timestamp).toBeGreaterThanOrEqual(10000);
-          }
-        })
+        const data = response.body.data;
+
+        //dbIndex0 at instanceId 1
+        expect(data[0].keyspaces[0][0].key).toEqual('key:1');
+        expect(data[0].keyspaces[0][0].value).toEqual('value1');
+
+        //dbIndex0 at instanceId 2
+        expect(data[1].keyspaces[0][0].key).toEqual('key:2');
+        expect(data[1].keyspaces[0][0].value).toEqual('value2');
+
+        //dbIndex2 at instanceId 2
+        expect(data[1].keyspaces[2][0].key).toEqual('key:3');
+        expect(data[1].keyspaces[2][0].value).toEqual('value3');
+        expect(data[1].keyspaces[2][1].key).toEqual('key:4');
+        expect(data[1].keyspaces[2][1].value).toEqual('value4');
+
       });
     });
 
-    xdescribe('GET /:instanceId (no dbIndex specified)', () => {
+    describe('GET /:instanceId (no dbIndex specified)', () => {
 
       let response;
       beforeAll(async () => {
@@ -151,6 +167,21 @@ describe('Route Integration Tests', () => {
         checkApiEventsRouteBodyShape(response.body);
       });
 
+      it('should be able to capture all the emitted keyspace events on the specified instance', () => {
+
+        const data = response.body.data;
+
+        //dbIndex0 at instanceId 2 - only one instance returned, so data should be accessed via 0th index
+        expect(data[0].keyspaces[0][0].key).toEqual('key:2');
+        expect(data[0].keyspaces[0][0].value).toEqual('value2');
+
+        //dbIndex2 at instanceId 2
+        expect(data[0].keyspaces[2][0].key).toEqual('key:3');
+        expect(data[0].keyspaces[2][0].value).toEqual('value3');
+        expect(data[0].keyspaces[2][1].key).toEqual('key:4');
+        expect(data[0].keyspaces[2][1].value).toEqual('value4');
+      });
+
       it('should return a 400 status code if an invalid instanceId is specified', async () => {
         response = await request(app).get('/api/events/6');
         expect(response.status).toEqual(400);
@@ -163,7 +194,7 @@ describe('Route Integration Tests', () => {
       let response;
       beforeAll(async () => {
         //Get all events, not specific to an instanceId or dbIndex
-        response = await request(app).get('/api/events/1/0');
+        response = await request(app).get('/api/events/2/2');
       });
 
       it('should return the correct instanceId within the response body', () => {
@@ -182,6 +213,18 @@ describe('Route Integration Tests', () => {
         checkApiEventsRouteBodyShape(response.body);
       });
 
+      it('should be able to capture all the emitted keyspace events on the specified dbIndex', () => {
+
+        const data = response.body.data;
+
+        //dbIndex2 at instanceId 2 - data and keyspaces indices should be 0 because only one instance/keyspace are returned
+        expect(data[0].keyspaces[0][0].key).toEqual('key:3');
+        expect(data[0].keyspaces[0][0].value).toEqual('value3');
+        expect(data[0].keyspaces[0][1].key).toEqual('key:4');
+        expect(data[0].keyspaces[0][1].value).toEqual('value4');
+
+      });
+
       it('should return a 400 status code if an invalid dbIndex is specified', async () => {
         response = await request(app).get('/api/events/1/30001235');
         expect(response.status).toEqual(400);
@@ -194,7 +237,7 @@ const checkApiEventsRouteBodyShape = (body) => {
   expect(body.data).toBeInstanceOf(Array);
   //check each "instance" element
   body.data.forEach((instance) => {
-    expect(instance.instanceId).toBeInstanceOf(Number);
+    expect(typeof instance.instanceId).toEqual('number');
     expect(instance.keyspaces).toBeInstanceOf(Array)
 
     //check each "keyspace" element
