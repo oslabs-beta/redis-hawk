@@ -4,10 +4,13 @@ import SearchFilter from "./SearchFilter.jsx";
 import * as actions from "../../action-creators/connections";
 
 const mapStateToProps = (store) => {
+  console.log("store in mapState", store);
   return {
-    keyspaces: store.keyspaceStore.keyspaces,
+    keyspace: store.keyspaceStore.keyspace,
     events: store.eventsStore.events,
-    database: store.currDatabaseStore.currDatabase,
+    keyGraph: store.keyGraphStore.keyGraph,
+    currDatabase: store.currDatabaseStore.currDatabase,
+    currPage: store.currPageStore.currPage,
   };
 };
 const mapDispatchToProps = (dispatch) => ({
@@ -22,56 +25,62 @@ class FilterNav extends Component {
   constructor(props) {
     super(props);
   }
-
   render() {
-    console.log("which page", this.props.whichPage);
     //assign a variable to each search filter option\
-    if (this.props.whichPage === "Graph Page") {
+    if (this.props.currPage === "graphs") {
       //working on the events graphs
       return (
-        <div className='searchFilterContainer'>
+        <div className='filterNavContainer'>
           {/* conditional rendering */}
-          <SearchFilter id='searchFilter' events={this.props.events} />
+          <SearchFilter
+            id='searchFilter'
+            events={this.props.events[this.props.currDatabase]}
+          />
           {/* insert onClick */}
           <button
             id='searchButton'
             onClick={(e) => {
               e.preventDefault();
-              this.props.updateKeyGraph(1, this.props.database);
+              this.props.updateKeyGraph(1, this.props.currDatabase);
             }}
             id='refreshButton'>
             Refresh
           </button>
         </div>
       );
-    } else if (this.props.whichPage === "Events Page") {
+    } else if (this.props.currPage === "events") {
       return (
-        <div className='searchFilterContainer'>
+        <div className='filterNavContainer'>
           {/* conditional rendering */}
-          <SearchFilter id='searchFilter' events={this.props.events} />
+          <SearchFilter
+            id='searchFilter'
+            events={this.props.events[this.props.currDatabase]}
+          />
           {/* insert onClick */}
           <button
             id='searchButton'
             onClick={(e) => {
               e.preventDefault();
-              this.props.updateEvents(1, this.props.database);
+              this.props.updateEvents(1, this.props.currDatabase);
             }}
             id='refreshButton'>
             Refresh
           </button>
         </div>
       );
-    } else if (this.props.whichPage === "Keyspace Page") {
+    } else {
       return (
-        <div className='searchFilterContainer'>
-          {/* conditional rendering */}
-          <SearchFilter id='searchFilter' keyspaces={this.props.keyspaces} />
+        <div className='filterNavContainer'>
+          <SearchFilter
+            id='searchFilter'
+            keyspace={this.props.keyspace[this.props.currDatabase]}
+          />
           {/* insert onClick */}
           <button
             id='searchButton'
             onClick={(e) => {
               e.preventDefault();
-              this.props.updateKeyspace(1, this.props.database);
+              this.props.updateKeyspace(1, this.props.currDatabase);
             }}
             id='refreshButton'>
             Refresh

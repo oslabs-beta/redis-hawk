@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import KeyEventComponent from "./KeyEventComponent.jsx";
-import EventsPagination from "./EventsPagination.jsx";
+import EventTable from "./EventTable.jsx";
 
 const mapStateToProps = (store) => {
   return {
@@ -16,7 +16,7 @@ class EventComponent extends Component {
   }
 
   render() {
-    console.log('In eventComponent')
+    console.log("In eventComponent");
     let listOfEvents;
     if (this.props.events) {
       listOfEvents = this.props.events.map((obj, idx) => {
@@ -26,10 +26,11 @@ class EventComponent extends Component {
 
     return (
       <div id='eventComponentContainer'>
-        <div id='KeyEventsDiv'>
+        {/* <div id='KeyEventsDiv'>
           <ul id='keyEventList'>{listOfEvents}</ul>
         </div>
-        {/* <EventsPagination /> */}
+        <EventsPagination /> */}
+        <EventTable />
       </div>
     );
   }
