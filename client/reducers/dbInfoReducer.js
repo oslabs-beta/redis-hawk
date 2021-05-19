@@ -3,17 +3,21 @@ import * as types from '../actions/actionTypes.js';
 
 const initialState = {
   databaseInfo: {
-    host: 'localhost',
-    port: 3000,
-    dataNum: 16,
+    host: '',
+    port: 0,
+    dataNum: 0,
   },
 };
 
 const dbInfoReducer = (state = initialState, action) => {
+  console.log('in reducer');
   switch (action.type) {
     case types.UPDATE_DBINFO: {
-      const newDatabase = action.payload;
-
+      const newDatabase = {};
+      newDatabase.host = action.payload.host;
+      newDatabase.port = action.payload.port;
+      newDatabase.dataNum = action.payload.dataNum;
+      console.log('in reducer newDatabase', newDatabase);
       return {
         ...state,
         databaseInfo: newDatabase,
