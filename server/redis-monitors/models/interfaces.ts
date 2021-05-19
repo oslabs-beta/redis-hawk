@@ -8,6 +8,7 @@ export interface RedisInstance {
 };
 
 export interface RedisMonitor {
+  instanceId: number;
   redisClient: any;
   host: RedisInstance['host'];
   port: RedisInstance['port'];
