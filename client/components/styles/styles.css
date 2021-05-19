@@ -1,5 +1,25 @@
+html {
+  height: 100vh;
+  width: 100vw;
+}
+
+body {
+  height: 100%;
+  width: 100%;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+#app {
+  height: 100%;
+  width: 100%;
+}
+
 #graphsComponentContainer {
-  position: 'relative';
+  position: relative;
   top: 500;
   left: 400;
   height: 55%;
@@ -8,7 +28,7 @@
 }
 
 #eventsComponentContainer {
-  position: 'relative';
+  position: relative;
   top: 500;
   left: 400;
   height: 55%;
@@ -16,8 +36,8 @@
   background-color: red;
 }
 
-#keyspaceComponent Container {
-  position: 'relative';
+#keyspaceComponentContainer {
+  position: relative;
   top: 500;
   left: 400;
   height: 55%;
@@ -26,7 +46,7 @@
 }
 
 .searchFilterContainer {
-  position: 'relative';
+  position: relative;
   top: 300;
   left: 300;
   height: 8%;
@@ -35,18 +55,25 @@
 }
 
 #databaseNavContainer {
-  position: 'relative';
+  position: relative;
   top: 150;
   height: 70%;
   width: 10%;
-  background-color: lightBlue;
+  background-color: blue;
 }
 
 #pageNavContainer {
-  position: 'relative';
+  position: relative;
   top: 150;
-  left: 300;
+  left: 500;
   height: 15%;
   width: 75%;
   background-color: lightPink;
+}
+
+#keyListComponentContainer {
+  height: 20px;
+  width: 100px;
+  color: black;
+  background-color: orange;
 }

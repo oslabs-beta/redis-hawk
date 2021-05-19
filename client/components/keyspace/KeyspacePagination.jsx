@@ -1,17 +1,17 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Pagination from '@material-ui/lab/Pagination';
-import { connect } from 'react-redux';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Pagination from "@material-ui/lab/Pagination";
+import { connect } from "react-redux";
 
 const mapStateToProps = (store) => {
   return {
-    keyspace: store.keyspace,
+    keyspace: store.keyspaceStore.keyspace,
   };
 };
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    '& > *': {
+    "& > *": {
       marginTop: theme.spacing(2),
     },
   },
@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
 const KeyspacePagination = (props) => {
   const classes = useStyles();
 
+  console.log("keyspace props", this.props.keyspace);
   return (
     <div className={classes.root}>
       <Pagination

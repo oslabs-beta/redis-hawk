@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import DatabaseComponent from './DatabaseComponent.jsx';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import DatabaseComponent from "./DatabaseComponent.jsx";
 
 const mapStateToProps = (store) => ({
   databaseInfo: store.databaseInfoStore.databaseInfo,
@@ -15,7 +15,7 @@ class DatabaseNav extends Component {
   }
   render() {
     const dbArray = [];
-    console.log('DatabaseNav props', this.props);
+    console.log("DatabaseNav props", this.props);
     if (this.props.databaseInfo.dataNum) {
       for (let i = 0; i < this.props.databaseInfo.dataNum; i++) {
         <DatabaseComponent databaseNum={i} />;
@@ -23,7 +23,7 @@ class DatabaseNav extends Component {
     }
 
     return (
-      <div id='DatabaseNavContainer'>
+      <div id='databaseNavContainer'>
         <div id='redisInstance' databaseInfo={this.props.databaseInfo}></div>
         <div id='databaseHolder'>{dbArray}</div>
       </div>
