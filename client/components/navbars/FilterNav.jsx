@@ -4,21 +4,24 @@ import SearchFilter from "./SearchFilter.jsx";
 import * as actions from "../../action-creators/connections";
 
 const mapStateToProps = (store) => {
-  console.log("store in mapState", store);
   return {
     keyspace: store.keyspaceStore.keyspace,
     events: store.eventsStore.events,
     keyGraph: store.keyGraphStore.keyGraph,
     currDatabase: store.currDatabaseStore.currDatabase,
     currPage: store.currPageStore.currPage,
+    currDisplay: store.currDisplayStore.currDisplay
   };
 };
 const mapDispatchToProps = (dispatch) => ({
-  updateEvents: (events) => dispatch(actions.updateEventsActionCreator(events)),
+  updateEvents: (events) => 
+    dispatch(actions.updateEventsActionCreator(events)),
   updateKeyspace: (keyspace) =>
     dispatch(actions.updateKeyspaceActionCreator(keyspace)),
   updateKeyGraph: (keyGraph) =>
     dispatch(actions.updateKeyGraphActionCreator(keyGraph)),
+  updateCurrentDisplay: (display) => 
+    dispatch(action.updateCurrentDisplayActionCreator(display))
 });
 
 class FilterNav extends Component {

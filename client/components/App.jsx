@@ -33,8 +33,8 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.props.updateKeyspace(1, this.props.database);
-    this.props.updateEvents(1, this.props.database);
+    this.props.updateKeyspace();
+    this.props.updateEvents();
     this.props.updateDBInfo();
   }
 

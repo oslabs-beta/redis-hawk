@@ -3,8 +3,6 @@ import React from "react";
 // add onclicks to the #filtertypes
 
 const SearchFilter = (props) => {
-  console.log("in search filter");
-  console.log("props in searchFilter", props.keyspaces);
   if (props.keyspace) {
     return (
       <div className='searchFilterDiv'>

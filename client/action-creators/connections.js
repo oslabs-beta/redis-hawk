@@ -6,10 +6,10 @@ export const updateKeyspaceActionCreator =
   (instanceId, dbIndex) => (dispatch) => {
     let url;
     //if parameters, url is
-    if (instanceId && dbIndex){
-      url =`/api/keyspaces/${instanceId}/${dbIndex}`
-    }else {
-      url = '/api/keyspaces'
+    if (instanceId && dbIndex) {
+      url = `/api/keyspaces/${instanceId}/${dbIndex}`;
+    } else {
+      url = "/api/keyspaces";
     }
     //dont need the options object on GET requests for fetch - GET is assumed;
     //content-type headers is not needed bc you send no body
@@ -20,11 +20,13 @@ export const updateKeyspaceActionCreator =
 
         // //data[0].keyspaces[0] to get the specific keyspace for the individual
         const keyspaces = data[0].keyspaces[0];
-        dispatch({
-          type: types.UPDATE_KEYSPACE,
-          //is this the proper syntax to grab dbIndex too????
-          payload: [keyspaces, dbIndex],
-        });
+        if (keyspaces) {
+          dispatch({
+            type: types.UPDATE_KEYSPACE,
+            //is this the proper syntax to grab dbIndex too????
+            payload: [keyspaces, dbIndex],
+          });
+        }
       })
       .catch((err) => {
         console.log("error in keyspaceUpdateActionCreator: ", err);
@@ -33,19 +35,27 @@ export const updateKeyspaceActionCreator =
 
 export const updateEventsActionCreator =
   (instanceId, dbIndex) => (dispatch) => {
-    fetch(`/api/events/${instanceId}/${dbIndex}`)
+    let url;
+    if (instanceId && dbIndex) {
+      url = `/api/events/${instanceId}/${dbIndex}`;
+    } else {
+      url = "/api/events";
+    }
+    fetch(url)
       .then((res) => res.json())
       .then((data) => {
         //the response be the deleted object, and we will grab the id off of that and we then go and fileter that out of state.
 
         //data[0].events[0] to get the events for a single dbindex
-        console.log("events", data[0].events[0]);
+        console.log("events", data);
         const events = data[0].events[0];
-        dispatch({
-          type: types.UPDATE_EVENTS,
-          //is this the proper syntax to add dbIndex???
-          payload: [events, dbIndex],
-        });
+        if (events) {
+          dispatch({
+            type: types.UPDATE_EVENTS,
+            //is this the proper syntax to add dbIndex???
+            payload: [events, dbIndex],
+          });
+        }
       })
       .catch((err) => {
         console.log("error in keyspaceUpdateActionCreator: ", err);
@@ -83,9 +93,7 @@ export const updateDBInfoActionCreator = () => (dispatch) => {
     .then((res) => res.json())
     .then((data) => {
       //for stretch features, there may be multiple instances here
-      console.log("first db data returned", data.instances[0]);
       const dbInfo = data;
-      console.log("dbInfo", dbInfo);
       dispatch({
         type: types.UPDATE_DBINFO,
         payload: data.instances[0],
@@ -102,4 +110,9 @@ export const updateDBInfoActionCreator = () => (dispatch) => {
 export const updatePageActionCreator = (newPage) => ({
   type: types.UPDATE_PAGE,
   payload: newPage,
+});
+
+export const updateCurrentDisplayActionCreator = (display) => ({
+  type: types.UPDATE_CURRDISPLAY,
+  payload: display,
 });
