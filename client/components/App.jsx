@@ -7,6 +7,23 @@ import KeyspaceComponent from "./keyspace/KeyspaceComponent.jsx";
 import GraphComponent from "./graphs/GraphComponent.jsx";
 import EventComponent from "./events/EventComponent.jsx";
 import "./styles/styles.css";
+import { connect } from "react-redux";
+import * as actions from "../action-creators/connections";
+
+///still need to check dispatchers here
+
+const mapStateToProps = (store) => {
+  return {
+    database: store.currDatabaseStore.currDatabase,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  updateKeyspace: (keyspace) =>
+    dispatch(actions.updateKeyspaceActionCreator(keyspace)),
+  updateEvents: (dbIndex) =>
+    dispatch(actions.updateEventsActionCreator(dbIndex)),
+});
 
 class App extends Component {
   constructor(props) {
@@ -20,6 +37,10 @@ class App extends Component {
   //this.state.whichPage = page
   // }
   //declare a fuction that's going to update whichPage state
+  componentDidMount() {
+    this.props.updateKeyspace(1, this.props.database);
+    this.props.updateEvents(1, this.props.database);
+  }
 
   render() {
     return (
@@ -41,4 +62,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default connect(mapStateToProps, mapDispatchToProps)(App);

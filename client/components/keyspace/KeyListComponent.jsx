@@ -4,7 +4,7 @@ const KeyListComponent = (props) => {
   return (
     <div className='keyListComponentContainer'>
       <li onClick={props.handleClick}>
-        Name: {props.keyspace.name} Type: {props.keyspace.type}
+        Name: {props.keyspace[0].name} Type: {props.keyspace[0].type}
       </li>
     </div>
   );

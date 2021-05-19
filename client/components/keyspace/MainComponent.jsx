@@ -12,25 +12,13 @@ class MainComponent extends Component {
 
   renderValue(e) {
     e.preventDefault();
-    const value = e.target.props.keyspace.value;
+    const value = e.target.props.keyspace[0].value;
     this.state.displayValue = value;
   }
 
   render() {
-    // console.log("hey", this.state.displayValue);
-    //functionality to render the proper number of KeyListComponents -- obj.props.keyspace???
+    const myKeys = [];
     if (this.props.keyspace) {
-      console.log("keyspace props in main component", this.props.keyspace);
-      // const listOfKeys = this.props.keyspace.map((arr, ind) => {
-      //   return (
-      //     <KeyListComponent
-      //       keyspace={arr[ind][0]}
-      //       handleClick={this.renderValue}
-      //     />
-      //   );
-      // });
-
-      const myKeys = [];
       for (let i = 0; i < this.props.keyspace.length; i += 1) {
         myKeys.push(
           <KeyListComponent
@@ -44,7 +32,7 @@ class MainComponent extends Component {
     return (
       <div id='mainComponentContainer'>
         <div id='keyListHolder'>
-          <ul id='keyList'>{console.log("mykeys", this.state.myKeys)}</ul>
+          <ul id='keyList'>{myKeys}</ul>
         </div>
         <div id='valueDisplay'>
           <h3>{this.state.displayValue}</h3>

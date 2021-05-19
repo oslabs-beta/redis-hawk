@@ -12,9 +12,6 @@ const mapStateToProps = (store) => {
   };
 };
 
-// const mapDispatchToProps = (dispatch) => ({
-//   processSomething: () => dispatch(deleteMediaActionCreator(mediaId, userId)),
-// });
 
 class KeyspaceComponent extends Component {
   constructor(props) {
@@ -25,6 +22,7 @@ class KeyspaceComponent extends Component {
     return (
       <div id='keyspaceComponentContainer'>
         <MainComponent
+        
           database={this.props.database}
           keyspace={this.props.keyspace}
         />

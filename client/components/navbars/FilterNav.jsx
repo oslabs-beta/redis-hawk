@@ -4,10 +4,16 @@ import SearchFilter from './SearchFilter.jsx';
 
 const mapStateToProps = (store) => {
   return {
-    keyspaces: store.keyspaces,
-    events: store.events,
+    keyspaces: store.keyspaceStore.keyspaces,
+    events: store.eventsStore.events,
+    database: store.currDatabaseStore.currDatabase
   };
 };
+const mapDispatchToProps = (dispatch) => ({
+  updateEvents: (events) => dispatch(actions.updateEventsActionCreator(events)),
+  updateKeyspace: (keyspace) => dispatch(actions.updateKeyspaceActionCreator(keyspace)),
+  updateKeyGraph: (keyGraph) => dispatch(actions.updateKeyGraphActionCreator(keyGraph))
+});
 
 class FilterNav extends Component {
   constructor(props) {
@@ -23,7 +29,7 @@ class FilterNav extends Component {
           {/* conditional rendering */}
           <SearchFilter id='searchFilter' events={this.props.events} />
           {/* insert onClick */}
-          <button id='refreshButton'>Refresh</button>
+          <button onClick={this.props.updateKeyGraph} id='refreshButton'>Refresh</button>
         </div>
       );
     } else if (this.props.whichPage === 'Events Page') {
@@ -32,7 +38,7 @@ class FilterNav extends Component {
           {/* conditional rendering */}
           <SearchFilter id='searchFilter' events={this.props.events} />
           {/* insert onClick */}
-          <button id='refreshButton'>Refresh</button>
+          <button onClick={this.props.updateEvents}id='refreshButton'>Refresh</button>
         </div>
       );
     } else {
@@ -41,7 +47,7 @@ class FilterNav extends Component {
           {/* conditional rendering */}
           <SearchFilter id='searchFilter' keyspaces={this.props.keyspaces} />
           {/* insert onClick */}
-          <button id='refreshButton'>Refresh</button>
+          <button onClick={this.props.updateKeyspace} id='refreshButton'>Refresh</button>
         </div>
       );
     }

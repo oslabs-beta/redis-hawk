@@ -1,14 +1,15 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import KeyEventComponent from './KeyEventComponent.jsx';
-import EventsPagination from './EventsPagination.jsx';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import KeyEventComponent from "./KeyEventComponent.jsx";
+import EventsPagination from "./EventsPagination.jsx";
 
 const mapStateToProps = (store) => {
   return {
-    database: store.database,
-    events: store.events,
+    database: store.currDatabaseStore.database,
+    events: store.eventsStore.events,
   };
 };
+
 
 class EventComponent extends Component {
   constructor(props) {

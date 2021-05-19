@@ -9,26 +9,9 @@ const mapStateToProps = (store) => {
   };
 };
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    "& > *": {
-      marginTop: theme.spacing(2),
-    },
-  },
-}));
-
 const KeyspacePagination = (props) => {
-  const classes = useStyles();
-
   console.log("keyspace props", this.props.keyspace);
-  return (
-    <div className={classes.root}>
-      <Pagination
-        count={Math.ceil(this.props.keyspace.length / 100)}
-        variant='outlined'
-      />
-    </div>
-  );
+  return <div> hello </div>;
 };
 
 export default connect(mapStateToProps, null)(KeyspacePagination);
