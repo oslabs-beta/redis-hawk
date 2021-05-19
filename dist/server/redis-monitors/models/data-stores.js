@@ -31,5 +31,24 @@ EventLog.prototype.add = function (key, event) {
         this.tail = newEvent;
     }
 };
+EventLog.prototype.returnLogAsArray = function (eventTotal) {
+    if (eventTotal === void 0) { eventTotal = 0; }
+    if (eventTotal < 0 || eventTotal >= this.eventTotal)
+        return [];
+    var logAsArray = [];
+    var count = this.eventTotal - eventTotal;
+    var current = this.tail;
+    while (count > 0) {
+        var event_1 = {
+            key: current.key,
+            event: current.event,
+            timestamp: current.timestamp
+        };
+        logAsArray.push(event_1);
+        current = current.previous;
+        count -= 1;
+    }
+    return logAsArray;
+};
 EventLog.prototype.removeManyViaTimestamp = function (timestamp) {
 };

@@ -16,9 +16,7 @@ instances.forEach(function (instance, idx) {
         port: instance.port,
         keyspaces: []
     };
-    console.log('test? are you there?');
     monitor.redisClient.config('GET', 'databases', function (err, res) {
-        console.log('yea im here');
         monitor.databases = +res[1];
         var _loop_1 = function (dbIndex) {
             var keyspace = {

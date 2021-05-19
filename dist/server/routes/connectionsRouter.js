@@ -1,10 +1,10 @@
 var Router = require('express').Router;
-var router = Router();
-var redisMonitors = require('../redis-monitors/redis-monitors');
-router.get('/', function (req, res, next) {
+var connectionsRouter = Router();
+var connectionsMonitors = require('../redis-monitors/redis-monitors');
+connectionsRouter.get('/', function (req, res, next) {
     res.locals.connections = [];
     try {
-        redisMonitors.forEach(function (redisMonitor, idx) {
+        connectionsMonitors.forEach(function (redisMonitor, idx) {
             var instance = {
                 instanceId: idx + 1,
                 host: redisMonitor.host,
@@ -19,4 +19,4 @@ router.get('/', function (req, res, next) {
     }
     res.status(200).json({ instances: res.locals.connections });
 });
-module.exports = router;
+module.exports = connectionsRouter;

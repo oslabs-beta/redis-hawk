@@ -58,7 +58,7 @@ describe('RedisMonitors Data Stores Unit Tests', () => {
       let eventLog = new EventLog();
 
       it('should add the first Keyspace Event as the head and tail', () => {
-        
+
         const event = new KeyspaceEvent('somekey', 'get');
         eventLog.add('somekey', 'get');
         expect(eventLog.head.key).toEqual(event.key);
@@ -95,12 +95,12 @@ describe('RedisMonitors Data Stores Unit Tests', () => {
       const eventLog = new EventLog();
 
       const newEvents = [
-        {key: 'message:1', event: 'set'},
-        {key: 'message:2', event: 'set'},
-        {key: 'message:3', event: 'set'},
-        {key: 'message:3', event: 'get'},
-        {key: 'message:4', event: 'set'},
-        {key: 'message:1', event: 'get'},
+        { key: 'message:1', event: 'set' },
+        { key: 'message:2', event: 'set' },
+        { key: 'message:3', event: 'set' },
+        { key: 'message:3', event: 'get' },
+        { key: 'message:4', event: 'set' },
+        { key: 'message:1', event: 'get' },
       ];
 
       newEvents.forEach(event => {
@@ -135,18 +135,18 @@ describe('RedisMonitors Data Stores Unit Tests', () => {
 
         const arrayLog = eventLog.returnLogAsArray();
         arrayLog.forEach((event, idx) => {
-          expect(event.key).toEqual(newEvents[idx].key);
-          expect(event.event).toEqual(newEvents[idx].event);
+          expect(event.key).toEqual(newEvents[newEvents.length - idx - 1].key);
+          expect(event.event).toEqual(newEvents[newEvents.length - idx - 1].event);
         });
       });
 
-      it('should return the correct number of KeyspaceEvents if an eventTotal argument is provided', () => {        
+      it('should return the correct number of KeyspaceEvents if an eventTotal argument is provided', () => {
 
         const arrayLog = eventLog.returnLogAsArray(2);
         expect(arrayLog).toHaveLength(newEvents.length - 2);
       });
 
-      it('should return the correct number of KeyspaceEvents if an eventTotal argument is provided', () => {        
+      it('should return the correct number of KeyspaceEvents if an eventTotal argument is provided', () => {
 
         const arrayLog = eventLog.returnLogAsArray(2);
         expect(arrayLog).toHaveLength(newEvents.length - 2);
