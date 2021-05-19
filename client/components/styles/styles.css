@@ -108,3 +108,17 @@ body {
   margin-left: 300px;
   z-index: 1;
 }
+
+.singleDatabase {
+  border: 1px solid black;
+  height: 40px;
+}
+.singleDatabase:hover {
+  cursor: pointer;
+}
+#redisInstance {
+  height: 10%;
+}
+#databaseHolder {
+  height: 90%;
+}

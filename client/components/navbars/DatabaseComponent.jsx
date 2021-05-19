@@ -2,8 +2,12 @@ import React, { Component } from 'react';
 
 const DatabaseComponent = (props) => {
   return (
-    <div id='singleDatabase'>
-      {/* insert onClick  and on hover above*/}
+    <div
+      className='singleDatabase'
+      onClick={() => {
+        props.handleClick(props.databaseNum);
+      }}
+    >
       Database {props.databaseNum}
     </div>
   );
