@@ -2,24 +2,28 @@
 import * as types from '../actions/actionTypes.js';
 
 const initialState = {
-  currDatabase: 0,
+  databaseInfo: {
+    host: 'localhost',
+    port: 3000,
+    dataNum: 16,
+  },
 };
 
-const databaseReducer = (state = initialState, action) => {
+const dbInfoReducer = (state = initialState, action) => {
   switch (action.type) {
-    case types.SWITCH_DATABASE: {
-      const dbIndex = action.payload;
+    case types.UPDATE_DBINFO: {
+      const newDatabase = action.payload;
+
       return {
         ...state,
-        currDatabase: dbIndex,
+        databaseInfo: newDatabase,
       };
     }
+
     default: {
       return state;
     }
   }
 };
 
-// module.exports = databaseReducer;
-
-export default databaseReducer;
+export default dbInfoReducer;

@@ -4,17 +4,21 @@ var fs = require('fs');
 var path = require('path');
 var redis = require('redis');
 var data_stores_1 = require("./models/data-stores");
-var instances = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../configs/config.json')));
+var instances = process.env.IS_TEST ?
+    JSON.parse(fs.readFileSync(path.resolve(__dirname, '../configs/tests-config.json')))
+    : JSON.parse(fs.readFileSync(path.resolve(__dirname, '../configs/config.json')));
 var redisMonitors = [];
 instances.forEach(function (instance, idx) {
     var monitor = {
+        instanceId: idx + 1,
         redisClient: redis.createClient({ host: instance.host, port: instance.port }),
         host: instance.host,
         port: instance.port,
         keyspaces: []
     };
-    monitor.databases = monitor.redisClient.config('GET', 'databases');
+    console.log('test? are you there?');
     monitor.redisClient.config('GET', 'databases', function (err, res) {
+        console.log('yea im here');
         monitor.databases = +res[1];
         var _loop_1 = function (dbIndex) {
             var keyspace = {

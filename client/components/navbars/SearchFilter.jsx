@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from "react";
 
 // add onclicks to the #filtertypes
 
@@ -42,7 +42,7 @@ const SearchFilter = (props) => {
         <div className='filterType'>Filter By Time</div>
       </div>
     );
-  }
+  } else return null;
 };
 
 export default SearchFilter;

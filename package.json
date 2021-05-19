@@ -5,14 +5,15 @@
   "main": "./client/index.js",
   "scripts": {
     "build": "webpack",
-    "test": "jest --verbose",
+    "test": "IS_TEST=true jest --verbose --forceExit",
     "start": "NODE_ENV=production nodemon dist/server/server.js",
     "dev": "NODE_ENV=development webpack serve --open & nodemon dist/server/server.js",
     "cp": "copyfiles -u 1 server/configs/* server/assets/* dist/server/"
   },
   "jest": {
     "transform": {
-      "^.+\\.(ts|tsx)$": "ts-jest"
+      "^.+\\.(ts|tsx)$": "ts-jest",
+      "^.+\\.jsx?$": "babel-jest"
     },
     "roots": [
       "<rootDir>/"
@@ -59,7 +60,10 @@
     "@babel/preset-env": "^7.14.2",
     "@babel/preset-react": "^7.13.13",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
+    "@types/express": "^4.17.11",
     "@types/jest": "^26.0.23",
+    "@types/node": "^15.3.0",
+    "@types/redis": "^2.8.28",
     "@types/supertest": "^2.0.11",
     "babel-jest": "^23.6.0",
     "babel-loader": "^8.2.2",
@@ -70,6 +74,7 @@
     "enzyme-to-json": "^3.6.2",
     "jest": "^26.6.3",
     "react-refresh": "^0.10.0",
+    "redis-server": "^1.2.2",
     "sass-loader": "^11.1.1",
     "style-loader": "^2.0.0",
     "supertest": "^6.1.3",

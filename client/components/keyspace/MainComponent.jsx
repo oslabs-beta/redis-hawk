@@ -1,33 +1,39 @@
-import React, { Component } from 'react';
-import KeyListComponent from './KeyListComponent.jsx';
+import React, { Component } from "react";
+import KeyListComponent from "./KeyListComponent.jsx";
 
 class MainComponent extends Component {
   constructor(props) {
     super(props);
-    const state = {
-      displayValue: '',
+    this.state = {
+      displayValue: "I am data!",
     };
     this.renderValue = this.renderValue.bind.this;
   }
 
   renderValue(e) {
     e.preventDefault();
-    const value = e.target.props.keyspace.value;
+    const value = e.target.props.keyspace[0].value;
     this.state.displayValue = value;
   }
 
   render() {
-    //functionality to render the proper number of KeyListComponents -- obj.props.keyspace???
-    const listOfKeys = this.props.keyspace.map((obj) => {
-      <KeyListComponent
-        keyspace={obj.props.keyspace}
-        handleClick={this.renderValue}
-      />;
-    });
+    console.log('In mainComponent')
+    const myKeys = [];
+    if (this.props.keyspace) {
+      for (let i = 0; i < this.props.keyspace.length; i += 1) {
+        myKeys.push(
+          <KeyListComponent
+            keyspace={this.props.keyspace[i]}
+            handleClick={this.renderValue}
+          />
+        );
+      }
+      console.log("myKeys", myKeys);
+    }
     return (
       <div id='mainComponentContainer'>
         <div id='keyListHolder'>
-          <ul id='keyList'>{listOfKeys}</ul>
+          <ul id='keyList'>{myKeys}</ul>
         </div>
         <div id='valueDisplay'>
           <h3>{this.state.displayValue}</h3>
