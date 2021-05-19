@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import KeyEventComponent from './KeyEventComponent.jsx';
-import EventsPagination from './EventsPagination.jsx';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import KeyEventComponent from "./KeyEventComponent.jsx";
+import EventsPagination from "./EventsPagination.jsx";
 
 const mapStateToProps = (store) => {
   return {
-    database: store.database,
-    events: store.events,
+    database: store.currDatabaseStore.database,
+    events: store.eventsStore.events,
   };
 };
 
@@ -16,18 +16,20 @@ class EventComponent extends Component {
   }
 
   render() {
-    const listOfEvents = this.props.events.map((obj) => {
-      <KeyEventComponent
-        events={obj.props.events}
-        database={obj.props.database}
-      />;
-    });
+    console.log('In eventComponent')
+    let listOfEvents;
+    if (this.props.events) {
+      listOfEvents = this.props.events.map((obj, idx) => {
+        <KeyEventComponent events={obj[idx]} database={this.props.database} />;
+      });
+    }
+
     return (
       <div id='eventComponentContainer'>
         <div id='KeyEventsDiv'>
-          <ul id='keyEventList'>{listOfEVents}</ul>
+          <ul id='keyEventList'>{listOfEvents}</ul>
         </div>
-        <EventsPagination />
+        {/* <EventsPagination /> */}
       </div>
     );
   }
