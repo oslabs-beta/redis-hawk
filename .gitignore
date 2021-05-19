@@ -98,4 +98,5 @@ typings/
 
 .DS_Store
 
+#Ignore redis dumps
 dump.rdb
