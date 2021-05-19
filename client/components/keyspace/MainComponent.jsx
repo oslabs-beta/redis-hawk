@@ -17,6 +17,7 @@ class MainComponent extends Component {
   }
 
   render() {
+    console.log('In mainComponent')
     const myKeys = [];
     if (this.props.keyspace) {
       for (let i = 0; i < this.props.keyspace.length; i += 1) {

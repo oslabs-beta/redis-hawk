@@ -31,7 +31,7 @@ body {
   background-color: orange;
 }
 
-#eventsComponentContainer {
+#eventComponentContainer {
   position: relative;
   top: 500;
   left: 400;
@@ -82,4 +82,9 @@ body {
   width: 100px;
   color: black;
   background-color: orange;
+}
+
+#refreshButton {
+  margin-left: 300px;
+  z-index: 1;
 }

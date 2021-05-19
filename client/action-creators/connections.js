@@ -20,7 +20,7 @@ export const updateKeyspaceActionCreator =
       })
       .catch((err) => {
         console.log(
-          "error deleting user from the DB in keyspaceUpdateActionCreator: ",
+          "error in keyspaceUpdateActionCreator: ",
           err
         );
       });
@@ -44,7 +44,7 @@ export const updateEventsActionCreator =
       })
       .catch((err) => {
         console.log(
-          "error deleting user from the DB in keyspaceUpdateActionCreator: ",
+          "error in keyspaceUpdateActionCreator: ",
           err
         );
       });
@@ -67,7 +67,7 @@ export const updateKeyGraphActionCreator =
       })
       .catch((err) => {
         console.log(
-          "error deleting user from the DB in keyspaceUpdateActionCreator: ",
+          "error in keyspaceUpdateActionCreator: ",
           err
         );
       });

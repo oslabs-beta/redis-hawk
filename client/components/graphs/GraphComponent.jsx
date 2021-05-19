@@ -7,7 +7,8 @@ class GraphComponent extends Component {
   }
 
   render() {
-    return <div>Graph Component!</div>;
+    console.log("In graphComponent");
+    return <div id='graphsComponentContainer'>Graph Component!</div>;
   }
 }
 

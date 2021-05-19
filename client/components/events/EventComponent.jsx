@@ -10,25 +10,26 @@ const mapStateToProps = (store) => {
   };
 };
 
-
 class EventComponent extends Component {
   constructor(props) {
     super(props);
   }
 
   render() {
-    const listOfEvents = this.props.events.map((obj) => {
-      <KeyEventComponent
-        events={obj.props.events}
-        database={obj.props.database}
-      />;
-    });
+    console.log('In eventComponent')
+    let listOfEvents;
+    if (this.props.events) {
+      listOfEvents = this.props.events.map((obj, idx) => {
+        <KeyEventComponent events={obj[idx]} database={this.props.database} />;
+      });
+    }
+
     return (
       <div id='eventComponentContainer'>
         <div id='KeyEventsDiv'>
-          <ul id='keyEventList'>{listOfEVents}</ul>
+          <ul id='keyEventList'>{listOfEvents}</ul>
         </div>
-        <EventsPagination />
+        {/* <EventsPagination /> */}
       </div>
     );
   }

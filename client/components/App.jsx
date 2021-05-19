@@ -28,9 +28,10 @@ const mapDispatchToProps = (dispatch) => ({
 class App extends Component {
   constructor(props) {
     super(props);
-    const state = {
-      whichPage: "",
+    this.state = {
+      whichPage: "Keyspace Page",
     };
+    this.changePage = this.changePage.bind(this);
   }
   // changePage(e) {
   //const page = e.target.innerHtml
@@ -42,13 +43,33 @@ class App extends Component {
     this.props.updateEvents(1, this.props.database);
   }
 
+  changePage(e) {
+    if (e.target.id === "keyspaceLink") {
+      this.state.whichPage = "Keyspace Page";
+      console.log("switched to keyspace page");
+      return;
+    }
+    if (e.target.id === "eventsLink") {
+      this.state.whichPage = "Events Page";
+      console.log("switched to events page");
+      return;
+    }
+    if (e.target.id === "graphsLink") {
+      this.state.whichPage = "Graph Page";
+      console.log("switched to graph page");
+      return;
+    }
+  }
   render() {
     return (
       <div id='app'>
         Hello world!
         <BrowserRouter>
-          <FilterNav whichPage={this.props.whichPage} />
-          <PageNav whichPage={this.props.whichPage} />
+          <FilterNav whichPage={this.state.whichPage} />
+          <PageNav
+            changePage={this.changePage}
+            whichPage={this.state.whichPage}
+          />
           <DatabaseNav />
           {/* create a react router to switch between the main area of divs */}
           <Switch>
