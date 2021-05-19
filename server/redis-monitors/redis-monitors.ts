@@ -14,21 +14,24 @@ const redis = require('redis');
 import { RedisInstance, RedisMonitor, Keyspace } from './models/interfaces';
 import { EventLog } from './models/data-stores';
 
-const instances: RedisInstance[] = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../configs/config.json')));
+const instances: RedisInstance[] = process.env.IS_TEST ?
+  JSON.parse(fs.readFileSync(path.resolve(__dirname, '../configs/tests-config.json')))
+  : JSON.parse(fs.readFileSync(path.resolve(__dirname, '../configs/config.json')));
+
 const redisMonitors: RedisMonitor[] = [];
 
 instances.forEach((instance: RedisInstance, idx: number): void => {
 
   const monitor: RedisMonitor = {
+    instanceId: idx + 1,
     redisClient: redis.createClient({ host: instance.host, port: instance.port }),
     host: instance.host,
     port: instance.port,
     keyspaces: []
   }
 
-  monitor.databases = monitor.redisClient.config('GET', 'databases');
   monitor.redisClient.config('GET', 'databases', (err, res: [string, string]): void => {
-
+    
     //Sets the number of databases present in this monitored Redis instance
     monitor.databases = +res[1];
 
