@@ -20,6 +20,7 @@ const redisMonitors: RedisMonitor[] = [];
 instances.forEach((instance: RedisInstance, idx: number): void => {
 
   const monitor: RedisMonitor = {
+    instanceId: idx + 1,
     redisClient: redis.createClient({ host: instance.host, port: instance.port }),
     host: instance.host,
     port: instance.port,
