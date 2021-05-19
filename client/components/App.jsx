@@ -9,6 +9,7 @@ import EventComponent from "./events/EventComponent.jsx";
 import "./styles/styles.css";
 import { connect } from "react-redux";
 import * as actions from "../action-creators/connections";
+import "../../node_modules/react-vis/dist/style.css";
 
 ///still need to check dispatchers here
 

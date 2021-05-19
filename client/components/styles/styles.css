@@ -23,6 +23,9 @@ body {
 
 #graphsComponentContainer {
   position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   top: 30%;
   height: 55%;
   width: 60%;
@@ -42,6 +45,7 @@ body {
 #keyspaceComponentContainer {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   position: absolute;
   top: 30%;
   left: 30%;
@@ -50,7 +54,17 @@ body {
 
   background-color: green;
 }
+#tableContainer {
+  background-color: black;
+}
 
+#tableCell {
+  /* color: white; */
+}
+
+#tableBody {
+  /* color: white; */
+}
 .searchFilterContainer {
   position: absolute;
   top: 20%;
