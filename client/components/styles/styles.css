@@ -45,6 +45,7 @@ body {
 #keyspaceComponentContainer {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   position: absolute;
   top: 30%;
   left: 30%;
@@ -53,7 +54,17 @@ body {
 
   background-color: green;
 }
+#tableContainer {
+  background-color: black;
+}
 
+#tableCell {
+  /* color: white; */
+}
+
+#tableBody {
+  /* color: white; */
+}
 .searchFilterContainer {
   position: absolute;
   top: 20%;

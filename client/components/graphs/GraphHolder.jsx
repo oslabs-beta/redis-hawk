@@ -10,7 +10,7 @@ import {
 
 const GraphHolder = (props) => {
   return (
-    <XYPlot width={300} height={300}>
+    <XYPlot width={1000} height={200}>
       <VerticalGridLines />
       <HorizontalGridLines />
       <XAxis />
