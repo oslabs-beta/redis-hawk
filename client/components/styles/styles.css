@@ -23,6 +23,9 @@ body {
 
 #graphsComponentContainer {
   position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   top: 30%;
   height: 55%;
   width: 60%;
