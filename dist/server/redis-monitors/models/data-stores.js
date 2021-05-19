@@ -8,6 +8,9 @@ function EventLog() {
 }
 exports.EventLog = EventLog;
 function KeyspaceEvent(key, event) {
+    if (typeof (key) !== 'string' || typeof (event) !== 'string') {
+        throw new TypeError('KeyspaceEvent must be constructed with string args');
+    }
     this.key = key;
     this.event = event;
     this.timestamp = Date.now();

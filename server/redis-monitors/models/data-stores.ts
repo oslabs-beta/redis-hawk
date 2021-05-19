@@ -27,6 +27,10 @@ export function KeyspaceEvent(key: string, event: string): void {
 Used to instantiate a new KeyspaceEvent. 
 The event will be timestamped based on the time of instantiation.
 */
+  if (typeof(key) !== 'string' || typeof(event) !== 'string') {
+    throw new TypeError('KeyspaceEvent must be constructed with string args');
+  }
+
   this.key = key;
   this.event = event;
   this.timestamp = Date.now();
