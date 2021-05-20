@@ -71,10 +71,6 @@ body {
   background-color: black;
 }
 
-#tableBody {
-  border: 10px solid red;
-}
-
 #tableCell {
   /* color: white; */
 }
