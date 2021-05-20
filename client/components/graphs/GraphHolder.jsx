@@ -118,8 +118,8 @@ const GraphHolder = (props) => {
 
   console.log("plotData", plotData);
   return (
-    <XYPlot xType='ordinal' width={1200} height={250}>
-      <VerticalGridLines />
+    <XYPlot xType='ordinal' width={1200} height={250} style={{backgroundColor: 'transparent'}}>
+      {/* <VerticalGridLines /> */}
       <HorizontalGridLines />
       <XAxis />
       <YAxis />

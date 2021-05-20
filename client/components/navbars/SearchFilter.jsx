@@ -48,102 +48,102 @@ class SearchFilter extends Component {
     if (this.props.currPage === 'events') {
       return (
         <div className='searchFilterDiv'>
-          <form onSubmit={this.handleSubmit}>
+          <form id='filter-form' onSubmit={this.handleSubmit}>
             <label>
-              Search:
-              <input
-                id='uniqueInput'
-                type='text'
-                value={this.state.value}
-                onChange={this.handleChange}
-              />
-              <input
-                className='filter'
-                id='name'
-                type='submit'
-                value='filter by name'
-                onClick={this.handleClick}
-              />
-              <input
-                className='filter'
-                id='event'
-                type='submit'
-                value='filter by event'
-                onClick={this.handleClick}
-              />
-              {/* <input
-                className='filter'
-                id='type'
-                type='submit'
-                value='filter by type'
-                onClick={this.handleClick}
-              /> */}
+              Search: 
             </label>
+            <input
+              id='uniqueInput'
+              type='text'
+              value={this.state.value}
+              onChange={this.handleChange}
+            />
+            <input
+              className='form-filter-button'
+              id='name'
+              type='submit'
+              value='filter by name'
+              onClick={this.handleClick}
+            />
+            <input
+              className='form-filter-button'
+              id='event'
+              type='submit'
+              value='filter by event'
+              onClick={this.handleClick}
+            />
+            {/* <input
+              className='filter'
+              id='type'
+              type='submit'
+              value='filter by type'
+              onClick={this.handleClick}
+            /> */}
           </form>
         </div>
       );
     } else if (this.props.currPage === 'graphs') {
       return (
         <div className='searchFilterDiv'>
-          <form onSubmit={this.handleSubmit}>
+          <form id='filter-form' onSubmit={this.handleSubmit}>
             <label>
               Search:
-              <input
-                type='text'
-                value={this.state.value}
-                onChange={this.handleChange}
-              />
-              <input
-                className='filter'
-                id='name'
-                type='submit'
-                value='filter by name'
-                onClick={this.handleClick}
-              />
-              <input
-                className='filter'
-                id='event'
-                type='submit'
-                value='filter by event'
-                onClick={this.handleClick}
-              />
-              {/* <input
-                className='filter'
-                id='type'
-                type='submit'
-                value='filter by type'
-                onClick={this.handleClick}
-              /> */}
             </label>
+            <input
+              type='text'
+              value={this.state.value}
+              onChange={this.handleChange}
+            />
+            <input
+              className='form-filter-button'
+              id='name'
+              type='submit'
+              value='filter by name'
+              onClick={this.handleClick}
+            />
+            <input
+              className='form-filter-button'
+              id='event'
+              type='submit'
+              value='filter by event'
+              onClick={this.handleClick}
+            />
+            {/* <input
+              className='filter'
+              id='type'
+              type='submit'
+              value='filter by type'
+              onClick={this.handleClick}
+            /> */}
           </form>
         </div>
       );
     } else {
       return (
         <div className='searchFilterDiv'>
-          <form onSubmit={this.handleSubmit}>
+          <form id='filter-form' onSubmit={this.handleSubmit}>
             <label>
               Search:
-              <input
-                type='text'
-                value={this.state.value}
-                onChange={this.handleChange}
-              />
-              <input
-                className='filter'
-                id='name'
-                type='submit'
-                value='filter by name'
-                onClick={this.handleClick}
-              />
-              <input
-                className='filter'
-                id='type'
-                type='submit'
-                value='filter by type'
-                onClick={this.handleClick}
-              />
             </label>
+            <input
+              type='text'
+              value={this.state.value}
+              onChange={this.handleChange}
+            />
+            <input
+              className='form-filter-button'
+              id='name'
+              type='submit'
+              value='filter by name'
+              onClick={this.handleClick}
+            />
+            <input
+              className='form-filter-button'
+              id='type'
+              type='submit'
+              value='filter by type'
+              onClick={this.handleClick}
+            />
           </form>
         </div>
       );

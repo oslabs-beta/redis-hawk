@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
 html {
   height: 100vh;
   width: 100vw;
@@ -7,11 +9,16 @@ body {
   /* display: inline-block; */
   height: 100%;
   width: 100%;
+  margin: 0 auto;
+  padding: 1em 0;
+  background-color: rgb(35,35,35);
+  color:rgb(200, 200, 200);
 }
 
 #root {
   height: 100%;
   width: 100%;
+  font-family: 'Roboto', sans-serif;
 }
 
 #app {
@@ -30,8 +37,8 @@ body {
   height: 55%;
   width: 60%;
   left: 30%;
-  background-color: orange;
   border: 1px solid #000000;
+  background-color: black;
   box-sizing: border-box;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   overflow: scroll;
@@ -47,7 +54,6 @@ body {
   left: 30%;
   height: 55%;
   width: 60%;
-  background-color: red;
   border: 1px solid #000000;
   box-sizing: border-box;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -65,8 +71,6 @@ body {
   border: 1px solid #000000;
   box-sizing: border-box;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-
-  background-color: green;
 }
 #tableContainer {
   background-color: black;
@@ -79,17 +83,52 @@ body {
 #tableBody {
   /* color: white; */
 }
+
 .filterNavContainer {
   position: absolute;
   display: flex;
   justify-content: space-between;
-  top: 20%;
+  top: 18%;
   left: 30%;
   height: 10%;
   width: 60%;
-  background-color: purple;
+  border-bottom: 1px solid grey;
   box-sizing: border-box;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.filterNavContainer > .filter-button {
+  background-color: rgb(233, 0, 0);
+  border: 1px solid rgb(233, 0, 0);
+  border-radius: 5px;
+  margin: 2em 0;
+  color: rgb(0, 0, 0);
+}
+
+#filter-form {
+  display: flex;
+  align-items: center;
+}
+
+#filter-form > * {
+  margin: 0 0.25em;
+}
+
+#filter-form > .form-filter-button {
+  background-color: transparent;
+  border: 1px solid rgb(201, 76, 3);
+  color: rgb(200, 200, 200);
+  border-radius: 5px;
+  padding: 0.25em 0.5em;
+}
+
+.filterNavContainer > .filter-button:hover, .form-filter-button:hover {
+  cursor: pointer;
+}
+
+#refreshButton {
+  position: relative;
+  margin-left: 300px;
+  z-index: 1;
 }
 
 .searchFilterDiv {
@@ -109,15 +148,33 @@ body {
 
 #databaseNavContainer {
   position: absolute;
-  top: 10%;
+  top: 5%;
   left: 5%;
   height: 80%;
-  width: 15%;
-  background-color: cyan;
-  border: 1px solid #000000;
+  width: 18%;
   box-sizing: border-box;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  overflow-y: scroll;
+  border: 1px solid grey;
+  border-radius: 10px;
+  overflow-y: auto;
+  padding: 1em 2.5em 1em;
+  font-size: 1.1em;
+}
+
+#redisInstance > p {
+  margin: 0.5em 0.25em;
+}
+
+#redisInstance span {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+#databaseHolder > .singleDatabase {
+  padding: 0.25em 0 0.25em 1em;
+}
+
+#databaseHolder > .singleDatabase:hover {
+  cursor: pointer;
 }
 
 #pageNavContainer {
@@ -130,8 +187,22 @@ body {
   left: 25%;
   height: 15%;
   width: 70%;
-  background-color: lightPink;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+#pageNavContainer .page-toggle {
+  text-decoration: none;
+  color: rgb(233, 0, 0);
+  border: 1px solid red;
+  border-radius: 5px;
+  padding: 1em 6em;
+}
+
+#pageNavContainer .selected-page-toggle {
+  text-decoration: none;
+  color: white;
+  background-color: rgb(233, 0, 0);
+  border-radius: 5px;
+  padding: 1em 6em;
 }
 
 #keyListComponentContainer {
@@ -142,19 +213,8 @@ body {
   background-color: orange;
 }
 
-#refreshButton {
-  position: relative;
-  margin-left: 300px;
-  z-index: 1;
-}
 
-.singleDatabase {
-  border: 1px solid black;
-  height: 40px;
-}
-.singleDatabase:hover {
-  cursor: pointer;
-}
+
 #redisInstance {
   height: 10%;
 }
