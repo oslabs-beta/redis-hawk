@@ -97,21 +97,21 @@ function createData(keyname, value, type) {
   return { keyname, value, type };
 }
 
-const rows = [
-  createData("Wesley", "geo-wiz", "string"),
-  createData("nothing", "value: null", "hash"),
-  createData("Abby", "Boss", "string"),
-  createData("random", "159", "string"),
-  createData("james", "sensei", "string"),
-  createData("realdata", "isTrue: false", "hash"),
-  createData("Ice cream sandwich", "yum", "string"),
-  createData("Jelly Bean", "binary: 0101", "hash"),
-  createData("KitKat", "password: 123456", "hash"),
-  createData("Lollipop", "somevalue", "string"),
-  createData("Marshmallow", "somevalue", "string"),
-  createData("Nougat", "somevalue", "string"),
-  createData("Oreo", "trueValue", "string"),
-].sort((a, b) => (a.calories < b.calories ? -1 : 1));
+// const rows = [
+//   createData("Wesley", "geo-wiz", "string"),
+//   createData("nothing", "value: null", "hash"),
+//   createData("Abby", "Boss", "string"),
+//   createData("random", "159", "string"),
+//   createData("james", "sensei", "string"),
+//   createData("realdata", "isTrue: false", "hash"),
+//   createData("Ice cream sandwich", "yum", "string"),
+//   createData("Jelly Bean", "binary: 0101", "hash"),
+//   createData("KitKat", "password: 123456", "hash"),
+//   createData("Lollipop", "somevalue", "string"),
+//   createData("Marshmallow", "somevalue", "string"),
+//   createData("Nougat", "somevalue", "string"),
+//   createData("Oreo", "trueValue", "string"),
+// ].sort((a, b) => (a.calories < b.calories ? -1 : 1));
 
 const useStyles2 = makeStyles({
   table: {
@@ -119,7 +119,28 @@ const useStyles2 = makeStyles({
   },
 });
 
-function KeyspaceTable() {
+function KeyspaceTable(props) {
+  const rows = [];
+  // console.log("EventTable props", props);
+  // if props.currDisplay.category  === 'name'
+  // use that name to match event.key with that name from event.key[0]
+  // e.g. event.key[0] === 'wesley';  props.currDisplay.filter === 'wes'
+  // so that event gets pushed into rows
+
+  // if props.currDisplay.category === 'event'
+  // event.event === 'SET'. props.currDisplay.filter === 'SET, that shit gets pushed to rows
+  console.log("props in KeyspaceTable", props);
+  props.keyspace[props.currDatabase].forEach((keyspace) => {
+    if (props.currDisplay.category === "name") {
+      if (keyspace.key.includes(props.currDisplay.filter.toString())) {
+        rows.push(createData(keyspace.key, keyspace.value, keyspace.type));
+      }
+    } else if (props.currDisplay.category === "type") {
+      if (keyspace.type === props.currDisplay.filter) {
+        rows.push(createData(keyspace.key, keyspace.value, keyspace.type));
+      }
+    } else rows.push(createData(keyspace.key, keyspace.value, keyspace.type));
+  });
   const classes = useStyles2();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);

@@ -1,11 +1,9 @@
 //leave these separate for future developers in case they want to add functionality
-import * as types from '../actions/actionTypes.js';
+import * as types from "../actions/actionTypes.js";
 
 const initialState = {
   currDatabase: 0,
-  keyspace: [
-    [{ name: 'Abigail The Queen', value: 'know she is queen', type: 'hash' }],
-  ],
+  keyspace: [[]],
 };
 
 const keyspaceReducer = (state = initialState, action) => {
@@ -15,11 +13,14 @@ const keyspaceReducer = (state = initialState, action) => {
     case types.UPDATE_KEYSPACE: {
       //we want to update the kesypace at index database
       const dbIndex = state.currDatabase;
-
-      const newKeyspace = action.payload;
+      console.log("payload in Keyspacereducer", action.payload);
+      const newKeyspace = action.payload.keyspaces;
 
       keyspace = state.keyspace.slice();
+      console.log("keyspace before push", keyspace);
       keyspace[dbIndex].push(...newKeyspace);
+      console.log("keyspace in reducer after push", keyspace);
+
       return {
         ...state,
         keyspace,
