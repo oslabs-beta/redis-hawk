@@ -276,7 +276,7 @@ describe('Route Integration Tests', () => {
 
       let response;
       beforeAll(async () => {
-        response = await request(app).get('/');
+        response = await request(app).get('/api/keyspaces');
       });
 
       it('should respond with a 200 status code', () => {
@@ -289,16 +289,11 @@ describe('Route Integration Tests', () => {
       });
 
       it('should return a response body in the proper shape', () => {
-        checkRequestBodyShape(response.body, ENDPOINT_NAMES.KEYSPACE_HISTORIES);
+        checkRequestBodyShape(response.body, ENDPOINT_NAMES.KEYSPACES);
       });
 
       it('should return the correct number of instances in the body', () => {
         expect(response.body.data).toHaveLength(2);
-      });
-
-      it('should return the correct number of keyspaces in the body', () => {
-        expect(response.body.data[0].keyspaces).toHaveLength(1);
-        expect(response.body.data[1].keyspaces).toHaveLength(2);
       });
 
       it('should return the correct keyspace data', () => {
@@ -312,7 +307,7 @@ describe('Route Integration Tests', () => {
           key: 'message:2',
           value: 'value2'
         }));
-        expect(response.body.data[1].keyspaces[0][0])
+        expect(response.body.data)
         .toEqual(expect.objectContaining({
           key: 'message:3',
           value: 'value3'
@@ -333,13 +328,6 @@ describe('Route Integration Tests', () => {
           value: 'value6'
         }));
       });
-
-
-
-
-
-      // expect(data[0].keyspaces[2][1].key).toEqual('key:4');
-      // expect(data[0].keyspaces[2][1].value).toEqual('value4');
 
 
     })
