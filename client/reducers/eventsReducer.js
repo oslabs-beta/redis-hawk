@@ -14,7 +14,6 @@ const eventsReducer = (state = initialState, action) => {
       const dbIndex = state.currDatabase;
 
       const newEvents = action.payload.events;
-      console.log("newEvents");
       events = state.events.slice();
 
       //the events come in from new to old
