@@ -101,22 +101,6 @@ function createData(keyname, value, type) {
   return { keyname, value, type };
 }
 
-// const rows = [
-//   createData("Wesley", "geo-wiz", "string"),
-//   createData("nothing", "value: null", "hash"),
-//   createData("Abby", "Boss", "string"),
-//   createData("random", "159", "string"),
-//   createData("james", "sensei", "string"),
-//   createData("realdata", "isTrue: false", "hash"),
-//   createData("Ice cream sandwich", "yum", "string"),
-//   createData("Jelly Bean", "binary: 0101", "hash"),
-//   createData("KitKat", "password: 123456", "hash"),
-//   createData("Lollipop", "somevalue", "string"),
-//   createData("Marshmallow", "somevalue", "string"),
-//   createData("Nougat", "somevalue", "string"),
-//   createData("Oreo", "trueValue", "string"),
-// ].sort((a, b) => (a.calories < b.calories ? -1 : 1));
-
 const useStyles2 = makeStyles({
   table: {
     minWidth: 500,
