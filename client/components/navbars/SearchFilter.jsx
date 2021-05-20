@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 import { Component } from 'react';
 import * as actions from '../../action-creators/connections.js';
 
-// add onclicks to the #filtertypes
-
 const mapStateToProps = (store) => {
   return {
     currPage: store.currPageStore.currPage,
@@ -16,53 +14,6 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(actions.updateCurrDisplayActionCreator(filter, category)),
 });
 
-// const SearchFilter = (props) => {
-//   if (props.keyspace) {
-//     return (
-//       <div className='searchFilterDiv'>
-//         <input id='searchInput' />
-//         <div className='filterContainer'>
-//           <div
-//             className='filter'
-//             onClick={() => props.updateCurrDisplay(input.value, 'name')}
-//           >
-//             Filter By Keyname
-//           </div>
-//           <div className='filter'>Filter By KeyType</div>
-//         </div>
-//         <div></div>
-//       </div>
-//     );
-//   }
-//   if (props.events) {
-//     return (
-//       <div className='searchFilterDiv'>
-//         <input id='searchInput' />
-//         <div className='filterContainer'>
-//           <div className='filter'>Filter By Keyname</div>
-//           <div className='filter'>Filter By KeyType</div>
-//           <div className='filter'>Filter By Event</div>
-//         </div>
-//         <div></div>
-//       </div>
-//     );
-//   }
-
-//   if (props.graphs) {
-//     return (
-//       <div className='searchFilterDiv'>
-//         <input id='searchInput' />
-//         <div className='filterContainer'>
-//           <div className='filter'>Filter By KeyType</div>
-//           <div className='filter'>Filter By KeyEvent</div>
-//           <div className='filter'>Filter By Time</div>
-//         </div>
-//         <div></div>
-//         <div className='filter'>Filter By Keyname</div>
-//       </div>
-//     );
-//   } else return null;
-// };
 class SearchFilter extends Component {
   constructor(props) {
     super(props);
@@ -120,13 +71,13 @@ class SearchFilter extends Component {
                 value='filter by event'
                 onClick={this.handleClick}
               />
-              <input
+              {/* <input
                 className='filter'
                 id='type'
                 type='submit'
                 value='filter by type'
                 onClick={this.handleClick}
-              />
+              /> */}
             </label>
           </form>
         </div>
@@ -156,13 +107,13 @@ class SearchFilter extends Component {
                 value='filter by event'
                 onClick={this.handleClick}
               />
-              <input
+              {/* <input
                 className='filter'
                 id='type'
                 type='submit'
                 value='filter by type'
                 onClick={this.handleClick}
-              />
+              /> */}
             </label>
           </form>
         </div>
@@ -200,52 +151,4 @@ class SearchFilter extends Component {
   }
 }
 
-// const SearchFilter = (props) => {
-//   if (props.keyspace) {
-//     return (
-//       <div className='searchFilterDiv'>
-//         <input id='searchInput' />
-//         <div className='filterContainer'>
-//           <div
-//             className='filter'
-//             onClick={() => props.updateCurrDisplay(input.value, 'name')}
-//           >
-//             Filter By Keyname
-//           </div>
-//           <div className='filter'>Filter By KeyType</div>
-//         </div>
-//         <div></div>
-//       </div>
-//     );
-//   }
-//   if (props.events) {
-//     return (
-//       <div className='searchFilterDiv'>
-//         <input id='searchInput' />
-//         <div className='filterContainer'>
-//           <div className='filter'>Filter By Keyname</div>
-//           <div className='filter'>Filter By KeyType</div>
-//           <div className='filter'>Filter By Event</div>
-//         </div>
-//         <div></div>
-//       </div>
-//     );
-//   }
-
-//   if (props.graphs) {
-//     return (
-//       <div className='searchFilterDiv'>
-//         <input id='searchInput' />
-//         <div className='filterContainer'>
-//           <div className='filter'>Filter By KeyType</div>
-//           <div className='filter'>Filter By KeyEvent</div>
-//           <div className='filter'>Filter By Time</div>
-//         </div>
-//         <div></div>
-//         <div className='filter'>Filter By Keyname</div>
-//       </div>
-//     );
-//   } else return null;
-// };
-
-export default connect(null, mapDispatchToProps)(SearchFilter);
+export default connect(mapStateToProps, mapDispatchToProps)(SearchFilter);
