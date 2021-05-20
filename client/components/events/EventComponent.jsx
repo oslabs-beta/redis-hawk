@@ -1,12 +1,13 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import KeyEventComponent from "./KeyEventComponent.jsx";
-import EventTable from "./EventTable.jsx";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import KeyEventComponent from './KeyEventComponent.jsx';
+import EventTable from './EventTable.jsx';
 
 const mapStateToProps = (store) => {
   return {
     database: store.currDatabaseStore.currDatabase,
     events: store.eventsStore.events,
+    currDisplay: store.currDisplayStore.currDisplay,
   };
 };
 
@@ -16,7 +17,7 @@ class EventComponent extends Component {
   }
 
   render() {
-    console.log("In eventComponent", this.props.database);
+    console.log('In eventComponent', this.props.database);
     let listOfEvents;
     if (this.props.events) {
       listOfEvents = this.props.events.map((obj, idx) => {
@@ -31,6 +32,7 @@ class EventComponent extends Component {
         </div>
         <EventsPagination /> */}
         <EventTable
+          currDisplay={this.props.currDisplay}
           currDatabase={this.props.database}
           events={this.props.events}
         />
