@@ -117,18 +117,21 @@ function KeyspaceTable(props) {
 
   // if props.currDisplay.category === 'event'
   // event.event === 'SET'. props.currDisplay.filter === 'SET, that shit gets pushed to rows
-  console.log('props in KeyspaceTable', props);
-  props.keyspace[props.currDatabase].forEach((keyspace) => {
-    if (props.currDisplay.category === 'name') {
-      if (keyspace.key.includes(props.currDisplay.filter.toString())) {
-        rows.push(createData(keyspace.key, keyspace.value, keyspace.type));
-      }
-    } else if (props.currDisplay.category === 'type') {
-      if (keyspace.type === props.currDisplay.filter) {
-        rows.push(createData(keyspace.key, keyspace.value, keyspace.type));
-      }
-    } else rows.push(createData(keyspace.key, keyspace.value, keyspace.type));
-  });
+
+  console.log("props in KeyspaceTable", props);
+  if (props.keyspace[props.currDatabase]) {
+    props.keyspace[props.currDatabase].forEach((keyspace) => {
+      if (props.currDisplay.category === "name") {
+        if (keyspace.key.includes(props.currDisplay.filter.toString())) {
+          rows.push(createData(keyspace.key, keyspace.value, keyspace.type));
+        }
+      } else if (props.currDisplay.category === "type") {
+        if (keyspace.type === props.currDisplay.filter) {
+          rows.push(createData(keyspace.key, keyspace.value, keyspace.type));
+        }
+      } else rows.push(createData(keyspace.key, keyspace.value, keyspace.type));
+    });
+  }
   const classes = useStyles2();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
