@@ -93,25 +93,25 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-function createData(keyname, value, type) {
-  return { keyname, value, type };
+function createData(keyname, event, time) {
+  return { keyname, event, time };
 }
 
-const rows = [
-  createData("Wesley", "geo-wiz", "string"),
-  createData("nothing", "value: null", "hash"),
-  createData("Abby", "Boss", "string"),
-  createData("random", "159", "string"),
-  createData("james", "sensei", "string"),
-  createData("realdata", "isTrue: false", "hash"),
-  createData("Ice cream sandwich", "yum", "string"),
-  createData("Jelly Bean", "binary: 0101", "hash"),
-  createData("KitKat", "password: 123456", "hash"),
-  createData("Lollipop", "somevalue", "string"),
-  createData("Marshmallow", "somevalue", "string"),
-  createData("Nougat", "somevalue", "string"),
-  createData("Oreo", "trueValue", "string"),
-].sort((a, b) => (a.calories < b.calories ? -1 : 1));
+// const rows = [
+//   createData("Wesley", "geo-wiz", "string"),
+//   createData("nothing", "value: null", "hash"),
+//   createData("Abby", "Boss", "string"),
+//   createData("random", "159", "string"),
+//   createData("james", "sensei", "string"),
+//   createData("realdata", "isTrue: false", "hash"),
+//   createData("Ice cream sandwich", "yum", "string"),
+//   createData("Jelly Bean", "binary: 0101", "hash"),
+//   createData("KitKat", "password: 123456", "hash"),
+//   createData("Lollipop", "somevalue", "string"),
+//   createData("Marshmallow", "somevalue", "string"),
+//   createData("Nougat", "somevalue", "string"),
+//   createData("Oreo", "trueValue", "string"),
+// ].sort((a, b) => (a.calories < b.calories ? -1 : 1));
 
 const useStyles2 = makeStyles({
   table: {
@@ -119,7 +119,16 @@ const useStyles2 = makeStyles({
   },
 });
 
-function EventTable() {
+function EventTable(props) {
+  const rows = [];
+  // console.log("EventTable props", props);
+
+  console.log("EventTable props.events", props.events[props.currDatabase]);
+  props.events[props.currDatabase].forEach((event) => {
+    const date = new Date(event.timestamp);
+    rows.push(createData(event.key, event.event, date.toString("MMM dd")));
+  });
+  console.log("rows in EventTable", rows);
   const classes = useStyles2();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -143,10 +152,10 @@ function EventTable() {
           <TableRow>
             <TableCell style={{ color: "white" }}>Keyname</TableCell>
             <TableCell style={{ color: "white" }} align='right'>
-              Value
+              Event
             </TableCell>
             <TableCell style={{ color: "white" }} align='right'>
-              Type
+              Timestamp
             </TableCell>
           </TableRow>
         </TableHead>
@@ -167,13 +176,13 @@ function EventTable() {
                 className='tableCell'
                 style={{ width: 160, color: "white" }}
                 align='right'>
-                {row.value}
+                {row.event}
               </TableCell>
               <TableCell
                 className='tableCell'
                 style={{ width: 160, color: "white" }}
                 align='right'>
-                {row.type}
+                {row.time}
               </TableCell>
             </TableRow>
           ))}

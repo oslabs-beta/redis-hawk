@@ -1,17 +1,9 @@
 //leave these separate for future developers in case they want to add functionality
-import * as types from '../actions/actionTypes.js';
+import * as types from "../actions/actionTypes.js";
 
 const initialState = {
   currDatabase: 0,
-  events: [
-    [
-      {
-        name: 'Arthur',
-        event: 'SET',
-        time: 'Sat May 15 2021 15:18:35 GMT-0400 (Eastern Daylight Time)',
-      },
-    ],
-  ],
+  events: [[]],
 };
 
 const eventsReducer = (state = initialState, action) => {
@@ -21,9 +13,9 @@ const eventsReducer = (state = initialState, action) => {
     case types.UPDATE_EVENTS: {
       const dbIndex = state.currDatabase;
 
-      const newEvents = action.payload;
-
-      events = state.event.slice();
+      const newEvents = action.payload.events;
+      console.log("newEvents");
+      events = state.events.slice();
 
       //the events come in from new to old
       for (let i = newEvents.length - 1; i >= 0; i -= 1) {

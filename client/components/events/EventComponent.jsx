@@ -5,7 +5,7 @@ import EventTable from "./EventTable.jsx";
 
 const mapStateToProps = (store) => {
   return {
-    database: store.currDatabaseStore.database,
+    database: store.currDatabaseStore.currDatabase,
     events: store.eventsStore.events,
   };
 };
@@ -16,7 +16,7 @@ class EventComponent extends Component {
   }
 
   render() {
-    console.log("In eventComponent");
+    console.log("In eventComponent", this.props.database);
     let listOfEvents;
     if (this.props.events) {
       listOfEvents = this.props.events.map((obj, idx) => {
@@ -30,7 +30,10 @@ class EventComponent extends Component {
           <ul id='keyEventList'>{listOfEvents}</ul>
         </div>
         <EventsPagination /> */}
-        <EventTable />
+        <EventTable
+          currDatabase={this.props.database}
+          events={this.props.events}
+        />
       </div>
     );
   }
