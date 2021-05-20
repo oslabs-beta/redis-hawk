@@ -163,7 +163,11 @@ function EventTable(props) {
             ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             : rows
           ).map((row) => (
-            <TableRow key={row.keyname}>
+            //TableRow's key will need to be totally unique
+            //in case the same event type happens to a given keyname multiple times
+            //this will cause a key duplication error and will result in 
+            //the TableRow component being duplicated/persisted across pages...
+            <TableRow key={row.keyname + row.event}>
               <TableCell
                 style={{ color: "white" }}
                 className='tableCell'
