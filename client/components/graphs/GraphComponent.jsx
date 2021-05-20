@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import GraphHolder from './GraphHolder.jsx';
-import { connect } from 'react-redux';
-import * as actions from '../../action-creators/connections';
+import React, { Component } from "react";
+import GraphHolder from "./GraphHolder.jsx";
+import { connect } from "react-redux";
+import * as actions from "../../action-creators/connections";
 
 const mapStateToProps = (store) => {
   return {
@@ -25,17 +25,17 @@ class GraphComponent extends Component {
 
   componentDidMount() {
     const self = this;
-    console.log('props', this.props);
-    setInterval(self.setGraphUpdate, 3000);
+    console.log("props", this.props);
+    setInterval(self.setGraphUpdate, 5000);
   }
   setGraphUpdate() {
-    console.log('fetching');
+    console.log("fetching");
     let currIndex = this.props.events[this.props.currDatabase].length - 1;
     this.props.updateEvents(1, this.props.currDatabase, currIndex);
   }
 
   render() {
-    console.log('props in GraphComponent', this.props);
+    console.log("props in GraphComponent", this.props);
     return (
       <div id='graphsComponentContainer'>
         <GraphHolder
