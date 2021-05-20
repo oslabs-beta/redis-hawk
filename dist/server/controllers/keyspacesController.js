@@ -40,7 +40,7 @@ var keyspacesRedisMonitors = require('../redis-monitors/redis-monitors');
 var utils_1 = require("./utils");
 var redis_1 = require("redis");
 var keyspacesController = {};
-keyspacesController.getKeyspace = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+keyspacesController.getAllInstancesKeyspaces = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var data, _i, keyspacesRedisMonitors_1, monitor, keyspaces, idx, client, _a, _b, keyspace, keyspaceData;
     return __generator(this, function (_c) {
         switch (_c.label) {
@@ -78,6 +78,83 @@ keyspacesController.getKeyspace = function (req, res, next) { return __awaiter(v
                 _i++;
                 return [3, 1];
             case 7:
+                res.locals.data = data;
+                return [2, next()];
+        }
+    });
+}); };
+keyspacesController.getAllKeyspacesForInstance = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var data, _i, keyspacesRedisMonitors_2, monitor, keyspaces, idx, client, _a, _b, keyspace, keyspaceData;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
+            case 0:
+                data = [];
+                _i = 0, keyspacesRedisMonitors_2 = keyspacesRedisMonitors;
+                _c.label = 1;
+            case 1:
+                if (!(_i < keyspacesRedisMonitors_2.length)) return [3, 7];
+                monitor = keyspacesRedisMonitors_2[_i];
+                if (!(monitor.instanceId = req.params.instanceId)) return [3, 6];
+                keyspaces = [];
+                idx = 0;
+                client = redis_1.createClient({ host: monitor.host, port: monitor.port });
+                _a = 0, _b = monitor.keyspaces;
+                _c.label = 2;
+            case 2:
+                if (!(_a < _b.length)) return [3, 5];
+                keyspace = _b[_a];
+                return [4, utils_1.getKeyspace(client, idx)];
+            case 3:
+                keyspaceData = _c.sent();
+                keyspaces.push(keyspaceData);
+                idx += 1;
+                _c.label = 4;
+            case 4:
+                _a++;
+                return [3, 2];
+            case 5:
+                data.push({
+                    instanceId: monitor.instanceId,
+                    keyspaces: keyspaces
+                });
+                _c.label = 6;
+            case 6:
+                _i++;
+                return [3, 1];
+            case 7:
+                res.locals.data = data;
+                return [2, next()];
+        }
+    });
+}); };
+keyspacesController.getKeyspaceForInstance = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var data, _i, keyspacesRedisMonitors_3, monitor, keyspaces, idx, client, keyspaceData;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                data = [];
+                _i = 0, keyspacesRedisMonitors_3 = keyspacesRedisMonitors;
+                _a.label = 1;
+            case 1:
+                if (!(_i < keyspacesRedisMonitors_3.length)) return [3, 4];
+                monitor = keyspacesRedisMonitors_3[_i];
+                if (!(monitor.instanceId = req.params.instanceId)) return [3, 3];
+                keyspaces = [];
+                idx = 0;
+                client = redis_1.createClient({ host: monitor.host, port: monitor.port });
+                return [4, utils_1.getKeyspace(client, req.params.dbIndex)];
+            case 2:
+                keyspaceData = _a.sent();
+                keyspaces.push(keyspaceData);
+                data.push({
+                    instanceId: monitor.instanceId,
+                    keyspaces: keyspaces
+                });
+                _a.label = 3;
+            case 3:
+                _i++;
+                return [3, 1];
+            case 4:
                 res.locals.data = data;
                 return [2, next()];
         }
