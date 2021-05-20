@@ -8,8 +8,9 @@ import KeyspaceTable from "./KeyspaceTable.jsx";
 
 const mapStateToProps = (store) => {
   return {
-    database: store.currDatabaseStore.currDatabase,
+    currDatabase: store.currDatabaseStore.currDatabase,
     keyspace: store.keyspaceStore.keyspace,
+    currDisplay: store.currDisplayStore.currDisplay,
   };
 };
 
@@ -26,7 +27,11 @@ class KeyspaceComponent extends Component {
           database={this.props.database}
           keyspace={this.props.keyspace}
         /> */}
-        <KeyspaceTable />
+        <KeyspaceTable
+          currDatabase={this.props.currDatabase}
+          keyspace={this.props.keyspace}
+          currDisplay={this.props.currDisplay}
+        />
         {/* <KeyspacePagination
           database={this.props.database}
           keys={this.props.keyspace}

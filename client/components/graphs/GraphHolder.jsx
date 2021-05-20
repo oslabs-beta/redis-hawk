@@ -1,4 +1,7 @@
 import React from "react";
+// import * as actions from "../../action-creators/connections";
+// import { connect } from "react-redux";
+
 import {
   XYPlot,
   XAxis,
@@ -7,6 +10,17 @@ import {
   HorizontalGridLines,
   LineSeries,
 } from "react-vis";
+
+// const mapStateToProps = (store) => {
+//   return {
+//     currDisplay: store.currDisplayStore.currDisplay,
+//   };
+// };
+
+// const mapDispatchToProps = (dispatch) => ({
+//   updateCurrentDisplay: (filter, category) =>
+//     dispatch(actions.updateCurrDisplayActionCreator)(filter, category),
+// });
 
 const GraphHolder = (props) => {
   console.log("GraphHolder props", props);
@@ -21,7 +35,7 @@ const GraphHolder = (props) => {
     const eventTimesArray = [];
     let temp = [];
     let xRange = 0;
-    let yRange = 60000;
+    let yRange = 10000;
 
     for (let i = 0; i < array.length; i++) {
       if (
@@ -48,8 +62,8 @@ const GraphHolder = (props) => {
               formattedTime: date.slice(16, 24),
             },
           ];
-          xRange += 60000;
-          yRange += 60000;
+          xRange += 10000;
+          yRange += 10000;
         }
       }
     }
@@ -58,7 +72,7 @@ const GraphHolder = (props) => {
     const result = [];
     eventTimesArray.forEach((array) => {
       const time = new Date(array[0].time).toString("MMM dd").slice(16, 24);
-      console.log("time", time);
+      // console.log("time", time);
       result.push({ x: array[0].formattedTime, y: array.length });
     });
     return result;
@@ -103,7 +117,7 @@ const GraphHolder = (props) => {
 
   console.log("plotData", plotData);
   return (
-    <XYPlot xType='ordinal' width={800} height={250}>
+    <XYPlot xType='ordinal' width={1200} height={250}>
       <VerticalGridLines />
       <HorizontalGridLines />
       <XAxis />
@@ -113,4 +127,5 @@ const GraphHolder = (props) => {
   );
 };
 
+// export default connect(mapStateToProps, mapDispatchToProps)(GraphHolder);
 export default GraphHolder;

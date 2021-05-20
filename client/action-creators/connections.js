@@ -15,16 +15,19 @@ export const updateKeyspaceActionCreator =
     //content-type headers is not needed bc you send no body
     fetch(url)
       .then((res) => res.json())
-      .then((data) => {
+      .then((response) => {
         //the response be the deleted object, and we will grab the id off of that and we then go and fileter that out of state.
 
         // //data[0].keyspaces[0] to get the specific keyspace for the individual
-        const keyspaces = data[0].keyspaces[0];
+        console.log("keyspaces data", response.data[0].keyspaces);
+
+        // console.log('keyspaces data', response.data[0].keyspaces)
+        const keyspaces = response.data[0].keyspaces[0];
         if (keyspaces) {
           dispatch({
             type: types.UPDATE_KEYSPACE,
             //is this the proper syntax to grab dbIndex too????
-            payload: [keyspaces, dbIndex],
+            payload: { keyspaces: keyspaces, dbIndex: dbIndex },
           });
         }
       })

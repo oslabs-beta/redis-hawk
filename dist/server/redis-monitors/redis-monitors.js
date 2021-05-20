@@ -27,7 +27,7 @@ instances.forEach(function (instance, idx) {
             monitor.keyspaces.push(keyspace);
             monitor.redisClient.on('pmessage', function (channel, message, event) {
                 if (+message.match(/[0-9*]/)[0] === dbIndex) {
-                    var key = message.replace(/__keyspace@[0-9]*__/, '');
+                    var key = message.replace(/__keyspace@[0-9]*__:/, '');
                     monitor.keyspaces[dbIndex].eventLog.add(key, event);
                 }
             });
