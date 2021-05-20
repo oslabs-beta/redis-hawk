@@ -2,6 +2,8 @@
 Library of interfaces to represent data structures used by the RedisMonitors.
 */
 
+import { RedisClient } from 'redis';
+
 export interface RedisInstance {
   host: string;
   port: number;
@@ -9,7 +11,7 @@ export interface RedisInstance {
 
 export interface RedisMonitor {
   instanceId: number;
-  redisClient: any;
+  redisClient: RedisClient;
   host: RedisInstance['host'];
   port: RedisInstance['port'];
   databases?: number; //Check property - should this be optional on object initialization?

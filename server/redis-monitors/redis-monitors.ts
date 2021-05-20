@@ -9,10 +9,11 @@ for each keyspace and write them to an event log.
 
 const fs = require('fs');
 const path = require('path');
-const redis = require('redis');
+import * as redis from 'redis';
 
 import { RedisInstance, RedisMonitor, Keyspace } from './models/interfaces';
 import { EventLog } from './models/data-stores';
+import { promisifyClientMethods } from './utils';
 
 const instances: RedisInstance[] = process.env.IS_TEST ?
   JSON.parse(fs.readFileSync(path.resolve(__dirname, '../configs/tests-config.json')))
@@ -22,15 +23,22 @@ const redisMonitors: RedisMonitor[] = [];
 
 instances.forEach((instance: RedisInstance, idx: number): void => {
 
+  // const redisClient: redis.RedisClient = promisifyClientMethods(
+  //   redis.createClient({ host: instance.host, port: instance.port })
+  // );
+
+  const redisClient: redis.RedisClient = redis.createClient({host: instance.host, port: instance.port})
+
   const monitor: RedisMonitor = {
     instanceId: idx + 1,
-    redisClient: redis.createClient({ host: instance.host, port: instance.port }),
+    redisClient: redisClient,
     host: instance.host,
     port: instance.port,
     keyspaces: []
   }
 
-  monitor.redisClient.config('GET', 'databases', (err, res: [string, string]): void => {
+
+  monitor.redisClient.config('GET', 'databases', (err, res): void => {
     
     //Sets the number of databases present in this monitored Redis instance
     monitor.databases = +res[1];

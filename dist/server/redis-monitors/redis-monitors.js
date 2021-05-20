@@ -2,16 +2,17 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs = require('fs');
 var path = require('path');
-var redis = require('redis');
+var redis = require("redis");
 var data_stores_1 = require("./models/data-stores");
 var instances = process.env.IS_TEST ?
     JSON.parse(fs.readFileSync(path.resolve(__dirname, '../configs/tests-config.json')))
     : JSON.parse(fs.readFileSync(path.resolve(__dirname, '../configs/config.json')));
 var redisMonitors = [];
 instances.forEach(function (instance, idx) {
+    var redisClient = redis.createClient({ host: instance.host, port: instance.port });
     var monitor = {
         instanceId: idx + 1,
-        redisClient: redis.createClient({ host: instance.host, port: instance.port }),
+        redisClient: redisClient,
         host: instance.host,
         port: instance.port,
         keyspaces: []

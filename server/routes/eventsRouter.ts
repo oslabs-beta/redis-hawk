@@ -48,9 +48,7 @@ eventsRouter.get('/:instanceId/', (req, res, next) => {
     const { eventTotal } = req.query;
     instance.keyspaces.push(keyspace.eventLog.returnLogAsArray((eventTotal) ? eventTotal : 0))
   });
-
-
-  console.log(instance)
+  
   body.data.push(instance);
   //res.send jsonified body.data
   res.status(200).json(body);
