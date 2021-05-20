@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import SearchFilter from "./SearchFilter.jsx";
-import * as actions from "../../action-creators/connections";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import SearchFilter from './SearchFilter.jsx';
+import * as actions from '../../action-creators/connections';
 
 const mapStateToProps = (store) => {
   return {
@@ -31,12 +31,12 @@ class FilterNav extends Component {
 
   render() {
     //assign a variable to each search filter option\
-    if (this.props.currPage === "graphs") {
+    if (this.props.currPage === 'graphs') {
       //working on the events graphs
 
       // have filters for events graph:
-        // adjust time range (inputs with buttons for incrementing?)
-        // filter by key name, filter by event 
+      // adjust time range (inputs with buttons for incrementing?)
+      // filter by key name, filter by event
       return (
         <div className='filterNavContainer'>
           {/* conditional rendering */}
@@ -50,8 +50,9 @@ class FilterNav extends Component {
             id='clearFilterButton'
             onClick={(e) => {
               e.preventDefault();
-              this.props.updateCurrentDisplay("", "");
-            }}>
+              this.props.updateCurrentDisplay('', '');
+            }}
+          >
             Clear Filter
           </button>
           <button
@@ -61,14 +62,14 @@ class FilterNav extends Component {
               e.preventDefault();
               let currLength =
                 this.props.events[this.props.currDatabase].length - 1;
-              console.log("current length of events", currLength);
+              console.log('current length of events', currLength);
               this.props.updateEvents(1, this.props.currDatabase, currLength);
             }}>
             Refresh
           </button>
         </div>
       );
-    } else if (this.props.currPage === "events") {
+    } else if (this.props.currPage === 'events') {
       return (
         <div className='filterNavContainer'>
           {/* conditional rendering */}
@@ -82,8 +83,9 @@ class FilterNav extends Component {
             id='clearFilterButton'
             onClick={(e) => {
               e.preventDefault();
-              this.props.updateCurrentDisplay("", "");
-            }}>
+              this.props.updateCurrentDisplay('', '');
+            }}
+          >
             Clear Filter
           </button>
           <button
@@ -93,10 +95,11 @@ class FilterNav extends Component {
               e.preventDefault();
               let currLength =
                 this.props.events[this.props.currDatabase].length - 1;
-              console.log("current length of events", currLength);
+              console.log('current length of events', currLength);
               this.props.updateEvents(1, this.props.currDatabase, currLength);
             }}
-            id='refreshButton'>
+            id='refreshButton'
+          >
             Refresh
           </button>
         </div>
@@ -114,8 +117,9 @@ class FilterNav extends Component {
             id='clearFilterButton'
             onClick={(e) => {
               e.preventDefault();
-              this.props.updateCurrentDisplay("", "");
-            }}>
+              this.props.updateCurrentDisplay('', '');
+            }}
+          >
             Clear Filter
           </button>
           <button
@@ -125,7 +129,8 @@ class FilterNav extends Component {
               e.preventDefault();
               this.props.updateKeyspace(1, this.props.currDatabase);
             }}
-            id='refreshButton'>
+            id='refreshButton'
+          >
             Refresh
           </button>
         </div>

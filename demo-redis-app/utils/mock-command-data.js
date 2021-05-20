@@ -4,7 +4,7 @@ Provides functionality for generating mock keys and mock values for in-scope Red
 Used by /utils/mock-commands.js
 */
 
-const faker = require('faker');
+const faker = require("faker");
 
 const mockData = {};
 
@@ -16,12 +16,13 @@ mockData.strings = {
   },
 
   createValue() {
-    const names = ['Abigail', 'Arthur', 'James', 'Wesley'];
-    const name = names[Math.floor(Math.random() * 4)]
-    const message = `${name} is a ${faker.hacker.adjective()} ${faker.hacker.noun()} working on ${faker.company.catchPhrase()}! Wow!`
+    const names = ["Abigail", "Arthur", "James", "Wesley"];
+    const name = names[Math.floor(Math.random() * 4)];
+    const message = `${name} is a ${faker.hacker.adjective()} ${faker.hacker.noun()} working on ${faker.company.catchPhrase()}! Wow!`;
+    // console.log("message", message);
     return message;
-  }
-}
+  },
+};
 
 mockData.lists = {
   createKey() {
@@ -29,9 +30,9 @@ mockData.lists = {
   },
 
   createValue() {
-    return ['testmsg1', 'testmsg2', 'testmsg3', 'testmsg4']
-  }
-}
+    return ["testmsg1", "testmsg2", "testmsg3", "testmsg4"];
+  },
+};
 
 mockData.hashes = {
   createKey() {
@@ -40,22 +41,17 @@ mockData.hashes = {
 
   createValue() {
     return {
-      user: 'tester',
-      pass: 'pass1234',
+      user: "tester",
+      pass: "pass1234",
       age: 27,
-      occupation: "gokart mechanic"
-    }
-  }
-
-}
+      occupation: "gokart mechanic",
+    };
+  },
+};
 
 mockData.sets = {
-  createKey() {
+  createKey() {},
 
-  },
-
-  createValue() {
-
-  }
-}
+  createValue() {},
+};
 module.exports = mockData;

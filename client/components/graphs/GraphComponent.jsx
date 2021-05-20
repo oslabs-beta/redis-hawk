@@ -13,11 +13,25 @@ const mapStateToProps = (store) => {
 const mapDispatchToProps = (dispatch) => ({
   updateCurrentDisplay: (filter, category) =>
     dispatch(actions.updateCurrDisplayActionCreator(filter, category)),
+  updateEvents: (instanceId, dbIndex, currIndex) =>
+    dispatch(actions.updateEventsActionCreator(instanceId, dbIndex, currIndex)),
 });
 
 class GraphComponent extends Component {
   constructor(props) {
     super(props);
+    this.setGraphUpdate = this.setGraphUpdate.bind(this);
+  }
+
+  componentDidMount() {
+    const self = this;
+    console.log("props", this.props);
+    setInterval(self.setGraphUpdate, 5000);
+  }
+  setGraphUpdate() {
+    console.log("fetching");
+    let currIndex = this.props.events[this.props.currDatabase].length - 1;
+    this.props.updateEvents(1, this.props.currDatabase, currIndex);
   }
 
   render() {

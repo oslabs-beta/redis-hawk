@@ -8,7 +8,7 @@ const DatabaseComponent = (props) => {
         props.handleClick(props.databaseNum);
       }}
     >
-      {`> Database ${props.databaseNum}`}
+      {`- Database ${props.databaseNum}`}
     </div>
   );
 };
