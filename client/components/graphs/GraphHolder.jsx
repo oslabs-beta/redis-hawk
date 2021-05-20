@@ -23,8 +23,8 @@ import {
 // });
 
 const GraphHolder = (props) => {
-  console.log("GraphHolder props", props);
-  console.log("GraphHolder props.events[0]", props.events[props.currDatabase]);
+  // console.log("GraphHolder props", props);
+  // console.log("GraphHolder props.events[0]", props.events[props.currDatabase]);
   // initial time for start to subtract from each keys timestamp
   // const initialTime = props.events[props.currDatabase][0].timestamp;
   // console.log(initialTime);
@@ -35,7 +35,7 @@ const GraphHolder = (props) => {
     const eventTimesArray = [];
     let temp = [];
     let xRange = 0;
-    let yRange = 10000;
+    let yRange = 5000;
 
     for (let i = 0; i < array.length; i++) {
       if (
@@ -62,12 +62,12 @@ const GraphHolder = (props) => {
               formattedTime: date.slice(16, 24),
             },
           ];
-          xRange += 10000;
-          yRange += 10000;
+          xRange += 5000;
+          yRange += 5000;
         }
       }
     }
-    console.log("eventTimesArray after pushes", eventTimesArray);
+    // console.log("eventTimesArray after pushes", eventTimesArray);
 
     const result = [];
     eventTimesArray.forEach((array) => {
@@ -113,7 +113,8 @@ const GraphHolder = (props) => {
   console.log(initialTime);
 
   const eventsArray = props.events[props.currDatabase];
-  const plotData = graphDataConverter(eventsArray, initialTime);
+  let plotData = [];
+  plotData = graphDataConverter(eventsArray, initialTime);
 
   console.log("plotData", plotData);
   return (
