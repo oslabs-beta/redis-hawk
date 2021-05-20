@@ -30,7 +30,6 @@ eventsRouter.get('/:instanceId/', function (req, res, next) {
         var eventTotal = req.query.eventTotal;
         instance.keyspaces.push(keyspace.eventLog.returnLogAsArray((eventTotal) ? eventTotal : 0));
     });
-    console.log(instance);
     body.data.push(instance);
     res.status(200).json(body);
 });
