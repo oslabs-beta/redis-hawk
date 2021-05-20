@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import DatabaseComponent from "./DatabaseComponent.jsx";
-import * as actions from "../../action-creators/connections";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import DatabaseComponent from './DatabaseComponent.jsx';
+import * as actions from '../../action-creators/connections';
 
 const mapStateToProps = (store) => ({
   databaseInfo: store.databaseInfoStore.databaseInfo,
@@ -37,7 +37,7 @@ class DatabaseNav extends Component {
     return (
       <div id='databaseNavContainer'>
         <div id='redisInstance' databaseinfo={this.props.databaseInfo}>
-          Host: {this.props.databaseInfo.host} Port:{" "}
+          Host: {this.props.databaseInfo.host} Port:{' '}
           {this.props.databaseInfo.port}
         </div>
         <div id='databaseHolder'>{dbArray}</div>
