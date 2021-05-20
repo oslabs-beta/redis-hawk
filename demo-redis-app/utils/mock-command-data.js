@@ -4,6 +4,8 @@ Provides functionality for generating mock keys and mock values for in-scope Red
 Used by /utils/mock-commands.js
 */
 
+const faker = require('faker');
+
 const mockData = {};
 
 mockData.strings = {
@@ -14,7 +16,10 @@ mockData.strings = {
   },
 
   createValue() {
-    return 'test-message';
+    const names = ['Abigail', 'Arthur', 'James', 'Wesley'];
+    const name = names[Math.floor(Math.random() * 4)]
+    const message = `${name} is a ${faker.hacker.adjective()} ${faker.hacker.noun()} working on ${faker.company.catchPhrase()}! Wow!`
+    return message;
   }
 }
 
