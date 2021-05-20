@@ -20,8 +20,8 @@ const mapStateToProps = (store) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  updateKeyspace: (keyspace) =>
-    dispatch(actions.updateKeyspaceActionCreator(keyspace)),
+  updateKeyspace: (dbIndex) =>
+    dispatch(actions.updateKeyspaceActionCreator(dbIndex)),
   updateEvents: (dbIndex) =>
     dispatch(actions.updateEventsActionCreator(dbIndex)),
   updateDBInfo: () => dispatch(actions.updateDBInfoActionCreator()),

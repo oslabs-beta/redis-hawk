@@ -1,6 +1,6 @@
-import ReduxThunk from 'redux-thunk';
+import ReduxThunk from "redux-thunk";
 
-import * as types from '../actions/actionTypes';
+import * as types from "../actions/actionTypes";
 
 export const updateKeyspaceActionCreator =
   (instanceId, dbIndex) => (dispatch) => {
@@ -9,7 +9,7 @@ export const updateKeyspaceActionCreator =
     if (instanceId && dbIndex) {
       url = `/api/keyspaces/${instanceId}/${dbIndex}`;
     } else {
-      url = '/api/keyspaces';
+      url = "/api/keyspaces";
     }
     //dont need the options object on GET requests for fetch - GET is assumed;
     //content-type headers is not needed bc you send no body
@@ -29,36 +29,40 @@ export const updateKeyspaceActionCreator =
         }
       })
       .catch((err) => {
-        console.log('error in keyspaceUpdateActionCreator: ', err);
+        console.log("error in updateKeyspaceActionCreator: ", err);
       });
   };
 
 export const updateEventsActionCreator =
-  (instanceId, dbIndex) => (dispatch) => {
+  (instanceId, dbIndex, currIndex) => (dispatch) => {
+    console.log('currIndex',currIndex)
     let url;
-    if (instanceId && dbIndex) {
-      url = `/api/events/${instanceId}/${dbIndex}`;
+    if (instanceId || dbIndex || currIndex) {
+      url = `/api/events/${instanceId}/${dbIndex}?eventTotal=${currIndex}`;
     } else {
-      url = '/api/events';
+      url = "/api/events";
     }
     fetch(url)
       .then((res) => res.json())
-      .then((data) => {
+      .then((res) => {
         //the response be the deleted object, and we will grab the id off of that and we then go and fileter that out of state.
 
         //data[0].events[0] to get the events for a single dbindex
-        console.log('events', data);
-        const events = data[0].events[0];
-        if (events) {
-          dispatch({
-            type: types.UPDATE_EVENTS,
-            //is this the proper syntax to add dbIndex???
-            payload: [events, dbIndex],
-          });
-        }
+        console.log("response", res);
+        console.log("full events", res.data);
+        console.log("events", res.data[0].keyspaces[0]);
+        const events = res.data[0].keyspaces[0];
+        console.log("events in reducer", events);
+        // if (events) {
+        dispatch({
+          type: types.UPDATE_EVENTS,
+          //is this the proper syntax to add dbIndex???
+          payload: { events: events, currDatabase: dbIndex },
+        });
+        // }
       })
       .catch((err) => {
-        console.log('error in keyspaceUpdateActionCreator: ', err);
+        console.log("error in updateEventsActionCreator: ", err);
       });
   };
 
@@ -70,7 +74,7 @@ export const updateKeyGraphActionCreator =
       .then((data) => {
         //the response be the deleted object, and we will grab the id off of that and we then go and fileter that out of state.
 
-        console.log('events', data.keyspaceHistory);
+        console.log("events", data.keyspaceHistory);
         const keyspaceHistory = data.keyspaceHistory;
         dispatch({
           type: types.UPDATE_KEYGRAPH,
@@ -78,13 +82,13 @@ export const updateKeyGraphActionCreator =
         });
       })
       .catch((err) => {
-        console.log('error in keyspaceUpdateActionCreator: ', err);
+        console.log("error in keyspaceUpdateActionCreator: ", err);
       });
   };
 
 //SWITCH DATABASE
 export const switchDatabaseActionCreator = (dbIndex) => (
-  console.log('switched to database', dbIndex),
+  console.log("switched to database", dbIndex),
   {
     type: types.SWITCH_DATABASE,
     payload: dbIndex,
@@ -92,7 +96,7 @@ export const switchDatabaseActionCreator = (dbIndex) => (
 );
 
 export const updateDBInfoActionCreator = () => (dispatch) => {
-  fetch('/api/connections')
+  fetch("/api/connections")
     .then((res) => res.json())
     .then((data) => {
       //for stretch features, there may be multiple instances here
@@ -104,7 +108,7 @@ export const updateDBInfoActionCreator = () => (dispatch) => {
     })
     .catch((err) => {
       console.log(
-        'error fetching databaseInfo in updateDBInfoActionCreator:',
+        "error fetching databaseInfo in updateDBInfoActionCreator:",
         err
       );
     });

@@ -1,9 +1,9 @@
-import * as types from '../actions/actionTypes.js';
+import * as types from "../actions/actionTypes.js";
 
 const initialState = {
   currDisplay: {
-    filter: '',
-    category: '',
+    filter: "",
+    category: "",
   },
 };
 
