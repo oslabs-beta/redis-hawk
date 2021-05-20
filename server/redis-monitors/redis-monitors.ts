@@ -56,7 +56,7 @@ instances.forEach((instance: RedisInstance, idx: number): void => {
       //Sets up a listener to log any received events for this specific keyspace
       monitor.redisClient.on('pmessage', (channel: string, message: string, event: string): void => {
         if (+message.match(/[0-9*]/)[0] === dbIndex) {
-          const key = message.replace(/__keyspace@[0-9]*__/, '');
+          const key = message.replace(/__keyspace@[0-9]*__:/, '');
           monitor.keyspaces[dbIndex].eventLog.add(key, event);
         }
       })
