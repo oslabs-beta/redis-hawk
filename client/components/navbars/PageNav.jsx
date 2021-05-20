@@ -14,28 +14,36 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const PageNav = (props) => {
+
+
   return (
     <div id='pageNavContainer'>
-      <Link to='/'>
+      <Link to='/' style={{ textDecoration: 'none' }}>
         <div
           id='keyspaceLink'
-          className='pageToggle'
+          className={
+            props.currPage === 'keyspace' ? 'selected-page-toggle' : 'page-toggle'
+          }
           onClick={() => props.updatePage("keyspace")}>
           Keyspace
         </div>
       </Link>
-      <Link to='/events'>
+      <Link to='/events' style={{ textDecoration: 'none' }}>
         <div
           id='eventsLink'
-          className='pageToggle'
+          className={
+            props.currPage === 'events' ? 'selected-page-toggle' : 'page-toggle'
+          }
           onClick={() => props.updatePage("events")}>
           Events
         </div>
       </Link>
-      <Link to='/graphs'>
+      <Link to='/graphs' style={{ textDecoration: 'none' }}>
         <div
           id='graphsLink'
-          className='pageToggle'
+          className={
+            props.currPage === 'graphs' ? 'selected-page-toggle' : 'page-toggle'
+          }
           onClick={() => props.updatePage("graphs")}>
           Graphs
         </div>

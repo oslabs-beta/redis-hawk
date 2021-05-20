@@ -46,6 +46,7 @@ class FilterNav extends Component {
           />
           {/* insert onClick */}
           <button
+            className='filter-button'
             id='clearFilterButton'
             onClick={(e) => {
               e.preventDefault();
@@ -54,15 +55,15 @@ class FilterNav extends Component {
             Clear Filter
           </button>
           <button
-            id='searchButton'
+            className='filter-button'
+            id='refreshButton'
             onClick={(e) => {
               e.preventDefault();
               let currLength =
                 this.props.events[this.props.currDatabase].length - 1;
               console.log("current length of events", currLength);
               this.props.updateEvents(1, this.props.currDatabase, currLength);
-            }}
-            id='refreshButton'>
+            }}>
             Refresh
           </button>
         </div>
@@ -77,6 +78,7 @@ class FilterNav extends Component {
           />
           {/* insert onClick */}
           <button
+            className='filter-button'
             id='clearFilterButton'
             onClick={(e) => {
               e.preventDefault();
@@ -85,6 +87,7 @@ class FilterNav extends Component {
             Clear Filter
           </button>
           <button
+            className='filter-button'
             id='searchButton'
             onClick={(e) => {
               e.preventDefault();
@@ -107,6 +110,7 @@ class FilterNav extends Component {
           />
           {/* insert onClick */}
           <button
+            className='filter-button'
             id='clearFilterButton'
             onClick={(e) => {
               e.preventDefault();
@@ -115,6 +119,7 @@ class FilterNav extends Component {
             Clear Filter
           </button>
           <button
+            className='filter-button'
             id='searchButton'
             onClick={(e) => {
               e.preventDefault();

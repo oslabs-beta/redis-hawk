@@ -37,10 +37,10 @@ class DatabaseNav extends Component {
     return (
       <div id='databaseNavContainer'>
         <div id='redisInstance' databaseinfo={this.props.databaseInfo}>
-          Host: {this.props.databaseInfo.host} Port:{' '}
-          {this.props.databaseInfo.port}
+          <p> <span className='db-host'>Host</span> {this.props.databaseInfo.host}</p> 
+          <p> <span className='db-port'>Port</span> {this.props.databaseInfo.port}</p>
+          <div id='databaseHolder'>{dbArray}</div>
         </div>
-        <div id='databaseHolder'>{dbArray}</div>
       </div>
     );
   }
