@@ -26,7 +26,6 @@ class GraphComponent extends Component {
   componentDidMount() {
     const self = this;
     console.log('props', this.props);
-    // setInterval(this.setGraphUpdate, 10000);
     setInterval(self.setGraphUpdate, 3000);
   }
   setGraphUpdate() {
