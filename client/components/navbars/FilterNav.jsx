@@ -33,6 +33,10 @@ class FilterNav extends Component {
     //assign a variable to each search filter option\
     if (this.props.currPage === "graphs") {
       //working on the events graphs
+
+      // have filters for events graph:
+        // adjust time range (inputs with buttons for incrementing?)
+        // filter by key name, filter by event 
       return (
         <div className='filterNavContainer'>
           {/* conditional rendering */}
