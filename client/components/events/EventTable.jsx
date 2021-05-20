@@ -117,15 +117,29 @@ function EventTable(props) {
   props.events[props.currDatabase].forEach((event) => {
     const date = new Date(event.timestamp);
     if (props.currDisplay.category === "name") {
-      if (event.key.includes(props.currDisplay.filter)) {
-        rows.push(createData(event.key, event.event, date.toString("MMM dd")));
+      if (event.key.includes(props.currDisplay.filter.toString())) {
+        rows.push(
+          createData(
+            event.key,
+            event.event,
+            date.toString("MMM dd").slice(0, 24)
+          )
+        );
       }
     } else if (props.currDisplay.category === "event") {
       if (event.event === props.currDisplay.filter) {
-        rows.push(createData(event.key, event.event, date.toString("MMM dd")));
+        rows.push(
+          createData(
+            event.key,
+            event.event,
+            date.toString("MMM dd").slice(0, 24)
+          )
+        );
       }
     } else
-      rows.push(createData(event.key, event.event, date.toString("MMM dd")));
+      rows.push(
+        createData(event.key, event.event, date.toString("MMM dd").slice(0, 24))
+      );
   });
   console.log("rows in EventTable", rows);
   const classes = useStyles2();
