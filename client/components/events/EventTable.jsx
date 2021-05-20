@@ -113,35 +113,40 @@ function EventTable(props) {
 
   // if props.currDisplay.category === 'event'
   // event.event === 'SET'. props.currDisplay.filter === 'SET, that shit gets pushed to rows
+  if (props.events[props.currDatabase]) {
+    props.events[props.currDatabase].forEach((event) => {
+      const date = new Date(event.timestamp);
+      if (props.currDisplay.category === "name") {
+        if (event.key.includes(props.currDisplay.filter.toString())) {
+          rows.push(
+            createData(
+              event.key,
+              event.event,
+              date.toString("MMM dd").slice(0, 24)
+            )
+          );
+        }
+      } else if (props.currDisplay.category === "event") {
+        if (event.event === props.currDisplay.filter) {
+          rows.push(
+            createData(
+              event.key,
+              event.event,
+              date.toString("MMM dd").slice(0, 24)
+            )
+          );
+        }
+      } else
+        rows.push(
+          createData(
+            event.key,
+            event.event,
+            date.toString("MMM dd").slice(0, 24)
+          )
+        );
+    });
+  }
 
-  props.events[props.currDatabase].forEach((event) => {
-    const date = new Date(event.timestamp);
-    if (props.currDisplay.category === "name") {
-      if (event.key.includes(props.currDisplay.filter.toString())) {
-        rows.push(
-          createData(
-            event.key,
-            event.event,
-            date.toString("MMM dd").slice(0, 24)
-          )
-        );
-      }
-    } else if (props.currDisplay.category === "event") {
-      if (event.event === props.currDisplay.filter) {
-        rows.push(
-          createData(
-            event.key,
-            event.event,
-            date.toString("MMM dd").slice(0, 24)
-          )
-        );
-      }
-    } else
-      rows.push(
-        createData(event.key, event.event, date.toString("MMM dd").slice(0, 24))
-      );
-  });
-  console.log("rows in EventTable", rows);
   const classes = useStyles2();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -179,7 +184,7 @@ function EventTable(props) {
           ).map((row) => (
             //TableRow's key will need to be totally unique
             //in case the same event type happens to a given keyname multiple times
-            //this will cause a key duplication error and will result in 
+            //this will cause a key duplication error and will result in
             //the TableRow component being duplicated/persisted across pages...
             <TableRow key={row.keyname + row.event}>
               <TableCell
