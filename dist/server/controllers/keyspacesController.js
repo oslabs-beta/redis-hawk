@@ -35,22 +35,25 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var keyspacesRedisMonitors = require('../redis-monitors/redis-monitors');
+var redis_monitors_1 = __importDefault(require("../redis-monitors/redis-monitors"));
 var utils_1 = require("./utils");
 var redis_1 = require("redis");
 var keyspacesController = {};
 keyspacesController.getAllInstancesKeyspaces = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var data, _i, keyspacesRedisMonitors_1, monitor, keyspaces, idx, client, _a, _b, keyspace, keyspaceData;
+    var data, _i, redisMonitors_1, monitor, keyspaces, idx, client, _a, _b, keyspace, keyspaceData;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
                 data = [];
-                _i = 0, keyspacesRedisMonitors_1 = keyspacesRedisMonitors;
+                _i = 0, redisMonitors_1 = redis_monitors_1.default;
                 _c.label = 1;
             case 1:
-                if (!(_i < keyspacesRedisMonitors_1.length)) return [3, 7];
-                monitor = keyspacesRedisMonitors_1[_i];
+                if (!(_i < redisMonitors_1.length)) return [3, 7];
+                monitor = redisMonitors_1[_i];
                 keyspaces = [];
                 idx = 0;
                 client = redis_1.createClient({ host: monitor.host, port: monitor.port });
@@ -84,16 +87,16 @@ keyspacesController.getAllInstancesKeyspaces = function (req, res, next) { retur
     });
 }); };
 keyspacesController.getAllKeyspacesForInstance = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var data, _i, keyspacesRedisMonitors_2, monitor, keyspaces, idx, client, _a, _b, keyspace, keyspaceData;
+    var data, _i, redisMonitors_2, monitor, keyspaces, idx, client, _a, _b, keyspace, keyspaceData;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
                 data = [];
-                _i = 0, keyspacesRedisMonitors_2 = keyspacesRedisMonitors;
+                _i = 0, redisMonitors_2 = redis_monitors_1.default;
                 _c.label = 1;
             case 1:
-                if (!(_i < keyspacesRedisMonitors_2.length)) return [3, 7];
-                monitor = keyspacesRedisMonitors_2[_i];
+                if (!(_i < redisMonitors_2.length)) return [3, 7];
+                monitor = redisMonitors_2[_i];
                 if (!(monitor.instanceId = req.params.instanceId)) return [3, 6];
                 keyspaces = [];
                 idx = 0;
@@ -128,16 +131,16 @@ keyspacesController.getAllKeyspacesForInstance = function (req, res, next) { ret
     });
 }); };
 keyspacesController.getKeyspaceForInstance = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var data, _i, keyspacesRedisMonitors_3, monitor, keyspaces, idx, client, keyspaceData;
+    var data, _i, redisMonitors_3, monitor, keyspaces, idx, client, keyspaceData;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 data = [];
-                _i = 0, keyspacesRedisMonitors_3 = keyspacesRedisMonitors;
+                _i = 0, redisMonitors_3 = redis_monitors_1.default;
                 _a.label = 1;
             case 1:
-                if (!(_i < keyspacesRedisMonitors_3.length)) return [3, 4];
-                monitor = keyspacesRedisMonitors_3[_i];
+                if (!(_i < redisMonitors_3.length)) return [3, 4];
+                monitor = redisMonitors_3[_i];
                 if (!(monitor.instanceId = req.params.instanceId)) return [3, 3];
                 keyspaces = [];
                 idx = 0;
@@ -160,4 +163,4 @@ keyspacesController.getKeyspaceForInstance = function (req, res, next) { return 
         }
     });
 }); };
-module.exports = keyspacesController;
+exports.default = keyspacesController;

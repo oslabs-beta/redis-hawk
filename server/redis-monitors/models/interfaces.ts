@@ -24,13 +24,19 @@ export interface Keyspace {
 };
 
 export interface EventLog {
-  head: null | KeyspaceEvent;
-  tail: null | KeyspaceEvent;
+  head: null | KeyspaceEventNode;
+  tail: null | KeyspaceEventNode;
   eventTotal: number;
   add: (key: string, event: string) => void;
+  returnLogAsArray: (eventTotal: number) => KeyspaceEvent[];
+}
+export interface KeyspaceEvent {
+  key: string;
+  event: string;
+  timestamp: Date;
 }
 
-export interface KeyspaceEvent {
+export interface KeyspaceEventNode extends KeyspaceEvent {
   key: string;
   event: string;
   timestamp: Date;

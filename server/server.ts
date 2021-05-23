@@ -1,11 +1,10 @@
-const express = require('express');
-const path = require('path');
+import express from 'express';
+import * as path from 'path';
 const app = express();
 
-const monitors = require('./redis-monitors/redis-monitors');
-const connectionsRouter = require('./routes/connectionsRouter');
-const eventsRouter = require('./routes/eventsRouter');
-const keyspacesRouter = require('./routes/keyspacesRouter');
+import connectionsRouter from './routes/connectionsRouter';
+import eventsRouter from './routes/eventsRouter';
+import keyspacesRouter from './routes/keyspacesRouter';
 
 const PORT = +process.env.PORT || 3000;
 

@@ -1,17 +1,17 @@
-const keyspacesRedisMonitors = require('../redis-monitors/redis-monitors');
+import redisMonitors from '../redis-monitors/redis-monitors';
 
 //type definition for response body data
 import { RedisInstance, Keyspace, KeyData } from './interfaces';
 import { getKeyspace } from './utils';
 import { createClient } from 'redis';
 
-interface keyspacesController {
+interface KeyspacesController {
   getAllInstancesKeyspaces?: (req, res, next) => void;
   getAllKeyspacesForInstance?: (req, res, next) => void;
   getKeyspaceForInstance?: (req, res, next) => void;
 }
 
-const keyspacesController: keyspacesController = {};
+const keyspacesController: KeyspacesController = {};
 
 keyspacesController.getAllInstancesKeyspaces = async (req, res, next) => {
 /*
@@ -19,7 +19,7 @@ Retrieves all keyspace data for every keyspace of every monitored instance.
 */
 
   const data: RedisInstance[] = [];
-  for (let monitor of keyspacesRedisMonitors) {
+  for (let monitor of redisMonitors) {
     
     const keyspaces: Keyspace[] = [];
     let idx = 0;
@@ -43,7 +43,7 @@ Retrieves all keyspace data for every keyspace of every monitored instance.
 keyspacesController.getAllKeyspacesForInstance = async (req, res, next) => {
 
   const data: RedisInstance[] = [];
-  for (let monitor of keyspacesRedisMonitors) {
+  for (let monitor of redisMonitors) {
 
     if (monitor.instanceId = req.params.instanceId) {
     
@@ -70,7 +70,7 @@ keyspacesController.getAllKeyspacesForInstance = async (req, res, next) => {
 keyspacesController.getKeyspaceForInstance = async (req, res, next) => {
 
   const data: RedisInstance[] = [];
-  for (let monitor of keyspacesRedisMonitors) {
+  for (let monitor of redisMonitors) {
 
     if (monitor.instanceId = req.params.instanceId) {
     
@@ -92,4 +92,4 @@ keyspacesController.getKeyspaceForInstance = async (req, res, next) => {
   return next();
 }
 
-module.exports = keyspacesController;
+export default keyspacesController;

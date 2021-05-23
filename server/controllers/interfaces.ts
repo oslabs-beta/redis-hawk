@@ -4,7 +4,6 @@ export interface RedisInstance {
 };
 
 export type Keyspace = KeyData[];
-
 export interface KeyData {
   key: string,
   value: any,

@@ -7,8 +7,8 @@ Each RedisMonitor will also create a keyspace notification subscriber
 for each keyspace and write them to an event log.
 */
 
-const fs = require('fs');
-const path = require('path');
+import * as fs from 'fs';
+import * as path from 'path';
 import * as redis from 'redis';
 
 import { RedisInstance, RedisMonitor, Keyspace } from './models/interfaces';
@@ -16,8 +16,8 @@ import { EventLog } from './models/data-stores';
 import { promisifyClientMethods } from './utils';
 
 const instances: RedisInstance[] = process.env.IS_TEST ?
-  JSON.parse(fs.readFileSync(path.resolve(__dirname, '../configs/tests-config.json')))
-  : JSON.parse(fs.readFileSync(path.resolve(__dirname, '../configs/config.json')));
+  JSON.parse(fs.readFileSync(path.resolve(__dirname, '../configs/tests-config.json')).toString())
+  : JSON.parse(fs.readFileSync(path.resolve(__dirname, '../configs/config.json')).toString());
 
 const redisMonitors: RedisMonitor[] = [];
 
@@ -68,4 +68,4 @@ instances.forEach((instance: RedisInstance, idx: number): void => {
   redisMonitors.push(monitor);
 })
 
-module.exports = redisMonitors;
+export default redisMonitors;

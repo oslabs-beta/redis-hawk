@@ -1,24 +1,24 @@
 import { Router } from 'express';
-const keyspacesController = require('../controllers/keyspacesController');
+import keyspacesController from '../controllers/keyspacesController';
 
-const keyspacesRouter = Router();
+const router = Router();
 
-keyspacesRouter.get('/', 
+router.get('/', 
   keyspacesController.getAllInstancesKeyspaces, 
   (req, res) => {
     res.status(200).json({data: res.locals.data});
 });
 
-keyspacesRouter.get('/:instanceId',
+router.get('/:instanceId',
   keyspacesController.getAllKeyspacesForInstance, 
   (req, res) => {
     res.status(200).json({data: res.locals.data});
 })
 
-keyspacesRouter.get('/:instanceId/:dbIndex',
+router.get('/:instanceId/:dbIndex',
   keyspacesController.getKeyspaceForInstance, 
   (req, res) => {
     res.status(200).json({data: res.locals.data});
 })
 
-module.exports = keyspacesRouter;
+export default router;
