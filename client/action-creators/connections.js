@@ -1,5 +1,3 @@
-import ReduxThunk from "redux-thunk";
-
 import * as types from "../actions/actionTypes";
 
 export const updateKeyspaceActionCreator =
