@@ -27,16 +27,17 @@ instances.forEach((instance: RedisInstance, idx: number): void => {
   //   redis.createClient({ host: instance.host, port: instance.port })
   // );
 
-  const redisClient: redis.RedisClient = redis.createClient({host: instance.host, port: instance.port})
+  const client: redis.RedisClient = redis.createClient({host: instance.host, port: instance.port});
+  const subscriber: redis.RedisClient = redis.createClient({host: instance.host, port: instance.port});
 
   const monitor: RedisMonitor = {
     instanceId: idx + 1,
-    redisClient: redisClient,
+    redisClient: client,
+    keyspaceSubscriber: subscriber,
     host: instance.host,
     port: instance.port,
     keyspaces: []
   }
-
 
   monitor.redisClient.config('GET', 'databases', (err, res): void => {
     
@@ -54,7 +55,7 @@ instances.forEach((instance: RedisInstance, idx: number): void => {
       monitor.keyspaces.push(keyspace);
 
       //Sets up a listener to log any received events for this specific keyspace
-      monitor.redisClient.on('pmessage', (channel: string, message: string, event: string): void => {
+      monitor.keyspaceSubscriber.on('pmessage', (channel: string, message: string, event: string): void => {
         if (+message.match(/[0-9*]/)[0] === dbIndex) {
           const key = message.replace(/__keyspace@[0-9]*__:/, '');
           monitor.keyspaces[dbIndex].eventLog.add(key, event);
@@ -62,7 +63,7 @@ instances.forEach((instance: RedisInstance, idx: number): void => {
       })
     }
 
-    monitor.redisClient.psubscribe('__keyspace@*__:*')
+    monitor.keyspaceSubscriber.psubscribe('__keyspace@*__:*')
   });
 
   redisMonitors.push(monitor);

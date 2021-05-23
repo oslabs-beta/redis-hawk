@@ -12,6 +12,7 @@ export interface RedisInstance {
 export interface RedisMonitor {
   instanceId: number;
   redisClient: RedisClient;
+  keyspaceSubscriber: RedisClient;
   host: RedisInstance['host'];
   port: RedisInstance['port'];
   databases?: number; //Check property - should this be optional on object initialization?

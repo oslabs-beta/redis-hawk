@@ -24,9 +24,8 @@ Retrieves all keyspace data for every keyspace of every monitored instance.
     const keyspaces: Keyspace[] = [];
     let idx = 0;
 
-    const client = createClient({host: monitor.host, port: monitor.port});
     for (const keyspace of monitor.keyspaces) {
-      const keyspaceData = await getKeyspace(client, idx)
+      const keyspaceData = await getKeyspace(monitor.redisClient, idx);
       keyspaces.push(keyspaceData);
       idx += 1;
     }
@@ -50,9 +49,8 @@ keyspacesController.getAllKeyspacesForInstance = async (req, res, next) => {
       const keyspaces: Keyspace[] = [];
       let idx = 0;
 
-      const client = createClient({host: monitor.host, port: monitor.port});
       for (const keyspace of monitor.keyspaces) {
-        const keyspaceData = await getKeyspace(client, idx)
+        const keyspaceData = await getKeyspace(monitor.redisClient, idx)
         keyspaces.push(keyspaceData);
         idx += 1;
       }
@@ -77,8 +75,7 @@ keyspacesController.getKeyspaceForInstance = async (req, res, next) => {
       const keyspaces: Keyspace[] = [];
       let idx = 0;
 
-      const client = createClient({host: monitor.host, port: monitor.port});
-      const keyspaceData = await getKeyspace(client, req.params.dbIndex);
+      const keyspaceData = await getKeyspace(monitor.redisClient, req.params.dbIndex);
       keyspaces.push(keyspaceData);
 
       data.push({
