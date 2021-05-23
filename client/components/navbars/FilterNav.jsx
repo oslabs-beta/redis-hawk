@@ -30,21 +30,13 @@ class FilterNav extends Component {
   }
 
   render() {
-    //assign a variable to each search filter option\
     if (this.props.currPage === 'graphs') {
-      //working on the events graphs
-
-      // have filters for events graph:
-      // adjust time range (inputs with buttons for incrementing?)
-      // filter by key name, filter by event
       return (
         <div className='filterNavContainer'>
-          {/* conditional rendering */}
           <SearchFilter
             id='searchFilter'
             events={this.props.events[this.props.currDatabase]}
           />
-          {/* insert onClick */}
           <button
             className='filter-button'
             id='clearFilterButton'
@@ -72,12 +64,10 @@ class FilterNav extends Component {
     } else if (this.props.currPage === 'events') {
       return (
         <div className='filterNavContainer'>
-          {/* conditional rendering */}
           <SearchFilter
             id='searchFilter'
             events={this.props.events[this.props.currDatabase]}
           />
-          {/* insert onClick */}
           <button
             className='filter-button'
             id='clearFilterButton'
@@ -111,7 +101,6 @@ class FilterNav extends Component {
             id='searchFilter'
             keyspace={this.props.keyspace[this.props.currDatabase]}
           />
-          {/* insert onClick */}
           <button
             className='filter-button'
             id='clearFilterButton'

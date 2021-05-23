@@ -109,16 +109,7 @@ const useStyles2 = makeStyles({
 
 function KeyspaceTable(props) {
   const rows = [];
-  // console.log("EventTable props", props);
-  // if props.currDisplay.category  === 'name'
-  // use that name to match event.key with that name from event.key[0]
-  // e.g. event.key[0] === 'wesley';  props.currDisplay.filter === 'wes'
-  // so that event gets pushed into rows
 
-  // if props.currDisplay.category === 'event'
-  // event.event === 'SET'. props.currDisplay.filter === 'SET, that shit gets pushed to rows
-
-  console.log("props in KeyspaceTable", props);
   if (props.keyspace[props.currDatabase]) {
     props.keyspace[props.currDatabase].forEach((keyspace) => {
       if (props.currDisplay.category === "name") {
@@ -131,7 +122,8 @@ function KeyspaceTable(props) {
         }
       } else rows.push(createData(keyspace.key, keyspace.value, keyspace.type));
     });
-  }
+  };
+
   const classes = useStyles2();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -149,7 +141,7 @@ function KeyspaceTable(props) {
   };
 
   return (
-    <TableContainer id='tableContainer' component={Paper}>
+    <TableContainer id='tableContainer' className="Table-Container" component={Paper}>
       <Table className={classes.table} aria-label='custom pagination table'>
         <TableHead>
           <TableRow>

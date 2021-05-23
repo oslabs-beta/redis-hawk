@@ -1,8 +1,8 @@
-import * as types from '../actions/actionTypes.js';
+import * as types from "../actions/actionTypes.js";
 
 const initialState = {
   currDatabase: 0,
-  keyGraph: [[{ name: 'Abigail', memory: '1GB', time: '11:30' }]],
+  keyGraph: [[{ name: "Abigail", memory: "1GB", time: "11:30" }]],
 };
 
 const keygraphReducer = (state = initialState, action) => {
@@ -27,7 +27,5 @@ const keygraphReducer = (state = initialState, action) => {
     }
   }
 };
-
-// module.exports = keygraphReducer;
 
 export default keygraphReducer;

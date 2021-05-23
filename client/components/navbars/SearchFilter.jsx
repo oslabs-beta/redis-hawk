@@ -30,17 +30,12 @@ class SearchFilter extends Component {
     this.setState({ value: event.target.value });
   }
   handleClick(event) {
-    // console.log('handle click event target', event.target.value);
     this.setState({ category: event.target.id });
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    const filter = this.state.value;
     this.setState({ value: '' });
-    console.log('newState', this.state.value);
-    // console.log('in onSubmit', e);
-    console.log(filter, this.state.category);
     this.props.updateCurrDisplay(this.state.value, this.state.category);
   }
 
@@ -72,13 +67,6 @@ class SearchFilter extends Component {
               value='filter by event'
               onClick={this.handleClick}
             />
-            {/* <input
-              className='filter'
-              id='type'
-              type='submit'
-              value='filter by type'
-              onClick={this.handleClick}
-            /> */}
           </form>
         </div>
       );
@@ -108,13 +96,6 @@ class SearchFilter extends Component {
               value='filter by event'
               onClick={this.handleClick}
             />
-            {/* <input
-              className='filter'
-              id='type'
-              type='submit'
-              value='filter by type'
-              onClick={this.handleClick}
-            /> */}
           </form>
         </div>
       );

@@ -13,13 +13,10 @@ const keyspaceReducer = (state = initialState, action) => {
     case types.UPDATE_KEYSPACE: {
       //we want to update the kesypace at index database
       const dbIndex = state.currDatabase;
-      console.log("payload in Keyspacereducer", action.payload);
       const newKeyspace = action.payload.keyspaces;
 
       keyspace = state.keyspace.slice();
-      console.log("keyspace before push", keyspace);
       keyspace[dbIndex].push(...newKeyspace);
-      console.log("keyspace in reducer after push", keyspace);
 
       return {
         ...state,
@@ -32,7 +29,5 @@ const keyspaceReducer = (state = initialState, action) => {
     }
   }
 };
-
-// module.exports = keyspaceReducer;
 
 export default keyspaceReducer;

@@ -33,5 +33,4 @@ const eventsReducer = (state = initialState, action) => {
   }
 };
 
-// module.exports = eventsReducer;
 export default eventsReducer;
