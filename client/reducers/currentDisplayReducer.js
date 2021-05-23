@@ -23,6 +23,4 @@ const currentDisplayReducer = (state = initialState, action) => {
   }
 };
 
-// module.exports = currentDisplayReducer;
-
 export default currentDisplayReducer;

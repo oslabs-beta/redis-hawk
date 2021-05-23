@@ -4,7 +4,7 @@ import * as types from "../actions/actionTypes.js";
 const initialState = {
   currPage: "keyspace",
 };
-// good call
+
 const pageReducer = (state = initialState, action) => {
   let currPage;
 
