@@ -1,5 +1,5 @@
 import express from 'express';
-import * as path from 'path';
+import path from 'path';
 const app = express();
 
 import connectionsRouter from './routes/connectionsRouter';
@@ -15,11 +15,23 @@ app.use('/api/events', eventsRouter);
 
 app.use('/api/keyspaces', keyspacesRouter);
 
-app.get('/', (req, res): void => {
+app.get('/', (req: express.Request, res: express.Response): void => {
   res.status(200).sendFile(path.resolve(__dirname, './assets/index.html'));
 })
 
-app.use((err, req, res, next) => {
+interface GlobalError {
+  log: string;
+  status?: number;
+  message?: {
+    error: string;
+  } 
+}
+
+app.use((
+  err: GlobalError, 
+  req: express.Request, 
+  res: express.Response, 
+  next: express.NextFunction): void => {
   const defaultErr = {
     log: 'Unknown Express middleware occured',
     status: 500,

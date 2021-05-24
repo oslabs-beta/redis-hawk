@@ -6,7 +6,7 @@ const getValue = async (key: string, type: string, redisClient: RedisClient): Pr
 
   const get = promisify(redisClient.get).bind(redisClient);
 
-  let value: any;
+  let value;
   switch (type) {
 
     case 'string': {
