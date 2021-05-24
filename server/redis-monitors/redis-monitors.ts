@@ -30,6 +30,7 @@ instances.forEach((instance: RedisInstance, idx: number): void => {
   const client: redis.RedisClient = redis.createClient({host: instance.host, port: instance.port});
   const subscriber: redis.RedisClient = redis.createClient({host: instance.host, port: instance.port});
 
+  console.log('idx is', idx);
   const monitor: RedisMonitor = {
     instanceId: idx + 1,
     redisClient: client,

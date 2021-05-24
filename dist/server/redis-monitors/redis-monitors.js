@@ -30,6 +30,7 @@ var redisMonitors = [];
 instances.forEach(function (instance, idx) {
     var client = redis.createClient({ host: instance.host, port: instance.port });
     var subscriber = redis.createClient({ host: instance.host, port: instance.port });
+    console.log('idx is', idx);
     var monitor = {
         instanceId: idx + 1,
         redisClient: client,

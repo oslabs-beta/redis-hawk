@@ -3,16 +3,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var express_1 = require("express");
+var express_1 = __importDefault(require("express"));
 var keyspacesController_1 = __importDefault(require("../controllers/keyspacesController"));
-var router = express_1.Router();
-router.get('/', keyspacesController_1.default.getAllInstancesKeyspaces, function (req, res) {
-    res.status(200).json({ data: res.locals.data });
+var router = express_1.default.Router();
+router.get('/', keyspacesController_1.default.findAllMonitors, keyspacesController_1.default.getKeyspacesForInstance, function (req, res) {
+    res.status(200).json(res.locals.keyspaces);
 });
-router.get('/:instanceId', keyspacesController_1.default.getAllKeyspacesForInstance, function (req, res) {
-    res.status(200).json({ data: res.locals.data });
+router.get('/:instanceId', keyspacesController_1.default.findSingleMonitor, keyspacesController_1.default.getKeyspacesForInstance, function (req, res) {
+    res.status(200).json(res.locals.keyspaces);
 });
-router.get('/:instanceId/:dbIndex', keyspacesController_1.default.getKeyspaceForInstance, function (req, res) {
-    res.status(200).json({ data: res.locals.data });
+router.get('/:instanceId/:dbIndex', keyspacesController_1.default.findSingleMonitor, keyspacesController_1.default.getKeyspacesForInstance, function (req, res) {
+    res.status(200).json(res.locals.keyspaces);
 });
 exports.default = router;

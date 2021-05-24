@@ -1,5 +1,5 @@
 import { RedisClient } from 'redis';
-import { Keyspace, KeyData } from './interfaces';
+import { Keyspace, KeyDetails } from './interfaces';
 import { promisify } from 'util';
 
 const getValue = async (key: string, type: string, redisClient: RedisClient): Promise<any> => {
@@ -21,21 +21,21 @@ const getValue = async (key: string, type: string, redisClient: RedisClient): Pr
 
 export const getKeyspace = async (redisClient: RedisClient, dbIdx: number): Promise<Keyspace> => {
 
-  const res = [];
+  const res: KeyDetails[] = [];
   const scan = promisify(redisClient.scan).bind(redisClient);
   const select = promisify(redisClient.select).bind(redisClient);
   const getType = promisify(redisClient.type).bind(redisClient);
 
   await select(dbIdx);
 
-  let scanResults = await scan('0', 'COUNT', '100');
-  let cursor = scanResults[0];
-  let keys = scanResults[1];
+  let scanResults: [string, string[]] = await scan('0', 'COUNT', '100');
+  let cursor: string = scanResults[0];
+  let keys: string[] = scanResults[1];
 
   do {
 
     for (let key of keys) {
-      const type = await getType(key);
+      const type: string = await getType(key);
       const value = await getValue(key, type, redisClient);
 
       res.push({

@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 import redisMonitors from '../redis-monitors/redis-monitors';
-import { ConnectionsResponseBody } from '../interfaces/responses';
+import { ConnectionsResponseBody } from './interfaces';
 
 interface ConnectionsController {
   getAllConnections: RequestHandler;

@@ -2,90 +2,70 @@ import redisMonitors from '../redis-monitors/redis-monitors';
 import { RequestHandler } from 'express';
 
 //type definition for response body data
-import { RedisInstance, Keyspace, KeyData } from './interfaces';
+// import { RedisInstance, Keyspace, KeyData } from './interfaces';
+import { KeyspacesResponseBody, Keyspace } from './interfaces';
 import { getKeyspace } from './utils';
 
 interface KeyspacesController {
-  getAllInstancesKeyspaces: RequestHandler;
-  getAllKeyspacesForInstance: RequestHandler;
-  getKeyspaceForInstance: RequestHandler;
+  findAllMonitors: RequestHandler;
+  findSingleMonitor: RequestHandler;
+  getKeyspacesForInstance: RequestHandler;
 }
 
 const keyspacesController: KeyspacesController = {
 
-  getAllInstancesKeyspaces: async (req, res, next) => {
-  /*
-  Retrieves all keyspace data for every keyspace of every monitored instance.
-  */
-
-    const data: RedisInstance[] = [];
-    for (let monitor of redisMonitors) {
-      
-      const keyspaces: Keyspace[] = [];
-      let idx = 0;
-
-      for (const keyspace of monitor.keyspaces) {
-        const keyspaceData = await getKeyspace(monitor.redisClient, idx);
-        keyspaces.push(keyspaceData);
-        idx += 1;
-      }
-
-      data.push({
-        instanceId: monitor.instanceId,
-        keyspaces: keyspaces
-      });
-    }
-    res.locals.data = data;
+  findAllMonitors: async (req, res, next) => {
+    res.locals.monitors = redisMonitors;
     return next();
   },
 
-  getAllKeyspacesForInstance: async (req, res, next) => {
+  findSingleMonitor: async (req, res, next) => {
 
-    const data: RedisInstance[] = [];
     for (let monitor of redisMonitors) {
+      if (monitor.instanceId === +req.params.instanceId) {
+        res.locals.monitors = [monitor];
+      }
+    } 
 
-      if (monitor.instanceId = +req.params.instanceId) {
-      
+    if (!res.locals.monitors) {
+      return next({log: 'User provided invalid instanceId', status: 400, message: {err: 'Please provide a valid instanceId'}});
+    }
+
+    return next();
+  },
+
+  getKeyspacesForInstance: async (req, res, next) => {
+
+    const keyspacesResponse: KeyspacesResponseBody = {data: []};
+    const dbIndex = req.params.dbIndex;
+
+    if (dbIndex) { //Grab specified keyspace for the instance
+      const keyspaceData = await getKeyspace(res.locals.monitors[0].redisClient, +dbIndex);
+      keyspacesResponse.data = [{
+        instanceId: res.locals.monitors[0].instanceId,
+        keyspaces: [keyspaceData]
+      }];
+
+    } else { //Grab all keyspaces for the instance
+
+      for (let monitor of res.locals.monitors) {
         const keyspaces: Keyspace[] = [];
-        let idx = 0;
 
+        let idx = 0;
         for (const keyspace of monitor.keyspaces) {
-          const keyspaceData = await getKeyspace(monitor.redisClient, idx)
+          const keyspaceData = await getKeyspace(monitor.redisClient, idx);
           keyspaces.push(keyspaceData);
           idx += 1;
         }
 
-        data.push({
+        keyspacesResponse.data.push({
           instanceId: monitor.instanceId,
           keyspaces: keyspaces
         });
       }
     }
-    res.locals.data = data;
-    return next();
-  },
 
-  getKeyspaceForInstance: async (req, res, next) => {
-
-    const data: RedisInstance[] = [];
-    for (let monitor of redisMonitors) {
-
-      if (monitor.instanceId = +req.params.instanceId) {
-      
-        const keyspaces: Keyspace[] = [];
-        let idx = 0;
-
-        const keyspaceData = await getKeyspace(monitor.redisClient, +req.params.dbIndex);
-        keyspaces.push(keyspaceData);
-
-        data.push({
-          instanceId: monitor.instanceId,
-          keyspaces: keyspaces
-        });
-
-      }
-    }
-    res.locals.data = data;
+    res.locals.keyspaces = keyspacesResponse;
     return next();
   }
 
