@@ -12,6 +12,7 @@ export interface RedisInstance {
 export interface RedisMonitor {
   instanceId: number;
   redisClient: RedisClient;
+  keyspaceSubscriber: RedisClient;
   host: RedisInstance['host'];
   port: RedisInstance['port'];
   databases?: number; //Check property - should this be optional on object initialization?
@@ -24,13 +25,19 @@ export interface Keyspace {
 };
 
 export interface EventLog {
-  head: null | KeyspaceEvent;
-  tail: null | KeyspaceEvent;
+  head: null | KeyspaceEventNode;
+  tail: null | KeyspaceEventNode;
   eventTotal: number;
   add: (key: string, event: string) => void;
+  returnLogAsArray: (eventTotal: number) => KeyspaceEvent[];
+}
+export interface KeyspaceEvent {
+  key: string;
+  event: string;
+  timestamp: Date;
 }
 
-export interface KeyspaceEvent {
+export interface KeyspaceEventNode extends KeyspaceEvent {
   key: string;
   event: string;
   timestamp: Date;

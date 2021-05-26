@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
     "target": "es5",
+    "module": "CommonJS",
+    "esModuleInterop": true,
     "rootDir": "./server",
     "outDir": "./dist/server",
     "allowJs": true,

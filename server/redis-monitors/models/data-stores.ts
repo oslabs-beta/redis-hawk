@@ -7,6 +7,8 @@ Data stores include:
 
 */
 
+import type { KeyspaceEvent as KeyspaceEventElement } from './interfaces';
+
 export function EventLog(): void {
   /*
   Represents a running log of events for a given monitored keyspace.
@@ -19,7 +21,7 @@ export function EventLog(): void {
 
   this.head = null;
   this.tail = null;
-  this.eventTotal = 0
+  this.eventTotal = 0;
 }
 
 export function KeyspaceEvent(key: string, event: string): void {
@@ -38,7 +40,7 @@ export function KeyspaceEvent(key: string, event: string): void {
   this.previous = null;
 }
 
-EventLog.prototype.add = function (key: string, event: string): void {
+EventLog.prototype.add = function(key: string, event: string): void {
   /*
   Adds a new keyspace event to the EventLog.
   */
@@ -55,15 +57,12 @@ EventLog.prototype.add = function (key: string, event: string): void {
   }
 }
 
-//need method that generates response array based on event total passed in (default is 0)
-
-
 //need method to convert DLL into object -- returnLogAsArray
-EventLog.prototype.returnLogAsArray = function (eventTotal = 0) {
+EventLog.prototype.returnLogAsArray = function(eventTotal: number = 0): KeyspaceEventElement[] {
   //this should probably return some sort of error
   if (eventTotal < 0 || eventTotal >= this.eventTotal) return [];
 
-  const logAsArray = [];
+  const logAsArray: KeyspaceEventElement[] = [];
   let count = this.eventTotal - eventTotal;
   let current = this.tail;
 
@@ -80,10 +79,6 @@ EventLog.prototype.returnLogAsArray = function (eventTotal = 0) {
   }
   return logAsArray;
 }
-
-
-
-
 
 EventLog.prototype.removeManyViaTimestamp = function (timestamp: Date): void {
   /*
