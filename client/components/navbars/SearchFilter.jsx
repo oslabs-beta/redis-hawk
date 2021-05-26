@@ -3,16 +3,16 @@ import { connect } from 'react-redux';
 import { Component } from 'react';
 import * as actions from '../../action-creators/connections.js';
 
-const mapStateToProps = (store) => {
-  return {
-    currPage: store.currPageStore.currPage,
-  };
-};
+// const mapStateToProps = (store) => {
+//   return {
+//     currPage: store.currPageStore.currPage,
+//   };
+// };
 
-const mapDispatchToProps = (dispatch) => ({
-  updateCurrDisplay: (filter, category) =>
-    dispatch(actions.updateCurrDisplayActionCreator(filter, category)),
-});
+// const mapDispatchToProps = (dispatch) => ({
+//   updateCurrDisplay: (filter, category) =>
+//     dispatch(actions.updateCurrDisplayActionCreator(filter, category)),
+// });
 
 class SearchFilter extends Component {
   constructor(props) {
@@ -34,6 +34,7 @@ class SearchFilter extends Component {
   }
 
   handleSubmit(event) {
+    console.log('our props', this.props);
     event.preventDefault();
     this.setState({ value: '' });
     this.props.updateCurrDisplay(this.state.value, this.state.category);
@@ -44,9 +45,7 @@ class SearchFilter extends Component {
       return (
         <div className='searchFilterDiv'>
           <form id='filter-form' onSubmit={this.handleSubmit}>
-            <label>
-              Search: 
-            </label>
+            <label>Search:</label>
             <input
               id='uniqueInput'
               type='text'
@@ -74,9 +73,7 @@ class SearchFilter extends Component {
       return (
         <div className='searchFilterDiv'>
           <form id='filter-form' onSubmit={this.handleSubmit}>
-            <label>
-              Search:
-            </label>
+            <label>Search:</label>
             <input
               type='text'
               value={this.state.value}
@@ -103,9 +100,7 @@ class SearchFilter extends Component {
       return (
         <div className='searchFilterDiv'>
           <form id='filter-form' onSubmit={this.handleSubmit}>
-            <label>
-              Search:
-            </label>
+            <label>Search:</label>
             <input
               type='text'
               value={this.state.value}
@@ -132,4 +127,5 @@ class SearchFilter extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SearchFilter);
+// export default connect(mapStateToProps, mapDispatchToProps)(SearchFilter);
+export default SearchFilter;
