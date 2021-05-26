@@ -5,9 +5,7 @@ import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import toJson from 'enzyme-to-json';
 import renderer from 'react-test-renderer';
-
-import EventComponent from '../../../client/components/events/EventComponent.jsx';
-import KeyEventComponent from '../../../client/components/events/KeyEventComponent.jsx';
+import EventTable from '../../../components/events/EventTable.jsx'
 
 configure({ adapter: new Adapter() });
 
@@ -22,7 +20,7 @@ describe('React Events unit tests', () => {
           time: '8:30',
         },
       ]],
-      totalEvents: 1,
+      currDisplay: 'events',
       currDatabase: 0
     };
 
@@ -30,79 +28,114 @@ describe('React Events unit tests', () => {
       wrapper = shallow(<EventComponent {...props} />);
     });
 
-    it('render a div with the id keyEventsDiv and pagination component, with events props passed from EventComponent', () => {
+    it('render a div with classname EventComponent-Container, and the EventTable component with currDisplay, currDatabase, and events properties passed into it', () => {
       expect(
         wrapper.containsAllMatchingElements([
-          <div id='keyEventsDiv' />,
+          <div
+            id='eventComponentContainer'
+            className='EventComponent-Container'>
+            <EventTable
+              currDisplay={this.props.currDisplay}
+              currDatabase={this.props.database}
+              events={this.props.events}
+            />
+          </div>,
         ])
       ).toEqual(true);
     });
   });
 
-  describe('keyEventDiv', () => {
+  describe('EventTable', () => {
     let wrapper;
     beforeAll(() => {
-      wrapper = shallow(<div events={props.events[props.currDatabase]} id='keyEventDiv' />);
+      wrapper = shallow(<EventTable props={...props} />);
     });
 
-    it('renders a ul element with the id keyEventList', () => {
-      expect(wrapper.find('keyEventList')).toHaveLength(1);
-    });
-  });
-
-  describe('keyEventList', () => {
-    let wrapper;
-    const props = {
-      events: [[
-        {
-          name: 'hey!',
-          event: 'scan',
-          time: '8:30',
-        },
-      ]],
-      totalEvents: 1,
-      currDatabase: 0
-    };
-
-    beforeAll(() => {
-      wrapper = shallow(<div id='keyEventList' />);
-    });
-
-    it('renders a ul element with the id keyEvenstList', () => {
-      expect(wrapper.find('keyEventsList'));
-    });
-    it('renders a single event for each event in the event prop', () => {
-      expect(wrapper.find('keyEventsList').toHaveLength(props.events[props.currDatabase].length));
-    });
-  });
-
-  describe('KeyEventComponent', () => {
-    let wrapper;
-    const props = {
-      events: [[
-        {
-          name: 'hey!',
-          event: 'scan',
-          time: '8:30',
-        },
-      ]],
-      totalEvents: 1,
-      currDatabase: 0
-    };
-
-    beforeAll(() => {
-      wrapper = shallow(<KeyEventComponent events={props.events[props.currDatabase]} />);
-    });
-
-    it('renders an li element with the id keyEvenstList', () => {
-      expect(wrapper.find('keyEventsList'));
-    });
-
-    it('renders an li element with text indicating event name, type and time', () => {
+    it('renders a div with of material UI components', () => {
       expect(
-        wrapper
-          .contains(<li>Keyname: Hey! Event: Scan Time: 8:30</li>)
-          .toBe(true)
+        wrapper.containsAllMatchingElements(
+          <TableContainer id='tableContainer' component={Paper}>
+            <Table
+              className={classes.table}
+              aria-label='custom pagination table'>
+              <TableHead>
+                <TableRow>
+                  <TableCell style={{ color: "white" }}>Keyname</TableCell>
+                  <TableCell style={{ color: "white" }} align='right'>
+                    Event
+                  </TableCell>
+                  <TableCell style={{ color: "white" }} align='right'>
+                    Timestamp
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody id='tableBody'>
+                {(rowsPerPage > 0
+                  ? rows.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                  : rows
+                ).map((row) => (
+                  <TableRow
+                    key={
+                      row.keyname + row.event + getRandomInt(100000).toString()
+                    }>
+                    <TableCell
+                      style={{ color: "white" }}
+                      className='tableCell'
+                      component='th'
+                      scope='row'>
+                      {row.keyname}
+                    </TableCell>
+                    <TableCell
+                      className='tableCell'
+                      style={{ width: 160, color: "white" }}
+                      align='right'>
+                      {row.event}
+                    </TableCell>
+                    <TableCell
+                      className='tableCell'
+                      style={{ width: 160, color: "white" }}
+                      align='right'>
+                      {row.time}
+                    </TableCell>
+                  </TableRow>
+                ))}
+
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 53 * emptyRows }}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    style={{ color: "white" }}
+                    rowsPerPageOptions={[
+                      5,
+                      10,
+                      25,
+                      { label: "All", value: -1 },
+                    ]}
+                    colSpan={3}
+                    count={rows.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    SelectProps={{
+                      inputProps: { "aria-label": "rows per page" },
+                      native: true,
+                    }}
+                    onChangePage={handleChangePage}
+                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                    // ActionsComponent={TablePaginationActions}
+                  />
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </TableContainer>
+        )
       );
     });
   });

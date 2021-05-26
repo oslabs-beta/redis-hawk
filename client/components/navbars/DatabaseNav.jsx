@@ -5,7 +5,6 @@ import * as actions from "../../action-creators/connections";
 
 const mapStateToProps = (store) => ({
   databaseInfo: store.databaseInfoStore.databaseInfo,
-  currDatabase: store.currDatabaseStore.currDatabase,
 });
 
 const mapDispatchToProps = (dispatch) => ({
