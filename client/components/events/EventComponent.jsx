@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import KeyEventComponent from './KeyEventComponent.jsx';
+
 import EventTable from './EventTable.jsx';
 
 const mapStateToProps = (store) => {
@@ -17,20 +17,16 @@ class EventComponent extends Component {
   }
 
   render() {
-    console.log('In eventComponent', this.props.database);
-    let listOfEvents;
-    if (this.props.events) {
-      listOfEvents = this.props.events.map((obj, idx) => {
-        <KeyEventComponent events={obj[idx]} database={this.props.database} />;
-      });
-    }
+    // console.log('In eventComponent', this.props.database);
+    // let listOfEvents;
+    // if (this.props.events) {
+    //   listOfEvents = this.props.events.map((obj, idx) => {
+    //     <KeyEventComponent events={obj[idx]} database={this.props.database} />;
+    //   });
+    // }
 
     return (
       <div id='eventComponentContainer'>
-        {/* <div id='KeyEventsDiv'>
-          <ul id='keyEventList'>{listOfEvents}</ul>
-        </div>
-        <EventsPagination /> */}
         <EventTable
           currDisplay={this.props.currDisplay}
           currDatabase={this.props.database}
