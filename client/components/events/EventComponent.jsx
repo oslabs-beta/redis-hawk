@@ -27,10 +27,6 @@ class EventComponent extends Component {
 
     return (
       <div id='eventComponentContainer'>
-        {/* <div id='KeyEventsDiv'>
-          <ul id='keyEventList'>{listOfEvents}</ul>
-        </div>
-        <EventsPagination /> */}
         <EventTable
           currDisplay={this.props.currDisplay}
           currDatabase={this.props.database}
