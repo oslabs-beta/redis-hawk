@@ -1,11 +1,10 @@
-const express = require('express');
-const path = require('path');
+import express from 'express';
+import path from 'path';
 const app = express();
 
-const monitors = require('./redis-monitors/redis-monitors');
-const connectionsRouter = require('./routes/connectionsRouter');
-const eventsRouter = require('./routes/eventsRouter');
-const keyspacesRouter = require('./routes/keyspacesRouter');
+import connectionsRouter from './routes/connectionsRouter';
+import eventsRouter from './routes/eventsRouter';
+import keyspacesRouter from './routes/keyspacesRouter';
 
 const PORT = +process.env.PORT || 3000;
 
@@ -18,11 +17,23 @@ app.use('/api/histories', historiesRouter);
 
 app.use('/api/keyspaces', keyspacesRouter);
 
-app.get('/', (req, res): void => {
+app.get('/', (req: express.Request, res: express.Response): void => {
   res.status(200).sendFile(path.resolve(__dirname, './assets/index.html'));
 })
 
-app.use((err, req, res, next) => {
+interface GlobalError {
+  log: string;
+  status?: number;
+  message?: {
+    error: string;
+  } 
+}
+
+app.use((
+  err: GlobalError, 
+  req: express.Request, 
+  res: express.Response, 
+  next: express.NextFunction): void => {
   const defaultErr = {
     log: 'Unknown Express middleware occured',
     status: 500,

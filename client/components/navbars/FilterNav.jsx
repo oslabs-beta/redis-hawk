@@ -20,7 +20,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(actions.updateKeyspaceActionCreator(keyspace)),
   updateKeyGraph: (keyGraph) =>
     dispatch(actions.updateKeyGraphActionCreator(keyGraph)),
-  updateCurrentDisplay: (filter, category) =>
+  updateCurrDisplay: (filter, category) =>
     dispatch(actions.updateCurrDisplayActionCreator(filter, category)),
 });
 
@@ -36,13 +36,15 @@ class FilterNav extends Component {
           <SearchFilter
             id='searchFilter'
             events={this.props.events[this.props.currDatabase]}
+            currPage={this.props.currPage}
+            updateCurrDisplay={this.props.updateCurrDisplay}
           />
           <button
             className='filter-button'
             id='clearFilterButton'
             onClick={(e) => {
               e.preventDefault();
-              this.props.updateCurrentDisplay('', '');
+              this.props.updateCurrDisplay('', '');
             }}
           >
             Clear Filter
@@ -56,7 +58,8 @@ class FilterNav extends Component {
                 this.props.events[this.props.currDatabase].length - 1;
               console.log('current length of events', currLength);
               this.props.updateEvents(1, this.props.currDatabase, currLength);
-            }}>
+            }}
+          >
             Refresh
           </button>
         </div>
@@ -67,13 +70,15 @@ class FilterNav extends Component {
           <SearchFilter
             id='searchFilter'
             events={this.props.events[this.props.currDatabase]}
+            currPage={this.props.currPage}
+            updateCurrDisplay={this.props.updateCurrDisplay}
           />
           <button
             className='filter-button'
             id='clearFilterButton'
             onClick={(e) => {
               e.preventDefault();
-              this.props.updateCurrentDisplay('', '');
+              this.props.updateCurrDisplay('', '');
             }}
           >
             Clear Filter
@@ -100,13 +105,15 @@ class FilterNav extends Component {
           <SearchFilter
             id='searchFilter'
             keyspace={this.props.keyspace[this.props.currDatabase]}
+            currPage={this.props.currPage}
+            updateCurrDisplay={this.props.updateCurrDisplay}
           />
           <button
             className='filter-button'
             id='clearFilterButton'
             onClick={(e) => {
               e.preventDefault();
-              this.props.updateCurrentDisplay('', '');
+              this.props.updateCurrDisplay('', '');
             }}
           >
             Clear Filter

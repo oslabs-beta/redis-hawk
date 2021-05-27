@@ -7,8 +7,7 @@ import toJson from 'enzyme-to-json';
 import renderer from 'react-test-renderer';
 
 import KeyspaceComponent from '../../../client/components/keyspace/KeyspaceComponent.jsx';
-import MainComponent from '../../../client/components/keyspace/MainComponent.jsx';
-import KeyListComponent from '../../../client/components/keyspace/KeyListComponent.jsx';
+import KeyspaceTable from '../../../client/components/keyspace/KeyspaceTable.jsx';
 
 configure({ adapter: new Adapter() });
 
@@ -21,19 +20,11 @@ describe('React Keyspace unit tests', () => {
           {
             name: 'keyName',
             value: 'hello',
-            time: '11:52',
+            type: 'SET',
           },
         ],
       ],
-      events: [
-        [
-          {
-            name: 'hey!',
-            event: 'scan',
-            time: '8:30',
-          },
-        ],
-      ],
+      currDisplay: 'keyspace',
       currDatabase: 0,
     };
 
@@ -41,145 +32,105 @@ describe('React Keyspace unit tests', () => {
       wrapper = shallow(<KeyspaceComponent {...props} />);
     });
 
-    it('render the main component and pagination div, with keyspace props passed to MainComponent', () => {
+    it('render the KeyspaceTable component with all props passed to the KeyspaceTable', () => {
+      expect(wrapper.find('keyspaceComponentContainer').find('div'))
       expect(
         wrapper.containsAllMatchingElements([
-          <MainComponent
-            keyspace={[
-              [
-                {
-                  name: 'keyName',
-                  value: 'hello',
-                  time: '11:52',
-                },
-              ],
-            ]}
-          />,
+          <div>
+          <KeyspaceTable
+          currDatabase={this.props.currDatabase}
+          keyspace={this.props.keyspace}
+          currDisplay={this.props.currDisplay}
+        />
+        </div>
         ])
       ).toEqual(true);
     });
   });
 
-  describe('MainComponent', () => {
+  describe('KeyspaceTable', () => {
     let wrapper;
-    const props = {
-      keyspace: [
-        [
-          {
-            name: 'keyName',
-            value: 'hello',
-            time: '11:52',
-          },
-        ],
-      ],
-      currDatabase: 0,
-    };
-
     beforeAll(() => {
-      wrapper = shallow(<MainComponent {...props} />);
+      wrapper = shallow(<KeyspaceTable props={...props} />);
     });
 
-    it('renders two divs, one with the id keyListHolder, the other with the id valueDisplay', () => {
-      expect(wrapper.find('div').toHaveLength(2));
-      expect(wrapper.find('keyListHolder'));
-      expect(wrapper.find('valueDisplay'));
+    it('renders a div with Material UI keyspace components', () => {
+      expect(wrapper.containsAllMatchingElements(
+        <TableContainer id='tableContainer' className="Table-Container" component={Paper}>
+      <Table className={classes.table} aria-label='custom pagination table'>
+        <TableHead>
+          <TableRow>
+            <TableCell style={{ color: 'white' }}>Keyname</TableCell>
+            <TableCell style={{ color: 'white' }} align='right'>
+              Value
+            </TableCell>
+            <TableCell style={{ color: 'white' }} align='right'>
+              Type
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody id='tableBody'>
+          {(rowsPerPage > 0
+            ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            : rows
+          ).map((row) => (
+            <TableRow key={row.keyname}>
+              <TableCell
+                style={{ color: 'white' }}
+                className='tableCell'
+                component='th'
+                scope='row'
+              >
+                {row.keyname}
+              </TableCell>
+              <TableCell
+                className='tableCell'
+                style={{ width: 160, color: 'white' }}
+                align='right'
+              >
+                {row.value}
+              </TableCell>
+              <TableCell
+                className='tableCell'
+                style={{ width: 160, color: 'white' }}
+                align='right'
+              >
+                {row.type}
+              </TableCell>
+            </TableRow>
+          ))}
+
+          {emptyRows > 0 && (
+            <TableRow style={{ height: 53 * emptyRows }}>
+              <TableCell colSpan={6} />
+            </TableRow>
+          )}
+        </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TablePagination
+              style={{ color: 'white' }}
+              rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+              colSpan={3}
+              count={rows.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              SelectProps={{
+                inputProps: { 'aria-label': 'rows per page' },
+                native: true,
+              }}
+              onChangePage={handleChangePage}
+              onChangeRowsPerPage={handleChangeRowsPerPage}
+              ActionsComponent={TablePaginationActions}
+            />
+          </TableRow>
+        </TableFooter>
+      </Table>
+    </TableContainer>
+      ))
     });
   });
-  describe('valueDisplay', () => {
-    let wrapper;
-    const props = {
-      keyspace: [
-        [
-          {
-            name: 'keyName',
-            value: 'hello',
-            time: '11:52',
-          },
-        ],
-      ],
-      currDatabase: 0,
-    };
-    beforeAll(() => {
-      wrapper = shallow(
-        <div id='valueDisplay' props={props.keyspace[props.currDatabase]} />
-      );
-    });
-    it('should render an h3 element with the props keyspace', () => {
-      expect(
-        wrapper.containsAllMatchingElements([
-          <h3
-            keyspace={[
-              {
-                name: 'keyName',
-                value: 'hello',
-                time: '11:52',
-              },
-            ]}
-          />,
-        ])
-      ).toEqual(true);
-    });
+  
+    
   });
 
-  describe('keyListHolder', () => {
-    let wrapper;
-    const props = {
-      keyspace: [
-        [
-          {
-            name: 'keyName',
-            value: 'hello',
-            time: '11:52',
-          },
-        ],
-      ],
-      currDatabase: 0,
-    };
-    beforeAll(() => {
-      wrapper = shallow(
-        <div id='keyListHolder' props={props.keyspace[props.currDatabase]} />
-      );
-    });
-
-    it('should render a ul element with the id keyList', () => {
-      expect(wrapper.find('keyList')).toHaveLength(1);
-    });
-  });
-
-  describe('KeyListComponent', () => {
-    let wrapper;
-    const props = {
-      keyspace: [
-        [
-          {
-            name: 'keyName',
-            value: 'hello',
-            time: '11:52',
-          },
-        ],
-      ],
-      currDatabase: 0,
-    };
-    beforeAll(() => {
-      wrapper = shallow(
-        <KeyListComponent props={props.keyspace[props.currDatabase]} />
-      );
-    });
-    it('should render a list item with the id keynameandtype', () => {
-      expect(wrapper.find('keynameandtype'));
-      expect(
-        wrapper.containsAllMatchingElements([
-          <li
-            keyspace={[
-              {
-                name: 'keyName',
-                value: 'hello',
-                time: '11:52',
-              },
-            ]}
-          />,
-        ])
-      ).toEqual(true);
-    });
-  });
-});

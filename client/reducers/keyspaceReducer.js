@@ -4,6 +4,7 @@ import * as types from "../actions/actionTypes.js";
 const initialState = {
   currDatabase: 0,
   keyspace: [[]],
+
 };
 
 const keyspaceReducer = (state = initialState, action) => {

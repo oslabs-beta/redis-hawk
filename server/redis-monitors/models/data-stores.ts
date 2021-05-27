@@ -1,5 +1,24 @@
 /*** KEYSPACE EVENTS ***/
 /*
+Module containing implementations of data stores for monitored Redis keyspaces. 
+
+Data stores include:
+* EventLogs
+* KeyspaceHistories 
+
+*/
+
+import type { 
+  KeyspaceEvent as KeyspaceEventElement, 
+  KeyspaceEventNode,
+  KeyspaceHistory as KeyspaceHistoryElement,
+  KeyspaceHistoryNode,
+  KeyDetails
+} from './interfaces';
+
+export class EventLog {
+
+  /*
   Represents a running log of events for a given monitored keyspace.
   Implemented as a doubly-linked list.
   
@@ -7,8 +26,10 @@
   * eventTotal represents the total number of events logged in EventLog.
     * eventTotal still accounts for any KeyspaceEvents that have been deleted
   */
-/*** ------------------ ***/
-export class EventLog {
+  head: null | KeyspaceEventNode;
+  tail: null | KeyspaceEventNode;
+  eventTotal: number;
+
   constructor() {
     this.head = null;
     this.tail = null;
@@ -31,17 +52,17 @@ export class EventLog {
     }
   }
 
-  removeManyViaTimestamp(timestamp: Date): void {
+  removeManyViaTimestamp(timestamp: number): void {
     /*
     Removes all events from the EventLog who have a timestamp earlier than the input timestamp.
     */
   }
 
-  returnLogAsArray(eventTotal = 0) {
-    //this should probably return some sort of error
+  returnLogAsArray(eventTotal = 0): KeyspaceEventElement[] {
+
     if (eventTotal < 0 || eventTotal >= this.eventTotal) return [];
 
-    const logAsArray = [];
+    const logAsArray: KeyspaceEventElement[] = [];
     let count = this.eventTotal - eventTotal;
     let current = this.tail;
 
@@ -60,12 +81,20 @@ export class EventLog {
   }
 }
 
-export class KeyspaceEvent {
+export class KeyspaceEvent implements KeyspaceEventNode {
   /*
   Used to instantiate a new KeyspaceEvent. 
   The event will be timestamped based on the time of instantiation.
   */
-  constructor(key: string, event: string): void {
+
+  key: string;
+  event: string;
+  timestamp: number;
+  next: null | KeyspaceEventNode;
+  previous: null | KeyspaceEventNode;
+
+
+  constructor(key: string, event: string) {
     if (typeof (key) !== 'string' || typeof (event) !== 'string') {
       throw new TypeError('KeyspaceEvent must be constructed with string args');
     }
@@ -86,19 +115,33 @@ The scan results will be timestamped and placed into the keyspace history.
 
 Similar to the event log, the keyspace histories will be implemented as a doubly linked list, except only a head and tail property will be present.
 
+//need method to convert DLL into object -- returnLogAsArray
+EventLog.prototype.returnLogAsArray = function(eventTotal: number = 0): KeyspaceEventElement[] {
+  //this should probably return some sort of error
+  if (eventTotal < 0 || eventTotal >= this.eventTotal) return [];
+
+  const logAsArray: KeyspaceEventElement[] = [];
+  let count = this.eventTotal - eventTotal;
+  let current = this.tail;
+
 An auto-cleanup process would also be recommended.
 */
 
 export class KeyspaceHistoriesLog {
+
+  head: null | KeyspaceHistoryNode;
+  tail: null | KeyspaceHistoryNode;
+  historiesCount: number;
+
   constructor() {
     this.head = null;
     this.tail = null;
     this.historiesCount = 0;
   }
-
-  add(keys: array): void {
-    //ads new events to keyspace histories
-    const newHistory = new KeyspaceHistory(key);
+  
+  add(keyDetails: KeyDetails[]): void {
+    //adds new events to keyspace histories
+    const newHistory = new KeyspaceHistory(keyDetails);
     this.historiesCount += 1;
     if (!this.head) {
       this.head = newHistory;
@@ -110,18 +153,17 @@ export class KeyspaceHistoriesLog {
     }
   }
 
-  returnLogAsArray(historiesCount = 0) {
+  returnLogAsArray(historiesCount = 0): KeyspaceHistoryElement[] {
     //need error handling
     if (historiesCount < 0 || historiesCount >= this.historiesCount) return [];
 
-    const logAsArray = [];
+    const logAsArray: KeyspaceHistoryElement[] = [];
     let count = this.historiesCount - historiesCount;
     let current = this.tail;
 
     while (count > 0) {
       const history = {
         keys: current.keys,
-        history: current.history,
         timestamp: current.timestamp
       };
 
@@ -133,15 +175,21 @@ export class KeyspaceHistoriesLog {
   }
 };
 
-export class KeyspaceHistory {
-  //instantiates a new keyspace history 
-  constructor(keys: string[]): void {
-    if (typeof (keys) !== 'string' || typeof (history) !== 'string') {
-      throw new TypeError('KeyspaceHistory must be constructed with string arguments')
+export class KeyspaceHistory implements KeyspaceHistoryNode {
+  
+  keys: KeyDetails[];
+  timestamp: number;
+  next: null | KeyspaceHistoryNode;
+  previous: null | KeyspaceHistoryNode;
+
+  constructor(keys: KeyDetails[]) {
+    if (!Array.isArray(keys)) {
+      throw new TypeError('KeyspaceHistory must be constructed with an array of KeyDetails')
     }
     this.keys = keys;
     this.timestamp = Date.now();
     this.next = null;
     this.previous = null;
   }
-}
+};
+

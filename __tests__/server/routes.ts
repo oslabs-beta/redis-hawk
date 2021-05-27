@@ -1,13 +1,12 @@
-import * as request from 'supertest';
-import * as RedisServer from 'redis-server';
+import request from 'supertest';
+import RedisServer from 'redis-server';
 import { resolve } from 'path';
 import { readFileSync } from 'fs';
-import * as redis from 'redis';
+import redis from 'redis';
 import { promisify } from 'util'; //promisify some node-redis client functionality
 
 import app from '../../server/server';
 import * as interfaces from '../../server/redis-monitors/models/interfaces';
-import { string } from 'yargs';
 
 const testConnections = JSON.parse(readFileSync(resolve(__dirname, '../../server/configs/tests-config.json')).toString());
 
