@@ -71,6 +71,30 @@ describe("updateEventGraphActionCreator", () => {
   });
 });
 
+describe("updateDBInfoActionCreator", () => {
+  afterEach(() => {
+    fetchMock.restore();
+  });
+
+  it("dispatches an event to update the current DB", () => {
+    fetchMock.getOnce("/api/connections");
+
+    const expectedActions = [{ type: types.UPDATE_DBINFO }];
+    const store = mockStore({
+      databaseInfo: {
+        host: "",
+        port: 0,
+        dataNum: 0,
+      },
+    });
+
+    return store.dispatch(connections.updateDBInfoActionCreator).then(() => {
+      // return of async actions
+      expect(store.getActions()).toEqual(expectedActions);
+    });
+  });
+});
+
 //SWITCH DATABASE
 
 describe("switchDatabaseActionCreator", () => {
@@ -84,3 +108,28 @@ describe("switchDatabaseActionCreator", () => {
     expect(store.getActions().toEqual(expectedActions));
   });
 });
+
+describe("updatePageActionCreator", () => {
+  afterEach(() => {
+    fetchMock.restore();
+  });
+
+  it("updates the current page", () => {
+    const expectedActions = [{ type: types.UPDATE_PAGE }];
+    const store = mockStore({ newPage: '' });
+    expect(store.getActions().toEqual(expectedActions));
+  });
+});
+
+describe("updateCurrDisplayActionCreator", () => {
+  afterEach(() => {
+    fetchMock.restore();
+  });
+
+  it("updates the current display", () => {
+    const expectedActions = [{ type: types.UPDATE_CURRDISPLAY }];
+    const store = mockStore({ filter: '', category: ''});
+    expect(store.getActions().toEqual(expectedActions));
+  });
+});
+

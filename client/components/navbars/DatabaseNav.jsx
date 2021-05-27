@@ -31,7 +31,7 @@ class DatabaseNav extends Component {
     }
 
     return (
-      <div id='databaseNavContainer'>
+      <div className='databaseNavContainer'>
         <div id='redisInstance' databaseinfo={this.props.databaseInfo}>
           <p>
             {" "}
