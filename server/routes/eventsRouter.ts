@@ -6,7 +6,7 @@ const eventsMonitors = require('../redis-monitors/redis-monitors');
 eventsRouter.get('/', (req, res, next) => {
   //set const body = {data: []}
   const body = { data: [] };
-  //if not, then loop through eventsMonitors 
+  //loop through eventsMonitors 
   eventsMonitors.forEach(monitor => {
     //for each monitor, create a new object "instance" (to be put in the response.body)
     const instance = {
@@ -48,7 +48,7 @@ eventsRouter.get('/:instanceId/', (req, res, next) => {
     const { eventTotal } = req.query;
     instance.keyspaces.push(keyspace.eventLog.returnLogAsArray((eventTotal) ? eventTotal : 0))
   });
-  
+
   body.data.push(instance);
   //res.send jsonified body.data
   res.status(200).json(body);

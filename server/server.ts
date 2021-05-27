@@ -14,6 +14,8 @@ app.use('/api/connections', connectionsRouter);
 //events routes
 app.use('/api/events', eventsRouter);
 
+app.use('/api/histories', historiesRouter);
+
 app.use('/api/keyspaces', keyspacesRouter);
 
 app.get('/', (req, res): void => {
