@@ -7,6 +7,7 @@ import { RedisClient } from 'redis';
 export interface RedisInstance {
   host: string;
   port: number;
+  recordKeyspaceHistoryFrequency: number,
 };
 
 export interface RedisMonitor {
@@ -17,11 +18,12 @@ export interface RedisMonitor {
   port: RedisInstance['port'];
   databases?: number; //Check property - should this be optional on object initialization?
   keyspaces: Keyspace[];
+  recordKeyspaceHistoryFrequency: RedisInstance['recordKeyspaceHistoryFrequency'],
 };
 
 export interface Keyspace {
   eventLog: EventLog;
-  keySnapshots: KeySnapshot[];
+  keyspaceHistories: KeyspaceHistoriesLog;
 };
 
 export interface EventLog {
@@ -34,18 +36,33 @@ export interface EventLog {
 export interface KeyspaceEvent {
   key: string;
   event: string;
-  timestamp: Date;
+  timestamp: number;
 }
 
 export interface KeyspaceEventNode extends KeyspaceEvent {
-  key: string;
-  event: string;
-  timestamp: Date;
-  next: null | KeyspaceEvent;
-  previous: null | KeyspaceEvent;
+  next: null | KeyspaceEventNode;
+  previous: null | KeyspaceEventNode;
 };
 
-export interface KeySnapshot {
-  timestamp: Date;
-  keys: string[];
+export interface KeyspaceHistoriesLog {
+  head: null | KeyspaceHistoryNode;
+  tail: null | KeyspaceHistoryNode;
+  historiesCount: number;
+  add: (keyDetails: KeyDetails[]) => void;
+  returnLogAsArray: (historiesCount: number) => KeyspaceHistory[];
+}
+
+export interface KeyspaceHistory {
+  timestamp: number;
+  keys: KeyDetails[];
 };
+
+export interface KeyspaceHistoryNode extends KeyspaceHistory {
+  next: null | KeyspaceHistoryNode;
+  previous: null | KeyspaceHistoryNode;
+}
+
+export interface KeyDetails {
+  key: string,
+  memoryUsage: number
+}

@@ -12,8 +12,8 @@ import * as path from 'path';
 import * as redis from 'redis';
 
 import { RedisInstance, RedisMonitor, Keyspace } from './models/interfaces';
-import { EventLog } from './models/data-stores';
-import { promisifyClientMethods } from './utils';
+import { EventLog, KeyspaceHistoriesLog } from './models/data-stores';
+import { promisifyClientMethods, recordKeyspaceHistory } from './utils';
 
 const instances: RedisInstance[] = process.env.IS_TEST ?
   JSON.parse(fs.readFileSync(path.resolve(__dirname, '../configs/tests-config.json')).toString())
@@ -31,14 +31,14 @@ instances.forEach((instance: RedisInstance, idx: number): void => {
   //Subscriber does not require any promisified methods
   const subscriber: redis.RedisClient = redis.createClient({host: instance.host, port: instance.port});
 
-  console.log('idx is', idx);
   const monitor: RedisMonitor = {
     instanceId: idx + 1,
     redisClient: client,
     keyspaceSubscriber: subscriber,
     host: instance.host,
     port: instance.port,
-    keyspaces: []
+    keyspaces: [],
+    recordKeyspaceHistoryFrequency: instance.recordKeyspaceHistoryFrequency
   }
 
   monitor.redisClient.config('GET', 'databases', (err, res): void => {
@@ -46,13 +46,14 @@ instances.forEach((instance: RedisInstance, idx: number): void => {
     //Sets the number of databases present in this monitored Redis instance
     monitor.databases = +res[1];
 
-    //Configures each keyspace with a event subscriber and event log
+    //Configures each keyspace with a event subscriber/event log
+    //Additionally auto-saves keyspace histories with frequency in JSON config
     //This should be futher modularized for readability and maintanability
     for (let dbIndex = 0; dbIndex < monitor.databases; dbIndex++) {
 
       const keyspace: Keyspace = {
         eventLog: new EventLog(),
-        keySnapshots: []
+        keyspaceHistories: new KeyspaceHistoriesLog()
       }
       monitor.keyspaces.push(keyspace);
 
@@ -63,6 +64,16 @@ instances.forEach((instance: RedisInstance, idx: number): void => {
           monitor.keyspaces[dbIndex].eventLog.add(key, event);
         }
       })
+
+      // For every recordKeyspaceHistoryFrequency milliseconds, 
+      // record a keyspace history for this given database
+      setInterval(
+        recordKeyspaceHistory, 
+        monitor.recordKeyspaceHistoryFrequency,
+        monitor, 
+        dbIndex
+      ); 
+
     }
 
     monitor.keyspaceSubscriber.psubscribe('__keyspace@*__:*')
