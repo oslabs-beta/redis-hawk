@@ -1,25 +1,30 @@
-var express = require('express');
-var eventsRouter = express.Router();
-var eventsMonitors = require('../redis-monitors/redis-monitors');
-eventsRouter.get('/', function (req, res, next) {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var express_1 = __importDefault(require("express"));
+var redis_monitors_1 = __importDefault(require("../redis-monitors/redis-monitors"));
+var router = express_1.default();
+router.get('/', function (req, res, next) {
     var body = { data: [] };
-    eventsMonitors.forEach(function (monitor) {
+    redis_monitors_1.default.forEach(function (monitor) {
         var instance = {
             instanceId: monitor.instanceId,
             keyspaces: []
         };
         monitor.keyspaces.forEach(function (keyspace) {
             var eventTotal = req.query.eventTotal;
-            instance.keyspaces.push(keyspace.eventLog.returnLogAsArray((eventTotal) ? eventTotal : 0));
+            instance.keyspaces.push(keyspace.eventLog.returnLogAsArray((+eventTotal) ? +eventTotal : 0));
         });
         body.data.push(instance);
     });
     res.status(200).json(body);
 });
-eventsRouter.get('/:instanceId/', function (req, res, next) {
+router.get('/:instanceId/', function (req, res, next) {
     var body = { data: [] };
     var instanceId = req.params.instanceId;
-    var monitor = eventsMonitors.find(function (m) {
+    var monitor = redis_monitors_1.default.find(function (m) {
         return m.instanceId === +instanceId;
     });
     var instance = {
@@ -28,15 +33,15 @@ eventsRouter.get('/:instanceId/', function (req, res, next) {
     };
     monitor.keyspaces.forEach(function (keyspace) {
         var eventTotal = req.query.eventTotal;
-        instance.keyspaces.push(keyspace.eventLog.returnLogAsArray((eventTotal) ? eventTotal : 0));
+        instance.keyspaces.push(keyspace.eventLog.returnLogAsArray((+eventTotal) ? +eventTotal : 0));
     });
     body.data.push(instance);
     res.status(200).json(body);
 });
-eventsRouter.get('/:instanceId/:dbIndex', function (req, res, next) {
+router.get('/:instanceId/:dbIndex', function (req, res, next) {
     var body = { data: [] };
     var _a = req.params, instanceId = _a.instanceId, dbIndex = _a.dbIndex;
-    var monitor = eventsMonitors.find(function (m) {
+    var monitor = redis_monitors_1.default.find(function (m) {
         return m.instanceId === +instanceId;
     });
     var instance = {
@@ -48,4 +53,4 @@ eventsRouter.get('/:instanceId/:dbIndex', function (req, res, next) {
     body.data.push(instance);
     res.status(200).json(body);
 });
-module.exports = eventsRouter;
+exports.default = router;

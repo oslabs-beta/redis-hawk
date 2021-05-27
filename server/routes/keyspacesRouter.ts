@@ -1,24 +1,27 @@
-import { Router } from 'express';
-const keyspacesController = require('../controllers/keyspacesController');
+import express from 'express';
+import keyspacesController from '../controllers/keyspacesController';
 
-const keyspacesRouter = Router();
+const router = express.Router();
 
-keyspacesRouter.get('/', 
-  keyspacesController.getAllInstancesKeyspaces, 
-  (req, res) => {
-    res.status(200).json({data: res.locals.data});
+router.get('/', 
+  keyspacesController.findAllMonitors,
+  keyspacesController.getKeyspacesForInstance, 
+  (req: express.Request, res: express.Response) => {
+    res.status(200).json(res.locals.keyspaces);
 });
 
-keyspacesRouter.get('/:instanceId',
-  keyspacesController.getAllKeyspacesForInstance, 
-  (req, res) => {
-    res.status(200).json({data: res.locals.data});
+router.get('/:instanceId',
+  keyspacesController.findSingleMonitor,
+  keyspacesController.getKeyspacesForInstance,
+  (req: express.Request, res: express.Response) => {
+    res.status(200).json(res.locals.keyspaces);
 })
 
-keyspacesRouter.get('/:instanceId/:dbIndex',
-  keyspacesController.getKeyspaceForInstance, 
-  (req, res) => {
-    res.status(200).json({data: res.locals.data});
+router.get('/:instanceId/:dbIndex',
+keyspacesController.findSingleMonitor,
+keyspacesController.getKeyspacesForInstance, 
+  (req: express.Request, res: express.Response) => {
+    res.status(200).json(res.locals.keyspaces);
 })
 
-module.exports = keyspacesRouter;
+export default router;

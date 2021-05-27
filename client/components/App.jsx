@@ -6,7 +6,7 @@ import DatabaseNav from "./navbars/DatabaseNav.jsx";
 import KeyspaceComponent from "./keyspace/KeyspaceComponent.jsx";
 import GraphComponent from "./graphs/GraphComponent.jsx";
 import EventComponent from "./events/EventComponent.jsx";
-import "./styles/styles.css";
+import "./styles/styles.scss";
 import { connect } from "react-redux";
 import * as actions from "../action-creators/connections";
 import "../../node_modules/react-vis/dist/style.css";

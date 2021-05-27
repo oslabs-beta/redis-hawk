@@ -6,9 +6,18 @@ const mockData = require('./mock-command-data.js');
 const mockSettings = require('./mock-command-settings');
 const client = require('../redis-config/client-config.js');
 
+
+const selectRandomDatabase = async (client) => {
+//Choose a random database (based on the Redis default of 16 databases for an instance) to perform commands against
+  await client.select(Math.floor(Math.random() * 16));
+};
+
 const mockCommands = {};
 
-mockCommands.setString = () => {
+mockCommands.setString = async () => {
+
+  await selectRandomDatabase(client);
+
   const key = mockData.strings.createKey();
   client.set(key, mockData.strings.createValue(), (err, res) => {
     if (!err) console.log(`Key set: ${key}`);
@@ -21,14 +30,20 @@ mockCommands.setString = () => {
   });
 }
 
-mockCommands.getString = () => {
+mockCommands.getString = async () => {
+
+  await selectRandomDatabase(client);
+
   const key = mockData.strings.createKey();
   client.get(key, (err, res) => {
     if (!err) console.log(`Retrieved string data for key ${key}: ${res}`);
   });
 }
 
-mockCommands.delString = () => {
+mockCommands.delString = async () => {
+
+  await selectRandomDatabase(client);
+
   const key = mockData.strings.createKey();
   client.del(key, (err, res) => {
     if (!err) console.log(`Deleted string key ${key}`);

@@ -1,5 +1,17 @@
 /*** KEYSPACE EVENTS ***/
 /*
+Module containing implementations of data stores for monitored Redis keyspaces. 
+
+Data stores include:
+* EventLogs
+* KeyspaceHistories 
+
+*/
+
+import type { KeyspaceEvent as KeyspaceEventElement } from './interfaces';
+
+export function EventLog(): void {
+  /*
   Represents a running log of events for a given monitored keyspace.
   Implemented as a doubly-linked list.
   
@@ -86,6 +98,15 @@ The scan results will be timestamped and placed into the keyspace history.
 
 Similar to the event log, the keyspace histories will be implemented as a doubly linked list, except only a head and tail property will be present.
 
+//need method to convert DLL into object -- returnLogAsArray
+EventLog.prototype.returnLogAsArray = function(eventTotal: number = 0): KeyspaceEventElement[] {
+  //this should probably return some sort of error
+  if (eventTotal < 0 || eventTotal >= this.eventTotal) return [];
+
+  const logAsArray: KeyspaceEventElement[] = [];
+  let count = this.eventTotal - eventTotal;
+  let current = this.tail;
+
 An auto-cleanup process would also be recommended.
 */
 
@@ -95,7 +116,7 @@ export class KeyspaceHistoriesLog {
     this.tail = null;
     this.historiesCount = 0;
   }
-
+  
   add(keys: array): void {
     //ads new events to keyspace histories
     const newHistory = new KeyspaceHistory(key);
@@ -144,4 +165,4 @@ export class KeyspaceHistory {
     this.next = null;
     this.previous = null;
   }
-}
+};
