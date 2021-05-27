@@ -4,13 +4,13 @@ import { promisify } from 'util';
 
 const getValue = async (key: string, type: string, redisClient: RedisClient): Promise<any> => {
 
-  const get = promisify(redisClient.get).bind(redisClient);
 
   let value;
   switch (type) {
 
     case 'string': {
-      value = await get(key);
+      //@ts-ignore - incorrect type errors for promisified method's return value
+      value = await client.get(key);
     }; break;
 
   };
@@ -22,20 +22,19 @@ const getValue = async (key: string, type: string, redisClient: RedisClient): Pr
 export const getKeyspace = async (redisClient: RedisClient, dbIdx: number): Promise<Keyspace> => {
 
   const res: KeyDetails[] = [];
-  const scan = promisify(redisClient.scan).bind(redisClient);
-  const select = promisify(redisClient.select).bind(redisClient);
-  const getType = promisify(redisClient.type).bind(redisClient);
 
-  await select(dbIdx);
+  await redisClient.select(dbIdx);
 
-  let scanResults: [string, string[]] = await scan('0', 'COUNT', '100');
+  //@ts-ignore - incorrect type errors for promisified method's return value
+  let scanResults: [string, string[]] = await redisClient.scan('0', 'COUNT', '100');
   let cursor: string = scanResults[0];
   let keys: string[] = scanResults[1];
 
   do {
 
     for (let key of keys) {
-      const type: string = await getType(key);
+      //@ts-ignore - incorrect type errors for promisified method's return value
+      const type: string = await redisClient.type(key);
       const value = await getValue(key, type, redisClient);
 
       res.push({
@@ -44,7 +43,8 @@ export const getKeyspace = async (redisClient: RedisClient, dbIdx: number): Prom
         value: value
       })
     }
-    scanResults = await scan(cursor, 'COUNT', '100');
+    //@ts-ignore - incorrect type errors for promisified method's return value
+    scanResults = await redisClient.scan(cursor, 'COUNT', '100');
     cursor = scanResults[0];
     keys = scanResults[1];
 
