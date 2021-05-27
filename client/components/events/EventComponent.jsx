@@ -17,16 +17,8 @@ class EventComponent extends Component {
   }
 
   render() {
-    // console.log('In eventComponent', this.props.database);
-    // let listOfEvents;
-    // if (this.props.events) {
-    //   listOfEvents = this.props.events.map((obj, idx) => {
-    //     <KeyEventComponent events={obj[idx]} database={this.props.database} />;
-    //   });
-    // }
-
     return (
-      <div id='eventComponentContainer'>
+      <div id='eventComponentContainer' className="EventComponent-Container">
         <EventTable
           currDisplay={this.props.currDisplay}
           currDatabase={this.props.database}
