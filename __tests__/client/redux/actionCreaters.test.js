@@ -84,7 +84,7 @@ describe("updateDBInfoActionCreator", () => {
       databaseInfo: {
         host: "",
         port: 0,
-        dataNum: 0,
+        numberOfDBs: 0,
       },
     });
 
