@@ -109,7 +109,6 @@ const useStyles2 = makeStyles({
 
 function KeyspaceTable(props) {
   const rows = [];
-  console.log('props', props);
 
   // if (props.keyspace[props.currDatabase]) {
   props.keyspace[props.currDatabase].forEach((keyspace) => {

@@ -18,7 +18,6 @@ class KeyspaceComponent extends Component {
   }
 
   render() {
-    console.log('props in KeyspaceComponent', this.props);
     return (
       <div
         id='keyspaceComponentContainer'
