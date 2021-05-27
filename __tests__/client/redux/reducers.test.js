@@ -272,14 +272,12 @@ describe('updateDBInfo', () => {
   describe('UPDATE_DBINFO', () => {
     const action = {
       type: 'UPDATE_DBINFO',
-      payload: 
-        {
-          databases: 16,
-          host: '127.0.0.1',
-          instanceId: 1,
-          port: 6379,
-        },
-      
+      payload: {
+        databases: 16,
+        host: '127.0.0.1',
+        instanceId: 1,
+        port: 6379,
+      },
     };
 
     it('updates database info', () => {
@@ -329,16 +327,12 @@ describe('update current display', () => {
   describe('UPDATE_CURRDISPLAY', () => {
     const action = {
       type: 'UPDATE_CURRDISPLAY',
-      payload: [
-        {
-          currDisplay: {
-            filter: 'type',
-            category: 'events',
-          },
-        },
-      ],
+      payload: {
+        filter: 'type',
+        category: 'events',
+      },
     };
-
+    //payload: { filter: filter, category: category },
     it('updates the current display', () => {
       const { currDisplay } = currDisplaySubject(state, action);
       expect(currDisplay).toEqual({
@@ -382,24 +376,17 @@ describe('update current page', () => {
   describe('UPDATE_CURRPAGE', () => {
     const action = {
       type: 'UPDATE_CURRPAGE',
-      payload: { currPage: 'keyspace' },
+      payload: 'keyspace',
     };
 
     it('updates the current display', () => {
       const { currPage } = pageSubject(state, action);
-      expect(currPage).toEqual({
-        currPage: 'keyspace',
-      });
+      expect(currPage).toEqual('keyspace');
     });
 
     it('returns a state object not strictly equal to the original', () => {
       const resultState = pageSubject(state, action);
-      expect(resultState).not.toBe(state);
-    });
-
-    it('includes currDixplay  prop not equal to the original', () => {
-      const { currPage } = pageSubject(state, action);
-      expect(currPage).not.toBe(state.currPage);
+      expect(resultState).not.toBe(state.currPage);
     });
   });
 });
