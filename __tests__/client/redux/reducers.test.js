@@ -1,10 +1,10 @@
-import keyspaceSubject from "../../../client/reducers/keyspaceReducer";
-import databaseSubject from "../../../client/reducers/databaseReducer";
-import eventSubject from "../../../client/reducers/eventsReducer";
-import keygraphSubject from "../../../client/reducers/graphsReducer";
-import dbInfoSubject from "../../../client/reducers/dbInfoReducer";
-import currDisplaySubject from "../../../client/reducers/currentDisplayReducer";
-import pageSubject from "../../../client/reducers/pageReducer";
+import keyspaceSubject from '../../../client/reducers/keyspaceReducer';
+import databaseSubject from '../../../client/reducers/databaseReducer';
+import eventSubject from '../../../client/reducers/eventsReducer';
+import keygraphSubject from '../../../client/reducers/graphsReducer';
+import dbInfoSubject from '../../../client/reducers/dbInfoReducer';
+import currDisplaySubject from '../../../client/reducers/currentDisplayReducer';
+import pageSubject from '../../../client/reducers/pageReducer';
 
 // const keyspaceSubject = require('../../../client/reducers/keyspaceReducer.js');
 
@@ -14,7 +14,7 @@ import pageSubject from "../../../client/reducers/pageReducer";
 
 // const keygraphSubject = require('../../../client/reducers/graphsReducer.js');
 
-describe("database reducer", () => {
+describe('database reducer', () => {
   let state;
   beforeEach(() => {
     state = {
@@ -22,38 +22,38 @@ describe("database reducer", () => {
     };
   });
 
-  describe("default state for databases", () => {
-    it("should return a default state when given an undefined input", () => {
+  describe('default state for databases', () => {
+    it('should return a default state when given an undefined input', () => {
       expect(databaseSubject(undefined, { type: undefined })).toEqual(state);
     });
   });
 
-  describe("unrecognized action types", () => {
-    it("should return the original without any duplication", () => {
+  describe('unrecognized action types', () => {
+    it('should return the original without any duplication', () => {
       const action = {
-        type: "ao;wiehf;aoie",
+        type: 'ao;wiehf;aoie',
       };
       expect(databaseSubject(state, action)).toBe(state);
     });
   });
 
-  describe("SWITCH_DATABASE", () => {
+  describe('SWITCH_DATABASE', () => {
     const action = {
-      type: "SWITCH_DATABASE",
+      type: 'SWITCH_DATABASE',
       payload: 2,
     };
 
-    it("switches database to #2", () => {
+    it('switches database to #2', () => {
       const { currDatabase } = databaseSubject(state, action);
       expect(currDatabase).toEqual(2);
     });
 
-    it("returns a state object not strictly equal to the original", () => {
+    it('returns a state object not strictly equal to the original', () => {
       const resultState = databaseSubject(state, action);
       expect(resultState).not.toBe(state);
     });
 
-    it("includes a database not equal to the original", () => {
+    it('includes a database not equal to the original', () => {
       const { currDatabase } = databaseSubject(state, action);
       expect(currDatabase).not.toBe(state.currentDB);
     });
@@ -62,7 +62,7 @@ describe("database reducer", () => {
 
 //keyspace reducer testing actions UPDATE_KEYSPACE and UPDATE_TOTALKEYS
 
-describe("keyspace reducer", () => {
+describe('keyspace reducer', () => {
   let state;
   beforeEach(() => {
     state = {
@@ -71,53 +71,49 @@ describe("keyspace reducer", () => {
     };
   });
 
-  describe("default state for keyspace", () => {
-    it("should return a default state when given an undefined input", () => {
+  describe('default state for keyspace', () => {
+    it('should return a default state when given an undefined input', () => {
       expect(keyspaceSubject(undefined, { type: undefined })).toEqual(state);
     });
   });
-  describe("unrecognized action types", () => {
-    it("should return the original state without any duplication", () => {
-      const action = { type: "whaaaaat?" };
+  describe('unrecognized action types', () => {
+    it('should return the original state without any duplication', () => {
+      const action = { type: 'whaaaaat?' };
       expect(keyspaceSubject(state, action)).toBe(state);
     });
   });
 
-  describe("UPDATE_KEYSPACE", () => {
+  describe('UPDATE_KEYSPACE', () => {
     const action = {
-      type: "UPDATE_KEYSPACE",
-      payload: [
-        {
-          name: "Abigail",
-          value: "isAwesome",
-          type: "hash",
-        },
-      ],
+      type: 'UPDATE_KEYSPACE',
+      payload: {
+        keyspace: [{ key: 'Abigail', value: 'isAwesome', type: 'hash' }],
+        dbIndex: 0,
+      },
     };
 
-    it("updates the keyspace", () => {
-      const { keyspaces } = keyspaceSubject(state, action);
-      console.log("keyspaces", keyspaces);
-      expect(keyspaces[0]).toEqual({
-        name: "Abigail",
-        value: "isAwesome",
-        type: "hash",
+    it('updates the keyspace', () => {
+      const { keyspace } = keyspaceSubject(state, action);
+      expect(keyspace[state.currDatabase][0]).toEqual({
+        key: 'Abigail',
+        value: 'isAwesome',
+        type: 'hash',
       });
     });
 
-    it("returns a state object not strictly equal to the original", () => {
+    it('returns a state object not strictly equal to the original', () => {
       const resultState = keyspaceSubject(state, action);
       expect(resultState).not.toBe(state);
     });
 
-    it("includes a keyspace not equal to the original", () => {
+    it('includes a keyspace not equal to the original', () => {
       const { keyspace } = keyspaceSubject(state, action);
-      expect(keyspaces[state.currDatabae]).not.toBe(state.keyspace);
+      expect(keyspace[state.currDatabase][0]).not.toBe(state.keyspace);
     });
   });
 });
 
-describe("events reducer", () => {
+describe('events reducer', () => {
   let state;
 
   beforeEach(() => {
@@ -126,38 +122,41 @@ describe("events reducer", () => {
       events: [[]],
     };
   });
-  describe("default state", () => {
-    it("should return a default state when given an undefined input", () => {
+  describe('default state', () => {
+    it('should return a default state when given an undefined input', () => {
       expect(eventSubject(undefined, { type: undefined })).toEqual(state);
     });
   });
 
-  describe("unrecognized action types", () => {
-    it("should return the original value without any duplication", () => {
-      const action = { type: "wannabemyfriend?" };
+  describe('unrecognized action types', () => {
+    it('should return the original value without any duplication', () => {
+      const action = { type: 'wannabemyfriend?' };
       expect(eventSubject(state, action)).toBe(state);
     });
   });
 
-  describe("UPDATE_EVENTS", () => {
+  describe('UPDATE_EVENTS', () => {
     const action = {
-      type: "UPDATE_EVENTS",
-      payload: [{ name: "abigail", event: "SET", time: "8:30" }],
+      type: 'UPDATE_EVENTS',
+      payload: {
+        events: [{ key: 'abigail', event: 'SET', timestamp: '8:30' }],
+        currDatabase: 0,
+      },
     };
-    it("updates the events", () => {
+    it('updates the events', () => {
       const { events } = eventSubject(state, action);
-      expect(events[0]).toEqual({
-        name: "abigail",
-        event: "SET",
-        time: "8:30",
+      expect(events[state.currDatabase][0]).toEqual({
+        key: 'abigail',
+        event: 'SET',
+        timestamp: '8:30',
       });
     });
-    it("returns a state object not strictly equal to the original", () => {
+    it('returns a state object not strictly equal to the original', () => {
       const eventState = eventSubject(state, action);
       // expect(eventState).toEqual(state)
       expect(eventState).not.toBe(state);
     });
-    it("returns an events value not strictly equal to the original", () => {
+    it('returns an events value not strictly equal to the original', () => {
       const { events } = eventSubject(state, action);
       expect(events).not.toBe(state.events);
     });
@@ -241,160 +240,153 @@ describe("events reducer", () => {
 //   });
 // });
 
-describe("updateDBInfo", () => {
+//payload:
+// databases: 16
+// host: "127.0.0.1"
+// instanceId: 1
+// port: 6379
+describe('updateDBInfo', () => {
   let state;
   beforeEach(() => {
     state = {
       databaseInfo: {
-        host: "",
+        host: '',
         port: 0,
-        dataNum: 0,
+        numberOfDBs: 0,
       },
     };
   });
 
-  describe("default state for databaseInfo", () => {
-    it("should return a default state when given an undefined input", () => {
+  describe('default state for databaseInfo', () => {
+    it('should return a default state when given an undefined input', () => {
       expect(dbInfoSubject(undefined, { type: undefined })).toEqual(state);
     });
   });
-  describe("unrecognized action types", () => {
-    it("should return the original state without any duplication", () => {
-      const action = { type: "awefh;a" };
+  describe('unrecognized action types', () => {
+    it('should return the original state without any duplication', () => {
+      const action = { type: 'awefh;a' };
       expect(dbInfoSubject(state, action)).toBe(state);
     });
   });
 
-  describe("UPDATE_DBINFO", () => {
+  describe('UPDATE_DBINFO', () => {
     const action = {
-      type: "UPDATE_DBINFO",
-      payload: [
-        {
-          host: "localhost:8080",
-          port: 6379,
-          dataNum: 16,
-        },
-      ],
+      type: 'UPDATE_DBINFO',
+      payload: {
+        databases: 16,
+        host: '127.0.0.1',
+        instanceId: 1,
+        port: 6379,
+      },
     };
 
-    it("updates database info", () => {
+    it('updates database info', () => {
       const { databaseInfo } = dbInfoSubject(state, action);
-      expect(databaseInfo[0]).toEqual({
-        host: "localhost:8080",
+      expect(databaseInfo).toEqual({
+        host: '127.0.0.1',
         port: 6379,
-        dataNum: 16,
+        numberOfDBs: 16,
       });
     });
 
-    it("returns a state object not strictly equal to the original", () => {
+    it('returns a state object not strictly equal to the original', () => {
       const resultState = dbInfoSubject(state, action);
       expect(resultState).not.toBe(state);
     });
 
-    it("includes dbInfo prop not equal to the original", () => {
+    it('includes dbInfo prop not equal to the original', () => {
       const { databaseInfo } = dbInfoSubject(state, action);
       expect(databaseInfo).not.toBe(state.databaseInfo);
     });
   });
 });
 
-describe("update current display", () => {
+describe('update current display', () => {
   let state;
   beforeEach(() => {
     state = {
       currDisplay: {
-        filter: "",
-        category: "",
+        filter: '',
+        category: '',
       },
     };
   });
 
-  describe("default state for currDisplay", () => {
-    it("should return a default state when given an undefined input", () => {
+  describe('default state for currDisplay', () => {
+    it('should return a default state when given an undefined input', () => {
       expect(currDisplaySubject(undefined, { type: undefined })).toEqual(state);
     });
   });
-  describe("unrecognized action types", () => {
-    it("should return the original state without any duplication", () => {
-      const action = { type: "awefh;a" };
+  describe('unrecognized action types', () => {
+    it('should return the original state without any duplication', () => {
+      const action = { type: 'awefh;a' };
       expect(currDisplaySubject(state, action)).toBe(state);
     });
   });
 
-  describe("UPDATE_CURRDISPLAY", () => {
+  describe('UPDATE_CURRDISPLAY', () => {
     const action = {
-      type: "UPDATE_CURRDISPLAY",
-      payload: [
-        {
-          currDisplay: {
-            filter: "type",
-            category: "events",
-          },
-        },
-      ],
+      type: 'UPDATE_CURRDISPLAY',
+      payload: {
+        filter: 'type',
+        category: 'events',
+      },
     };
-
-    it("updates the current display", () => {
+    //payload: { filter: filter, category: category },
+    it('updates the current display', () => {
       const { currDisplay } = currDisplaySubject(state, action);
       expect(currDisplay).toEqual({
-        filter: "type",
-        category: "events",
+        filter: 'type',
+        category: 'events',
       });
     });
 
-    it("returns a state object not strictly equal to the original", () => {
+    it('returns a state object not strictly equal to the original', () => {
       const resultState = currDisplaySubject(state, action);
       expect(resultState).not.toBe(state);
     });
 
-    it("includes dbInfo prop not equal to the original", () => {
+    it('includes dbInfo prop not equal to the original', () => {
       const { currDisplay } = currDisplaySubject(state, action);
       expect(currDisplay).not.toBe(state.currDisplay);
     });
   });
 });
 
-describe("update current page", () => {
+describe('update current page', () => {
   let state;
   beforeEach(() => {
     state = {
-      currPage: "keyspace",
+      currPage: 'keyspace',
     };
   });
 
-  describe("default state for current page", () => {
-    it("should return a default state when given an undefined input", () => {
+  describe('default state for current page', () => {
+    it('should return a default state when given an undefined input', () => {
       expect(pageSubject(undefined, { type: undefined })).toEqual(state);
     });
   });
-  describe("unrecognized action types", () => {
-    it("should return the original state without any duplication", () => {
-      const action = { type: "awefh;a" };
+  describe('unrecognized action types', () => {
+    it('should return the original state without any duplication', () => {
+      const action = { type: 'awefh;a' };
       expect(pageSubject(state, action)).toBe(state);
     });
   });
 
-  describe("UPDATE_CURRPAGE", () => {
+  describe('UPDATE_CURRPAGE', () => {
     const action = {
-      type: "UPDATE_CURRPAGE",
-      payload: { currPage: "keyspace" },
+      type: 'UPDATE_CURRPAGE',
+      payload: 'keyspace',
     };
 
-    it("updates the current display", () => {
+    it('updates the current display', () => {
       const { currPage } = pageSubject(state, action);
-      expect(currPage).toEqual({
-        currPage: "keyspace",
-      });
+      expect(currPage).toEqual('keyspace');
     });
 
-    it("returns a state object not strictly equal to the original", () => {
+    it('returns a state object not strictly equal to the original', () => {
       const resultState = pageSubject(state, action);
-      expect(resultState).not.toBe(state);
-    });
-
-    it("includes currDixplay  prop not equal to the original", () => {
-      const { currPage } = pageSubject(state, action);
-      expect(currPage).not.toBe(state.currPage);
+      expect(resultState).not.toBe(state.currPage);
     });
   });
 });
