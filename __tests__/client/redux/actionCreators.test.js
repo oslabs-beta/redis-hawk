@@ -1,6 +1,6 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import updateKeyspaceActionCreator from '../../../client/action-creators/connections';
+import { updateKeyspaceActionCreator } from '../../../client/action-creators/connections';
 import * as actions from '../../../client/actions/actionTypes';
 import fetchMock from 'fetch-mock';
 import expect from 'expect'; // You can use any testing library

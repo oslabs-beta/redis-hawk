@@ -2,18 +2,31 @@ import * as types from '../actions/actionTypes';
 
 export const updateKeyspaceActionCreator =
   (instanceId, dbIndex) => (dispatch) => {
+    console.log('dbIndex outside of fetch', dbIndex);
     let url;
     if (instanceId && dbIndex) {
       url = `/api/keyspaces/${instanceId}/${dbIndex}`;
     } else {
       url = '/api/keyspaces';
     }
+    console.log('url', url);
 
     fetch(url)
       .then((res) => res.json())
       .then((response) => {
-        const keyspace = response.data[0].keyspaces[0];
-        console.log('keyspace in keyspace action creator', keyspace);
+        console.log('dbIndex inside of fetch', dbIndex);
+        // console.log('full keyspace data', response.data[0]);
+        let keyspace;
+        if (!dbIndex) {
+          //this will grab all of our databases on the initial
+          keyspace = response.data[0].keyspaces;
+          // } else {
+        }
+        //this we want if our url specifies a specific database
+        else {
+          keyspace = response.data[0].keyspaces[0];
+        }
+
         if (keyspace) {
           dispatch({
             type: types.UPDATE_KEYSPACE,
@@ -38,7 +51,7 @@ export const updateEventsActionCreator =
     fetch(url)
       .then((res) => res.json())
       .then((res) => {
-        const events = res.data[0].keyspaces[0];
+        const events = res.data[instanceId].keyspaces[dbIndex];
         console.log('events in updateEventsActionCreator', events);
         dispatch({
           type: types.UPDATE_EVENTS,
@@ -77,6 +90,8 @@ export const switchDatabaseActionCreator = (dbIndex) => (
     payload: dbIndex,
   }
 );
+
+//SWITCH INSTANCE action creator
 
 //payload:
 // databases: 16

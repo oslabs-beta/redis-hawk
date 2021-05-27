@@ -12,11 +12,19 @@ const keyspaceReducer = (state = initialState, action) => {
   switch (action.type) {
     case types.UPDATE_KEYSPACE: {
       //we want to update the kesypace at index database
-      const dbIndex = state.currDatabase;
-      const newKeyspace = action.payload.keyspace;
-
-      keyspace = state.keyspace.slice();
-      keyspace[dbIndex].push(...newKeyspace);
+      if (!action.payload.dbIndex) {
+        const allKeyspaces = action.payload.keyspace;
+        keyspace = state.keyspace.slice();
+        keyspace = allKeyspaces;
+        console.log('db0 in keyspace after push', keyspace);
+      } else {
+        const dbIndex = action.payload.dbIndex;
+        console.log('dbIndex in keyspaceReducer', dbIndex);
+        const newKeyspace = action.payload.keyspace;
+        console.log('keyspace from payload', newKeyspace);
+        keyspace = state.keyspace.slice();
+        keyspace[dbIndex].push(...newKeyspace);
+      }
 
       return {
         ...state,

@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import KeyspaceTable from "./KeyspaceTable.jsx";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import KeyspaceTable from './KeyspaceTable.jsx';
 
 //withRouter??? -- for props.history -- stretch??
 
@@ -18,10 +18,12 @@ class KeyspaceComponent extends Component {
   }
 
   render() {
+    console.log('props in KeyspaceComponent', this.props);
     return (
       <div
         id='keyspaceComponentContainer'
-        className='KeyspaceComponent-Container'>
+        className='KeyspaceComponent-Container'
+      >
         <KeyspaceTable
           currDatabase={this.props.currDatabase}
           keyspace={this.props.keyspace}
