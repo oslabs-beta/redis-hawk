@@ -100,6 +100,3 @@ typings/
 
 #Ignore redis dumps
 dump.rdb
-
-#Ignore distribution until source code is complete
-dist/

@@ -10,7 +10,8 @@ const getValue = async (key: string, type: string, redisClient: RedisClient): Pr
 
     case 'string': {
       //@ts-ignore - incorrect type errors for promisified method's return value
-      value = await client.get(key);
+      value = await redisClient.get(key);
+      console.log(value);
     }; break;
 
   };
