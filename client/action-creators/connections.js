@@ -94,6 +94,14 @@ export const switchDatabaseActionCreator = (dbIndex) => (
 
 //SWITCH INSTANCE action creator
 
+export const switchInstanceActionCreator = (instanceId) => (
+  console.log('switched to database', instanceId),
+  {
+    type: types.SWITCH_INSTANCE,
+    payload: instanceId,
+  }
+);
+
 //payload:
 // databases: 16
 // host: "127.0.0.1"

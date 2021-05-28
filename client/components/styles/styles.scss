@@ -11,8 +11,8 @@ body {
   width: 100%;
   margin: 0 auto;
   padding: 1em 0;
-  background-color: rgb(35,35,35);
-  color:rgb(200, 200, 200);
+  background-color: rgb(35, 35, 35);
+  color: rgb(200, 200, 200);
 }
 
 #root {
@@ -121,7 +121,8 @@ body {
   padding: 0.25em 0.5em;
 }
 
-.filterNavContainer > .filter-button:hover, .form-filter-button:hover {
+.filterNavContainer > .filter-button:hover,
+.form-filter-button:hover {
   cursor: pointer;
 }
 
@@ -146,7 +147,7 @@ body {
   width: 40%;
 }
 
-#databaseNavContainer {
+.databaseNavContainer {
   position: absolute;
   top: 5%;
   left: 5%;
@@ -212,8 +213,6 @@ body {
   color: black;
   background-color: orange;
 }
-
-
 
 #redisInstance {
   height: 10%;
