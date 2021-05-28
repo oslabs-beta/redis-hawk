@@ -23,6 +23,8 @@ const redisMonitors: RedisMonitor[] = [];
 
 instances.forEach((instance: RedisInstance, idx: number): void => {
 
+  console.log(idx);
+
   //Promisify methods for the redis client for async/await capability
   const client: redis.RedisClient = promisifyClientMethods(
     redis.createClient({host: instance.host, port: instance.port})

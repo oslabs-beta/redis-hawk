@@ -1,11 +1,10 @@
 /*
 Mocks some common Redis commands. Used by index.js
+All mock command functions should be passed a node-redis client.
 */
 
 const mockData = require('./mock-command-data.js');
 const mockSettings = require('./mock-command-settings');
-const client = require('../redis-config/client-config.js');
-
 
 const selectRandomDatabase = async (client) => {
 //Choose a random database (based on the Redis default of 16 databases for an instance) to perform commands against
@@ -14,7 +13,7 @@ const selectRandomDatabase = async (client) => {
 
 const mockCommands = {};
 
-mockCommands.setString = async () => {
+mockCommands.setString = async (client) => {
 
   await selectRandomDatabase(client);
 
@@ -30,7 +29,7 @@ mockCommands.setString = async () => {
   });
 }
 
-mockCommands.getString = async () => {
+mockCommands.getString = async (client) => {
 
   await selectRandomDatabase(client);
 
@@ -40,7 +39,7 @@ mockCommands.getString = async () => {
   });
 }
 
-mockCommands.delString = async () => {
+mockCommands.delString = async (client) => {
 
   await selectRandomDatabase(client);
 
@@ -50,7 +49,7 @@ mockCommands.delString = async () => {
   });
 }
 
-mockCommands.pushList = () => {
+mockCommands.pushList = (client) => {
   const key = mockData.lists.createKey();
   client.lpush(key, mockData.lists.createValue(), (err, res) => {
     if (!err) console.log(`Key lpush: ${key}`);
@@ -63,21 +62,21 @@ mockCommands.pushList = () => {
   });
 }
 
-mockCommands.smembersList = () => {
+mockCommands.smembersList = (client) => {
   const key = mockData.lists.createKey();
   client.smembers(key, (err, res) => {
     if (!err) console.log(`Retrieved list data for key ${key}: ${res}`);
   });
 }
 
-mockCommands.ltrimList = () => {
+mockCommands.ltrimList = (client) => {
   const key = mockData.lists.createKey();
   client.ltrim(key, 0, -1, (err, res) => {
     if (!err) console.log(`Deleted list key ${key}`)
   });
 }
 
-mockCommands.hmsetHash = () => {
+mockCommands.hmsetHash = (client) => {
   const key = mockData.hashes.createKey();
   client.hmset(key, mockData.hashes.createValue(), (err, res) => {
     if (!err) console.log(`Key hmset ${key}`);
@@ -90,14 +89,14 @@ mockCommands.hmsetHash = () => {
   });
 }
 
-mockCommands.hgetallHash = () => {
+mockCommands.hgetallHash = (client) => {
   const key = mockData.hashes.createKey();
   client.hgetall(key, (err, res) => {
     if (!err) console.log(`Retrieved hash data for key ${key}:  ${res}`)
   });
 }
 
-mockCommands.hdelHash = () => {
+mockCommands.hdelHash = (client) => {
   const key = mockData.hashes.createKey();
   client.hdel(key, user, pass, age, occupation, (err, res) => {
     if (!err) console.log(`Deleted hash key ${key}`)
