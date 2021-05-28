@@ -108,20 +108,20 @@ export const switchInstanceActionCreator = (instanceId) => (
 // instanceId: 1
 // port: 6379
 
-export const updateDBInfoActionCreator = () => (dispatch) => {
+export const updateInstanceInfoActionCreator = () => (dispatch) => {
   fetch("/api/connections")
     .then((res) => res.json())
     .then((data) => {
       //for stretch features, there may be multiple instances here
-      console.log("dbinfo action creator data", data);
+      console.log("instanceinfo action creator data", data);
       dispatch({
-        type: types.UPDATE_DBINFO,
-        payload: data.instances[0],
+        type: types.UPDATE_INSTANCEINFO,
+        payload: data.instances,
       });
     })
     .catch((err) => {
       console.log(
-        "error fetching databaseInfo in updateDBInfoActionCreator:",
+        "error fetching instanceinfo in updateDBInfoActionCreator:",
         err
       );
     });

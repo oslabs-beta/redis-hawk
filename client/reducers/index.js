@@ -4,7 +4,7 @@ import databaseReducer from './databaseReducer';
 import eventsReducer from './eventsReducer';
 import graphsReducer from './graphsReducer';
 import keyspaceReducer from './keyspaceReducer';
-import dbInfoReducer from './dbInfoReducer';
+import instanceInfoReducer from './instanceInfoReducer';
 import pageReducer from './pageReducer';
 import currDisplayReducer from './currentDisplayReducer';
 import instanceReducer from './instanceReducer';
@@ -15,7 +15,7 @@ export default combineReducers({
   keyGraphStore: graphsReducer,
   currDatabaseStore: databaseReducer,
   currInstanceStore: instanceReducer,
-  databaseInfoStore: dbInfoReducer,
+  instanceInfoStore: instanceInfoReducer,
   currPageStore: pageReducer,
   currDisplayStore: currDisplayReducer,
 });
