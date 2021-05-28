@@ -35,7 +35,7 @@ class InstanceNav extends Component {
     return (
       <div className='InstanceNav-Container'>
         <div id='redisInstance' instanceInfo={this.props.currInstance}>
-          <div id='databaseHolder'>{instanceArray}</div>
+          <div id='instanceHolder'>{instanceArray}</div>
         </div>
       </div>
     );

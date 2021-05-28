@@ -161,6 +161,29 @@ body {
   font-size: 1.1em;
 }
 
+
+.InstanceNav-Container {
+  position: absolute;
+  top: 5%;
+  left: 25%;
+  height: 80%;
+  width: 18%;
+  box-sizing: border-box;
+  border: 1px solid grey;
+  border-radius: 10px;
+  overflow-y: auto;
+  padding: 1em 2.5em 1em;
+  font-size: 1.1em;
+}
+
+#instanceHolder > .singleInstance {
+  padding: 0.25em 0 0.25em 1em;
+}
+
+#instanceHolder > .singleInstance:hover {
+  cursor: pointer;
+}
+
 #redisInstance > p {
   margin: 0.5em 0.25em;
 }
