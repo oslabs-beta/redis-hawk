@@ -1,20 +1,17 @@
-import * as types from '../actions/actionTypes';
+import * as types from "../actions/actionTypes";
 
 export const updateKeyspaceActionCreator =
   (instanceId, dbIndex) => (dispatch) => {
-    console.log('dbIndex outside of fetch', dbIndex);
     let url;
     if (instanceId && dbIndex) {
       url = `/api/keyspaces/${instanceId}/${dbIndex}`;
     } else {
-      url = '/api/keyspaces';
+      url = "/api/keyspaces";
     }
-    console.log('url', url);
 
     fetch(url)
       .then((res) => res.json())
       .then((response) => {
-        console.log('dbIndex inside of fetch', dbIndex);
         // console.log('full keyspace data', response.data[0]);
         let keyspace;
         if (!dbIndex) {
@@ -36,23 +33,27 @@ export const updateKeyspaceActionCreator =
         }
       })
       .catch((err) => {
-        console.log('error in updateKeyspaceActionCreator: ', err);
+        console.log("error in updateKeyspaceActionCreator: ", err);
       });
   };
 
 export const updateEventsActionCreator =
   (instanceId, dbIndex, currIndex) => (dispatch) => {
     let url;
-    if (instanceId || dbIndex || currIndex) {
+    if (instanceId && dbIndex && currIndex) {
       url = `/api/events/${instanceId}/${dbIndex}?eventTotal=${currIndex}`;
     } else {
-      url = '/api/events';
+      url = "/api/events";
     }
     fetch(url)
       .then((res) => res.json())
       .then((res) => {
-        const events = res.data[instanceId].keyspaces[dbIndex];
-        console.log('events in updateEventsActionCreator', events);
+        let events;
+        if (!dbIndex){
+          events = res.data[0].keyspaces;
+        }else {
+          events = res.data[0].keyspaces[0];
+        }
         dispatch({
           type: types.UPDATE_EVENTS,
           //is this the proper syntax to add dbIndex???
@@ -61,7 +62,7 @@ export const updateEventsActionCreator =
         // }
       })
       .catch((err) => {
-        console.log('error in updateEventsActionCreator: ', err);
+        console.log("error in updateEventsActionCreator: ", err);
       });
   };
 
@@ -78,13 +79,13 @@ export const updateKeyGraphActionCreator =
         });
       })
       .catch((err) => {
-        console.log('error in keyspaceUpdateActionCreator: ', err);
+        console.log("error in keyspaceUpdateActionCreator: ", err);
       });
   };
 
 //SWITCH DATABASE
 export const switchDatabaseActionCreator = (dbIndex) => (
-  console.log('switched to database', dbIndex),
+  console.log("switched to database", dbIndex),
   {
     type: types.SWITCH_DATABASE,
     payload: dbIndex,
@@ -100,11 +101,11 @@ export const switchDatabaseActionCreator = (dbIndex) => (
 // port: 6379
 
 export const updateDBInfoActionCreator = () => (dispatch) => {
-  fetch('/api/connections')
+  fetch("/api/connections")
     .then((res) => res.json())
     .then((data) => {
       //for stretch features, there may be multiple instances here
-      console.log('dbinfo action creator data', data);
+      console.log("dbinfo action creator data", data);
       dispatch({
         type: types.UPDATE_DBINFO,
         payload: data.instances[0],
@@ -112,7 +113,7 @@ export const updateDBInfoActionCreator = () => (dispatch) => {
     })
     .catch((err) => {
       console.log(
-        'error fetching databaseInfo in updateDBInfoActionCreator:',
+        "error fetching databaseInfo in updateDBInfoActionCreator:",
         err
       );
     });

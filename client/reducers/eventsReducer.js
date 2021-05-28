@@ -11,16 +11,21 @@ const eventsReducer = (state = initialState, action) => {
 
   switch (action.type) {
     case types.UPDATE_EVENTS: {
-      const dbIndex = state.currDatabase;
+      if (!action.payload.currDatabase) {
+        const allEvents = action.payload.events;
+        events = state.events.splice();
+        events = allEvents;
+      } else {
+        const dbIndex = action.payload.currDatabase;
+        const newEvents = action.payload.events;
 
-      const newEvents = action.payload.events;
-      events = state.events.slice();
+        events = state.events.slice();
 
-      //the events come in from new to old
-      for (let i = newEvents.length - 1; i >= 0; i -= 1) {
-        events[dbIndex].push(newEvents[i]);
+        //the events come in from new to old
+        for (let i = newEvents.length - 1; i >= 0; i -= 1) {
+          events[dbIndex].push(newEvents[i]);
+        }
       }
-
       return {
         ...state,
         events,
