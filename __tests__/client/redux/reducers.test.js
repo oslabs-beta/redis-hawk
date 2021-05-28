@@ -70,7 +70,7 @@ describe('instance reducer', () => {
 
   describe('default state for instances', () => {
     it('should return a default state when given an undefined input', () => {
-      expect(databaseSubject(undefined, { type: undefined })).toEqual(state);
+      expect(instanceSubject(undefined, { type: undefined })).toEqual(state);
     });
   });
 
@@ -79,7 +79,7 @@ describe('instance reducer', () => {
       const action = {
         type: 'ao;wiehf;aoie',
       };
-      expect(databaseSubject(state, action)).toBe(state);
+      expect(instanceSubject(state, action)).toBe(state);
     });
   });
 
