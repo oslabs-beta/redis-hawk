@@ -40,24 +40,20 @@ export const updateKeyspaceActionCreator =
 export const updateEventsActionCreator =
   (instanceId, dbIndex, currIndex) => (dispatch) => {
     let url;
-    if (instanceId || dbIndex || currIndex) {
+    if (instanceId && dbIndex && currIndex) {
       url = `/api/events/${instanceId}/${dbIndex}?eventTotal=${currIndex}`;
     } else {
       url = "/api/events";
     }
-    console.log('url',url)
     fetch(url)
       .then((res) => res.json())
       .then((res) => {
         let events;
-        console.log("res", res);
-        console.log('dbIndex', dbIndex)
         if (!dbIndex){
           events = res.data[0].keyspaces;
         }else {
           events = res.data[0].keyspaces[0];
         }
-        console.log("events in updateEventsActionCreator", events);
         dispatch({
           type: types.UPDATE_EVENTS,
           //is this the proper syntax to add dbIndex???

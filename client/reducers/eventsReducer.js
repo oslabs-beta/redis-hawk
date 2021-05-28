@@ -18,15 +18,14 @@ const eventsReducer = (state = initialState, action) => {
       } else {
         const dbIndex = action.payload.currDatabase;
         const newEvents = action.payload.events;
-        console.log("payload in eventsReducer", action.payload);
+
         events = state.events.slice();
-        console.log("events after assignment of copy of state.events", events);
+
         //the events come in from new to old
         for (let i = newEvents.length - 1; i >= 0; i -= 1) {
           events[dbIndex].push(newEvents[i]);
         }
       }
-      console.log("events after push", events);
       return {
         ...state,
         events,

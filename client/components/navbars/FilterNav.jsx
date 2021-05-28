@@ -95,7 +95,7 @@ class FilterNav extends Component {
             onClick={(e) => {
               e.preventDefault();
               let currLength =
-                this.props.events[this.props.currDatabase].length - 1;
+                this.props.events[this.props.currDatabase].length;
               console.log('current length of events', currLength);
               //replace 1 with this.props.currInstance
               this.props.updateEvents(1, this.props.currDatabase, currLength);
