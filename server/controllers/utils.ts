@@ -10,29 +10,29 @@ const getValue = async (key: string, type: string, redisClient: RedisClient): Pr
 
     case 'string': {
       //@ts-ignore - incorrect type errors for promisified method's return value
-      value = await client.get(key);
+      value = await redisClient.get(key);
     }; break;
 
     case 'list': {
       //@ts-ignore - incorrect type errors for promisified method's return value
-      value = await client.lindex(key);
+      value = await redisClient.lindex(key);
     }; break;
 
     case 'set': {
       //@ts-ignore - incorrect type errors for promisified method's return value
-      value = await client.smembers(key);
+      value = await redisClient.smembers(key);
     }; break;
 
     case 'sortedSet': {
       //@ts-ignore - incorrect type errors for promisified method's return value
       //note:  will need to include a range with the key to return all values in 
       //the sorted set
-      value = await client.zrange(key 0 - 1);
+      value = await redisClient.zrange(key, 0, - 1);
     }; break;
 
     case 'hash': {
       //@ts-ignore - incorrect type errors for promisified method's return value
-      value = await client.hgetall(key);
+      value = await redisClient.hgetall(key);
     }; break;
 
 
