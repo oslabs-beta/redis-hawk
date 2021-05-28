@@ -37,21 +37,20 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getKeyspace = void 0;
-var util_1 = require("util");
 var getValue = function (key, type, redisClient) { return __awaiter(void 0, void 0, void 0, function () {
-    var get, value, _a;
+    var value, _a;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                get = util_1.promisify(redisClient.get).bind(redisClient);
                 _a = type;
                 switch (_a) {
                     case 'string': return [3, 1];
                 }
                 return [3, 3];
-            case 1: return [4, get(key)];
+            case 1: return [4, redisClient.get(key)];
             case 2:
                 value = _b.sent();
+                console.log(value);
                 ;
                 return [3, 3];
             case 3:
@@ -61,18 +60,15 @@ var getValue = function (key, type, redisClient) { return __awaiter(void 0, void
     });
 }); };
 var getKeyspace = function (redisClient, dbIdx) { return __awaiter(void 0, void 0, void 0, function () {
-    var res, scan, select, getType, scanResults, cursor, keys, _i, keys_1, key, type, value;
+    var res, scanResults, cursor, keys, _i, keys_1, key, type, value;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 res = [];
-                scan = util_1.promisify(redisClient.scan).bind(redisClient);
-                select = util_1.promisify(redisClient.select).bind(redisClient);
-                getType = util_1.promisify(redisClient.type).bind(redisClient);
-                return [4, select(dbIdx)];
+                return [4, redisClient.select(dbIdx)];
             case 1:
                 _a.sent();
-                return [4, scan('0', 'COUNT', '100')];
+                return [4, redisClient.scan('0', 'COUNT', '100')];
             case 2:
                 scanResults = _a.sent();
                 cursor = scanResults[0];
@@ -84,7 +80,7 @@ var getKeyspace = function (redisClient, dbIdx) { return __awaiter(void 0, void 
             case 4:
                 if (!(_i < keys_1.length)) return [3, 8];
                 key = keys_1[_i];
-                return [4, getType(key)];
+                return [4, redisClient.type(key)];
             case 5:
                 type = _a.sent();
                 return [4, getValue(key, type, redisClient)];
@@ -99,7 +95,7 @@ var getKeyspace = function (redisClient, dbIdx) { return __awaiter(void 0, void 
             case 7:
                 _i++;
                 return [3, 4];
-            case 8: return [4, scan(cursor, 'COUNT', '100')];
+            case 8: return [4, redisClient.scan(cursor, 'COUNT', '100')];
             case 9:
                 scanResults = _a.sent();
                 cursor = scanResults[0];
