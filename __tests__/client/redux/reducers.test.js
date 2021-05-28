@@ -5,7 +5,7 @@ import keygraphSubject from '../../../client/reducers/graphsReducer';
 import dbInfoSubject from '../../../client/reducers/dbInfoReducer';
 import currDisplaySubject from '../../../client/reducers/currentDisplayReducer';
 import pageSubject from '../../../client/reducers/pageReducer';
-
+import instanceSubject from '../../../client/reducers/instanceReducer';
 // const keyspaceSubject = require('../../../client/reducers/keyspaceReducer.js');
 
 // const databaseSubject = require('../../../client/reducers/databaseReducer.js');
@@ -55,7 +55,53 @@ describe('database reducer', () => {
 
     it('includes a database not equal to the original', () => {
       const { currDatabase } = databaseSubject(state, action);
-      expect(currDatabase).not.toBe(state.currentDB);
+      expect(currDatabase).not.toBe(state.currDatabase);
+    });
+  });
+});
+
+describe('instance reducer', () => {
+  let state;
+  beforeEach(() => {
+    state = {
+      currInstance: 1,
+    };
+  });
+
+  describe('default state for instances', () => {
+    it('should return a default state when given an undefined input', () => {
+      expect(databaseSubject(undefined, { type: undefined })).toEqual(state);
+    });
+  });
+
+  describe('unrecognized action types', () => {
+    it('should return the original without any duplication', () => {
+      const action = {
+        type: 'ao;wiehf;aoie',
+      };
+      expect(databaseSubject(state, action)).toBe(state);
+    });
+  });
+
+  describe('SWITCH_INSTANCE', () => {
+    const action = {
+      type: 'SWITCH_INSTANCE',
+      payload: 2,
+    };
+
+    it('switches instance to #2', () => {
+      const { currInstance } = instanceSubject(state, action);
+      expect(currInstance).toEqual(2);
+    });
+
+    it('returns a state object not strictly equal to the original', () => {
+      const resultState = instanceSubject(state, action);
+      expect(resultState).not.toBe(state);
+    });
+
+    it('includes a instance not equal to the original', () => {
+      const { currInstance } = instanceSubject(state, action);
+      expect(currInstance).not.toBe(state.currInstance);
     });
   });
 });

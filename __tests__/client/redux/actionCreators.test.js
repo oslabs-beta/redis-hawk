@@ -143,3 +143,17 @@ describe('updateCurrDisplayActionCreator', () => {
     expect(store.getActions().toEqual(expectedActions));
   });
 });
+
+//SWITCH INSTANCE
+
+describe('switchInstanceActionCreator', () => {
+  afterEach(() => {
+    fetchMock.restore();
+  });
+
+  it('creates SWITCH_INSTANCE when fetching is done', () => {
+    const expectedActions = [{ type: types.SWITCH_INSTANCE }];
+    const store = mockStore({ currInstance: 1 });
+    expect(store.getActions().toEqual(expectedActions));
+  });
+});
