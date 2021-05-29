@@ -7,12 +7,12 @@ const mockData = require('./mock-command-data.js');
 const mockSettings = require('./mock-command-settings');
 
 const selectRandomDatabase = async (client) => {
-//Choose a random database (based on the Redis default of 16 databases for an instance) to perform commands against
+  //Choose a random database (based on the Redis default of 16 databases for an instance) to perform commands against
   await client.select(Math.floor(Math.random() * 16));
 };
 
 const mockCommands = {};
-
+/* <<<<< Strings >>>>> */
 mockCommands.setString = async (client) => {
 
   await selectRandomDatabase(client);
@@ -49,6 +49,7 @@ mockCommands.delString = async (client) => {
   });
 }
 
+/* <<<<< Lists >>>>> */
 mockCommands.pushList = (client) => {
   const key = mockData.lists.createKey();
   client.lpush(key, mockData.lists.createValue(), (err, res) => {
@@ -69,13 +70,18 @@ mockCommands.smembersList = (client) => {
   });
 }
 
-mockCommands.ltrimList = (client) => {
+mockCommands.rpopList = (client) => {
   const key = mockData.lists.createKey();
-  client.ltrim(key, 0, -1, (err, res) => {
+  client.rpop(key, (err, res) => {
     if (!err) console.log(`Deleted list key ${key}`)
   });
 }
 
+/* <<<<< Sets >>>>> */
+
+/* <<<<< Sorted Sets >>>>> */
+
+/* <<<<< Hashes >>>>> */
 mockCommands.hmsetHash = (client) => {
   const key = mockData.hashes.createKey();
   client.hmset(key, mockData.hashes.createValue(), (err, res) => {
