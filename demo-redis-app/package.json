@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "faker": "^5.5.3",
-    "redis": "^3.1.2"
+    "redis": "^3.1.2",
+    "redis-server": "^1.2.2"
   }
 }

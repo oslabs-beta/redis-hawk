@@ -15,7 +15,7 @@ const GraphHolder = (props) => {
     let temp = [];
     let xRange = 0;
     let yRange = 5000;
-    console.log("array", array);
+    console.log("array in graphDataConverter", array);
     for (let i = 0; i < array.length; i++) {
       if (
         array[i].timestamp - initTime >= xRange &&
@@ -48,19 +48,21 @@ const GraphHolder = (props) => {
     }
 
     const result = [];
-    console.log(" props in graphHolder", props);
-    if (props.currDatabase === 0) {
-      eventTimesArray.forEach((array) => {
-        // console.log("time", time);
-        result.push({ x: array[0].formattedTime, y: array.length });
-      });
-      return result;
-    }
+    console.log("eventtimesarray", eventTimesArray);
+    // if (props.currDatabase === 0) {
+    eventTimesArray.forEach((array) => {
+      // console.log("time", time);
+      result.push({ x: array[0].formattedTime, y: array.length });
+    });
+    // }
+    return result;
   };
 
   const initialTime = props.events[props.currDatabase][0].timestamp;
   const eventsArray = props.events[props.currDatabase];
+  console.log("intialTime", initialTime, "eventsArray", eventsArray);
   const plotData = graphDataConverter(eventsArray, initialTime);
+  console.log("plotData", plotData);
 
   return (
     <XYPlot

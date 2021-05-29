@@ -8,27 +8,42 @@ export const updateKeyspaceActionCreator =
     } else {
       url = "/api/keyspaces";
     }
-
     fetch(url)
       .then((res) => res.json())
       .then((response) => {
         // console.log('full keyspace data', response.data[0]);
         let keyspace;
-        if (!dbIndex) {
+        if (!dbIndex && !instanceId) {
           //this will grab all of our databases on the initial
-          keyspace = response.data[0].keyspaces;
+          keyspace = response.data;
+          dispatch({
+            type: types.UPDATE_KEYSPACE,
+            //is this the proper syntax to add dbIndex??
+            payload: {
+              keyspace: keyspace,
+              // dbIndex: dbIndex,
+              // instanceId: instanceId,
+            },
+          });
           // } else {
         }
         //this we want if our url specifies a specific database
         else {
-          keyspace = response.data[0].keyspaces[0];
-        }
-
-        if (keyspace) {
+          console.log("response in update keyspace actionc creator", response);
+          keyspace = response.data[instanceId - 1].keyspaces[dbIndex];
           dispatch({
             type: types.UPDATE_KEYSPACE,
             //is this the proper syntax to add dbIndex??
-            payload: { keyspace: keyspace, dbIndex: dbIndex },
+            payload: {
+              keyspace: keyspace,
+              // [
+              //   {
+              //     keyspaces: keyspace,
+              //   },
+              // ],
+              dbIndex: dbIndex,
+              instanceId: instanceId,
+            },
           });
         }
       })
@@ -49,15 +64,20 @@ export const updateEventsActionCreator =
       .then((res) => res.json())
       .then((res) => {
         let events;
-        if (!dbIndex){
-          events = res.data[0].keyspaces;
-        }else {
+        if (!dbIndex) {
+          console.log("events resopnse in updateEventsActionCreator", res);
+          events = res.data;
+        } else {
           events = res.data[0].keyspaces[0];
         }
         dispatch({
           type: types.UPDATE_EVENTS,
           //is this the proper syntax to add dbIndex???
-          payload: { events: events, currDatabase: dbIndex },
+          payload: {
+            events: events,
+            currDatabase: dbIndex,
+            currInstance: instanceId,
+          },
         });
         // }
       })
@@ -95,7 +115,7 @@ export const switchDatabaseActionCreator = (dbIndex) => (
 //SWITCH INSTANCE action creator
 
 export const switchInstanceActionCreator = (instanceId) => (
-  console.log('switched to database', instanceId),
+  console.log("switched to database", instanceId),
   {
     type: types.SWITCH_INSTANCE,
     payload: instanceId,
@@ -108,20 +128,19 @@ export const switchInstanceActionCreator = (instanceId) => (
 // instanceId: 1
 // port: 6379
 
-export const updateDBInfoActionCreator = () => (dispatch) => {
+export const updateInstanceInfoActionCreator = () => (dispatch) => {
   fetch("/api/connections")
     .then((res) => res.json())
     .then((data) => {
       //for stretch features, there may be multiple instances here
-      console.log("dbinfo action creator data", data);
       dispatch({
-        type: types.UPDATE_DBINFO,
-        payload: data.instances[0],
+        type: types.UPDATE_INSTANCEINFO,
+        payload: data.instances,
       });
     })
     .catch((err) => {
       console.log(
-        "error fetching databaseInfo in updateDBInfoActionCreator:",
+        "error fetching instanceinfo in updateDBInfoActionCreator:",
         err
       );
     });

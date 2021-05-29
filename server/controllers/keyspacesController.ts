@@ -25,18 +25,18 @@ const keyspacesController: KeyspacesController = {
       if (monitor.instanceId === +req.params.instanceId) {
         res.locals.monitors = [monitor];
       }
-    } 
+    }
 
     if (!res.locals.monitors) {
-      return next({log: 'User provided invalid instanceId', status: 400, message: {err: 'Please provide a valid instanceId'}});
+      return next({ log: 'User provided invalid instanceId', status: 400, message: { err: 'Please provide a valid instanceId' } });
     }
 
     return next();
   },
-
+  //Focus here
   getKeyspacesForInstance: async (req, res, next) => {
 
-    const keyspacesResponse: KeyspacesResponseBody = {data: []};
+    const keyspacesResponse: KeyspacesResponseBody = { data: [] };
     const dbIndex = req.params.dbIndex;
 
     if (dbIndex) { //Grab specified keyspace for the instance

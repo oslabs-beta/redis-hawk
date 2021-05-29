@@ -25,7 +25,7 @@ class GraphComponent extends Component {
 
   componentDidMount() {
     const self = this;
-    setInterval(self.setGraphUpdate, 20000);
+    setInterval(self.setGraphUpdate, 60000);
   }
   setGraphUpdate() {
     let currIndex = this.props.events[this.props.currDatabase].length - 1;
@@ -33,7 +33,6 @@ class GraphComponent extends Component {
   }
 
   render() {
-    console.log("events props in GraphComp", this.props.events);
     return (
       <div id='graphsComponentContainer' className='GraphComponent-Container'>
         <GraphHolder

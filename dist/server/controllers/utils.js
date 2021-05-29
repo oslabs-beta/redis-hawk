@@ -50,7 +50,6 @@ var getValue = function (key, type, redisClient) { return __awaiter(void 0, void
             case 1: return [4, redisClient.get(key)];
             case 2:
                 value = _b.sent();
-                console.log(value);
                 ;
                 return [3, 3];
             case 3:
