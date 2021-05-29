@@ -73,12 +73,37 @@ mockCommands.lrangeList = (client) => {
 mockCommands.rpopList = (client) => {
   const key = mockData.lists.createKey();
   client.rpop(key, (err, res) => {
-    if (!err) console.log(`Deleted list key ${key}`)
+    if (!err) console.log(`Popped value in list key ${key}`)
   });
 }
 
 /* <<<<< Sets >>>>> */
+mockCommands.saddSet = (client) => {
+  const key = mockData.sets.createKey();
+  client.sadd(key, mockData.sets.createValue(), (err, res) => {
+    if (!err) console.log(`Key sadd: ${key}`);
+    //Randomly expire every other successfully generated key
+    if (!err & Math.floor(Math.random() * 2) % 2 === 0) {
+      client.expire(key, mockSettings.SET_TIME_TO_LIVE, (err, res) => {
+        if (!err) console.log(`Set key expired: ${key}`);
+      });
+    }
+  });
+}
 
+mockCommands.smembersSet = (client) => {
+  const key = mockData.lists.createKey();
+  client.smembers(key, (err, res) => {
+    if (!err) console.log(`Retrieved set data for key ${key}: ${res}`);
+  });
+}
+
+mockCommands.spopSet = (client) => {
+  const key = mockData.lists.createKey();
+  client.spop(key, (err, res) => {
+    if (!err) console.log(`Popped value on  key ${key}`)
+  });
+}
 /* <<<<< Sorted Sets >>>>> */
 
 /* <<<<< Hashes >>>>> */
