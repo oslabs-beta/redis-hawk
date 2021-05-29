@@ -1,6 +1,12 @@
 [
   {
     "host": "127.0.0.1",
-    "port": 6379
+    "port": 6379,
+    "recordKeyspaceHistoryFrequency": 60000
+  },
+  {
+    "host": "127.0.0.1",
+    "port": 6380,
+    "recordKeyspaceHistoryFrequency": 60000
   }
 ]

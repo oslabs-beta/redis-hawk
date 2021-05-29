@@ -9,12 +9,13 @@ import {
 } from "react-vis";
 
 const GraphHolder = (props) => {
+  console.log("props.currDatabase in graphHolder", props.currDatabase);
   const graphDataConverter = (array, initTime) => {
     const eventTimesArray = [];
     let temp = [];
     let xRange = 0;
     let yRange = 5000;
-
+    console.log("array", array);
     for (let i = 0; i < array.length; i++) {
       if (
         array[i].timestamp - initTime >= xRange &&

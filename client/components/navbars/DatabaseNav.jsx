@@ -18,8 +18,8 @@ class DatabaseNav extends Component {
   }
   render() {
     const dbArray = [];
-    if (this.props.databaseInfo.dataNum) {
-      for (let i = 0; i < this.props.databaseInfo.dataNum; i++) {
+    if (this.props.databaseInfo.numberOfDBs) {
+      for (let i = 0; i < this.props.databaseInfo.numberOfDBs; i++) {
         dbArray.push(
           <DatabaseComponent
             handleClick={this.props.switchDatabase}

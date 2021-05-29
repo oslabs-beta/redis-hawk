@@ -110,19 +110,19 @@ const useStyles2 = makeStyles({
 function KeyspaceTable(props) {
   const rows = [];
 
-  if (props.keyspace[props.currDatabase]) {
-    props.keyspace[props.currDatabase].forEach((keyspace) => {
-      if (props.currDisplay.category === "name") {
-        if (keyspace.key.includes(props.currDisplay.filter.toString())) {
-          rows.push(createData(keyspace.key, keyspace.value, keyspace.type));
-        }
-      } else if (props.currDisplay.category === "type") {
-        if (keyspace.type === props.currDisplay.filter) {
-          rows.push(createData(keyspace.key, keyspace.value, keyspace.type));
-        }
-      } else rows.push(createData(keyspace.key, keyspace.value, keyspace.type));
-    });
-  };
+  // if (props.keyspace[props.currDatabase]) {
+  props.keyspace[props.currDatabase].forEach((keyspace) => {
+    if (props.currDisplay.category === 'name') {
+      if (keyspace.key.includes(props.currDisplay.filter.toString())) {
+        rows.push(createData(keyspace.key, keyspace.value, keyspace.type));
+      }
+    } else if (props.currDisplay.category === 'type') {
+      if (keyspace.type === props.currDisplay.filter) {
+        rows.push(createData(keyspace.key, keyspace.value, keyspace.type));
+      }
+    } else rows.push(createData(keyspace.key, keyspace.value, keyspace.type));
+  });
+  // };
 
   const classes = useStyles2();
   const [page, setPage] = React.useState(0);
@@ -141,7 +141,11 @@ function KeyspaceTable(props) {
   };
 
   return (
-    <TableContainer id='tableContainer' className="Table-Container" component={Paper}>
+    <TableContainer
+      id='tableContainer'
+      className='Table-Container'
+      component={Paper}
+    >
       <Table className={classes.table} aria-label='custom pagination table'>
         <TableHead>
           <TableRow>

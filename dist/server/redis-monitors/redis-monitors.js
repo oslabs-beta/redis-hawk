@@ -23,28 +23,30 @@ var fs = __importStar(require("fs"));
 var path = __importStar(require("path"));
 var redis = __importStar(require("redis"));
 var data_stores_1 = require("./models/data-stores");
+var utils_1 = require("./utils");
 var instances = process.env.IS_TEST ?
     JSON.parse(fs.readFileSync(path.resolve(__dirname, '../configs/tests-config.json')).toString())
     : JSON.parse(fs.readFileSync(path.resolve(__dirname, '../configs/config.json')).toString());
 var redisMonitors = [];
 instances.forEach(function (instance, idx) {
-    var client = redis.createClient({ host: instance.host, port: instance.port });
+    console.log(idx);
+    var client = utils_1.promisifyClientMethods(redis.createClient({ host: instance.host, port: instance.port }));
     var subscriber = redis.createClient({ host: instance.host, port: instance.port });
-    console.log('idx is', idx);
     var monitor = {
         instanceId: idx + 1,
         redisClient: client,
         keyspaceSubscriber: subscriber,
         host: instance.host,
         port: instance.port,
-        keyspaces: []
+        keyspaces: [],
+        recordKeyspaceHistoryFrequency: instance.recordKeyspaceHistoryFrequency
     };
     monitor.redisClient.config('GET', 'databases', function (err, res) {
         monitor.databases = +res[1];
         var _loop_1 = function (dbIndex) {
             var keyspace = {
                 eventLog: new data_stores_1.EventLog(),
-                keySnapshots: []
+                keyspaceHistories: new data_stores_1.KeyspaceHistoriesLog()
             };
             monitor.keyspaces.push(keyspace);
             monitor.keyspaceSubscriber.on('pmessage', function (channel, message, event) {
@@ -53,6 +55,7 @@ instances.forEach(function (instance, idx) {
                     monitor.keyspaces[dbIndex].eventLog.add(key, event);
                 }
             });
+            setInterval(utils_1.recordKeyspaceHistory, monitor.recordKeyspaceHistoryFrequency, monitor, dbIndex);
         };
         for (var dbIndex = 0; dbIndex < monitor.databases; dbIndex++) {
             _loop_1(dbIndex);

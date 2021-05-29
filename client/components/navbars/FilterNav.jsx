@@ -5,6 +5,7 @@ import * as actions from '../../action-creators/connections';
 
 const mapStateToProps = (store) => {
   return {
+    //need to map currInstance
     keyspace: store.keyspaceStore.keyspace,
     events: store.eventsStore.events,
     keyGraph: store.keyGraphStore.keyGraph,
@@ -16,8 +17,8 @@ const mapStateToProps = (store) => {
 const mapDispatchToProps = (dispatch) => ({
   updateEvents: (events, currData, currIndex) =>
     dispatch(actions.updateEventsActionCreator(events, currData, currIndex)),
-  updateKeyspace: (keyspace) =>
-    dispatch(actions.updateKeyspaceActionCreator(keyspace)),
+  updateKeyspace: (currInstance, dbIndex) =>
+    dispatch(actions.updateKeyspaceActionCreator(currInstance, dbIndex)),
   updateKeyGraph: (keyGraph) =>
     dispatch(actions.updateKeyGraphActionCreator(keyGraph)),
   updateCurrDisplay: (filter, category) =>
@@ -57,6 +58,11 @@ class FilterNav extends Component {
               let currLength =
                 this.props.events[this.props.currDatabase].length - 1;
               console.log('current length of events', currLength);
+              console.log(
+                'this is our current database',
+                this.props.currDatabase
+              );
+              //change 1 to this.props.currInstance
               this.props.updateEvents(1, this.props.currDatabase, currLength);
             }}
           >
@@ -89,8 +95,9 @@ class FilterNav extends Component {
             onClick={(e) => {
               e.preventDefault();
               let currLength =
-                this.props.events[this.props.currDatabase].length - 1;
+                this.props.events[this.props.currDatabase].length;
               console.log('current length of events', currLength);
+              //replace 1 with this.props.currInstance
               this.props.updateEvents(1, this.props.currDatabase, currLength);
             }}
             id='refreshButton'
@@ -123,6 +130,11 @@ class FilterNav extends Component {
             id='searchButton'
             onClick={(e) => {
               e.preventDefault();
+              console.log(
+                'this is our current database',
+                this.props.currDatabase
+              );
+              //replace 1 with this.props.currInstance
               this.props.updateKeyspace(1, this.props.currDatabase);
             }}
             id='refreshButton'

@@ -13,14 +13,21 @@ we need set standard configurations on the redis database:
 
 const redis = require('redis');
 const { promisify } = require('util');
-const client = redis.createClient();
 
-client.config('SET', 'notify-keyspace-events', 'KEA');
+const clients = [];
 
-client.select = promisify(client.select).bind(client);
+for (let PORT = 6379; PORT < 6381; PORT++) {
 
-client.on('error', (error) => {
-  console.log('Redis client error occured: ', error);
-});
+  const client = redis.createClient({host: '127.0.0.1', port: PORT});
+  client.config('SET', 'notify-keyspace-events', 'KEA');
+  client.select = promisify(client.select).bind(client);
+  client.on('error', (error) => {
+    console.log(`Redis client error occured (port ${PORT}): ${error}
+    Please ensure you have a redis server running on this port.
+    bash: redis-server --port ${PORT}`);
+  });
 
-module.exports = client;
+  clients.push(client);
+}
+
+module.exports = clients;
