@@ -46,6 +46,22 @@ mockData.sets = {
   }
 };
 
+/* <<<<< Sorted Sets >>>>> */
+mockData.sortedSets = {
+  createKey() {
+    return `sortedset:${Math.floor(Math.random() * 10000)}`;
+  },
+
+  createValue() {
+    return [
+      1, "sortedset1",
+      2, "sortedset2",
+      3, "sortedset3",
+      4, "sortedset4"
+    ]
+  }
+};
+
 /* <<<<< Hashes >>>>> */
 mockData.hashes = {
   createKey() {
