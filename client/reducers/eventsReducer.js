@@ -11,7 +11,7 @@ const eventsReducer = (state = initialState, action) => {
 
   switch (action.type) {
     case types.UPDATE_EVENTS: {
-      if (!action.payload.currDatabase) {
+      if (!action.payload.currDatabase && !action.payload.currInstance) {
         const allEvents = action.payload.events;
         events = state.events.splice();
         events = allEvents;
