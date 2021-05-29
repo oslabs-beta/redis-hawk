@@ -8,12 +8,12 @@ export const updateKeyspaceActionCreator =
     } else {
       url = "/api/keyspaces";
     }
-    console.log("in keyspace action creator");
     fetch(url)
       .then((res) => res.json())
       .then((response) => {
         // console.log('full keyspace data', response.data[0]);
         let keyspace;
+        console.log("response in update keyspace actionc creator", response);
         if (!dbIndex && !instanceId) {
           //this will grab all of our databases on the initial
           keyspace = response.data;
@@ -23,7 +23,7 @@ export const updateKeyspaceActionCreator =
         else {
           keyspace = response.data[0].keyspaces[0];
         }
-        console.log("we are in keyspace connection", keyspace);
+
         if (keyspace) {
           dispatch({
             type: types.UPDATE_KEYSPACE,
