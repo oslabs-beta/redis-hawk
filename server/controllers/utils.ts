@@ -16,7 +16,7 @@ const getValue = async (key: string, type: string, redisClient: RedisClient): Pr
 
     case 'list': {
       //@ts-ignore - incorrect type errors for promisified method's return value
-      value = await redisClient.lindex(key);
+      value = await redisClient.lrange(key);
     }; break;
 
     case 'set': {
