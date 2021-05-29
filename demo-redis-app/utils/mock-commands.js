@@ -105,6 +105,32 @@ mockCommands.spopSet = (client) => {
   });
 }
 /* <<<<< Sorted Sets >>>>> */
+mockCommands.ZaddSortedSet = (client) => {
+  const key = mockData.sets.createKey();
+  client.zadd(key, mockData.sortedSets.createValue(), (err, res) => {
+    if (!err) console.log(`Key zadd: ${key}`);
+    //Randomly expire every other successfully generated key
+    if (!err & Math.floor(Math.random() * 2) % 2 === 0) {
+      client.expire(key, mockSettings.SET_TIME_TO_LIVE, (err, res) => {
+        if (!err) console.log(`Set key expired: ${key}`);
+      });
+    }
+  });
+}
+
+mockCommands.zrangeSortedSet = (client) => {
+  const key = mockData.lists.createKey();
+  client.zrange(key, 0, -1, (err, res) => {
+    if (!err) console.log(`Retrieved sorted set data for key ${key}: ${res}`);
+  });
+}
+
+mockCommands.zpopminSortedSet = (client) => {
+  const key = mockData.lists.createKey();
+  client.zpopmin(key, (err, res) => {
+    if (!err) console.log(`zpoppedmin value on key ${key}`)
+  });
+}
 
 /* <<<<< Hashes >>>>> */
 mockCommands.hmsetHash = (client) => {
