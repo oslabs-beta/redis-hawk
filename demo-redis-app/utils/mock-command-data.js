@@ -8,6 +8,7 @@ const faker = require("faker");
 
 const mockData = {};
 
+/* <<<<< Strings >>>>> */
 mockData.strings = {
   //Generates keys with corresponding string values. Uses "messages" as a mocked use-case for strings.
 
@@ -23,7 +24,7 @@ mockData.strings = {
     return message;
   },
 };
-
+/* <<<<< Lists >>>>> */
 mockData.lists = {
   createKey() {
     return `list:${Math.floor(Math.random() * 10000)}`;
@@ -34,6 +35,18 @@ mockData.lists = {
   },
 };
 
+/* <<<<< Sets >>>>> */
+mockData.sets = {
+  createKey() {
+    return `set:${Math.floor(Math.random() * 10000)}`;
+  },
+
+  createValue() {
+    return ["setval1", "setval2", "setval3", "setval4"]
+  }
+};
+
+/* <<<<< Hashes >>>>> */
 mockData.hashes = {
   createKey() {
     return `hash:${Math.floor(Math.random() * 100000)}`;
@@ -50,8 +63,8 @@ mockData.hashes = {
 };
 
 mockData.sets = {
-  createKey() {},
+  createKey() { },
 
-  createValue() {},
+  createValue() { },
 };
 module.exports = mockData;
