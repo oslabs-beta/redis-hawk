@@ -63,9 +63,9 @@ mockCommands.pushList = (client) => {
   });
 }
 
-mockCommands.smembersList = (client) => {
+mockCommands.lrangeList = (client) => {
   const key = mockData.lists.createKey();
-  client.smembers(key, (err, res) => {
+  client.lrange(key, 0, -1, (err, res) => {
     if (!err) console.log(`Retrieved list data for key ${key}: ${res}`);
   });
 }
