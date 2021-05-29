@@ -13,7 +13,7 @@ app.use('/api/connections', connectionsRouter);
 //events routes
 app.use('/api/events', eventsRouter);
 
-app.use('/api/histories', historiesRouter);
+// app.use('/api/histories', historiesRouter);
 
 app.use('/api/keyspaces', keyspacesRouter);
 
@@ -43,8 +43,7 @@ app.use((
   res.status(defaultErr.status).json(defaultErr.message);
 })
 
-app.listen(PORT, (): void => {
+export default app.listen(PORT, (): void => {
   console.log(`Listening on port ${PORT}`);
 });
 
-export default app;
