@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import SearchFilter from './SearchFilter.jsx';
-import * as actions from '../../action-creators/connections';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import SearchFilter from "./SearchFilter.jsx";
+import * as actions from "../../action-creators/connections";
 
 const mapStateToProps = (store) => {
   return {
@@ -12,6 +12,7 @@ const mapStateToProps = (store) => {
     currDatabase: store.currDatabaseStore.currDatabase,
     currPage: store.currPageStore.currPage,
     currDisplay: store.currDisplayStore.currDisplay,
+    currInstance: store.currInstanceStore.currInstance,
   };
 };
 const mapDispatchToProps = (dispatch) => ({
@@ -31,7 +32,7 @@ class FilterNav extends Component {
   }
 
   render() {
-    if (this.props.currPage === 'graphs') {
+    if (this.props.currPage === "graphs") {
       return (
         <div className='filterNavContainer'>
           <SearchFilter
@@ -45,9 +46,8 @@ class FilterNav extends Component {
             id='clearFilterButton'
             onClick={(e) => {
               e.preventDefault();
-              this.props.updateCurrDisplay('', '');
-            }}
-          >
+              this.props.updateCurrDisplay("", "");
+            }}>
             Clear Filter
           </button>
           <button
@@ -57,20 +57,19 @@ class FilterNav extends Component {
               e.preventDefault();
               let currLength =
                 this.props.events[this.props.currDatabase].length - 1;
-              console.log('current length of events', currLength);
+              console.log("current length of events", currLength);
               console.log(
-                'this is our current database',
+                "this is our current database",
                 this.props.currDatabase
               );
               //change 1 to this.props.currInstance
               this.props.updateEvents(1, this.props.currDatabase, currLength);
-            }}
-          >
+            }}>
             Refresh
           </button>
         </div>
       );
-    } else if (this.props.currPage === 'events') {
+    } else if (this.props.currPage === "events") {
       return (
         <div className='filterNavContainer'>
           <SearchFilter
@@ -84,9 +83,8 @@ class FilterNav extends Component {
             id='clearFilterButton'
             onClick={(e) => {
               e.preventDefault();
-              this.props.updateCurrDisplay('', '');
-            }}
-          >
+              this.props.updateCurrDisplay("", "");
+            }}>
             Clear Filter
           </button>
           <button
@@ -96,12 +94,11 @@ class FilterNav extends Component {
               e.preventDefault();
               let currLength =
                 this.props.events[this.props.currDatabase].length;
-              console.log('current length of events', currLength);
+              console.log("current length of events", currLength);
               //replace 1 with this.props.currInstance
               this.props.updateEvents(1, this.props.currDatabase, currLength);
             }}
-            id='refreshButton'
-          >
+            id='refreshButton'>
             Refresh
           </button>
         </div>
@@ -120,9 +117,8 @@ class FilterNav extends Component {
             id='clearFilterButton'
             onClick={(e) => {
               e.preventDefault();
-              this.props.updateCurrDisplay('', '');
-            }}
-          >
+              this.props.updateCurrDisplay("", "");
+            }}>
             Clear Filter
           </button>
           <button
@@ -131,14 +127,16 @@ class FilterNav extends Component {
             onClick={(e) => {
               e.preventDefault();
               console.log(
-                'this is our current database',
+                "this is our current database",
                 this.props.currDatabase
               );
               //replace 1 with this.props.currInstance
-              this.props.updateKeyspace(1, this.props.currDatabase);
+              this.props.updateKeyspace(
+                this.props.currInstance,
+                this.props.currDatabase
+              );
             }}
-            id='refreshButton'
-          >
+            id='refreshButton'>
             Refresh
           </button>
         </div>

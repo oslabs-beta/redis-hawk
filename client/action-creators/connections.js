@@ -8,27 +8,31 @@ export const updateKeyspaceActionCreator =
     } else {
       url = "/api/keyspaces";
     }
-
+    console.log("in keyspace action creator");
     fetch(url)
       .then((res) => res.json())
       .then((response) => {
         // console.log('full keyspace data', response.data[0]);
         let keyspace;
-        if (!dbIndex) {
+        if (!dbIndex && !instanceId) {
           //this will grab all of our databases on the initial
-          keyspace = response.data[0].keyspaces;
+          keyspace = response.data;
           // } else {
         }
         //this we want if our url specifies a specific database
         else {
           keyspace = response.data[0].keyspaces[0];
         }
-
+        console.log("we are in keyspace connection", keyspace);
         if (keyspace) {
           dispatch({
             type: types.UPDATE_KEYSPACE,
             //is this the proper syntax to add dbIndex??
-            payload: { keyspace: keyspace, dbIndex: dbIndex },
+            payload: {
+              keyspace: keyspace,
+              dbIndex: dbIndex,
+              instanceId: instanceId,
+            },
           });
         }
       })
@@ -49,9 +53,9 @@ export const updateEventsActionCreator =
       .then((res) => res.json())
       .then((res) => {
         let events;
-        if (!dbIndex){
+        if (!dbIndex) {
           events = res.data[0].keyspaces;
-        }else {
+        } else {
           events = res.data[0].keyspaces[0];
         }
         dispatch({
@@ -95,7 +99,7 @@ export const switchDatabaseActionCreator = (dbIndex) => (
 //SWITCH INSTANCE action creator
 
 export const switchInstanceActionCreator = (instanceId) => (
-  console.log('switched to database', instanceId),
+  console.log("switched to database", instanceId),
   {
     type: types.SWITCH_INSTANCE,
     payload: instanceId,
@@ -113,7 +117,7 @@ export const updateInstanceInfoActionCreator = () => (dispatch) => {
     .then((res) => res.json())
     .then((data) => {
       //for stretch features, there may be multiple instances here
-      console.log("instanceinfo action creator data", data);
+      console.log("instanceinfo action creator data", data.instances);
       dispatch({
         type: types.UPDATE_INSTANCEINFO,
         payload: data.instances,
