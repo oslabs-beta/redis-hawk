@@ -29,7 +29,7 @@ const startDemoApp = async () => {
 
     setInterval(mock.hmsetHash, mockSettings.HASH_HMSET_FREQUENCY, client);
     setInterval(mock.hgetallHash, mockSettings.HASH_HGETALL_FREQUENCY, client);
-    setInterval(mock.hdelHash, mockSettings.HASH_HDEL_FREQUENCY, client);
+    // setInterval(mock.hdelHash, mockSettings.HASH_HDEL_FREQUENCY, client);
 
   
   })
