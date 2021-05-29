@@ -23,12 +23,12 @@ describe("React DatabaseNav unit tests", () => {
     };
 
     beforeAll(() => {
-      wrapper = shallow(<DatabaseNav props={props.databaseInfo} />);
+      wrapper = shallow(<InstanceNav props={props.instanceInfo} />);
     });
 
     it("renders the div with id databaseNavContainer with database host and database port passed down and a div with id databaseHolder with databaseInfo props passed down ", () => {
       // expect(wrapper.find("databaseNavContainer").find("div"));
-      expect(wrapper.find("databaseNavContainer").find("div"));
+      expect(wrapper.find("instanceNavContainer").find("div"));
       // expect(wrapper.find("db-host").find("span"));
       // expect(wrapper.find("db-port").find("span"));
       // expect(
@@ -52,25 +52,26 @@ describe("React DatabaseNav unit tests", () => {
       // ).toEqual(true);
     });
   });
-  describe("DatabaseComponent", () => {
+  describe("InstanceComponent", () => {
     let wrapper;
-    const changeDatabasesFunc = () => "changing databases";
+    const changeInstanceFunc = () => "changing instance";
     const props = {
-      databaseInfo: [
+      instanceInfo: [
         {
           host: "localhost",
           port: "3000",
           numberOfDBs: 16,
+          instanceId: 1,
         },
       ],
-      changeDatabases: changeDatabasesFunc,
+      changeInstance: changeInstanceFunc,
     };
 
     beforeAll(() => {
-      wrapper = shallow(<DatabaseComponent props={props.databaseInfo} />);
+      wrapper = shallow(<InstanceComponent props={props.instanceInfo} />);
     });
-    it("renders a div with id singleDatabase that contains the number for the database", () => {
-      expect(wrapper.find("singleDatabase").find("div"));
+    it("renders a div with id singleInstance that contains the number for the database", () => {
+      expect(wrapper.find("singleInstance").find("div"));
       expect(
         wrapper.containsAllMatchingElements([
           <div
@@ -79,6 +80,7 @@ describe("React DatabaseNav unit tests", () => {
                 host: "localhost",
                 port: "3000",
                 numberOfDBs: 16,
+                instanceId: 1,
               },
             ]}
           />,
@@ -86,8 +88,8 @@ describe("React DatabaseNav unit tests", () => {
       );
     });
     it("should have functions passed down invoking on click to change databases", () => {
-      expect(wrapper.find("singleDatabase").invoke("onClick")()).toEqual(
-        changeDatabasesFunc()
+      expect(wrapper.find("singleInstance").invoke("onClick")()).toEqual(
+        changeInstanceFunc()
       );
     });
   });
