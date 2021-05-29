@@ -5,7 +5,7 @@
   "main": "./client/index.js",
   "scripts": {
     "build": "webpack",
-    "test": "IS_TEST=true jest --verbose --forceExit",
+    "test": "IS_TEST=true jest --verbose",
     "start": "NODE_ENV=production nodemon dist/server/server.js",
     "dev": "NODE_ENV=development webpack serve --open & nodemon dist/server/server.js",
     "cp": "copyfiles -u 1 server/configs/* server/assets/* dist/server/"
@@ -22,7 +22,9 @@
       "ts",
       "tsx",
       "js"
-    ]
+    ],
+    "globalSetup": "./jestGlobalSetup.js",
+    "globalTeardown": "./jestGlobalTeardown.js"
   },
   "repository": {
     "type": "git",
