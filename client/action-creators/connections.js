@@ -13,23 +13,34 @@ export const updateKeyspaceActionCreator =
       .then((response) => {
         // console.log('full keyspace data', response.data[0]);
         let keyspace;
-        console.log("response in update keyspace actionc creator", response);
         if (!dbIndex && !instanceId) {
           //this will grab all of our databases on the initial
           keyspace = response.data;
-          // } else {
-        }
-        //this we want if our url specifies a specific database
-        else {
-          keyspace = response.data[0].keyspaces[0];
-        }
-
-        if (keyspace) {
           dispatch({
             type: types.UPDATE_KEYSPACE,
             //is this the proper syntax to add dbIndex??
             payload: {
               keyspace: keyspace,
+              // dbIndex: dbIndex,
+              // instanceId: instanceId,
+            },
+          });
+          // } else {
+        }
+        //this we want if our url specifies a specific database
+        else {
+          console.log("response in update keyspace actionc creator", response);
+          keyspace = response.data[instanceId - 1].keyspaces[dbIndex];
+          dispatch({
+            type: types.UPDATE_KEYSPACE,
+            //is this the proper syntax to add dbIndex??
+            payload: {
+              keyspace: keyspace,
+              // [
+              //   {
+              //     keyspaces: keyspace,
+              //   },
+              // ],
               dbIndex: dbIndex,
               instanceId: instanceId,
             },
@@ -54,14 +65,19 @@ export const updateEventsActionCreator =
       .then((res) => {
         let events;
         if (!dbIndex) {
-          events = res.data[0].keyspaces;
+          console.log("events resopnse in updateEventsActionCreator", res);
+          events = res.data;
         } else {
           events = res.data[0].keyspaces[0];
         }
         dispatch({
           type: types.UPDATE_EVENTS,
           //is this the proper syntax to add dbIndex???
-          payload: { events: events, currDatabase: dbIndex },
+          payload: {
+            events: events,
+            currDatabase: dbIndex,
+            currInstance: instanceId,
+          },
         });
         // }
       })
@@ -117,7 +133,6 @@ export const updateInstanceInfoActionCreator = () => (dispatch) => {
     .then((res) => res.json())
     .then((data) => {
       //for stretch features, there may be multiple instances here
-      console.log("instanceinfo action creator data", data.instances);
       dispatch({
         type: types.UPDATE_INSTANCEINFO,
         payload: data.instances,

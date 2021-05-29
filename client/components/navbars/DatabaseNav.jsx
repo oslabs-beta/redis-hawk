@@ -19,12 +19,7 @@ class DatabaseNav extends Component {
   }
   render() {
     const dbArray = [];
-    console.log("props in dbNav", this.props);
 
-    console.log(
-      "this.props.instanceInfo in databaseNav",
-      this.props.instanceInfo[this.props.currInstance - 1].databases
-    );
     if (this.props.instanceInfo[this.props.currInstance - 1].databases > 0) {
       for (
         let i = 0;

@@ -105,12 +105,33 @@ const useStyles2 = makeStyles({
 
 function EventTable(props) {
   const rows = [];
-
-  if (props.events[props.currDatabase]) {
-    props.events[props.currDatabase].forEach((event) => {
-      const date = new Date(event.timestamp);
-      if (props.currDisplay.category === "name") {
-        if (event.key.includes(props.currDisplay.filter.toString())) {
+  console.log("eventTable props.event", props);
+  console.log("props.currInstance", props.currInstance);
+  if (props.events[props.currInstance - 1]) {
+    props.events[props.currInstance - 1].keyspaces[props.currDatabase].forEach(
+      (event) => {
+        const date = new Date(event.timestamp);
+        if (props.currDisplay.category === "name") {
+          if (event.key.includes(props.currDisplay.filter.toString())) {
+            rows.push(
+              createData(
+                event.key,
+                event.event,
+                date.toString("MMM dd").slice(0, 24)
+              )
+            );
+          }
+        } else if (props.currDisplay.category === "event") {
+          if (event.event === props.currDisplay.filter) {
+            rows.push(
+              createData(
+                event.key,
+                event.event,
+                date.toString("MMM dd").slice(0, 24)
+              )
+            );
+          }
+        } else
           rows.push(
             createData(
               event.key,
@@ -118,27 +139,10 @@ function EventTable(props) {
               date.toString("MMM dd").slice(0, 24)
             )
           );
-        }
-      } else if (props.currDisplay.category === "event") {
-        if (event.event === props.currDisplay.filter) {
-          rows.push(
-            createData(
-              event.key,
-              event.event,
-              date.toString("MMM dd").slice(0, 24)
-            )
-          );
-        }
-      } else
-        rows.push(
-          createData(
-            event.key,
-            event.event,
-            date.toString("MMM dd").slice(0, 24)
-          )
-        );
-    });
+      }
+    );
   }
+  console.log("rows after forEach", rows);
 
   // used to obtain random number value for key of table-row component
   const getRandomInt = (max) => {

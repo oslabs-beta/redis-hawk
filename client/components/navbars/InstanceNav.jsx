@@ -18,7 +18,6 @@ class InstanceNav extends Component {
     super(props);
   }
   render() {
-    console.log("props in Instance", this.props);
     // if (this.props.instanceInfo[this.props.currInstance - 1]) {
 
     const instanceArray = [];
