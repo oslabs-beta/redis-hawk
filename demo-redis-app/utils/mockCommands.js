@@ -3,8 +3,8 @@ Mocks some common Redis commands. Used by index.js
 All mock command functions should be passed a node-redis client.
 */
 
-const mockData = require('./mock-command-data.js');
-const mockSettings = require('./mock-command-settings');
+const mockData = require('./mockCommandData.js');
+const mockSettings = require('./mockCommandSettings');
 
 const selectRandomDatabase = async (client) => {
   //Choose a random database (based on the Redis default of 16 databases for an instance) to perform commands against
@@ -50,7 +50,7 @@ mockCommands.delString = async (client) => {
 }
 
 /* <<<<< Lists >>>>> */
-mockCommands.pushList = (client) => {
+mockCommands.lpushList = (client) => {
   const key = mockData.lists.createKey();
   client.lpush(key, mockData.lists.createValue(), (err, res) => {
     if (!err) console.log(`Key lpush: ${key}`);
@@ -70,9 +70,9 @@ mockCommands.lrangeList = (client) => {
   });
 }
 
-mockCommands.rpopList = (client) => {
+mockCommands.lpopList = (client) => {
   const key = mockData.lists.createKey();
-  client.rpop(key, (err, res) => {
+  client.lpop(key, (err, res) => {
     if (!err) console.log(`Popped value in list key ${key}`)
   });
 }
@@ -105,7 +105,7 @@ mockCommands.spopSet = (client) => {
   });
 }
 /* <<<<< Sorted Sets >>>>> */
-mockCommands.ZaddSortedSet = (client) => {
+mockCommands.zaddSortedSet = (client) => {
   const key = mockData.sets.createKey();
   client.zadd(key, mockData.sortedSets.createValue(), (err, res) => {
     if (!err) console.log(`Key zadd: ${key}`);
@@ -153,11 +153,11 @@ mockCommands.hgetallHash = (client) => {
   });
 }
 
-mockCommands.hdelHash = (client) => {
-  const key = mockData.hashes.createKey();
-  client.hdel(key, user, pass, age, occupation, (err, res) => {
-    if (!err) console.log(`Deleted hash key ${key}`)
-  });
-}
+// mockCommands.hdelHash = (client) => {
+//   const key = mockData.hashes.createKey();
+//   client.hdel(key, user, pass, age, occupation, (err, res) => {
+//     if (!err) console.log(`Deleted hash key ${key}`)
+//   });
+// }
 
 module.exports = mockCommands;
