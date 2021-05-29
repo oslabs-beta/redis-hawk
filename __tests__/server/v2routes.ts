@@ -1,5 +1,4 @@
 import request from 'supertest';
-import RedisServer from 'redis-server';
 import { resolve } from 'path';
 import { readFileSync } from 'fs';
 import * as redis from 'redis';
@@ -59,7 +58,7 @@ describe('Route Integration Tests', () => {
 
   it('should return a 404 status code for a request to a bad route', () => {
 
-    return request(app).get('obviously/bad/route')
+    return request(app).get('/obviously/bad/route')
       .expect(404);
   })
 
