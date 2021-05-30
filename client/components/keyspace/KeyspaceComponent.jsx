@@ -12,8 +12,8 @@ const mapStateToProps = (store) => {
     currDatabase: store.currDatabaseStore.currDatabase,
     keyspace: store.keyspaceStore.keyspace,
     currDisplay: store.currDisplayStore.currDisplay,
-    pageSize: store.pageSizeStore.pageSize,
-    pageNum: store.pageNumStore.pageNum,
+    pageSize: store.dataPageStore.pageSize,
+    pageNum: store.dataPageStore.pageNum,
   };
 };
 const mapDispatchToProps = (dispatch) => ({
