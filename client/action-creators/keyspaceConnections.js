@@ -39,6 +39,37 @@ loadKeyspaceActionCreator = () => (dispatch) => {
     });
 };
 
-refreshKeyspaceActionCreator = () => (dispatch) => {};
+//for refreshing the keyspace of a certain database at a certain instance - need to know if there are filters or not for dispatch
+// arguments: database, instance, page size, page num = 1, refreshScan = 1,
+//response:
+// {
+//     keyTotal: 6347,
+//     pageSize: 50,
+//     pageNum: 4,
+//     data: [
+//         {
+//             key: '',
+//             value: '',
+//             type: any,
+//         }
+//     ]
+// }
+refreshKeyspaceActionCreator =
+  (instanceId, dbIndex, pageSize, pageNum, refreshScan) => (dispatch) => {
+    fetch(
+      `api/v2/keyspaces/${instanceId}/${dbIndex}/?pageSize=${pageSize}&pageNum=${pageNum}&refreshScan=${refreshScan}`
+    )
+      .then((res) => res.json())
+      .then((response) => {
+        console.log('response in refreshKeyspaceActionCreator', response);
+        let refreshKeyspace = response;
+        dispatch({
+          type: types.REFRESH_KEYSPACE,
+          payload: {
+            keyspace: refreshKeyspace,
+          },
+        });
+      });
+  };
 
 changeKeyspacePageActionCreator = () => (dispatch) => {};
