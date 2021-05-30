@@ -24,7 +24,7 @@ import * as types from '../actions/actionTypes';
 //     },
 //   ];
 // }
-loadKeyspaceActionCreator = () => (dispatch) => {
+export const loadKeyspaceActionCreator = () => (dispatch) => {
   fetch('/api/v2/keyspaces')
     .then((res) => res.json())
     .then((response) => {
@@ -54,7 +54,7 @@ loadKeyspaceActionCreator = () => (dispatch) => {
 //         }
 //     ]
 // }
-refreshKeyspaceActionCreator =
+export const refreshKeyspaceActionCreator =
   (instanceId, dbIndex, pageSize, pageNum, refreshScan) => (dispatch) => {
     fetch(
       `api/v2/keyspaces/${instanceId}/${dbIndex}/?pageSize=${pageSize}&pageNum=${pageNum}&refreshScan=${refreshScan}`
@@ -89,7 +89,7 @@ refreshKeyspaceActionCreator =
 //         }
 //     ]
 // }
-changeKeyspacePageActionCreator =
+export const changeKeyspacePageActionCreator =
   (instanceId, dbIndex, queryOptions) => (dispatch) => {
     let URI = `api/v2/keyspaces/${instanceId}/${dbIndex}/?`;
     //this may have an issue in here - be aware of queryOptions
