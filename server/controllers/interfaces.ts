@@ -23,3 +23,10 @@ interface InstanceKeyspaceDetail {
 export interface KeyspacesResponseBody {
   data: InstanceKeyspaceDetail[];
 }
+
+export interface KeyspaceResponsePage {
+  keyTotal: number;
+  pageSize: number;
+  pageNum: number;
+  data: KeyDetails[];
+}

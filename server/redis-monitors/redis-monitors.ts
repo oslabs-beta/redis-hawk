@@ -53,8 +53,11 @@ instances.forEach((instance: RedisInstance, idx: number): void => {
 
       const keyspace: Keyspace = {
         eventLog: new EventLog(),
-        keyspaceHistories: new KeyspaceHistoriesLog()
+        keyspaceHistories: new KeyspaceHistoriesLog(),
+        keyspaceSnapshot: [],
+        eventLogSnapshot: []
       }
+      
       monitor.keyspaces.push(keyspace);
 
       //Sets up a listener to log any received events for this specific keyspace

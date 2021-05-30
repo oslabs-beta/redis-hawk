@@ -47,6 +47,10 @@ var promisifyClientMethods = function (client) {
     client.set = util_1.promisify(client.set).bind(client);
     client.get = util_1.promisify(client.get).bind(client);
     client.mget = util_1.promisify(client.mget).bind(client);
+    client.lrange = util_1.promisify(client.lrange).bind(client);
+    client.smembers = util_1.promisify(client.smembers).bind(client);
+    client.zrange = util_1.promisify(client.zrange).bind(client);
+    client.hgetall = util_1.promisify(client.hgetall).bind(client);
     return client;
 };
 exports.promisifyClientMethods = promisifyClientMethods;

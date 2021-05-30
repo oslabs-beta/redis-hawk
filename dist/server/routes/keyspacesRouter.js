@@ -15,4 +15,13 @@ router.get('/:instanceId', keyspacesController_1.default.findSingleMonitor, keys
 router.get('/:instanceId/:dbIndex', keyspacesController_1.default.findSingleMonitor, keyspacesController_1.default.getKeyspacesForInstance, function (req, res) {
     res.status(200).json(res.locals.keyspaces);
 });
+router.get('/keyspaces/', keyspacesController_1.default.findAllMonitors, keyspacesController_1.default.refreshKeyspace, keyspacesController_1.default.getKeyspacePages, function (req, res) {
+    res.status(200).json(res.locals.keyspaces);
+});
+router.get('/keyspaces/:instanceId', keyspacesController_1.default.findSingleMonitor, keyspacesController_1.default.refreshKeyspace, keyspacesController_1.default.getKeyspacePages, function (req, res) {
+    res.status(200).json(res.locals.keyspaces);
+});
+router.get('/keyspaces/:instanceId/:dbIndex', keyspacesController_1.default.findSingleMonitor, keyspacesController_1.default.refreshKeyspace, keyspacesController_1.default.getKeyspacePages, function (req, res) {
+    res.status(200).json(res.locals.keyspaces);
+});
 exports.default = router;

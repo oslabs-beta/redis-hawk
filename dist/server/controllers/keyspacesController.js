@@ -115,6 +115,126 @@ var keyspacesController = {
                     return [2, next()];
             }
         });
-    }); }
+    }); },
+    refreshKeyspace: function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+        var refreshScan, dbIndex, monitor, _a, _i, _b, monitor, idx, _c, _d, keyspace, _e, e_1;
+        return __generator(this, function (_f) {
+            switch (_f.label) {
+                case 0:
+                    refreshScan = req.query.refreshScan;
+                    if (refreshScan === '0')
+                        return [2, next()];
+                    if (refreshScan !== '1' && refreshScan !== undefined)
+                        return [2, next({
+                                log: 'Request included invalid refreshScan query parameter',
+                                status: 400,
+                                message: { err: 'Please provide a valid refreshScan value: 1 or 0' }
+                            })];
+                    dbIndex = +req.params.dbIndex;
+                    _f.label = 1;
+                case 1:
+                    _f.trys.push([1, 11, , 12]);
+                    if (!(dbIndex >= 0)) return [3, 3];
+                    monitor = res.locals.monitors[0];
+                    _a = monitor.keyspaces[dbIndex];
+                    return [4, utils_1.getKeyspace(monitor.redisClient, dbIndex)];
+                case 2:
+                    _a.keyspaceSnapshot = _f.sent();
+                    return [3, 10];
+                case 3:
+                    _i = 0, _b = res.locals.monitors;
+                    _f.label = 4;
+                case 4:
+                    if (!(_i < _b.length)) return [3, 9];
+                    monitor = _b[_i];
+                    idx = 0;
+                    _c = 0, _d = monitor.keyspaces;
+                    _f.label = 5;
+                case 5:
+                    if (!(_c < _d.length)) return [3, 8];
+                    keyspace = _d[_c];
+                    _e = monitor.keyspaces[idx];
+                    return [4, utils_1.getKeyspace(monitor.redisClient, idx)];
+                case 6:
+                    _e.keyspaceSnapshot = _f.sent();
+                    idx += 1;
+                    _f.label = 7;
+                case 7:
+                    _c++;
+                    return [3, 5];
+                case 8:
+                    _i++;
+                    return [3, 4];
+                case 9:
+                    ;
+                    _f.label = 10;
+                case 10: return [3, 12];
+                case 11:
+                    e_1 = _f.sent();
+                    return [2, next({
+                            log: "Error encountered while rescanning keyspace: " + e_1,
+                            message: { err: 'Server error occured while rescanning keyspace' }
+                        })];
+                case 12: return [2, next()];
+            }
+        });
+    }); },
+    getKeyspacePages: function (req, res, next) {
+        var _a = req.query, keynameFilter = _a.keynameFilter, keytypeFilter = _a.keytypeFilter, pageNum = _a.pageNum, pageSize = _a.pageSize;
+        var validatedPageNum = pageNum ? +pageNum : 1;
+        var validatedPageSize = pageSize ? +pageSize : 5;
+        var getPaginatedKeyspaceData = function (keyspaceSnapshot) {
+            if (keynameFilter) {
+                keyspaceSnapshot = keyspaceSnapshot.filter(function (keyDetails) {
+                    return keyDetails.key.includes(keynameFilter.toString());
+                });
+            }
+            if (keytypeFilter) {
+                keyspaceSnapshot = keyspaceSnapshot.filter(function (keyDetails) {
+                    return keyDetails.type === keytypeFilter.toString();
+                });
+            }
+            var keyTotal = keyspaceSnapshot.length;
+            var startIndex = ((validatedPageNum - 1) * validatedPageSize);
+            var endIndex = validatedPageNum * validatedPageSize;
+            return [keyTotal, keyspaceSnapshot.slice(startIndex, endIndex)];
+        };
+        var dbIndex = +req.params.dbIndex;
+        if (dbIndex >= 0) {
+            var monitor = res.locals.monitors[0];
+            var _b = getPaginatedKeyspaceData(monitor.keyspaces[dbIndex].keyspaceSnapshot), keyTotal = _b[0], paginatedData = _b[1];
+            res.locals.keyspaces = {
+                keyTotal: keyTotal,
+                pageSize: validatedPageSize,
+                pageNum: validatedPageNum,
+                data: paginatedData
+            };
+        }
+        else {
+            var keyspacesResponse = { data: [] };
+            for (var _i = 0, _c = res.locals.monitors; _i < _c.length; _i++) {
+                var monitor = _c[_i];
+                var keyspaceData = [];
+                var idx = 0;
+                for (var _d = 0, _e = monitor.keyspaces; _d < _e.length; _d++) {
+                    var keyspace = _e[_d];
+                    var _f = getPaginatedKeyspaceData(monitor.keyspaces[idx].keyspaceSnapshot), keyTotal = _f[0], paginatedData = _f[1];
+                    keyspaceData.push({
+                        keyTotal: keyTotal,
+                        pageSize: validatedPageSize,
+                        pageNum: validatedPageNum,
+                        data: paginatedData
+                    });
+                    idx += 1;
+                }
+                keyspacesResponse.data.push({
+                    instanceId: monitor.instanceId,
+                    keyspaces: keyspaceData
+                });
+            }
+            res.locals.keyspaces = keyspacesResponse;
+        }
+        return next();
+    }
 };
 exports.default = keyspacesController;

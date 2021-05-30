@@ -26,7 +26,7 @@ export const promisifyClientMethods = (client: RedisClient) => {
   client.mget = promisify(client.mget).bind(client);
 
   //redis commands: data: lists (note:  requires index to get value)
-  client.lindex = promisify(client.lindex).bind(client);
+  client.lrange = promisify(client.lrange).bind(client);
 
   //redis commands: data: sets (note:  returns all members of set associated with given key)
   client.smembers = promisify(client.smembers).bind(client);
