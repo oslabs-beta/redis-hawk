@@ -27,8 +27,8 @@ const startDemoApp = async () => {
     setInterval(mock.zrangeSortedSet, mockSettings.SORTEDSET_ZRANGE_FREQUENCY, client);
     setInterval(mock.zpopminSortedSet, mockSettings.SORTEDSET_ZPOPMIN_FREQUENCY, client);
 
-    setInterval(mock.hmsetHash, mockSettings.HASH_HMSET_FREQUENCY, client);
-    setInterval(mock.hgetallHash, mockSettings.HASH_HGETALL_FREQUENCY, client);
+    // setInterval(mock.hmsetHash, mockSettings.HASH_HMSET_FREQUENCY, client);
+    // setInterval(mock.hgetallHash, mockSettings.HASH_HGETALL_FREQUENCY, client);
     // setInterval(mock.hdelHash, mockSettings.HASH_HDEL_FREQUENCY, client);
 
   
