@@ -39,6 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.recordKeyspaceHistory = exports.promisifyClientMethods = void 0;
 var util_1 = require("util");
 var promisifyClientMethods = function (client) {
+    client.config = util_1.promisify(client.config).bind(client);
     client.flushdb = util_1.promisify(client.flushdb).bind(client);
     client.flushall = util_1.promisify(client.flushall).bind(client);
     client.select = util_1.promisify(client.select).bind(client);

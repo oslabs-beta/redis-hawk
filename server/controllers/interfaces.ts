@@ -15,6 +15,12 @@ export interface KeyDetails {
   type: string;
 }
 
+export interface EventDetails {
+  key: string;
+  event: string;
+  timestamp: number;
+}
+
 export type Keyspace = KeyDetails[];
 interface InstanceKeyspaceDetail {
   instanceId: number;

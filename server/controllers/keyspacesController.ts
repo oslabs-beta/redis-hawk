@@ -1,9 +1,8 @@
-import redisMonitors from '../redis-monitors/redis-monitors';
 import { RequestHandler } from 'express';
 
 //type definition for response body data
 // import { RedisInstance, Keyspace, KeyData } from './interfaces';
-import type { KeyspacesResponseBody, KeyspaceResponsePage, KeyDetails, Keyspace } from './interfaces';
+import type { KeyspacesResponseBody, KeyDetails, Keyspace } from './interfaces';
 import { getKeyspace } from './utils';
 
 interface KeyspacesController {
