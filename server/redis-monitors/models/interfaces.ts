@@ -37,6 +37,7 @@ export interface EventLog {
   tail: null | KeyspaceEventNode;
   eventTotal: number;
   add: (key: string, event: string) => void;
+  reset: () => void;
   returnLogAsArray: (eventTotal: number) => KeyspaceEvent[];
 }
 export interface KeyspaceEvent {
@@ -55,6 +56,7 @@ export interface KeyspaceHistoriesLog {
   tail: null | KeyspaceHistoryNode;
   historiesCount: number;
   add: (keyDetails: KeyDetails[]) => void;
+  reset: () => void;
   returnLogAsArray: (historiesCount: number) => KeyspaceHistory[];
 }
 
