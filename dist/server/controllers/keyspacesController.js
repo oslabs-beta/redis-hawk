@@ -35,34 +35,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var redis_monitors_1 = __importDefault(require("../redis-monitors/redis-monitors"));
 var utils_1 = require("./utils");
 var keyspacesController = {
-    findAllMonitors: function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            res.locals.monitors = redis_monitors_1.default;
-            return [2, next()];
-        });
-    }); },
-    findSingleMonitor: function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-        var _i, redisMonitors_1, monitor;
-        return __generator(this, function (_a) {
-            for (_i = 0, redisMonitors_1 = redis_monitors_1.default; _i < redisMonitors_1.length; _i++) {
-                monitor = redisMonitors_1[_i];
-                if (monitor.instanceId === +req.params.instanceId) {
-                    res.locals.monitors = [monitor];
-                }
-            }
-            if (!res.locals.monitors) {
-                return [2, next({ log: 'User provided invalid instanceId', status: 400, message: { err: 'Please provide a valid instanceId' } })];
-            }
-            return [2, next()];
-        });
-    }); },
     getKeyspacesForInstance: function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
         var keyspacesResponse, dbIndex, keyspaceData, _i, _a, monitor, keyspaces, idx, _b, _c, keyspace, keyspaceData;
         return __generator(this, function (_d) {
