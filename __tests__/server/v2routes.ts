@@ -104,10 +104,14 @@ describe('Route Integration Tests', () => {
     beforeAll(async () => {
       for (const model of redisModels) {
         await model.client.set('db0-key1', 'value1');
+        await model.client.set('db0-key2', 'value2');
+        await model.client.set('db0-key3', 'value3');
+        await model.client.set('db0-key4', 'value4');
         await model.client.select(2);
         await model.client.set('db2-key2', 'value2');
-        await model.client.lpush('db2-key3', 'el1', 'el2');
-        await model.client.lpush('db2-key4', 'el1', 'el2');
+        await model.client.lpush('db2-key3', 'el2', 'el1');
+        await model.client.lpush('db2-key4', 'el2', 'el1');
+        await model.client.set('db2-key5', 'value5');
       }
     })
 
@@ -122,7 +126,7 @@ describe('Route Integration Tests', () => {
 
       let response: request.Response;
       beforeAll(async () => {
-        response = await request(app).get('/api/v2/keyspaces?pageSize=12&pageNum=2');
+        response = await request(app).get('/api/v2/keyspaces?pageNum=2&pageSize=3');
       });
 
       it('should return a 200 status code', () => {
@@ -153,17 +157,24 @@ describe('Route Integration Tests', () => {
         //Technically, response body data also includes list data, but tests in a subsequent block will cover this
         response.body.data.forEach(instanceDetail => {
           expect(instanceDetail.keyspaces[0]).toEqual(expect.objectContaining({
-            keyTotal: 1,
-            pageSize: 12,
+            keyTotal: 4,
+            pageSize: 3,
             pageNum: 2,
-            data: [{key: 'db0-key1', value: 'value1', type: 'string'}]
+            data: expect.arrayContaining([expect.objectContaining({
+              key: expect.any(String),
+              value: expect.any(String),
+              type: expect.any(String)
+            })])
           }));
 
           expect(instanceDetail.keyspaces[2]).toEqual(expect.objectContaining({
-            keyTotal: 1,
-            pageSize: 12,
+            keyTotal: 4,
+            pageSize: 3,
             pageNum: 2,
-            data: [{key: 'db2-key2', value: 'value2', type: 'string'}]
+            data: expect.arrayContaining([expect.objectContaining({
+              key: expect.any(String),
+              type: expect.any(String)
+            })])
           }));
         });
       });
@@ -176,7 +187,7 @@ describe('Route Integration Tests', () => {
       
       let response: request.Response;
       beforeAll(async () => {
-        response = await request(app).get('/api/v2/keyspaces/1/2&pageSize=3&pageNum=1&refreshScan=1&keynameFilter=key3&keytypeFilter=list');
+        response = await request(app).get('/api/v2/keyspaces/1/2?pageSize=3&pageNum=1&refreshScan=1&keynameFilter=key3&keytypeFilter=list');
 
         //Add extra values to test assertions of the refreshScan query parameter
         await redisModels[0].client.select(1);
@@ -203,7 +214,7 @@ describe('Route Integration Tests', () => {
           pageNum: 1,
           data: [{
             key: 'db2-key3',
-            value: ['el1, el2'],
+            value: ['el1', 'el2'],
             type: 'list'
           }]
         }));
@@ -240,6 +251,8 @@ const promisifyRedisClient = (redisClient: redis.RedisClient): redis.RedisClient
 
   redisClient.set = promisify(redisClient.set).bind(redisClient);
   redisClient.get = promisify(redisClient.get).bind(redisClient);
+  redisClient.lpush = promisify(redisClient.lpush).bind(redisClient);
+  redisClient.lrange = promisify(redisClient.lrange).bind(redisClient);
 
   return redisClient;
 }
