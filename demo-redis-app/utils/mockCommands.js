@@ -121,7 +121,7 @@ mockCommands.zaddSortedSet = (client) => {
 mockCommands.zrangeSortedSet = (client) => {
   const key = mockData.lists.createKey();
   client.zrange(key, 0, -1, (err, res) => {
-    if (!err) console.log(`Retrieved sorted set data for key ${key}: ${res}`);
+    if (!err) console.log(`Retrievedy}: ${res}`);
   });
 }
 
@@ -133,31 +133,31 @@ mockCommands.zpopminSortedSet = (client) => {
 }
 
 /* <<<<< Hashes >>>>> */
-// mockCommands.hmsetHash = (client) => {
-//   const key = mockData.hashes.createKey();
-//   client.hmset(key, mockData.hashes.createValue(), (err, res) => {
-//     if (!err) console.log(`Key hmset ${key}`);
-//     //Randomly expire every other successfully generated key
-//     if (!err & Math.floor(Math.random() * 2) % 2 === 0) {
-//       client.expire(key, mockSettings.HASH_TIME_TO_LIVE, (err, res) => {
-//         if (!err) console.log(`Hash key expried: ${key}`);
-//       });
-//     }
-//   });
-// }
+mockCommands.hmsetHash = (client) => {
+  const key = mockData.hashes.createKey();
+  client.hmset(key, mockData.hashes.createValue(), (err, res) => {
+    if (!err) console.log(`Key hmset ${key}`);
+    //Randomly expire every other successfully generated key
+    if (!err & Math.floor(Math.random() * 2) % 2 === 0) {
+      client.expire(key, mockSettings.HASH_TIME_TO_LIVE, (err, res) => {
+        if (!err) console.log(`Hash key expried: ${key}`);
+      });
+    }
+  });
+}
 
-// mockCommands.hgetallHash = (client) => {
-//   const key = mockData.hashes.createKey();
-//   client.hgetall(key, (err, res) => {
-//     if (!err) console.log(`Retrieved hash data for key ${key}:  ${res}`)
-//   });
-// }
+mockCommands.hgetallHash = (client) => {
+  const key = mockData.hashes.createKey();
+  client.hgetall(key, (err, res) => {
+    if (!err) console.log(`Retrieved hash data for key ${key}:  ${res}`)
+  });
+}
 
-// mockCommands.hdelHash = (client) => {
-//   const key = mockData.hashes.createKey();
-//   client.hdel(key, user, pass, age, occupation, (err, res) => {
-//     if (!err) console.log(`Deleted hash key ${key}`)
-//   });
-// }
+mockCommands.hdelHash = (client) => {
+  const key = mockData.hashes.createKey();
+  client.hdel(key, (err, res) => {
+    if (!err) console.log(`Deleted hash key ${key}`)
+  });
+}
 
 module.exports = mockCommands;
