@@ -7,7 +7,7 @@ import * as types from '../actions/actionTypes';
 //   data: [ (array of instances)
 //     {
 //       instanceId: 1,
-//       keyspaces: [ (array of keyspaces)
+//       keyspaces: [ (array of databases)
 //         {
 //           keyTotal: 6347,
 //           pageSize: 50,
@@ -67,6 +67,8 @@ refreshKeyspaceActionCreator =
           type: types.REFRESH_KEYSPACE,
           payload: {
             keyspace: refreshKeyspace,
+            currInstance: instanceId,
+            currDatabase: dbIndex,
           },
         });
       });
@@ -109,6 +111,8 @@ changeKeyspacePageActionCreator =
           type: types.CHANGE_KEYSPACE_PAGE,
           payload: {
             keyspace: nextPageKeyspace,
+            currInstance: instanceId,
+            currDatabase: dbIndex,
           },
         });
       });
