@@ -9,7 +9,7 @@ export const promisifyClientMethods = (client: RedisClient) => {
 
   //redis processes - currently excluded as this method is being used
   //in callback form - need to refactor existing code before utilizing this
-  // client.config = promisify(client.config).bind(client);
+  client.config = promisify(client.config).bind(client);
 
   //redis commands: databases
   client.flushdb = promisify(client.flushdb).bind(client);

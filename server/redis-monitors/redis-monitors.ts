@@ -21,7 +21,7 @@ const instances: RedisInstance[] = process.env.IS_TEST ?
 
 const redisMonitors: RedisMonitor[] = [];
 
-instances.forEach((instance: RedisInstance, idx: number): void => {
+instances.forEach( async (instance: RedisInstance, idx: number): Promise<void> => {
 
   //Promisify methods for the redis client for async/await capability
   const client: redis.RedisClient = promisifyClientMethods(
@@ -41,47 +41,56 @@ instances.forEach((instance: RedisInstance, idx: number): void => {
     recordKeyspaceHistoryFrequency: instance.recordKeyspaceHistoryFrequency
   }
 
-  monitor.redisClient.config('GET', 'databases', (err, res): void => {
-    
+  //Subscribe to all keyspace events
+  try {
+    await monitor.redisClient.config('SET', 'notify-keyspace-events', 'KEA');
+  } catch (e) {
+    console.log(`Could not configure client to publish keyspace event noficiations`);
+  }
+
+  let res;
+  try {
+    res = await monitor.redisClient.config('GET', 'databases')
     //Sets the number of databases present in this monitored Redis instance
     monitor.databases = +res[1];
 
-    //Configures each keyspace with a event subscriber/event log
-    //Additionally auto-saves keyspace histories with frequency in JSON config
-    //This should be futher modularized for readability and maintanability
-    for (let dbIndex = 0; dbIndex < monitor.databases; dbIndex++) {
+  } catch (e) {
+    console.log(`Could not get database count from client`);
+  }
 
-      const keyspace: Keyspace = {
-        eventLog: new EventLog(),
-        keyspaceHistories: new KeyspaceHistoriesLog(),
-        keyspaceSnapshot: [],
-        eventLogSnapshot: []
-      }
-      
-      monitor.keyspaces.push(keyspace);
+  //Configures each keyspace with a event subscriber/event log
+  //Additionally auto-saves keyspace histories with frequency in JSON config
+  //This should be futher modularized for readability and maintanability
+  for (let dbIndex = 0; dbIndex < monitor.databases; dbIndex++) {
 
-      //Sets up a listener to log any received events for this specific keyspace
-      monitor.keyspaceSubscriber.on('pmessage', (channel: string, message: string, event: string): void => {
-        if (+message.match(/[0-9*]/)[0] === dbIndex) {
-          const key = message.replace(/__keyspace@[0-9]*__:/, '');
-          monitor.keyspaces[dbIndex].eventLog.add(key, event);
-        }
-      })
-
-      // For every recordKeyspaceHistoryFrequency milliseconds, 
-      // record a keyspace history for this given database
-      setInterval(
-        recordKeyspaceHistory, 
-        monitor.recordKeyspaceHistoryFrequency,
-        monitor, 
-        dbIndex
-      ); 
-
+    const keyspace: Keyspace = {
+      eventLog: new EventLog(),
+      keyspaceHistories: new KeyspaceHistoriesLog(),
+      keyspaceSnapshot: [],
+      eventLogSnapshot: []
     }
 
-    monitor.keyspaceSubscriber.psubscribe('__keyspace@*__:*')
-  });
+    monitor.keyspaces.push(keyspace);
 
+    //Sets up a listener to log any received events for this specific keyspace
+    monitor.keyspaceSubscriber.on('pmessage', (channel: string, message: string, event: string): void => {
+      if (+message.match(/[0-9*]/)[0] === dbIndex) {
+        const key = message.replace(/__keyspace@[0-9]*__:/, '');
+        monitor.keyspaces[dbIndex].eventLog.add(key, event);
+      }
+    })
+
+    // For every recordKeyspaceHistoryFrequency milliseconds, 
+    // record a keyspace history for this given database
+    setInterval(
+      recordKeyspaceHistory, 
+      monitor.recordKeyspaceHistoryFrequency,
+      monitor, 
+      dbIndex
+    ); 
+  }
+
+  monitor.keyspaceSubscriber.psubscribe('__keyspace@*__:*')
   redisMonitors.push(monitor);
 })
 
