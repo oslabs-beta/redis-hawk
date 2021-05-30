@@ -24,8 +24,14 @@ export interface RedisMonitor {
 export interface Keyspace {
   eventLog: EventLog;
   keyspaceHistories: KeyspaceHistoriesLog;
+  keyspaceSnapshot: KeyspaceKeyDetail[];
+  eventLogSnapshot: KeyspaceEvent[];
 };
-
+export interface KeyspaceKeyDetail {
+  key: string;
+  value: any;
+  type: string;
+}
 export interface EventLog {
   head: null | KeyspaceEventNode;
   tail: null | KeyspaceEventNode;

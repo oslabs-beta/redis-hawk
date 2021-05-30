@@ -29,7 +29,6 @@ var instances = process.env.IS_TEST ?
     : JSON.parse(fs.readFileSync(path.resolve(__dirname, '../configs/config.json')).toString());
 var redisMonitors = [];
 instances.forEach(function (instance, idx) {
-    console.log(idx);
     var client = utils_1.promisifyClientMethods(redis.createClient({ host: instance.host, port: instance.port }));
     var subscriber = redis.createClient({ host: instance.host, port: instance.port });
     var monitor = {
@@ -46,7 +45,9 @@ instances.forEach(function (instance, idx) {
         var _loop_1 = function (dbIndex) {
             var keyspace = {
                 eventLog: new data_stores_1.EventLog(),
-                keyspaceHistories: new data_stores_1.KeyspaceHistoriesLog()
+                keyspaceHistories: new data_stores_1.KeyspaceHistoriesLog(),
+                keyspaceSnapshot: [],
+                eventLogSnapshot: []
             };
             monitor.keyspaces.push(keyspace);
             monitor.keyspaceSubscriber.on('pmessage', function (channel, message, event) {

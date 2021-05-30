@@ -45,14 +45,38 @@ var getValue = function (key, type, redisClient) { return __awaiter(void 0, void
                 _a = type;
                 switch (_a) {
                     case 'string': return [3, 1];
+                    case 'list': return [3, 3];
+                    case 'set': return [3, 5];
+                    case 'sortedSet': return [3, 7];
+                    case 'hash': return [3, 9];
                 }
-                return [3, 3];
+                return [3, 11];
             case 1: return [4, redisClient.get(key)];
             case 2:
                 value = _b.sent();
                 ;
-                return [3, 3];
-            case 3:
+                return [3, 11];
+            case 3: return [4, redisClient.lrange(key, 0, -1)];
+            case 4:
+                value = _b.sent();
+                ;
+                return [3, 11];
+            case 5: return [4, redisClient.smembers(key)];
+            case 6:
+                value = _b.sent();
+                ;
+                return [3, 11];
+            case 7: return [4, redisClient.zrange(key, 0, -1)];
+            case 8:
+                value = _b.sent();
+                ;
+                return [3, 11];
+            case 9: return [4, redisClient.hgetall(key)];
+            case 10:
+                value = _b.sent();
+                ;
+                return [3, 11];
+            case 11:
                 ;
                 return [2, value];
         }

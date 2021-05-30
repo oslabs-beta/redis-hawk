@@ -23,8 +23,6 @@ const redisMonitors: RedisMonitor[] = [];
 
 instances.forEach((instance: RedisInstance, idx: number): void => {
 
-  console.log(idx);
-
   //Promisify methods for the redis client for async/await capability
   const client: redis.RedisClient = promisifyClientMethods(
     redis.createClient({host: instance.host, port: instance.port})
@@ -55,8 +53,11 @@ instances.forEach((instance: RedisInstance, idx: number): void => {
 
       const keyspace: Keyspace = {
         eventLog: new EventLog(),
-        keyspaceHistories: new KeyspaceHistoriesLog()
+        keyspaceHistories: new KeyspaceHistoriesLog(),
+        keyspaceSnapshot: [],
+        eventLogSnapshot: []
       }
+      
       monitor.keyspaces.push(keyspace);
 
       //Sets up a listener to log any received events for this specific keyspace
