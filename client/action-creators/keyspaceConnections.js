@@ -4,10 +4,10 @@ import * as types from '../actions/actionTypes';
 // no requirements in for the deployment of this action creator
 //response :
 // {
-//   data: [
+//   data: [ (array of instances)
 //     {
 //       instanceId: 1,
-//       keyspaces: [
+//       keyspaces: [ (array of keyspaces)
 //         {
 //           keyTotal: 6347,
 //           pageSize: 50,
@@ -71,5 +71,45 @@ refreshKeyspaceActionCreator =
         });
       });
   };
+//change the page and handle the filters for keyspace
+//requirements: instanceId, dbIndex, page Size, page num, keyname filter, keytype filter, refreshScan = 0 - need to know whether there is a
+//OPTIONS PARAMETER BEING USED HERE CALLED QUERYOPTIONS
+//response:
+// {
+//     keyTotal: 6347,
+//     pageSize: 50,
+//     pageNum: 4,
+//     data: [
+//         {
+//             key: '',
+//             value: '',
+//             type: any,
+//         }
+//     ]
+// }
+changeKeyspacePageActionCreator =
+  (instanceId, dbIndex, queryOptions) => (dispatch) => {
+    let URI = `api/v2/keyspaces/${instanceId}/${dbIndex}/?`;
+    //this may have an issue in here - be aware of queryOptions
+    if (queryOptions.pageSize) URI += `pageSize=${queryOptions.pageSize}`;
+    if (queryOptions.pageNum) URI += `&pageNum=${queryOptions.pageNum}`;
+    if (queryOptions.keyNameFilter)
+      URI += `&keyNameFilter=${queryOptions.keyNameFilter}`;
+    if (queryOptions.keyTypeFilter)
+      URI += `&keyTypeFilter=${queryOptions.keyTypeFilter}`;
+    if (queryOptions.refreshScan)
+      URI += `&refreshScan=${queryOptions.refreshScan}`;
 
-changeKeyspacePageActionCreator = () => (dispatch) => {};
+    fetch(URI)
+      .then((res) => res.json)
+      .then((response) => {
+        console.log('response in changeKeyspaceActionCreator', response);
+        let nextPageKeyspace = response;
+        dispatch({
+          type: types.CHANGE_KEYSPACE_PAGE,
+          payload: {
+            keyspace: nextPageKeyspace,
+          },
+        });
+      });
+  };
