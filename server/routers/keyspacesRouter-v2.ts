@@ -1,10 +1,11 @@
 import express from 'express';
 import keyspacesController from '../controllers/keyspacesController';
+import monitorsController from '../controllers/monitorsController'
 
 const router = express.Router();
 
 router.get('/',
-  keyspacesController.findAllMonitors,
+  monitorsController.findAllMonitors,
   keyspacesController.refreshKeyspace,
   keyspacesController.getKeyspacePages,
   (req: express.Request, res: express.Response) => {
@@ -13,7 +14,7 @@ router.get('/',
 );
 
 router.get('/:instanceId',
-  keyspacesController.findSingleMonitor,
+  monitorsController.findSingleMonitor,
   keyspacesController.refreshKeyspace,
   keyspacesController.getKeyspacePages,
   (req: express.Request, res: express.Response) => {
@@ -23,7 +24,7 @@ router.get('/:instanceId',
 
 
 router.get('/:instanceId/:dbIndex',
-  keyspacesController.findSingleMonitor,
+  monitorsController.findSingleMonitor,
   keyspacesController.refreshKeyspace,
   keyspacesController.getKeyspacePages,
   (req: express.Request, res: express.Response) => {

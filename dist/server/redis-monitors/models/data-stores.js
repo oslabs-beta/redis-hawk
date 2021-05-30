@@ -20,6 +20,11 @@ var EventLog = (function () {
             this.tail = newEvent;
         }
     };
+    EventLog.prototype.reset = function () {
+        this.head = null;
+        this.tail = null;
+        this.eventTotal = 0;
+    };
     EventLog.prototype.removeManyViaTimestamp = function (timestamp) {
     };
     EventLog.prototype.returnLogAsArray = function (eventTotal) {
@@ -76,6 +81,11 @@ var KeyspaceHistoriesLog = (function () {
             newHistory.previous = this.tail;
             this.tail = newHistory;
         }
+    };
+    KeyspaceHistoriesLog.prototype.reset = function () {
+        this.head = null;
+        this.tail = null;
+        this.historiesCount = 0;
     };
     KeyspaceHistoriesLog.prototype.returnLogAsArray = function (historiesCount) {
         if (historiesCount === void 0) { historiesCount = 0; }

@@ -5,7 +5,7 @@ import * as redis from 'redis';
 import { promisify } from 'util'; //promisify some node-redis client functionality
 
 import app from '../../server/server';
-import * as interfaces from '../../server/redis-monitors/models/interfaces';
+import redisMonitors from '../../server/redis-monitors/redis-monitors'
 
 const testConnections = JSON.parse(readFileSync(resolve(__dirname, '../../server/configs/tests-config.json')).toString());
 
@@ -29,6 +29,7 @@ describe('Route Integration Tests', () => {
     for (let conn of testConnections) {
 
       const redisClient = promisifyRedisClient(redis.createClient({ host: conn.host, port: conn.port }));
+      await redisClient.config('SET', 'notify-keyspace-events', 'KEA');
       
       const redisModel = {
         client: redisClient,
@@ -86,6 +87,7 @@ describe('Route Integration Tests', () => {
     });
 
     it('should provide the correct connection details', () => {
+
       response.body.instances.forEach((instanceDetail, idx) => {
 
         //Each instance detail object in the response body
@@ -239,7 +241,269 @@ describe('Route Integration Tests', () => {
         }));
       });
     });
-  })
+  });
+
+  describe('/api/v2/events', () => {
+
+    beforeAll(() => {
+      //clear out any preceding events logged in the monitors
+      for (const monitor of redisMonitors) {
+        for (const keyspace of monitor.keyspaces) {
+          keyspace.eventLog.reset();
+        }
+      }
+    });
+
+    describe('GET "/"', () => {
+
+      let response: request.Response;
+      beforeAll(async () => {
+
+        //Emit 4 keyspace events for first 3 databases of each instance
+        for (const model of redisModels) {
+          for (let i = 0; i < 3; i++) {
+            await model.client.select(i);
+            await model.client.set('key1', 'wow');
+            await model.client.set('key3', 'wow3');
+            await model.client.lpush('key2', 'el1');
+            await model.client.del('key1');
+
+            const res = await model.client.get('key3');
+          }
+        }
+
+        response = await request(app).get('/api/v2/events');
+      });
+
+      it('should return a 200 status code', () => {
+        expect(response.status).toEqual(200);
+      })
+
+      it('should respond with JSON', () => {
+        expect(response.headers['content-type']).toEqual(
+          expect.stringContaining('json')
+        );
+      });
+
+      it('should respond with a data property of the proper length', () => {
+        expect(response.body.data).toHaveLength(2);
+      });
+
+      it('should return a data array where each element is an object containing instanceId and keyspaces properties', () => {
+        response.body.data.forEach((instanceDetail) => {
+          expect(instanceDetail).toEqual(expect.objectContaining({
+            instanceId: expect.any(Number),
+            keyspaces: expect.any(Array)
+          }));
+        });
+      });
+
+      it('should capture and return, in the response body, any events that occured', () => {
+        response.body.data.forEach(instanceDetail => {
+
+          for (let i = 0; i < 3; i++) {
+            const keyspaceDetail = instanceDetail.keyspaces[i];
+            expect(keyspaceDetail).toEqual(expect.objectContaining({
+              eventTotal: 4,
+              pageSize: 5, //default, as this was not specified in the request
+              pageNum: 1, //default, as this was not specified in the request
+              data: expect.any(Array)
+            }));
+
+            expect(keyspaceDetail.data).toHaveLength(4);
+          }
+        });
+      });
+
+      it('should return events in the correct order, of most to least recent', () => {
+        response.body.data.forEach(instanceDetail => {
+
+          for (let i = 0; i < 3; i++) {
+            const keyspaceDetail = instanceDetail.keyspaces[i];
+
+            expect(keyspaceDetail.data[0].key).toEqual('key1');
+            expect(keyspaceDetail.data[0].event).toEqual('del');
+
+            expect(keyspaceDetail.data[1].key).toEqual('key2');
+            expect(keyspaceDetail.data[1].event).toEqual('lpush');
+
+            expect(keyspaceDetail.data[2].key).toEqual('key3');
+            expect(keyspaceDetail.data[2].event).toEqual('set');
+
+            expect(keyspaceDetail.data[3].key).toEqual('key1');
+            expect(keyspaceDetail.data[3].event).toEqual('set');
+
+            for (let i = 0; i < keyspaceDetail.data.length - 1; i++) {
+              expect(keyspaceDetail.data[i].timestamp).toBeGreaterThanOrEqual(
+                keyspaceDetail.data[i + 1].timestamp);
+            }
+          }
+        });
+      });
+
+      it('should properly filter for keynames', async () => {
+
+        const res = await request(app).get('/api/v2/events?refreshData=0&keynameFilter=2');
+        res.body.data.forEach(instanceDetail => {
+          for (let i = 0; i < 3; i++) {
+
+            const keyspace = instanceDetail.keyspaces[i];
+            expect(keyspace).toEqual(expect.objectContaining({
+              eventTotal: 1,
+              data: expect.any(Array)
+            }));
+
+            expect(keyspace.data).toHaveLength(1);
+          }
+        });
+      });
+      
+      it('should properly filter for event types', async () => {
+
+        const res = await request(app).get('/api/v2/events?refreshData=0&eventTypeFilter=del');
+
+        res.body.data.forEach(instanceDetail => {
+
+          for (let i = 0; i < 3; i++) {
+            const keyspace = instanceDetail.keyspaces[i];
+
+            expect(keyspace).toEqual(expect.objectContaining({
+              eventTotal: 1,
+              data: expect.any(Array)
+            }));
+
+            expect(keyspace.data).toHaveLength(1);
+
+          }
+        });
+      });
+
+      it('should grab the proper event subset based on pagination parameters', async () => {
+
+        const res = await request(app).get('/api/v2/events?refreshData=0&pageSize=3&pageNum=1');
+
+        res.body.data.forEach(instanceDetail => {
+          for (let i = 0; i < 3; i++) {
+            const keyspace = instanceDetail.keyspaces[i];
+            expect(keyspace.data).toHaveLength(3);
+          }
+        });
+      });
+    });
+
+    describe('GET "/:instanceId/:dbIndex"', () => {
+
+      let response;
+      beforeAll(async () => {
+
+        for (const monitor of redisMonitors) {
+          monitor.keyspaces.forEach(keyspace => {
+            keyspace.eventLog.reset();
+          })
+        }
+
+        //Test for instanceId 1, dbIndex 4
+        const client = redisModels[0].client
+        await client.select(4);
+        await client.set('key1', 'cool');
+        await client.set('key2', 'neato');
+        await client.set('key3', 'rick beato');
+        await client.lpush('key4', 'el2', 'el1');
+        await client.del('key1');
+
+        response = await request(app).get('/api/v2/events/1/4?pageSize=3');
+      });
+
+      it('should respond with a 200 status code', () => {
+        expect(response.status).toEqual(200);
+      });
+
+      it('should respond with JSON', () => {
+        expect(response.headers['content-type']).toEqual(
+          expect.stringContaining('json')
+        );
+      });
+
+      it('should contain the correct response body shape', () => {
+        expect(response.body).toEqual(expect.objectContaining({
+          eventTotal: expect.any(Number),
+          pageSize: expect.any(Number),
+          pageNum: expect.any(Number),
+          data: expect.any(Array)
+        }));
+      });
+
+      it('should contain the correct metadata values', () => {
+        expect(response.body).toEqual(expect.objectContaining({
+          eventTotal: 5,
+          pageSize: 3,
+          pageNum: 1 //default since it was not specified in the request
+        }));
+      });
+
+      it('should contain the correct data for the three most recent events', () => {
+
+        expect(response.body.data).toHaveLength(3);
+
+        expect(response.body.data[0].key).toEqual('key1');
+        expect(response.body.data[0].event).toEqual('del');
+
+        expect(response.body.data[1].key).toEqual('key4');
+        expect(response.body.data[1].event).toEqual('lpush');
+
+        expect(response.body.data[2].key).toEqual('key3');
+        expect(response.body.data[2].event).toEqual('set');
+      });
+
+      it('should respond with the correct page', async () => {
+    
+        const response = await request(app).get('/api/v2/events/1/4?pageSize=2&pageNum=2');
+        expect(response.body.data).toHaveLength(2);
+        expect(response.body.data[0].event).toEqual('set');
+        expect(response.body.data[1].event).toEqual('set');
+
+      });
+
+      it('should filter the response properly', async () => {
+
+        const response = await request(app).get('/api/v2/events/1/4?pageSize=3&pageNum=1&keynameFilter=1&eventTypeFilter=set');
+        
+        expect(response.body).toEqual(expect.objectContaining({
+          eventTotal: 1,
+          pageNum: 1,
+          pageSize: 3,
+          data: expect.any(Array)
+        }));
+
+        expect(response.body.data).toHaveLength(1);
+        expect(response.body.data[0]).toEqual(expect.objectContaining({
+          key: 'key1',
+          event: 'set'
+        }));
+      });
+
+      it('should handle event log data refreshing properly', async () => {
+
+        await redisModels[0].client.select(4);
+        await redisModels[0].client.set('newkey', 'doge');
+
+        let response = await request(app).get('/api/v2/events/1/4?refreshData=0&keynameFilter=newk')
+        expect(response.body).toEqual(expect.objectContaining({
+          eventTotal: 0,
+          data: []
+        }));
+
+        response = await request(app).get('/api/v2/events/1/4?refreshData=1&keynameFilter=newk')
+        expect(response.body).toEqual(expect.objectContaining({
+          eventTotal: 1,
+          data: expect.arrayContaining([expect.objectContaining({
+            key: 'newkey',
+            event: 'set'
+          })])
+        }));
+      });
+    });
+  });
 
 });
 
@@ -251,6 +515,7 @@ const promisifyRedisClient = (redisClient: redis.RedisClient): redis.RedisClient
 
   redisClient.set = promisify(redisClient.set).bind(redisClient);
   redisClient.get = promisify(redisClient.get).bind(redisClient);
+  redisClient.del = promisify(redisClient.del).bind(redisClient);
   redisClient.lpush = promisify(redisClient.lpush).bind(redisClient);
   redisClient.lrange = promisify(redisClient.lrange).bind(redisClient);
 
