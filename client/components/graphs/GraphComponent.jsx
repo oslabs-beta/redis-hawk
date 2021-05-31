@@ -16,25 +16,29 @@ const mapStateToProps = (store) => {
 const mapDispatchToProps = (dispatch) => ({
   updateCurrentDisplay: (filter, category) =>
     dispatch(actions.updateCurrDisplayActionCreator(filter, category)),
-  initialEventsGet: (instanceId, dbIndex, currTotal) =>
-    dispatch(eventActions.getTotalEventsActionCreator(instanceId, dbIndex)),
+  getEvents: (instanceId, dbIndex, queryParams) =>
+    dispatch(
+      eventActions.getTotalEventsActionCreator(instanceId, dbIndex, queryParams)
+    ),
 });
 
 class GraphComponent extends Component {
   constructor(props) {
     super(props);
     // this.setGraphUpdate = this.setGraphUpdate.bind(this);
-   
   }
 
   componentDidMount() {
+    const params = { timeInterval: 10000 };
     const self = this;
-    console.log("this.props", this.props);
-    self.props.initialEventsGet(
+    self.props.getEvents(
       this.props.currInstance,
-      this.props.currDatabase
+      this.props.currDatabase,
+      params
     );
-    // setInterval(self.setGraphUpdate, 60000);
+    console.log("this.props after getEvents", this.props);
+
+    // setInterval(self.getEvents, 60000);
   }
   // setGraphUpdate() {
   //   this.props.getTotalEvents(1, this.props.currDatabase, this.props.currTotal);

@@ -16,7 +16,8 @@ const totalEventsReducer = (state = initialState, action) => {
       totalEvents = state.totalEvents.slice();
       totalEvents.eventTotals.push(...events.eventTotals);
       totalEvents.eventTally = events.evenTotal;
-
+      console.log('event tally in Events Reducer', totalEvents.eventTally)
+      console.log('totalEvents.eventTotals in EventReducer', totalEvents.eventTotal)
       return {
         ...state,
         totalEvents,

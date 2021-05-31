@@ -11,6 +11,7 @@ import './styles/styles.scss';
 import { connect } from 'react-redux';
 import * as actions from '../action-creators/connections';
 import * as keyspaceActions from '../action-creators/keyspaceConnections';
+import * as eventActions from "../action-creators/eventsConnections";
 import '../../node_modules/react-vis/dist/style.css';
 
 ///still need to check dispatchers here
