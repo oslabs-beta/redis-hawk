@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import SearchFilter from "./SearchFilter.jsx";
 import * as actions from "../../action-creators/connections";
-import * as keyspaceActions from "../../action-creators/"
+import * as keyspaceActions from "../../action-creators/keyspaceConnections";
 import * as eventActions from "../../action-creators/eventsConnections";
 
 const mapStateToProps = (store) => {
@@ -71,12 +71,17 @@ class FilterNav extends Component {
   }
 
   render() {
+    console.log(
+      "this.props in filterNav graph before conditional render",
+      this.props
+    );
     if (this.props.currPage === "graphs") {
+      console.log("this.props in filterNav graph render", this.props);
       return (
         <div className='filterNavContainer'>
           <SearchFilter
             id='searchFilter'
-            events={this.props.events[this.props.currDatabase]}
+            events={this.props.events}
             currPage={this.props.currPage}
             updateCurrDisplay={this.props.updateCurrDisplay}
           />

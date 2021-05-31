@@ -15,7 +15,7 @@ const GraphHolder = (props) => {
     let temp = [];
     let xRange = 0;
     let yRange = 5000;
-    console.log("array in graphDataConverter", array);
+    // console.log("array in graphDataConverter", array);
     for (let i = 0; i < array.length; i++) {
       if (
         array[i].timestamp - initTime >= xRange &&
