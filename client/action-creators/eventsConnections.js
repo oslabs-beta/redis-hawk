@@ -116,7 +116,7 @@ export const changeEventsPageActionCreator =
       });
   };
 
-export const getEventTotalsActionCreator =
+export const getTotalEventsActionCreator =
   (instanceId, dbIndex, queryParams) => (dispatch) => {
     let URI = `api/v2/events/${instanceId}/${dbIndex}/?`;
     if (queryParams.eventTotal) {
@@ -140,7 +140,7 @@ export const getEventTotalsActionCreator =
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {
-        console.log("response in getEventTotalsActionCreator", response);
+        console.log("response in getTotalEventsActionCreator", response);
         let allEvents = response.data;
         dispatch({
           type: types.LOAD_ALL_EVENTS,

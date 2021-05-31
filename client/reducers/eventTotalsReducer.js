@@ -4,24 +4,24 @@ const initialState = {
   currInstance: 1,
   currDatabase: 0,
   totalEvents: {
-    eventTotal: 0,
-    eventCount: 0,
-    end_time: 0
-}
+    eventTally: 0, 
+    eventTotals: []
+  }
 };
-const eventTotalsReducer = (state = initialState, action) => {
+const totalEventsReducer = (state = initialState, action) => {
   let totalEvents;
   switch (action.type) {
     case types.GET_EVENT_TOTALS: {
-      const allEvents = action.payload.totalEvents
+      const events = action.payload.totalEvents;
       totalEvents = state.totalEvents.slice();
-      totalEvents.push(...allEvents)
+      totalEvents.eventTotals.push(...events.eventTotals);
+      totalEvents.eventTally = events.evenTotal
 
       return {
         ...state,
-        totalEvents
-      }
+        totalEvents,
+      };
     }
   }
-}
+};
 export default eventTotalsReducer;
