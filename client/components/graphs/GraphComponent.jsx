@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import GraphHolder from "./GraphHolder.jsx";
+import LineChart from "./LineChart.jsx";
 import { connect } from "react-redux";
 import * as actions from "../../action-creators/connections";
 
@@ -35,10 +36,11 @@ class GraphComponent extends Component {
   render() {
     return (
       <div id='graphsComponentContainer' className='GraphComponent-Container'>
-        <GraphHolder
+        {/* <GraphHolder
           currDatabase={this.props.currDatabase}
           events={this.props.events}
-        />
+        /> */}
+        <LineChart />
       </div>
     );
   }
