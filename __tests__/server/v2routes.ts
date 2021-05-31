@@ -65,7 +65,7 @@ describe('Route Integration Tests', () => {
       .expect(404);
   })
 
-  xdescribe('/api/connections', () => {
+  describe('/api/connections', () => {
 
     let response: request.Response;
     beforeAll(async () => {
@@ -102,7 +102,7 @@ describe('Route Integration Tests', () => {
     });
   })
 
-  xdescribe('/api/v2/keyspaces', () => {
+  describe('/api/v2/keyspaces', () => {
 
     //Perform Redis commands to be captured by the route
     beforeAll(async () => {
@@ -252,7 +252,7 @@ describe('Route Integration Tests', () => {
   });
 
 
-  xdescribe('/api/v2/keyspaces/histories', () => {
+  describe('/api/v2/keyspaces/histories', () => {
 
     afterAll(() => {
       for (const monitor of redisMonitors) {
@@ -422,7 +422,7 @@ describe('Route Integration Tests', () => {
 
   })
 
-  xdescribe('/api/v2/events', () => {
+  describe('/api/v2/events', () => {
 
     describe('GET "/"', () => {
 
@@ -701,7 +701,7 @@ describe('Route Integration Tests', () => {
 
   describe('/api/v2/events/totals', () => {
 
-    describe('GET "/:instanceId/:dbIndex"', () => {
+   describe('GET "/:instanceId/:dbIndex"', () => {
 
       it('should return a 400 status code if no timeInterval or eventTotal parameter is specified', async () => {
         const client = redisModels[0].client;
@@ -725,19 +725,19 @@ describe('Route Integration Tests', () => {
           await client.set('key1', 'val');
           await client.lpush('key2', 'el2', 'el1');
           await client.del('key1');
-          jest.setTimeout(timeInterval);
+          await delay(timeInterval);
 
           //emit a second set events
           await client.set('key1', 'newval');
           await client.rpush('key3', 'el1', 'el2');
-          jest.setTimeout(timeInterval);
+          await delay(timeInterval);
 
           //Emit a third set of events
           await client.del('key1');
           await client.del('key3');
           await client.set('key4', 'hellowurld');
           await client.set('wow', 'money');
-          jest.setTimeout(timeInterval); //allow time to pass for above events to occur
+          await delay(timeInterval);
 
           //Send a response to capture events
           response = await request(app).get(`/api/v2/events/totals/${redisModels[0].instanceId}/4?timeInterval=${timeInterval * 1.1}`);
@@ -752,12 +752,12 @@ describe('Route Integration Tests', () => {
         });
 
         it('should respond with a 200 status code and JSON', () => {
-          expect(response.stauts).toEqual(200);
+          expect(response.status).toEqual(200);
           expect(response.headers['content-type']).toEqual(expect.stringContaining('json'));
         });
 
         it('should respond with the correct eventTotal', () => {
-          expect(response.body.eventTotal).toEqual(8);
+          expect(response.body.eventTotal).toEqual(9);
         });
 
         it('should respond with the correct number of eventTotals intervals', () => {
@@ -813,22 +813,21 @@ describe('Route Integration Tests', () => {
         });
 
         it('should provide the correct eventCount in the eventTotals array element', () => {
-          expect(response.body.eventCount).toEqual(320 - 113);
+          expect(response.body.eventTotals[0].eventCount).toEqual(320 - 113);
         });
       });
 
       describe('handling filtering query parameters', () => {
-
         
         beforeAll(async () => {
           const client = redisModels[0].client;
           await client.select(6);
 
           for (let i = 0; i < 30; i++) {
-            await client.set(`wow-${i}`, 'coolbean');
+            await client.set(`wow1-${i}`, 'coolbean');
             await client.lpush(`wow-${i}`, 'el2', 'el1')
             await client.lpush(`erm-${i + 30}`, 'el2', 'el1');
-            await client.del(`wow-${i}`);
+            await client.del(`wow1-${i}`);
           }
         });
 
@@ -846,19 +845,20 @@ describe('Route Integration Tests', () => {
         });
 
         it('should filter for event types properly', async () => {
-          const response = await request(app).get(`/api/v2/events/totals/${redisModels[0].instanceId}/6?timeInterval=10000&eventTypes=lpush,del`);
+          const response = await request(app).get(`/api/v2/events/totals/${redisModels[0].instanceId}/6?eventTotal=0&eventTypes=lpush,del`);
           expect(response.body.eventTotals[0].eventCount).toEqual(90);
         });
 
         it('should filter for keynameFilters properly', async () => {
-          const response = await request(app).get(`/api/v2/events/totals/${redisModels[0].instanceId}/6?timeInterval=10000&keynameFilter=erm`);
-          expect(response.body.eventTotals[0].eventCount).toEqual(30);
+          const response = await request(app).get(`/api/v2/events/totals/${redisModels[0].instanceId}/6?eventTotal=4&keynameFilter=erm`);
+          expect(response.body.eventTotals[0].eventCount).toEqual(29);
         });
 
         it('should filter for both event types and keynames simultaneously, properly', async () => {
           const response = await request(app).get(`/api/v2/events/totals/${redisModels[0].instanceId}/6?timeInterval=10000&keynameFilter=wow&eventTypes=lpush,del`);
           expect(response.body.eventTotals[0].eventCount).toEqual(60);
         });
+
       });
     });
   });
@@ -879,4 +879,10 @@ const promisifyRedisClient = (redisClient: redis.RedisClient): redis.RedisClient
   redisClient.lrange = promisify(redisClient.lrange).bind(redisClient);
 
   return redisClient;
+}
+
+const delay = (ms) => {
+  return new Promise(resolve => {
+    setTimeout(resolve, ms)
+  })
 }
