@@ -37,7 +37,7 @@ class KeyspaceComponent extends Component {
   }
 
   render() {
-    console.log('all the props in keyspace component', this.props);
+    // console.log('all the props in keyspace component', this.props);
     return (
       <div
         id='keyspaceComponentContainer'
@@ -50,7 +50,7 @@ class KeyspaceComponent extends Component {
           currInstance={this.props.currInstance}
           updatePageSize={this.props.updatePageSize}
           updatePageNum={this.props.updatePageNum}
-          changeKeyspace={this.props.changeKeyspace}
+          changeKeyspacePage={this.props.changeKeyspacePage}
           pageNum={this.props.pageNum}
           pageSize={this.props.pageSize}
           myCount={

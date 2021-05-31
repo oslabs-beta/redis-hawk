@@ -65,14 +65,26 @@ import * as React from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 
 function KeyspaceTable(props) {
-  console.log('props in keyspace table', props);
-  let myProps = props;
+  // console.log('props in keyspace table', props);
 
   const [pageSize, setPageSize] = React.useState(25);
   const [loading, setLoading] = React.useState(false);
 
   const handlePageChange = (params) => {
     console.log('current page in params', params.page);
+    props.updatePageNum(params.page + 1);
+    console.log('pageNum in props', props.pageNum + 1);
+    const funcOptions = {
+      pageSize: props.pageSize,
+      pageNum: props.pageNum + 1,
+      refreshScan: 0,
+    };
+    console.log('my funcOptions', funcOptions);
+    props.changeKeyspacePage(
+      props.currInstance,
+      props.currDatabase,
+      funcOptions
+    );
   };
 
   const handlePageSizeChange = (params) => {
@@ -87,7 +99,7 @@ function KeyspaceTable(props) {
     data[i].id = i;
   }
 
-  console.log('data in keyspace table', data);
+  // console.log('data in keyspace table', data);
   return (
     <div
       style={{ height: 400, width: '100%', backgroundColor: 'rgb(233, 0, 0)' }}
