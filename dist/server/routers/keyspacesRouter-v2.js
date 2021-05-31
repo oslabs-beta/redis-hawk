@@ -16,4 +16,7 @@ router.get('/:instanceId', monitorsController_1.default.findSingleMonitor, keysp
 router.get('/:instanceId/:dbIndex', monitorsController_1.default.findSingleMonitor, keyspacesController_1.default.refreshKeyspace, keyspacesController_1.default.getKeyspacePages, function (req, res) {
     res.status(200).json(res.locals.keyspaces);
 });
+router.get('/histories/:instanceId/:dbIndex', monitorsController_1.default.findSingleMonitor, keyspacesController_1.default.getKeyspaceHistories, function (req, res) {
+    res.status(200).json(res.locals.histories);
+});
 exports.default = router;

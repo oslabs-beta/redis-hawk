@@ -3,12 +3,14 @@ import { RequestHandler } from 'express';
 //type definition for response body data
 // import { RedisInstance, Keyspace, KeyData } from './interfaces';
 import type { KeyspacesResponseBody, KeyDetails, Keyspace } from './interfaces';
+import type { KeyspaceHistoriesLog, KeyspaceHistoryNode, KeyDetails as HistoryKeyDetails } from '../redis-monitors/models/interfaces';
 import { getKeyspace } from './utils';
 
 interface KeyspacesController {
   getKeyspacesForInstance: RequestHandler;
   refreshKeyspace: RequestHandler;
   getKeyspacePages: RequestHandler;
+  getKeyspaceHistories: RequestHandler;
 }
 
 const keyspacesController: KeyspacesController = {
@@ -171,8 +173,69 @@ const keyspacesController: KeyspacesController = {
     }
 
     return next();
-  }
+  },
 
+  getKeyspaceHistories: (req, res, next) => {
+  /*
+    Traverses the logged keyspace histories for a single monitor only,
+    and constructs a response body with aggregated keyCount and memoryUsage metrics
+    for each logged history.
+  */ 
+
+    const dbIndex = +req.params.dbIndex;
+    //grab the keyspace histories log for the given monitor
+    const historiesLog: KeyspaceHistoriesLog = res.locals.monitors[0].keyspaces[dbIndex].keyspaceHistories;
+    const requestHistoryCount = +req.query.historiesCount;
+
+    //Check for an invalid historyCount parameter
+    if (requestHistoryCount > historiesLog.historiesCount
+        || (req.params.historyCount && isNaN(requestHistoryCount))) {
+      return next({
+        log: 'Request provided an incorrect historyCount parameter',
+        status: 400,
+        message: {err: 'historyCount is invalid - please ensure it is a number and a valid count received from a previous response'}
+      });
+    }
+
+    const responseData = {
+      historyCount: historiesLog.historiesCount,
+      histories: []
+    }
+
+    //Determine the proper count of histories to grab based on query param
+    let count = requestHistoryCount ? historiesLog.historiesCount - requestHistoryCount : historiesLog.historiesCount;
+    //Traverse the histories log backwards (so newest histories are at the front of the response body)
+
+    let current: KeyspaceHistoryNode = historiesLog.tail;
+    const keynameFilter = req.query.keynameFilter
+
+    while (count > 0) {
+
+      //Filters keynames (if there is a filter parameter)
+      const filteredKeys = keynameFilter ? current.keys.filter((el: HistoryKeyDetails): boolean => {
+        return el.key.includes(keynameFilter.toString());
+      }) : current.keys
+
+      //Get total memory usage for all the filtered keys
+      const totalMemoryUsage = filteredKeys.reduce((acc: number, el: HistoryKeyDetails): number => {
+        return acc + el.memoryUsage;
+      }, 0);
+
+      //Add this history with aggregated detail to the response body
+      responseData.histories.push({
+        timestamp: current.timestamp,
+        keyCount: filteredKeys.length,
+        memoryUsage: totalMemoryUsage
+      });
+      
+      //Move onto next (older) history
+      current = current.previous;
+      count -= 1;
+    }
+
+    res.locals.histories = responseData;
+    return next();
+  }
 };
 
 export default keyspacesController;
