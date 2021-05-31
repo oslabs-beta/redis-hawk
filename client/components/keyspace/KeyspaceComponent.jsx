@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import KeyspaceTable from './KeyspaceTable.jsx';
-import * as actions from '../action-creators/connections';
-import * as keyspaceActions from '../action-creators/keyspaceConnections';
+import * as actions from '../../action-creators/connections';
+import * as keyspaceActions from '../../action-creators/keyspaceConnections';
 
 //withRouter??? -- for props.history -- stretch??
 
@@ -37,6 +37,7 @@ class KeyspaceComponent extends Component {
   }
 
   render() {
+    console.log('all the props in keyspace component', this.props);
     return (
       <div
         id='keyspaceComponentContainer'
@@ -52,6 +53,11 @@ class KeyspaceComponent extends Component {
           changeKeyspace={this.props.changeKeyspace}
           pageNum={this.props.pageNum}
           pageSize={this.props.pageSize}
+          myCount={
+            this.props.keyspace[this.props.currInstance - 1].keyspaces[
+              this.props.currDatabase
+            ].keyTotal
+          }
         />
       </div>
     );
