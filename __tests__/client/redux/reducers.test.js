@@ -281,12 +281,78 @@ describe("events reducer", () => {
     it("returns specific page of events", () => {
       const { events } = eventSubject(state, action);
       expect(
-        events[state.currInstance - 1].keyspaces[state.currDatabase]
-      ).toEqual({
-        key: "Arthur",
-        event: "Set",
-        timestamp: "07:00",
-      });
+        events[state.currInstance - 1].keyspaces[state.currDatabase].data
+      ).toEqual([
+        {
+          key: "Arthur",
+          event: "Set",
+          timestamp: "07:00",
+        },
+        {
+          key: "Abby",
+          event: "Set",
+          timestamp: "07:10",
+        },
+      ]);
+    });
+    it("returns a state object not strictly equal to the original", () => {
+      const eventState = eventSubject(state, action);
+      // expect(eventState).toEqual(state)
+      expect(eventState).not.toBe(state);
+    });
+    it("returns an events value not strictly equal to the original", () => {
+      const { events } = eventSubject(state, action);
+      expect(events).not.toBe(state.events);
+    });
+  });
+
+  describe("CHANGE_EVENTS_PAGE", () => {
+    const action = {
+      type: "CHANGE_EVENTS_PAGE",
+      payload: {
+        events: [
+          {
+            instanceId: 1,
+            keyspaces: [
+              {
+                eventTotal: 2,
+                pageSize: 1,
+                pageNum: 2,
+                data: [
+                  {
+                    key: "Arthur",
+                    event: "Set",
+                    timestamp: "07:00",
+                  },
+                  {
+                    key: "Abby",
+                    event: "Set",
+                    timestamp: "07:10",
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        currDatabase: 0,
+      },
+    };
+    it("changes the  page of events", () => {
+      const { events } = eventSubject(state, action);
+      expect(
+        events[state.currInstance - 1].keyspaces[state.currDatabase].data
+      ).toEqual([
+        {
+          key: "Arthur",
+          event: "Set",
+          timestamp: "07:00",
+        },
+        {
+          key: "Abby",
+          event: "Set",
+          timestamp: "07:10",
+        },
+      ]);
     });
     it("returns a state object not strictly equal to the original", () => {
       const eventState = eventSubject(state, action);
