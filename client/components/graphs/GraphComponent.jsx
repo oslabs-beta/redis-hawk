@@ -3,7 +3,7 @@ import GraphHolder from "./GraphHolder.jsx";
 import LineChart from "./LineChart.jsx";
 import { connect } from "react-redux";
 import * as actions from "../../action-creators/connections";
-import * as eventActions from "../../action- creators/eventsConnections";
+import * as eventActions from "../../action-creators/eventsConnections";
 
 const mapStateToProps = (store) => {
   return {
@@ -16,25 +16,29 @@ const mapStateToProps = (store) => {
 const mapDispatchToProps = (dispatch) => ({
   updateCurrentDisplay: (filter, category) =>
     dispatch(actions.updateCurrDisplayActionCreator(filter, category)),
-  getTotalEvents: (instanceId, dbIndex, currIndex) =>
-    dispatch(
-      eventActions.getTotalEventsActionCreator(instanceId, dbIndex, currTotal)
-    ),
+  initialEventsGet: (instanceId, dbIndex, currTotal) =>
+    dispatch(eventActions.getTotalEventsActionCreator(instanceId, dbIndex)),
 });
 
 class GraphComponent extends Component {
   constructor(props) {
     super(props);
-    this.setGraphUpdate = this.setGraphUpdate.bind(this);
+    // this.setGraphUpdate = this.setGraphUpdate.bind(this);
+   
   }
 
   componentDidMount() {
     const self = this;
-    setInterval(self.setGraphUpdate, 60000);
+    console.log("this.props", this.props);
+    self.props.initialEventsGet(
+      this.props.currInstance,
+      this.props.currDatabase
+    );
+    // setInterval(self.setGraphUpdate, 60000);
   }
-  setGraphUpdate() {
-    this.props.getTotalEvents(1, this.props.currDatabase, this.props.currTotal);
-  }
+  // setGraphUpdate() {
+  //   this.props.getTotalEvents(1, this.props.currDatabase, this.props.currTotal);
+  // }
 
   render() {
     return (

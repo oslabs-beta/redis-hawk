@@ -99,7 +99,7 @@ export const changeEventsPageActionCreator =
       URI += `&keyTypeFilter=${queryParams.keyTypeFilter}`;
     if (queryParams.refreshData)
       URI += `&refreshData=${queryParams.refreshData}`;
-
+    
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {
@@ -118,25 +118,30 @@ export const changeEventsPageActionCreator =
 
 export const getTotalEventsActionCreator =
   (instanceId, dbIndex, queryParams) => (dispatch) => {
-    let URI = `api/v2/events/${instanceId}/${dbIndex}/?`;
-    if (queryParams.eventTotal) {
-      if (queryParams.eventTypes)
-        URI += `eventTotal=${queryParams.eventTotal}/&${queryParams.eventTypes}`;
-      if (queryParams.keynameFilter)
-        URI += `eventTotal=${queryParams.eventTotal}/&keynameFilter=${queryParams.keynameFilter}`;
-      else {
-        URI += `eventTotal=${queryParms.eventTotal}`;
+    console.log("in getTotalEventsActionCreator");
+    let URI = `api/v2/events/${instanceId}/${dbIndex}/`;
+    if (queryParams){
+      if (queryParams.eventTotal) {
+        if (queryParams.eventTypes)
+          URI += `?eventTotal=${queryParams.eventTotal}/&${queryParams.eventTypes}`;
+        if (queryParams.keynameFilter)
+          URI += `?eventTotal=${queryParams.eventTotal}/&keynameFilter=${queryParams.keynameFilter}`;
+        else {
+          URI += `?eventTotal=${queryParms.eventTotal}`;
+        }
       }
-    }
-    if (queryParams.timeInterval) {
-      if (queryParams.eventTypes)
-        URI += `timeInterval=${queryParams.timeInterval}/&${queryParams.eventTypes}`;
-      if (queryParams.keynameFilter)
-        URI += `timeInterval=${queryParams.timeInterval}/&keynameFilter=${queryParams.keynameFilter}`;
-      else {
-        URI += `timeInterval=${queryParms.timeInterval}`;
+      if (queryParams.timeInterval) {
+        if (queryParams.eventTypes)
+          URI += `?timeInterval=${queryParams.timeInterval}/&${queryParams.eventTypes}`;
+        if (queryParams.keynameFilter)
+          URI += `?timeInterval=${queryParams.timeInterval}/&keynameFilter=${queryParams.keynameFilter}`;
+        else {
+          URI += `?timeInterval=${queryParms.timeInterval}`;
+        }
       }
+
     }
+    console.log("URI in eventTotalsActionCreator", URI);
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {

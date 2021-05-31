@@ -61,21 +61,20 @@
 //   );
 // }
 
-import * as React from 'react';
-import { DataGrid } from '@material-ui/data-grid';
-import { useDemoData } from '@material-ui/x-grid-data-generator';
+import * as React from "react";
+import { DataGrid } from "@material-ui/data-grid";
+import { useDemoData } from "@material-ui/x-grid-data-generator";
 
 function KeyspaceTable() {
   const { data } = useDemoData({
-    dataSet: 'Commodity',
+    dataSet: "Commodity",
     rowLength: 100,
     maxColumns: 6,
   });
 
   return (
     <div
-      style={{ height: 400, width: '100%', backgroundColor: 'rgb(233, 0, 0)' }}
-    >
+      style={{ height: 400, width: "100%", backgroundColor: "rgb(233, 0, 0)" }}>
       <DataGrid autoPageSize pagination {...data} />
     </div>
   );

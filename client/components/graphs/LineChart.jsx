@@ -4,7 +4,7 @@ import zoomPlugin from "chartjs-plugin-zoom";
 // import Hammer from "hammerjs";
 import Chart from "chart.js/auto";
 
-const LineChart = () => {
+const LineChart = (props) => {
   const [chartData, setChartData] = useState({});
   const labels = [
     "07:00",
@@ -74,6 +74,19 @@ const LineChart = () => {
     60, 70, 80, 99, 23, 50, 88, 99, 100, 105, 80, 35, 75, 200, 100, 60, 70, 80,
     99, 23, 50, 88, 99, 100, 105,
   ];
+
+  // const initialTime = props.events[props.currDatabase][0].timestamp;
+  // const eventsArray = props.events[props.currDatabase];
+  // console.log("intialTime", initialTime, "eventsArray", eventsArray);
+  // const plotData = graphDataConverter(eventsArray, initialTime);
+  // console.log("plotData", plotData);
+  // //
+  console.log("props in LineChart", props);
+
+  // this.props.events[props.currDatabase][0].map(obj => {
+  //   timesArray.push()
+  // })
+
   const chart = () => {
     setChartData({
       labels,
