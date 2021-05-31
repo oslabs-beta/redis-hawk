@@ -274,27 +274,36 @@ describe('Route Integration Tests', () => {
             After commands are performed, sends request to grab keyspace history.
           */
 
+          //Clear out any existing keyspace histories
+          for (const monitor of redisMonitors) {
+            for (const keyspace of monitor.keyspaces) {
+              keyspace.keyspaceHistories.reset();
+            }
+          }
+
+          let monitor;
+          redisMonitors.forEach((redisMonitor) => {
+            if (redisMonitor.instanceId === redisModels[0].instanceId) {
+              monitor = redisMonitor;
+            }
+          })
+
           const client = redisModels[0].client;
           await client.select(0);
           await client.set('key1', 'val');
           await client.set('key2', 'val2');
           await client.lpush('key3', 'el3', 'el2', 'el1');
+    
+          await recordKeyspaceHistory(monitor, 0);
+
           
-
-          //Allow for the first keyspace history to be recorded
-          jest.useFakeTimers();
-          jest.advanceTimersByTime(redisModels[0].recordKeyspaceHistoryFrequency * 1.5);
-
           await client.set('key4', 'val');
           await client.set('key5', 'val2');
           await client.lpush('key6', 'el3', 'el2', 'el1');
+          await recordKeyspaceHistory(monitor, 0);
 
-          //Allow for the second keyspace history to be recorded
-          jest.advanceTimersByTime(redisModels[0].recordKeyspaceHistoryFrequency);
-
-          //Allow for the third keyspace history to be recorded
           await client.del('key6');      
-          jest.advanceTimersByTime(redisModels[0].recordKeyspaceHistoryFrequency);
+          await recordKeyspaceHistory(monitor, 0);
 
           response = await request(app).get('/api/v2/keyspaces/histories/1/0');
         });
@@ -327,9 +336,9 @@ describe('Route Integration Tests', () => {
         it('should return the correct data in the histories property', () => {
 
           const histories = response.body.histories;
-          expect(histories[0].keyCount).toEqual(3);
+          expect(histories[2].keyCount).toEqual(3);
           expect(histories[1].keyCount).toEqual(6);
-          expect(histories[2].keyCount).toEqual(5);
+          expect(histories[0].keyCount).toEqual(5);
 
           histories.forEach(history => {
             expect(history.timestamp).toBeLessThanOrEqual(Date.now());
@@ -354,20 +363,32 @@ describe('Route Integration Tests', () => {
         let response;
         beforeAll(async () => {
 
+          //Clear out any existing keyspace histories
+          for (const monitor of redisMonitors) {
+            for (const keyspace of monitor.keyspaces) {
+              keyspace.keyspaceHistories.reset();
+            }
+          }
+
+          let monitor;
+          redisMonitors.forEach((redisMonitor) => {
+            if (redisMonitor.instanceId === redisModels[0].instanceId) {
+              monitor = redisMonitor;
+            }
+          })
+
           const client = redisModels[0].client;
           await client.select(3);
           await client.set('key1', 'val');
           await client.set('key2', 'val');
+    
+          await recordKeyspaceHistory(monitor, 3);
 
-          jest.useFakeTimers();
-          jest.advanceTimersByTime(redisModels[0].recordKeyspaceHistoryFrequency);
-
-          
           await client.set('beep3', 'val');
-          jest.advanceTimersByTime(redisModels[0].recordKeyspaceHistoryFrequency);
+          await recordKeyspaceHistory(monitor, 3);
 
           await client.set('beep4', 'val');
-          jest.advanceTimersByTime(redisModels[0].recordKeyspaceHistoryFrequency);
+          await recordKeyspaceHistory(monitor, 3);
 
           response = await request(app).get(`/api/v2/keyspaces/histories/${redisModels[0].instanceId}/3?historiesCount=1&keynameFilter=beep`);
         });
@@ -385,9 +406,12 @@ describe('Route Integration Tests', () => {
         });
 
         it('should give the right number of histories based on the historiesCount parameter', () => {
-          expect(response.body.historyCount).toEqual(2);
           expect(response.body.histories).toHaveLength(2);
         });
+
+        it('should return the new historyCount from the redisMonitor process', () => {
+          expect(response.body.historyCount).toEqual(3);
+        })
 
         it('the keycounts should reflect the keynameFilter specified', () => {
           expect(response.body.histories[0].keyCount).toEqual(2);
