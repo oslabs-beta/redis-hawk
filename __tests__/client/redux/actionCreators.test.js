@@ -1,6 +1,6 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import { loadKeyspaceActionCreator } from '../../../client/action-creators/connections';
+import { loadKeyspaceActionCreator, refreshKeyspaceActionCreator} from '../../../client/action-creators/connections';
 import * as actions from '../../../client/actions/actionTypes';
 import fetchMock from 'fetch-mock';
 import expect from 'expect'; // You can use any testing library
@@ -39,21 +39,24 @@ describe('loadKeyspaceActionCreator', () => {
     );
   });
 });
-describe("loadKeyspaceActionCreator", () => {
+describe("refreshKeyspaceActionCreator", () => {
   afterEach(() => {
     fetchMock.restore();
   });
 
-  it("creates UPDATE_KEYSPACE when fetching keyspace has been done", () => {
-    fetchMock.getOnce("/api/v2/keyspaces", {
-      headers: { "content-type": "application/json" },
-    });
+  it("creates REFRESH_KEYSPACE when fetching keyspace has been done", () => {
+    const pageNum = 50;
+    const pageSize = 10;
+    const refreshScan = false
+    fetchMock.getOnce(`/api/v2/keyspaces/2/?pageSize=${pageSize}&pageNum=${pageNum}&refreshScan=${refreshScan}`);
 
     const expectedActions = [
       {
-        type: actions.LOAD_KEYSPACE,
+        type: actions.REFRESH_KEYSPACE,
         payload: {
           keyspace: [{ key: "abigail", value: "yes", type: "string" }],
+          currInstance: 2,
+          currDatabase: 1
         },
       },
     ];
@@ -62,7 +65,7 @@ describe("loadKeyspaceActionCreator", () => {
     return (
       store
         // .dispatch(connections.keyspaceUpdateActionCreator())
-        .dispatch(loadKeyspaceActionCreator(0, 1))
+        .dispatch(refreshKeyspaceActionCreator(0, 1))
         .then(() => {
           // return of async actions
           expect(store.getActions()).toEqual(expectedActions);
