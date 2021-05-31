@@ -1,6 +1,8 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import KeyspaceTable from "./KeyspaceTable.jsx";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import KeyspaceTable from './KeyspaceTable.jsx';
+import * as actions from '../../action-creators/connections';
+import * as keyspaceActions from '../../action-creators/keyspaceConnections';
 
 //withRouter??? -- for props.history -- stretch??
 
@@ -10,8 +12,24 @@ const mapStateToProps = (store) => {
     currDatabase: store.currDatabaseStore.currDatabase,
     keyspace: store.keyspaceStore.keyspace,
     currDisplay: store.currDisplayStore.currDisplay,
+    pageSize: store.dataPageStore.pageSize,
+    pageNum: store.dataPageStore.pageNum,
   };
 };
+const mapDispatchToProps = (dispatch) => ({
+  updatePageSize: (pageSize) =>
+    dispatch(actions.updatePageSizeActionCreator(pageSize)),
+  updatePageNum: (pageNum) =>
+    dispatch(actions.updatePageNumActionCreator(pageNum)),
+  changeKeyspacePage: (instanceId, dbIndex, queryOptions) =>
+    dispatch(
+      keyspaceActions.changeKeyspacePageActionCreator(
+        instanceId,
+        dbIndex,
+        queryOptions
+      )
+    ),
+});
 
 class KeyspaceComponent extends Component {
   constructor(props) {
@@ -23,7 +41,8 @@ class KeyspaceComponent extends Component {
     return (
       <div
         id='keyspaceComponentContainer'
-        className='KeyspaceComponent-Container'>
+        className='KeyspaceComponent-Container'
+      >
         <KeyspaceTable
           currDatabase={this.props.currDatabase}
           keyspace={this.props.keyspace}
@@ -45,4 +64,4 @@ class KeyspaceComponent extends Component {
   }
 }
 
-export default connect(mapStateToProps, null)(KeyspaceComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(KeyspaceComponent);
