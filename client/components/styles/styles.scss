@@ -160,7 +160,6 @@ body {
   font-size: 1.1em;
 }
 
-
 .InstanceNav-Container {
   position: absolute;
   top: 5%;
@@ -241,4 +240,13 @@ body {
 }
 #databaseHolder {
   height: 90%;
+}
+
+.MuiToolbar-root {
+  color: rgb(200, 200, 200);
+  font-family: 'Roboto', sans-serif;
+}
+.MuiDataGrid-main {
+  color: rgb(200, 200, 200);
+  font-family: 'Roboto', sans-serif;
 }
