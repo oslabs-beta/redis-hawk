@@ -10,7 +10,7 @@ const initialState = {
       keyspaces: [
         {
           keyTotal: 1,
-          pageSize: 50,
+          pageSize: 5,
           pageNum: 4,
           data: [
             {
@@ -54,12 +54,13 @@ const keyspaceReducer = (state = initialState, action) => {
       const currInstance = action.payload.currInstance;
       const currDatabase = action.payload.currDatabase;
 
-      keyspace = state.keyspace.slice();
-      keyspace[currInstance - 1].keyspaces[currDatabase] = specificKeyspace;
+      let updateKeyspace = state.keyspace.slice();
+      updateKeyspace[currInstance - 1].keyspaces[currDatabase] =
+        specificKeyspace;
       //do I need to update the database and isntance?
       return {
         ...state,
-        keyspace,
+        keyspace: updateKeyspace,
       };
     }
     case types.CHANGE_KEYSPACE_PAGE: {

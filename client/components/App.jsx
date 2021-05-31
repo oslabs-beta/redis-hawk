@@ -37,7 +37,7 @@ class App extends Component {
   componentDidMount() {
     this.props.loadKeyspace();
     console.log('loaded keyspace');
-    this.props.updateEvents();
+    // this.props.updateEvents();
     this.props.updateInstanceInfo();
   }
 

@@ -25,7 +25,7 @@ import * as types from '../actions/actionTypes';
 //   ];
 // }
 export const loadKeyspaceActionCreator = () => (dispatch) => {
-  fetch('/api/v2/keyspaces')
+  fetch('/api/v2/keyspaces/?pageSize=25')
     .then((res) => res.json())
     .then((response) => {
       console.log('response in loadKeyspaceActionCreator', response);

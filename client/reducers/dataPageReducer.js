@@ -2,7 +2,7 @@
 import * as types from '../actions/actionTypes.js';
 
 const initialState = {
-  pageSize: 50,
+  pageSize: 5,
   pageNum: 1,
 };
 

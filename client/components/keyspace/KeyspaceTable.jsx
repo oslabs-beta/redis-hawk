@@ -63,20 +63,46 @@
 
 import * as React from 'react';
 import { DataGrid } from '@material-ui/data-grid';
-import { useDemoData } from '@material-ui/x-grid-data-generator';
 
-function KeyspaceTable() {
-  const { data } = useDemoData({
-    dataSet: 'Commodity',
-    rowLength: 100,
-    maxColumns: 6,
-  });
+function KeyspaceTable(props) {
+  console.log('props in keyspace table', props);
 
+  const [pageSize, setPageSize] = React.useState(25);
+  const [loading, setLoading] = React.useState(false);
+
+  const handlePageSizeChange = (params) => {
+    console.log('params', params);
+    setPageSize(params.pageSize);
+  };
+
+  const data =
+    props.keyspace[props.currInstance - 1].keyspaces[props.currDatabase].data;
+
+  for (let i = 0; i < data.length; i += 1) {
+    data[i].id = i;
+  }
+
+  console.log('data in keyspace table', data);
   return (
     <div
       style={{ height: 400, width: '100%', backgroundColor: 'rgb(233, 0, 0)' }}
     >
-      <DataGrid autoPageSize pagination {...data} />
+      <DataGrid
+        autoPageSize={false}
+        loading={loading}
+        pagination
+        paginationMode={'server'}
+        rowCount={props.myCount}
+        pageSize={pageSize}
+        rowsPerPageOptions={[5, 10, 25, 50, 100]}
+        onPageSizeChange={handlePageSizeChange}
+        columns={[
+          { field: 'key', width: '25%' },
+          { field: 'value', width: '49%' },
+          { field: 'type', width: '25%' },
+        ]}
+        rows={data}
+      />
     </div>
   );
 }
