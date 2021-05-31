@@ -46,6 +46,7 @@
     "@material-ui/lab": "^4.0.0-alpha.58",
     "@material-ui/x-grid": "^4.0.0-alpha.29",
     "@material-ui/x-grid-data-generator": "^4.0.0-alpha.29",
+    "chart.js": "^3.3.2",
     "express": "^4.17.1",
     "fetch-mock": "^9.11.0",
     "node-fetch": "^2.6.1",
