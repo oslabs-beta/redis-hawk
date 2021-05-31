@@ -24,6 +24,9 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(actions.updateKeyGraphActionCreator(keyGraph)),
   updateCurrDisplay: (filter, category) =>
     dispatch(actions.updateCurrDisplayActionCreator(filter, category)),
+  updatePageNum: (pageNum) => {
+    actions.updatePageActionCreator(pageNum);
+  },
 });
 
 class FilterNav extends Component {
@@ -135,6 +138,8 @@ class FilterNav extends Component {
                 this.props.currInstance,
                 this.props.currDatabase
               );
+              //need to have current graph updated to page 1 -- re render?
+              this.props.updatePageNum(1);
             }}
             id='refreshButton'>
             Refresh
