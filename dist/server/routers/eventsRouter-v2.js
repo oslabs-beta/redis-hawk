@@ -16,4 +16,12 @@ router.get('/:instanceId', monitorsController_1.default.findSingleMonitor, event
 router.get('/:instanceId/:dbIndex', monitorsController_1.default.findSingleMonitor, eventsController_1.default.refreshEventLog, eventsController_1.default.getEventsPages, function (req, res) {
     res.status(200).json(res.locals.events);
 });
+router.get('/totals/:instanceId/:dbIndex', monitorsController_1.default.findSingleMonitor, eventsController_1.default.validateRequestType, function (req, res, next) {
+    if (req.query.timeInterval)
+        eventsController_1.default.getEventsByTimeInterval(req, res, next);
+    else if (req.query.eventTotal)
+        eventsController_1.default.getSingleEventsTotal(req, res, next);
+}, function (req, res) {
+    res.status(200).json(res.locals.eventTotals);
+});
 exports.default = router;

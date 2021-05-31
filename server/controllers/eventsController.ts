@@ -1,8 +1,14 @@
 import { RequestHandler } from 'express';
 import type { EventDetails } from './interfaces';
+import type { NextFunction } from 'express';
+
+import type { EventLog, KeyspaceEventNode } from '../redis-monitors/models/interfaces';
 interface EventsController {
   refreshEventLog: RequestHandler;
-  getEventsPages: RequestHandler
+  getEventsPages: RequestHandler;
+  validateRequestType: RequestHandler;
+  getEventsByTimeInterval: RequestHandler;
+  getSingleEventsTotal: RequestHandler;
 };
 
 const eventsController: EventsController = {
@@ -122,8 +128,146 @@ const eventsController: EventsController = {
     } 
 
     return next();
-  }
+  },
 
+  validateRequestType: (req, res, next): void => {
+  /*
+    Checks if either a timeInterval or eventTotal query parameter is specified.
+    Send a 400 response if not.
+  */
+
+
+
+    if ((req.query.timeInterval && req.query.eventTotal)
+         || (!req.query.timeInterval && !req.query.eventTotal)) {
+  
+      //Invoke error handler since neither is defined or both are definedw
+      return next({
+        log: 'Request did not provide valid timeInterval or eventTotal query parameters',
+        status: 400,
+        message: {err: 'Please make sure to pass either the timeInterval or eventTotal query parameter, but not both'}
+      });
+    }
+
+    return next();
+  },
+
+  getEventsByTimeInterval: (req, res, next): void => {
+  /*
+    For a given keyspace,
+    aggregates event counts by a timeInterval specified via the timeInterval query parameter.
+
+    Constructs the proper response body once aggregation is complete.
+  */
+
+    const dbIndex = +req.params.dbIndex;
+    const eventLog: EventLog = res.locals.monitors[0].keyspaces[dbIndex].eventLog;
+    const timeInterval = +req.query.timeInterval;
+
+    if (req.query.timeInterval && isNaN(timeInterval)) return next({
+      log: 'Client provided an invalid timeInterval query parameter value',
+      status: 400,
+      message: {err: 'Please provide a valid timeInterval value - a positive integer'}
+    });
+
+    const responseData = {
+      eventTotal: eventLog.eventTotal,
+      eventTotals: []
+    }
+
+    let intervalData = {
+      start_time: Date.now() - timeInterval,
+      end_time: Date.now(),
+      eventCount: 0
+    }
+
+    let current: KeyspaceEventNode = eventLog.tail;
+    const keynameFilter: string = req.query.keynameFilter ? req.query.keynameFilter.toString() : '';
+    const eventTypeFilters: string[] = req.query.eventTypes ? req.query.eventTypes.toString().split(',') : [];
+
+    //Traverse event log from tail to head, incrementing the eventCount of an aggregation interval
+    //As long as the event meets filter criteria
+    while (current) {
+
+      //If the event is out of bounds of the current aggregation interval, create a new "preceding" aggregation time interval
+      while (current.timestamp < intervalData.start_time) {
+        responseData.eventTotals.push(intervalData);
+        intervalData = {
+          start_time: intervalData.start_time - timeInterval,
+          end_time: intervalData.start_time,
+          eventCount: 0
+        };
+      }
+
+      if (eventTypeFilters.length === 0) {
+        if (current.key.includes(keynameFilter)) intervalData.eventCount += 1;
+      } else if (current.key.includes(keynameFilter) && eventTypeFilters.includes(current.event)) {
+        intervalData.eventCount += 1;
+      }
+
+      current = current.previous;
+    }
+
+    responseData.eventTotals.push(intervalData);
+    res.locals.eventTotals = responseData;
+
+    return next();
+
+  },
+
+  getSingleEventsTotal: (req, res, next): void => {
+  /*
+    Determines the difference between the total number of events tracked by the EventLog
+    for a given keyspace and the number of events the client is aware of.
+
+    Then, constructs a proper response body.
+  */
+
+    const dbIndex = +req.params.dbIndex;
+    const eventLog: EventLog = res.locals.monitors[0].keyspaces[dbIndex].eventLog;
+
+    const eventTotalParam = +req.query.eventTotal;
+
+    //Validate the eventTotal query parameter
+    if (eventTotalParam > eventLog.eventTotal
+      || (eventTotalParam && isNaN(eventTotalParam))) {
+        return next({
+          log: 'Client provided an invalid eventTotal query parameter value',
+          status: 400,
+          message: {err: 'Please provide an valid eventTotal query parameter; utilize a value obtained from a previous response'}
+        })
+      }
+
+    //Traverse backwards through the event log until we've reached the event the client is aware of
+    //Only aggregate event counts for events that meet filter criteria
+    let eventCountToTraverse = eventLog.eventTotal - eventTotalParam;
+    let eventCount = 0;
+    let current: KeyspaceEventNode = eventLog.tail;
+    const keynameFilter: string = req.query.keynameFilter ? req.query.keynameFilter.toString() : '';
+    const eventTypeFilters: string[] = req.query.eventTypes ? req.query.eventTypes.toString().split(',') : [];
+
+    while (eventCountToTraverse > 0) {
+
+      if (eventTypeFilters.length === 0) {
+        if (current.key.includes(keynameFilter)) eventCount += 1;
+      } else if (current.key.includes(keynameFilter) && eventTypeFilters.includes(current.event)) {
+        eventCount += 1;
+      }
+      
+      current = current.previous;
+      eventCountToTraverse -= 1
+    }
+
+    res.locals.eventTotals = {
+      eventTotal: eventLog.eventTotal,
+      eventTotals: [{
+        end_time: Date.now(),
+        eventCount: eventCount
+      }]
+    }
+
+    return next();
+  }
 };
 
 export default eventsController;
