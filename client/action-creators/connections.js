@@ -13,7 +13,7 @@ export const updateEventsActionCreator =
       .then((res) => {
         let events;
         if (!dbIndex) {
-          console.log('events resopnse in updateEventsActionCreator', res);
+          // console.log('events resopnse in updateEventsActionCreator', res);
           events = res.data;
         } else {
           events = res.data[0].keyspaces[0];
@@ -63,7 +63,7 @@ export const switchDatabaseActionCreator = (dbIndex) => (
 //SWITCH INSTANCE action creator
 
 export const switchInstanceActionCreator = (instanceId) => (
-  console.log('switched to database', instanceId),
+  console.log('switched to instance', instanceId),
   {
     type: types.SWITCH_INSTANCE,
     payload: instanceId,
@@ -102,4 +102,14 @@ export const updatePageActionCreator = (newPage) => ({
 export const updateCurrDisplayActionCreator = (filter, category) => ({
   type: types.UPDATE_CURRDISPLAY,
   payload: { filter: filter, category: category },
+});
+
+export const updatePageNumActionCreator = (pageNum) => ({
+  type: types.UPDATE_PAGENUM,
+  payload: pageNum,
+});
+
+export const updatePageSizeActionCreator = (pageSize) => ({
+  type: types.UPDATE_PAGESIZE,
+  payload: pageSize,
 });
