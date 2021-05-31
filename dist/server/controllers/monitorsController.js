@@ -35,60 +35,32 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.recordKeyspaceHistory = exports.promisifyClientMethods = void 0;
-var util_1 = require("util");
-var promisifyClientMethods = function (client) {
-    client.config = util_1.promisify(client.config).bind(client);
-    client.flushdb = util_1.promisify(client.flushdb).bind(client);
-    client.flushall = util_1.promisify(client.flushall).bind(client);
-    client.select = util_1.promisify(client.select).bind(client);
-    client.scan = util_1.promisify(client.scan).bind(client);
-    client.type = util_1.promisify(client.type).bind(client);
-    client.set = util_1.promisify(client.set).bind(client);
-    client.get = util_1.promisify(client.get).bind(client);
-    client.mget = util_1.promisify(client.mget).bind(client);
-    client.lrange = util_1.promisify(client.lrange).bind(client);
-    client.smembers = util_1.promisify(client.smembers).bind(client);
-    client.zrange = util_1.promisify(client.zrange).bind(client);
-    client.hgetall = util_1.promisify(client.hgetall).bind(client);
-    return client;
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.promisifyClientMethods = promisifyClientMethods;
-var recordKeyspaceHistory = function (monitor, dbIndex) { return __awaiter(void 0, void 0, void 0, function () {
-    var keyDetails, cursor, keys;
-    var _a, _b;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
-            case 0:
-                keyDetails = [];
-                cursor = '0';
-                keys = [];
-                return [4, monitor.redisClient.select(dbIndex)];
-            case 1:
-                _c.sent();
-                return [4, monitor.redisClient.scan(cursor)];
-            case 2:
-                _a = _c.sent(), cursor = _a[0], keys = _a[1];
-                _c.label = 3;
-            case 3:
-                keys.forEach(function (key) {
-                    keyDetails.push({
-                        key: key,
-                        memoryUsage: 1
-                    });
-                });
-                return [4, monitor.redisClient.scan(cursor)];
-            case 4:
-                _b = _c.sent(), cursor = _b[0], keys = _b[1];
-                _c.label = 5;
-            case 5:
-                if (cursor !== '0') return [3, 3];
-                _c.label = 6;
-            case 6:
-                monitor.keyspaces[dbIndex].keyspaceHistories.add(keyDetails);
-                return [2];
-        }
-    });
-}); };
-exports.recordKeyspaceHistory = recordKeyspaceHistory;
+Object.defineProperty(exports, "__esModule", { value: true });
+var redis_monitors_1 = __importDefault(require("../redis-monitors/redis-monitors"));
+var monitorsController = {
+    findAllMonitors: function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            res.locals.monitors = redis_monitors_1.default;
+            return [2, next()];
+        });
+    }); },
+    findSingleMonitor: function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+        var _i, redisMonitors_1, monitor;
+        return __generator(this, function (_a) {
+            for (_i = 0, redisMonitors_1 = redis_monitors_1.default; _i < redisMonitors_1.length; _i++) {
+                monitor = redisMonitors_1[_i];
+                if (monitor.instanceId === +req.params.instanceId) {
+                    res.locals.monitors = [monitor];
+                }
+            }
+            if (!res.locals.monitors) {
+                return [2, next({ log: 'User provided invalid instanceId', status: 400, message: { err: 'Please provide a valid instanceId' } })];
+            }
+            return [2, next()];
+        });
+    }); },
+};
+exports.default = monitorsController;

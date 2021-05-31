@@ -9,15 +9,17 @@ import pageReducer from './pageReducer';
 import currDisplayReducer from './currentDisplayReducer';
 import instanceReducer from './instanceReducer';
 import dataPageReducer from './dataPageReducer';
+import totalEventsReducer from './totalEventsReducer';
+
 
 export default combineReducers({
   keyspaceStore: keyspaceReducer,
   eventsStore: eventsReducer,
+  totalEventsStore: totalEventsReducer,
   keyGraphStore: graphsReducer,
   currDatabaseStore: databaseReducer,
   currInstanceStore: instanceReducer,
   instanceInfoStore: instanceInfoReducer,
   currPageStore: pageReducer,
   currDisplayStore: currDisplayReducer,
-  dataPageStore: dataPageReducer,
 });

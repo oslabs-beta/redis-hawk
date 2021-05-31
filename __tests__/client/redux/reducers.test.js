@@ -5,6 +5,7 @@ import keygraphSubject from "../../../client/reducers/graphsReducer";
 import instanceInfoSubject from "../../../client/reducers/instanceInfoReducer";
 import currDisplaySubject from "../../../client/reducers/currentDisplayReducer";
 import pageSubject from "../../../client/reducers/pageReducer";
+import dataPageSubject from "../../../client/reducers/dataPageReducer";
 import instanceSubject from "../../../client/reducers/instanceReducer";
 // const keyspaceSubject = require('../../../client/reducers/keyspaceReducer.js');
 
@@ -164,8 +165,27 @@ describe("events reducer", () => {
 
   beforeEach(() => {
     state = {
+      currInstance: 1,
       currDatabase: 0,
-      events: [[]],
+      events: [
+        {
+          instanceId: 1,
+          keyspaces: [
+            {
+              eventTotal: 0,
+              pageSize: 50,
+              pageNum: 4,
+              data: [
+                {
+                  key: "loading",
+                  event: "loading",
+                  timestamp: "loading",
+                },
+              ],
+            },
+          ],
+        },
+      ],
     };
   });
   describe("default state", () => {
@@ -181,20 +201,91 @@ describe("events reducer", () => {
     });
   });
 
-  describe("UPDATE_EVENTS", () => {
+  describe("LOAD_ALL_EVENTS", () => {
     const action = {
-      type: "UPDATE_EVENTS",
+      type: "LOAD_ALL_EVENTS",
       payload: {
-        events: [{ key: "abigail", event: "SET", timestamp: "8:30" }],
+        events: [
+          {
+            instanceId: 1,
+            keyspaces: [
+              {
+                eventTotal: 0,
+                pageSize: 1,
+                pageNum: 1,
+                data: [
+                  {
+                    key: "Arthur",
+                    event: "Set",
+                    timestamp: "07:00",
+                  },
+                ],
+              },
+            ],
+          },
+        ],
         currDatabase: 0,
       },
     };
-    it("updates the events", () => {
+    it("loads all events from server", () => {
       const { events } = eventSubject(state, action);
-      expect(events[state.currDatabase][0]).toEqual({
-        key: "abigail",
-        event: "SET",
-        timestamp: "8:30",
+      expect(
+        events[state.currInstance - 1].keyspaces[state.currDatabase]
+      ).toEqual({
+        key: "Arthur",
+        event: "Set",
+        timestamp: "07:00",
+      });
+    });
+    it("returns a state object not strictly equal to the original", () => {
+      const eventState = eventSubject(state, action);
+      // expect(eventState).toEqual(state)
+      expect(eventState).not.toBe(state);
+    });
+    it("returns an events value not strictly equal to the original", () => {
+      const { events } = eventSubject(state, action);
+      expect(events).not.toBe(state.events);
+    });
+  });
+  describe("REFRESH_EVENTS", () => {
+    const action = {
+      type: "REFRESH_EVENTS",
+      payload: {
+        events: [
+          {
+            instanceId: 1,
+            keyspaces: [
+              {
+                eventTotal: 2,
+                pageSize: 1,
+                pageNum: 2,
+                data: [
+                  {
+                    key: "Arthur",
+                    event: "Set",
+                    timestamp: "07:00",
+                  },
+                  {
+                    key: "Abby",
+                    event: "Set",
+                    timestamp: "07:10",
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        currDatabase: 0,
+      },
+    };
+    it("returns specific page of events", () => {
+      const { events } = eventSubject(state, action);
+      expect(
+        events[state.currInstance - 1].keyspaces[state.currDatabase]
+      ).toEqual({
+        key: "Arthur",
+        event: "Set",
+        timestamp: "07:00",
       });
     });
     it("returns a state object not strictly equal to the original", () => {
@@ -329,13 +420,15 @@ describe("updateInstanceInfo", () => {
 
     it("updates instance info", () => {
       const { instanceInfo } = instanceInfoSubject(state, action);
-      expect(instanceInfo).toEqual([{
-        instanceId: 3,
-        databases: 16,
-        host: "127.0.0.1",
-        port: 6379,
-        recordKeyspaceHistoryFrequency: 100,
-      }]);
+      expect(instanceInfo).toEqual([
+        {
+          instanceId: 3,
+          databases: 16,
+          host: "127.0.0.1",
+          port: 6379,
+          recordKeyspaceHistoryFrequency: 100,
+        },
+      ]);
     });
 
     it("returns a state object not strictly equal to the original", () => {
@@ -436,6 +529,61 @@ describe("update current page", () => {
     it("returns a state object not strictly equal to the original", () => {
       const resultState = pageSubject(state, action);
       expect(resultState).not.toBe(state.currPage);
+    });
+  });
+});
+
+describe("update page size and page num", () => {
+  let state;
+  beforeEach(() => {
+    state = {
+      pageSize: 50,
+      pageNum: 1,
+    };
+  });
+
+  describe("default state for page size and number of pages", () => {
+    it("should return a default state when given an undefined input", () => {
+      expect(dataPageSubject(undefined, { type: undefined })).toEqual(state);
+    });
+  });
+  describe("unrecognized action types", () => {
+    it("should return the original state without any duplication", () => {
+      const action = { type: "awefh;a" };
+      expect(dataPageSubject(state, action)).toBe(state);
+    });
+  });
+
+  describe("UPDATE_PAGESIZE", () => {
+    const action = {
+      type: "UPDATE_PAGESIZE",
+      payload: 10,
+    };
+
+    it("updates the current display", () => {
+      const { pageSize } = dataPageSubject(state, action);
+      expect(pageSize).toEqual(10);
+    });
+
+    it("returns a state object not strictly equal to the original", () => {
+      const resultState = dataPageSubject(state, action);
+      expect(resultState).not.toBe(state.pageSize);
+    });
+  });
+  describe("UPDATE_PAGENUM", () => {
+    const action = {
+      type: "UPDATE_PAGENUM",
+      payload: 2,
+    };
+
+    it("updates the current display", () => {
+      const { pageNum } = dataPageSubject(state, action);
+      expect(pageNum).toEqual(2);
+    });
+
+    it("returns a state object not strictly equal to the original", () => {
+      const resultState = dataPageSubject(state, action);
+      expect(resultState).not.toBe(state.pageSize);
     });
   });
 });

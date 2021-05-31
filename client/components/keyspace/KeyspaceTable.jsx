@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 import regeneratorRuntime from 'regenerator-runtime';
@@ -68,6 +69,7 @@ function KeyspaceTable(props) {
     console.log(filterQuery);
   };
 
+
   const data =
     props.keyspace[props.currInstance - 1].keyspaces[props.currDatabase].data;
 
@@ -77,6 +79,7 @@ function KeyspaceTable(props) {
 
   // console.log('data in keyspace table', data);
   return (
+
     <div style={{ height: 400, width: '100%' }}>
       <DataGrid
         autoPageSize={false}
@@ -101,5 +104,6 @@ function KeyspaceTable(props) {
     </div>
   );
 }
+
 
 export default KeyspaceTable;
