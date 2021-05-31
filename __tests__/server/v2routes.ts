@@ -65,7 +65,7 @@ describe('Route Integration Tests', () => {
       .expect(404);
   })
 
-  describe('/api/connections', () => {
+  xdescribe('/api/connections', () => {
 
     let response: request.Response;
     beforeAll(async () => {
@@ -102,7 +102,7 @@ describe('Route Integration Tests', () => {
     });
   })
 
-  describe('/api/v2/keyspaces', () => {
+  xdescribe('/api/v2/keyspaces', () => {
 
     //Perform Redis commands to be captured by the route
     beforeAll(async () => {
@@ -252,7 +252,7 @@ describe('Route Integration Tests', () => {
   });
 
 
-  describe('/api/v2/keyspaces/histories', () => {
+  xdescribe('/api/v2/keyspaces/histories', () => {
 
     afterAll(() => {
       for (const monitor of redisMonitors) {
@@ -422,7 +422,7 @@ describe('Route Integration Tests', () => {
 
   })
 
-  describe('/api/v2/events', () => {
+  xdescribe('/api/v2/events', () => {
 
     describe('GET "/"', () => {
 
@@ -443,6 +443,18 @@ describe('Route Integration Tests', () => {
         }
 
         response = await request(app).get('/api/v2/events');
+      });
+
+      afterAll(async () => {
+        for (const model of redisModels) {
+          await model.client.flushall();
+        }
+
+        for (const monitor of redisMonitors) {
+          for (const keyspace of monitor.keyspaces) {
+            keyspace.eventLog.reset();
+          }
+        }
       });
 
       it('should return a 200 status code', () => {
@@ -584,6 +596,18 @@ describe('Route Integration Tests', () => {
         response = await request(app).get('/api/v2/events/1/4?pageSize=3');
       });
 
+      afterAll(async () => {
+        for (const model of redisModels) {
+          await model.client.flushall();
+        }
+
+        for (const monitor of redisMonitors) {
+          for (const keyspace of monitor.keyspaces) {
+            keyspace.eventLog.reset();
+          }
+        }
+      });
+
       it('should respond with a 200 status code', () => {
         expect(response.status).toEqual(200);
       });
@@ -675,6 +699,170 @@ describe('Route Integration Tests', () => {
     });
   });
 
+  describe('/api/v2/events/totals', () => {
+
+    describe('GET "/:instanceId/:dbIndex"', () => {
+
+      it('should return a 400 status code if no timeInterval or eventTotal parameter is specified', async () => {
+        const client = redisModels[0].client;
+        await client.select(0);
+        await client.set('oops', 'i did it again')
+        const response = await request(app).get(`/api/v2/events/totals/${redisModels[0].instanceId}/0`);
+        expect(response.status).toEqual(400);
+      })
+
+      describe('with timeInterval parameter', () => {
+
+        let response;
+        beforeAll(async () => {
+
+          const timeInterval = 200;
+
+          const client = redisModels[0].client;
+          await client.select(4);
+
+          //Emit some events immediately to be captured and manually pass time to allow events to occur
+          await client.set('key1', 'val');
+          await client.lpush('key2', 'el2', 'el1');
+          await client.del('key1');
+          jest.setTimeout(timeInterval);
+
+          //emit a second set events
+          await client.set('key1', 'newval');
+          await client.rpush('key3', 'el1', 'el2');
+          jest.setTimeout(timeInterval);
+
+          //Emit a third set of events
+          await client.del('key1');
+          await client.del('key3');
+          await client.set('key4', 'hellowurld');
+          await client.set('wow', 'money');
+          jest.setTimeout(timeInterval); //allow time to pass for above events to occur
+
+          //Send a response to capture events
+          response = await request(app).get(`/api/v2/events/totals/${redisModels[0].instanceId}/4?timeInterval=${timeInterval * 1.1}`);
+        });
+
+        afterAll(async () => {
+          await redisModels[0].client.flushall();
+
+          for (const monitor of redisMonitors) {
+            monitor.keyspaces[4].eventLog.reset();
+          }
+        });
+
+        it('should respond with a 200 status code and JSON', () => {
+          expect(response.stauts).toEqual(200);
+          expect(response.headers['content-type']).toEqual(expect.stringContaining('json'));
+        });
+
+        it('should respond with the correct eventTotal', () => {
+          expect(response.body.eventTotal).toEqual(8);
+        });
+
+        it('should respond with the correct number of eventTotals intervals', () => {
+          expect(response.body.eventTotals).toHaveLength(3);
+        })
+
+        it('should order each eventTotal from most recent to least recent', () => {
+          const totals = response.body.eventTotals;
+          for (let i = 0; i < 2; i++) {
+            expect(totals[i].start_time).toBeGreaterThanOrEqual(totals[i + 1].start_time);
+            expect(totals[i].end_time).toBeGreaterThanOrEqual(totals[i + 1].end_time);
+          }
+        })
+
+        it('should capture the correct eventCount for each interval', () => {
+          const totals = response.body.eventTotals;
+
+          expect(totals[0].eventCount).toEqual(4);
+          expect(totals[1].eventCount).toEqual(2);
+          expect(totals[2].eventCount).toEqual(3);
+        });
+      });
+
+      describe('with eventTotal parameter', () => {
+
+
+        let response;
+        beforeAll(async () => {
+
+          const client = redisModels[0].client;
+          await client.select(2);
+          for (let i = 0; i < 320; i++) {
+            await client.set(`key-${i}`, `val-${i}`);
+          }
+
+          response = await request(app).get(`/api/v2/events/totals/${redisModels[0].instanceId}/2?eventTotal=113`);
+        });
+
+        afterAll(async () => {
+          await redisModels[0].client.flushall();
+
+          for (const monitor of redisMonitors) {
+            monitor.keyspaces[2].eventLog.reset();
+          }
+        })
+
+        it('should provide the correct eventTotal metadata', () => {
+          expect(response.body.eventTotal).toEqual(320);
+        });
+
+        it('should provide a single element in the eventTotals array', () => {
+          expect(response.body.eventTotals).toHaveLength(1);
+        });
+
+        it('should provide the correct eventCount in the eventTotals array element', () => {
+          expect(response.body.eventCount).toEqual(320 - 113);
+        });
+      });
+
+      describe('handling filtering query parameters', () => {
+
+        
+        beforeAll(async () => {
+          const client = redisModels[0].client;
+          await client.select(6);
+
+          for (let i = 0; i < 30; i++) {
+            await client.set(`wow-${i}`, 'coolbean');
+            await client.lpush(`wow-${i}`, 'el2', 'el1')
+            await client.lpush(`erm-${i + 30}`, 'el2', 'el1');
+            await client.del(`wow-${i}`);
+          }
+        });
+
+        afterAll(async () => {
+          await redisModels[0].client.flushall();
+
+          for (const monitor of redisMonitors) {
+            monitor.keyspaces[6].eventLog.reset();
+          }
+        })
+
+        it('should not affect the eventTotal metadata', async () => {
+          const response = await request(app).get(`/api/v2/events/totals/${redisModels[0].instanceId}/6?timeInterval=10000&eventTypes=set`);
+          expect(response.body.eventTotal).toEqual(120);
+        });
+
+        it('should filter for event types properly', async () => {
+          const response = await request(app).get(`/api/v2/events/totals/${redisModels[0].instanceId}/6?timeInterval=10000&eventTypes=lpush,del`);
+          expect(response.body.eventTotals[0].eventCount).toEqual(90);
+        });
+
+        it('should filter for keynameFilters properly', async () => {
+          const response = await request(app).get(`/api/v2/events/totals/${redisModels[0].instanceId}/6?timeInterval=10000&keynameFilter=erm`);
+          expect(response.body.eventTotals[0].eventCount).toEqual(30);
+        });
+
+        it('should filter for both event types and keynames simultaneously, properly', async () => {
+          const response = await request(app).get(`/api/v2/events/totals/${redisModels[0].instanceId}/6?timeInterval=10000&keynameFilter=wow&eventTypes=lpush,del`);
+          expect(response.body.eventTotals[0].eventCount).toEqual(60);
+        });
+      });
+    });
+  });
+
 });
 
 const promisifyRedisClient = (redisClient: redis.RedisClient): redis.RedisClient => {
@@ -687,6 +875,7 @@ const promisifyRedisClient = (redisClient: redis.RedisClient): redis.RedisClient
   redisClient.get = promisify(redisClient.get).bind(redisClient);
   redisClient.del = promisify(redisClient.del).bind(redisClient);
   redisClient.lpush = promisify(redisClient.lpush).bind(redisClient);
+  redisClient.rpush = promisify(redisClient.rpush).bind(redisClient);
   redisClient.lrange = promisify(redisClient.lrange).bind(redisClient);
 
   return redisClient;
