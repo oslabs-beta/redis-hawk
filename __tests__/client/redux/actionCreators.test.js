@@ -1,6 +1,6 @@
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import { updateKeyspaceActionCreator } from '../../../client/action-creators/connections';
+import { loadKeyspaceActionCreator } from '../../../client/action-creators/connections';
 import * as actions from '../../../client/actions/actionTypes';
 import fetchMock from 'fetch-mock';
 import expect from 'expect'; // You can use any testing library
@@ -8,22 +8,21 @@ import expect from 'expect'; // You can use any testing library
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-describe('updateKeyspaceActionCreator', () => {
+describe('loadKeyspaceActionCreator', () => {
   afterEach(() => {
     fetchMock.restore();
   });
 
   it('creates UPDATE_KEYSPACE when fetching keyspace has been done', () => {
-    fetchMock.getOnce('/api/keyspaces/0/1', {
+    fetchMock.getOnce('/api/v2/keyspaces', {
       headers: { 'content-type': 'application/json' },
     });
 
     const expectedActions = [
       {
-        type: actions.UPDATE_KEYSPACE,
+        type: actions.LOAD_KEYSPACE,
         payload: {
           keyspace: [{ key: 'abigail', value: 'yes', type: 'string' }],
-          dbIndex: 0,
         },
       },
     ];
@@ -32,7 +31,38 @@ describe('updateKeyspaceActionCreator', () => {
     return (
       store
         // .dispatch(connections.keyspaceUpdateActionCreator())
-        .dispatch(updateKeyspaceActionCreator(0, 1))
+        .dispatch(loadKeyspaceActionCreator(0, 1))
+        .then(() => {
+          // return of async actions
+          expect(store.getActions()).toEqual(expectedActions);
+        })
+    );
+  });
+});
+describe("loadKeyspaceActionCreator", () => {
+  afterEach(() => {
+    fetchMock.restore();
+  });
+
+  it("creates UPDATE_KEYSPACE when fetching keyspace has been done", () => {
+    fetchMock.getOnce("/api/v2/keyspaces", {
+      headers: { "content-type": "application/json" },
+    });
+
+    const expectedActions = [
+      {
+        type: actions.LOAD_KEYSPACE,
+        payload: {
+          keyspace: [{ key: "abigail", value: "yes", type: "string" }],
+        },
+      },
+    ];
+    const store = mockStore({ keyspace: [[]] });
+
+    return (
+      store
+        // .dispatch(connections.keyspaceUpdateActionCreator())
+        .dispatch(loadKeyspaceActionCreator(0, 1))
         .then(() => {
           // return of async actions
           expect(store.getActions()).toEqual(expectedActions);
