@@ -1,56 +1,4 @@
-import * as types from "../actions/actionTypes";
-
-export const updateKeyspaceActionCreator =
-  (instanceId, dbIndex) => (dispatch) => {
-    let url;
-    if (instanceId && dbIndex) {
-      url = `/api/keyspaces/${instanceId}/${dbIndex}`;
-    } else {
-      url = "/api/keyspaces";
-    }
-    fetch(url)
-      .then((res) => res.json())
-      .then((response) => {
-        // console.log('full keyspace data', response.data[0]);
-        let keyspace;
-        if (!dbIndex && !instanceId) {
-          //this will grab all of our databases on the initial
-          keyspace = response.data;
-          dispatch({
-            type: types.UPDATE_KEYSPACE,
-            //is this the proper syntax to add dbIndex??
-            payload: {
-              keyspace: keyspace,
-              // dbIndex: dbIndex,
-              // instanceId: instanceId,
-            },
-          });
-          // } else {
-        }
-        //this we want if our url specifies a specific database
-        else {
-          console.log("response in update keyspace actionc creator", response);
-          keyspace = response.data[instanceId - 1].keyspaces[dbIndex];
-          dispatch({
-            type: types.UPDATE_KEYSPACE,
-            //is this the proper syntax to add dbIndex??
-            payload: {
-              keyspace: keyspace,
-              // [
-              //   {
-              //     keyspaces: keyspace,
-              //   },
-              // ],
-              dbIndex: dbIndex,
-              instanceId: instanceId,
-            },
-          });
-        }
-      })
-      .catch((err) => {
-        console.log("error in updateKeyspaceActionCreator: ", err);
-      });
-  };
+import * as types from '../actions/actionTypes';
 
 export const updateEventsActionCreator =
   (instanceId, dbIndex, currIndex) => (dispatch) => {
@@ -58,14 +6,14 @@ export const updateEventsActionCreator =
     if (instanceId && dbIndex && currIndex) {
       url = `/api/events/${instanceId}/${dbIndex}?eventTotal=${currIndex}`;
     } else {
-      url = "/api/events";
+      url = '/api/events';
     }
     fetch(url)
       .then((res) => res.json())
       .then((res) => {
         let events;
         if (!dbIndex) {
-          console.log("events resopnse in updateEventsActionCreator", res);
+          // console.log('events resopnse in updateEventsActionCreator', res);
           events = res.data;
         } else {
           events = res.data[0].keyspaces[0];
@@ -82,7 +30,7 @@ export const updateEventsActionCreator =
         // }
       })
       .catch((err) => {
-        console.log("error in updateEventsActionCreator: ", err);
+        console.log('error in updateEventsActionCreator: ', err);
       });
   };
 
@@ -99,13 +47,13 @@ export const updateKeyGraphActionCreator =
         });
       })
       .catch((err) => {
-        console.log("error in keyspaceUpdateActionCreator: ", err);
+        console.log('error in keyspaceUpdateActionCreator: ', err);
       });
   };
 
 //SWITCH DATABASE
 export const switchDatabaseActionCreator = (dbIndex) => (
-  console.log("switched to database", dbIndex),
+  console.log('switched to database', dbIndex),
   {
     type: types.SWITCH_DATABASE,
     payload: dbIndex,
@@ -115,7 +63,7 @@ export const switchDatabaseActionCreator = (dbIndex) => (
 //SWITCH INSTANCE action creator
 
 export const switchInstanceActionCreator = (instanceId) => (
-  console.log("switched to database", instanceId),
+  console.log('switched to instance', instanceId),
   {
     type: types.SWITCH_INSTANCE,
     payload: instanceId,
@@ -129,7 +77,7 @@ export const switchInstanceActionCreator = (instanceId) => (
 // port: 6379
 
 export const updateInstanceInfoActionCreator = () => (dispatch) => {
-  fetch("/api/connections")
+  fetch('/api/connections')
     .then((res) => res.json())
     .then((data) => {
       //for stretch features, there may be multiple instances here
@@ -140,7 +88,7 @@ export const updateInstanceInfoActionCreator = () => (dispatch) => {
     })
     .catch((err) => {
       console.log(
-        "error fetching instanceinfo in updateDBInfoActionCreator:",
+        'error fetching instanceinfo in updateDBInfoActionCreator:',
         err
       );
     });
@@ -154,4 +102,14 @@ export const updatePageActionCreator = (newPage) => ({
 export const updateCurrDisplayActionCreator = (filter, category) => ({
   type: types.UPDATE_CURRDISPLAY,
   payload: { filter: filter, category: category },
+});
+
+export const updatePageNumActionCreator = (pageNum) => ({
+  type: types.UPDATE_PAGENUM,
+  payload: pageNum,
+});
+
+export const updatePageSizeActionCreator = (pageSize) => ({
+  type: types.UPDATE_PAGESIZE,
+  payload: pageSize,
 });

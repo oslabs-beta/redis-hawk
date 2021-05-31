@@ -8,6 +8,7 @@ import instanceInfoReducer from './instanceInfoReducer';
 import pageReducer from './pageReducer';
 import currDisplayReducer from './currentDisplayReducer';
 import instanceReducer from './instanceReducer';
+import dataPageReducer from './dataPageReducer';
 
 export default combineReducers({
   keyspaceStore: keyspaceReducer,
@@ -18,4 +19,5 @@ export default combineReducers({
   instanceInfoStore: instanceInfoReducer,
   currPageStore: pageReducer,
   currDisplayStore: currDisplayReducer,
+  dataPageStore: dataPageReducer,
 });
