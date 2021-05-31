@@ -58,7 +58,7 @@ export const refreshKeyspaceActionCreator =
     )
       .then((res) => res.json())
       .then((response) => {
-        // response should be 
+        // response should be
         console.log("response in refreshEventsActionCreator", response);
         let refreshEvents = response;
         dispatch({
@@ -101,7 +101,7 @@ export const changeEventsPageActionCreator =
       URI += `&refreshData=${queryParams.refreshData}`;
 
     fetch(URI)
-      .then((res) => res.json)
+      .then((res) => res.json())
       .then((response) => {
         console.log("response in changeEventsPageActionCreator", response);
         let nextPageEvents = response;
@@ -116,24 +116,27 @@ export const changeEventsPageActionCreator =
       });
   };
 
-  export const getEventTotalsActionCreator = (instanceId, dbIndex, queryParams) => (dispatch) => {
+export const getEventTotalsActionCreator =
+  (instanceId, dbIndex, queryParams) => (dispatch) => {
     let URI = `api/v2/events/${instanceId}/${dbIndex}/?`;
-    if (queryParams.eventTotal){
-      if (queryParams.eventTypes) URI += `eventTotal=${queryParams.eventTotal}/&${queryParams.eventTypes}`
-      if (queryParams.keynameFilters) URI += `eventTotal=${queryParams.eventTotal}/&keynameFilters=${queryParams.keynameFilters}`
+    if (queryParams.eventTotal) {
+      if (queryParams.eventTypes)
+        URI += `eventTotal=${queryParams.eventTotal}/&${queryParams.eventTypes}`;
+      if (queryParams.keynameFilter)
+        URI += `eventTotal=${queryParams.eventTotal}/&keynameFilter=${queryParams.keynameFilter}`;
       else {
         URI += `eventTotal=${queryParms.eventTotal}`;
       }
     }
-     if (queryParams.timeInterval) {
-       if (queryParams.eventTypes)
-         URI += `timeInterval=${queryParams.timeInterval}/&${queryParams.eventTypes}`;
-       if (queryParams.keynameFilters)
-         URI += `timeInterval=${queryParams.timeInterval}/&keynameFilters=${queryParams.keynameFilters}`;
-       else {
-         URI += `timeInterval=${queryParms.timeInterval}`;
-       }
-     }
+    if (queryParams.timeInterval) {
+      if (queryParams.eventTypes)
+        URI += `timeInterval=${queryParams.timeInterval}/&${queryParams.eventTypes}`;
+      if (queryParams.keynameFilter)
+        URI += `timeInterval=${queryParams.timeInterval}/&keynameFilter=${queryParams.keynameFilter}`;
+      else {
+        URI += `timeInterval=${queryParms.timeInterval}`;
+      }
+    }
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {
@@ -143,6 +146,8 @@ export const changeEventsPageActionCreator =
           type: types.LOAD_ALL_EVENTS,
           payload: {
             totalEvents: allEvents,
+            currInstance: instanceId,
+            currDatabase: dbIndex,
           },
         });
       });
