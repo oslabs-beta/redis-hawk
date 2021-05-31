@@ -35,34 +35,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var redis_monitors_1 = __importDefault(require("../redis-monitors/redis-monitors"));
 var utils_1 = require("./utils");
 var keyspacesController = {
-    findAllMonitors: function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            res.locals.monitors = redis_monitors_1.default;
-            return [2, next()];
-        });
-    }); },
-    findSingleMonitor: function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-        var _i, redisMonitors_1, monitor;
-        return __generator(this, function (_a) {
-            for (_i = 0, redisMonitors_1 = redis_monitors_1.default; _i < redisMonitors_1.length; _i++) {
-                monitor = redisMonitors_1[_i];
-                if (monitor.instanceId === +req.params.instanceId) {
-                    res.locals.monitors = [monitor];
-                }
-            }
-            if (!res.locals.monitors) {
-                return [2, next({ log: 'User provided invalid instanceId', status: 400, message: { err: 'Please provide a valid instanceId' } })];
-            }
-            return [2, next()];
-        });
-    }); },
     getKeyspacesForInstance: function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
         var keyspacesResponse, dbIndex, keyspaceData, _i, _a, monitor, keyspaces, idx, _b, _c, keyspace, keyspaceData;
         return __generator(this, function (_d) {
@@ -234,6 +209,43 @@ var keyspacesController = {
             }
             res.locals.keyspaces = keyspacesResponse;
         }
+        return next();
+    },
+    getKeyspaceHistories: function (req, res, next) {
+        var dbIndex = +req.params.dbIndex;
+        var historiesLog = res.locals.monitors[0].keyspaces[dbIndex].keyspaceHistories;
+        var requestHistoryCount = +req.query.historiesCount;
+        if (requestHistoryCount > historiesLog.historiesCount
+            || (req.params.historyCount && isNaN(requestHistoryCount))) {
+            return next({
+                log: 'Request provided an incorrect historyCount parameter',
+                status: 400,
+                message: { err: 'historyCount is invalid - please ensure it is a number and a valid count received from a previous response' }
+            });
+        }
+        var responseData = {
+            historyCount: historiesLog.historiesCount,
+            histories: []
+        };
+        var count = requestHistoryCount ? historiesLog.historiesCount - requestHistoryCount : historiesLog.historiesCount;
+        var current = historiesLog.tail;
+        var keynameFilter = req.query.keynameFilter;
+        while (count > 0) {
+            var filteredKeys = keynameFilter ? current.keys.filter(function (el) {
+                return el.key.includes(keynameFilter.toString());
+            }) : current.keys;
+            var totalMemoryUsage = filteredKeys.reduce(function (acc, el) {
+                return acc + el.memoryUsage;
+            }, 0);
+            responseData.histories.push({
+                timestamp: current.timestamp,
+                keyCount: filteredKeys.length,
+                memoryUsage: totalMemoryUsage
+            });
+            current = current.previous;
+            count -= 1;
+        }
+        res.locals.histories = responseData;
         return next();
     }
 };

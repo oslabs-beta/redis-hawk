@@ -1,8 +1,7 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import SearchFilter from './SearchFilter.jsx';
-import * as actions from '../../action-creators/connections';
-import * as keyspaceActions from '../../action-creators/keyspaceConnections';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import SearchFilter from "./SearchFilter.jsx";
+import * as actions from "../../action-creators/connections";
 
 const mapStateToProps = (store) => {
   return {
@@ -14,32 +13,13 @@ const mapStateToProps = (store) => {
     currPage: store.currPageStore.currPage,
     currDisplay: store.currDisplayStore.currDisplay,
     currInstance: store.currInstanceStore.currInstance,
-    pageSize: store.dataPageStore.pageSize,
-    pageNum: store.dataPageStore.pageNum,
   };
 };
 const mapDispatchToProps = (dispatch) => ({
   updateEvents: (events, currData, currIndex) =>
     dispatch(actions.updateEventsActionCreator(events, currData, currIndex)),
-  //do i need to be dispatching the changeKeyspacePage for the filtering?? or does this just go in the table?
-  changeKeyspacePage: (instanceId, dbIndex, queryOptions) =>
-    dispatch(
-      keyspaceActions.changeKeyspacePageActionCreator(
-        instanceId,
-        dbIndex,
-        queryOptions
-      )
-    ),
-  refreshKeyspace: (instanceId, dbIndex, pageSize, pageNum, refreshScan) =>
-    dispatch(
-      keyspaceActions.refreshKeyspaceActionCreator(
-        instanceId,
-        dbIndex,
-        pageSize,
-        pageNum,
-        refreshScan
-      )
-    ),
+  updateKeyspace: (currInstance, dbIndex) =>
+    dispatch(actions.updateKeyspaceActionCreator(currInstance, dbIndex)),
   updateKeyGraph: (keyGraph) =>
     dispatch(actions.updateKeyGraphActionCreator(keyGraph)),
   updateCurrDisplay: (filter, category) =>
@@ -52,7 +32,7 @@ class FilterNav extends Component {
   }
 
   render() {
-    if (this.props.currPage === 'graphs') {
+    if (this.props.currPage === "graphs") {
       return (
         <div className='filterNavContainer'>
           <SearchFilter
@@ -66,9 +46,8 @@ class FilterNav extends Component {
             id='clearFilterButton'
             onClick={(e) => {
               e.preventDefault();
-              this.props.updateCurrDisplay('', '');
-            }}
-          >
+              this.props.updateCurrDisplay("", "");
+            }}>
             Clear Filter
           </button>
           <button
@@ -78,20 +57,19 @@ class FilterNav extends Component {
               e.preventDefault();
               let currLength =
                 this.props.events[this.props.currDatabase].length - 1;
-              console.log('current length of events', currLength);
+              console.log("current length of events", currLength);
               console.log(
-                'this is our current database',
+                "this is our current database",
                 this.props.currDatabase
               );
               //change 1 to this.props.currInstance
               this.props.updateEvents(1, this.props.currDatabase, currLength);
-            }}
-          >
+            }}>
             Refresh
           </button>
         </div>
       );
-    } else if (this.props.currPage === 'events') {
+    } else if (this.props.currPage === "events") {
       return (
         <div className='filterNavContainer'>
           <SearchFilter
@@ -105,9 +83,8 @@ class FilterNav extends Component {
             id='clearFilterButton'
             onClick={(e) => {
               e.preventDefault();
-              this.props.updateCurrDisplay('', '');
-            }}
-          >
+              this.props.updateCurrDisplay("", "");
+            }}>
             Clear Filter
           </button>
           <button
@@ -117,12 +94,11 @@ class FilterNav extends Component {
               e.preventDefault();
               let currLength =
                 this.props.events[this.props.currDatabase].length;
-              console.log('current length of events', currLength);
+              console.log("current length of events", currLength);
               //replace 1 with this.props.currInstance
               this.props.updateEvents(1, this.props.currDatabase, currLength);
             }}
-            id='refreshButton'
-          >
+            id='refreshButton'>
             Refresh
           </button>
         </div>
@@ -135,17 +111,14 @@ class FilterNav extends Component {
             keyspace={this.props.keyspace[this.props.currDatabase]}
             currPage={this.props.currPage}
             updateCurrDisplay={this.props.updateCurrDisplay}
-            pageNum={this.props.pageNum}
-            pageSize={this.props.pageSize}
           />
           <button
             className='filter-button'
             id='clearFilterButton'
             onClick={(e) => {
               e.preventDefault();
-              this.props.updateCurrDisplay('', '');
-            }}
-          >
+              this.props.updateCurrDisplay("", "");
+            }}>
             Clear Filter
           </button>
           <button
@@ -154,22 +127,16 @@ class FilterNav extends Component {
             onClick={(e) => {
               e.preventDefault();
               console.log(
-                'currInstance',
-                this.props.currInstance,
-                'currDatabase',
+                "this is our current database",
                 this.props.currDatabase
               );
-              //pageNum is always going to be 1 on refresh and refreshScan is going to be 1
-              this.props.refreshKeyspace(
+              //replace 1 with this.props.currInstance
+              this.props.updateKeyspace(
                 this.props.currInstance,
-                this.props.currDatabase,
-                this.props.pageSize,
-                1,
-                1
+                this.props.currDatabase
               );
             }}
-            id='refreshButton'
-          >
+            id='refreshButton'>
             Refresh
           </button>
         </div>
