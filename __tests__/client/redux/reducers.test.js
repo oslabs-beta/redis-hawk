@@ -165,8 +165,27 @@ describe("events reducer", () => {
 
   beforeEach(() => {
     state = {
+      currInstance: 1,
       currDatabase: 0,
-      events: [[]],
+      events: [
+        {
+          instanceId: 1,
+          keyspaces: [
+            {
+              eventTotal: 0,
+              pageSize: 50,
+              pageNum: 4,
+              data: [
+                {
+                  key: "loading",
+                  event: "loading",
+                  timestamp: "loading",
+                },
+              ],
+            },
+          ],
+        },
+      ],
     };
   });
   describe("default state", () => {
@@ -182,20 +201,91 @@ describe("events reducer", () => {
     });
   });
 
-  describe("UPDATE_EVENTS", () => {
+  describe("LOAD_ALL_EVENTS", () => {
     const action = {
-      type: "UPDATE_EVENTS",
+      type: "LOAD_ALL_EVENTS",
       payload: {
-        events: [{ key: "abigail", event: "SET", timestamp: "8:30" }],
+        events: [
+          {
+            instanceId: 1,
+            keyspaces: [
+              {
+                eventTotal: 0,
+                pageSize: 1,
+                pageNum: 1,
+                data: [
+                  {
+                    key: "Arthur",
+                    event: "Set",
+                    timestamp: "07:00",
+                  },
+                ],
+              },
+            ],
+          },
+        ],
         currDatabase: 0,
       },
     };
-    it("updates the events", () => {
+    it("loads all events from server", () => {
       const { events } = eventSubject(state, action);
-      expect(events[state.currDatabase][0]).toEqual({
-        key: "abigail",
-        event: "SET",
-        timestamp: "8:30",
+      expect(
+        events[state.currInstance - 1].keyspaces[state.currDatabase]
+      ).toEqual({
+        key: "Arthur",
+        event: "Set",
+        timestamp: "07:00",
+      });
+    });
+    it("returns a state object not strictly equal to the original", () => {
+      const eventState = eventSubject(state, action);
+      // expect(eventState).toEqual(state)
+      expect(eventState).not.toBe(state);
+    });
+    it("returns an events value not strictly equal to the original", () => {
+      const { events } = eventSubject(state, action);
+      expect(events).not.toBe(state.events);
+    });
+  });
+  describe("REFRESH_EVENTS", () => {
+    const action = {
+      type: "REFRESH_EVENTS",
+      payload: {
+        events: [
+          {
+            instanceId: 1,
+            keyspaces: [
+              {
+                eventTotal: 2,
+                pageSize: 1,
+                pageNum: 2,
+                data: [
+                  {
+                    key: "Arthur",
+                    event: "Set",
+                    timestamp: "07:00",
+                  },
+                  {
+                    key: "Abby",
+                    event: "Set",
+                    timestamp: "07:10",
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        currDatabase: 0,
+      },
+    };
+    it("returns specific page of events", () => {
+      const { events } = eventSubject(state, action);
+      expect(
+        events[state.currInstance - 1].keyspaces[state.currDatabase]
+      ).toEqual({
+        key: "Arthur",
+        event: "Set",
+        timestamp: "07:00",
       });
     });
     it("returns a state object not strictly equal to the original", () => {
