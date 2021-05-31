@@ -52,6 +52,13 @@ export class EventLog {
     }
   }
 
+  reset(): void {
+  //Resets the EventLog to its initial state (clear out the log).
+    this.head = null;
+    this.tail = null;
+    this.eventTotal = 0;
+  }
+
   removeManyViaTimestamp(timestamp: number): void {
     /*
     Removes all events from the EventLog who have a timestamp earlier than the input timestamp.
@@ -151,6 +158,13 @@ export class KeyspaceHistoriesLog {
       newHistory.previous = this.tail;
       this.tail = newHistory;
     }
+  }
+
+  reset(): void {
+    //resets the histories log to its initial state (clears out log)
+    this.head = null;
+    this.tail = null;
+    this.historiesCount = 0;
   }
 
   returnLogAsArray(historiesCount = 0): KeyspaceHistoryElement[] {

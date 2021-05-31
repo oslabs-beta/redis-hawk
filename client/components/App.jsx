@@ -10,12 +10,12 @@ import EventComponent from './events/EventComponent.jsx';
 import './styles/styles.scss';
 import { connect } from 'react-redux';
 import * as actions from '../action-creators/connections';
-import * as keyspaceActions from '../action-creators/keyspaceConnections';
+import * as keyspaceActions from '../action-creators/keyspaceConnections.js';
+
 import '../../node_modules/react-vis/dist/style.css';
 
 ///still need to check dispatchers here
 
-//not using this right now
 const mapStateToProps = (store) => {
   return {
     database: store.currDatabaseStore.currDatabase,
@@ -23,10 +23,10 @@ const mapStateToProps = (store) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  loadKeyspace: () => dispatch(keyspaceActions.loadKeyspaceActionCreator()),
   updateEvents: (dbIndex) =>
     dispatch(actions.updateEventsActionCreator(dbIndex)),
   updateInstanceInfo: () => dispatch(actions.updateInstanceInfoActionCreator()),
+  loadKeyspace: () => dispatch(keyspaceActions.loadKeyspaceActionCreator()),
 });
 
 class App extends Component {

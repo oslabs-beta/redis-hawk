@@ -2,10 +2,11 @@ import express from "express";
 import path from "path";
 const app = express();
 
-import connectionsRouter from './routes/connectionsRouter';
-import eventsRouter from './routes/eventsRouter';
-import keyspacesRouter from './routes/keyspacesRouter';
-import keyspacesRouterv2 from './routes/keyspacesRouter-v2';
+import connectionsRouter from './routers/connectionsRouter';
+import eventsRouter from './routers/eventsRouter';
+import eventsRouterv2 from './routers/eventsRouter-v2';
+import keyspacesRouter from './routers/keyspacesRouter';
+import keyspacesRouterv2 from './routers/keyspacesRouter-v2';
 
 const PORT = +process.env.PORT || 3000;
 
@@ -13,6 +14,7 @@ const PORT = +process.env.PORT || 3000;
 app.use('/api/connections', connectionsRouter);
 //events routes
 app.use('/api/events', eventsRouter);
+app.use('/api/v2/events', eventsRouterv2);
 
 // app.use('/api/histories', historiesRouter);
 

@@ -16,11 +16,17 @@ const mapStateToProps = (store) => {
     pageNum: store.dataPageStore.pageNum,
   };
 };
+
 const mapDispatchToProps = (dispatch) => ({
-  updatePageSize: (pageSize) =>
-    dispatch(actions.updatePageSizeActionCreator(pageSize)),
-  updatePageNum: (pageNum) =>
-    dispatch(actions.updatePageNumActionCreator(pageNum)),
+  updateEvents: (events, currData, currIndex) =>
+    dispatch(actions.updateEventsActionCreator(events, currData, currIndex)),
+  updateKeyGraph: (keyGraph) =>
+    dispatch(actions.updateKeyGraphActionCreator(keyGraph)),
+  updateCurrDisplay: (filter, category) =>
+    dispatch(actions.updateCurrDisplayActionCreator(filter, category)),
+  updatePageNum: (pageNum) => {
+    actions.updatePageActionCreator(pageNum);
+  },
   changeKeyspacePage: (instanceId, dbIndex, queryOptions) =>
     dispatch(
       keyspaceActions.changeKeyspacePageActionCreator(
@@ -29,6 +35,9 @@ const mapDispatchToProps = (dispatch) => ({
         queryOptions
       )
     ),
+  updatePageSize: (pageSize) => {
+    actions.updatePageSizeActionCreator(pageSize);
+  },
 });
 
 class KeyspaceComponent extends Component {

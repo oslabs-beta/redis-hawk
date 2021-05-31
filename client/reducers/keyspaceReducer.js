@@ -30,10 +30,8 @@ const keyspaceReducer = (state = initialState, action) => {
 
   switch (action.type) {
     case types.LOAD_KEYSPACE: {
-      console.log(
-        'action payload in LOAD_KEYSPACE keyspace reducer',
-        action.payload
-      );
+      //we want to update the kesypace at index database
+      console.log('action payload LOAD_KEYSPACE reducer', action.payload);
 
       const fullKeyspace = action.payload.keyspace;
       keyspace = state.keyspace.slice();

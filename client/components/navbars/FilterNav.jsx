@@ -14,22 +14,20 @@ const mapStateToProps = (store) => {
     currPage: store.currPageStore.currPage,
     currDisplay: store.currDisplayStore.currDisplay,
     currInstance: store.currInstanceStore.currInstance,
-    pageSize: store.dataPageStore.pageSize,
     pageNum: store.dataPageStore.pageNum,
+    pageSize: store.dataPageStore.pageSize,
   };
 };
 const mapDispatchToProps = (dispatch) => ({
   updateEvents: (events, currData, currIndex) =>
     dispatch(actions.updateEventsActionCreator(events, currData, currIndex)),
-  //do i need to be dispatching the changeKeyspacePage for the filtering?? or does this just go in the table?
-  changeKeyspacePage: (instanceId, dbIndex, queryOptions) =>
-    dispatch(
-      keyspaceActions.changeKeyspacePageActionCreator(
-        instanceId,
-        dbIndex,
-        queryOptions
-      )
-    ),
+  updateKeyGraph: (keyGraph) =>
+    dispatch(actions.updateKeyGraphActionCreator(keyGraph)),
+  updateCurrDisplay: (filter, category) =>
+    dispatch(actions.updateCurrDisplayActionCreator(filter, category)),
+  updatePageNum: (pageNum) => {
+    actions.updatePageActionCreator(pageNum);
+  },
   refreshKeyspace: (instanceId, dbIndex, pageSize, pageNum, refreshScan) =>
     dispatch(
       keyspaceActions.refreshKeyspaceActionCreator(
@@ -40,13 +38,6 @@ const mapDispatchToProps = (dispatch) => ({
         refreshScan
       )
     ),
-  updateKeyGraph: (keyGraph) =>
-    dispatch(actions.updateKeyGraphActionCreator(keyGraph)),
-  updateCurrDisplay: (filter, category) =>
-    dispatch(actions.updateCurrDisplayActionCreator(filter, category)),
-  updatePageNum: (pageNum) => {
-    actions.updatePageActionCreator(pageNum);
-  },
 });
 
 class FilterNav extends Component {
@@ -138,8 +129,6 @@ class FilterNav extends Component {
             keyspace={this.props.keyspace[this.props.currDatabase]}
             currPage={this.props.currPage}
             updateCurrDisplay={this.props.updateCurrDisplay}
-            pageNum={this.props.pageNum}
-            pageSize={this.props.pageSize}
           />
           <button
             className='filter-button'
@@ -157,12 +146,10 @@ class FilterNav extends Component {
             onClick={(e) => {
               e.preventDefault();
               console.log(
-                'currInstance',
-                this.props.currInstance,
-                'currDatabase',
+                'this is our current database',
                 this.props.currDatabase
               );
-              //pageNum is always going to be 1 on refresh and refreshScan is going to be 1
+              //replace 1 with this.props.currInstance
               this.props.refreshKeyspace(
                 this.props.currInstance,
                 this.props.currDatabase,
