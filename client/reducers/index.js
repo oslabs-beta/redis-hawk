@@ -11,7 +11,6 @@ import instanceReducer from './instanceReducer';
 import dataPageReducer from './dataPageReducer';
 import totalEventsReducer from './totalEventsReducer';
 
-
 export default combineReducers({
   keyspaceStore: keyspaceReducer,
   eventsStore: eventsReducer,
@@ -22,4 +21,5 @@ export default combineReducers({
   instanceInfoStore: instanceInfoReducer,
   currPageStore: pageReducer,
   currDisplayStore: currDisplayReducer,
+  dataPageStore: dataPageReducer,
 });
