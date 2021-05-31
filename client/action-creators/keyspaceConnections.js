@@ -102,7 +102,7 @@ export const changeKeyspacePageActionCreator =
     if (queryOptions.refreshScan)
       URI += `&refreshScan=${queryOptions.refreshScan}`;
 
-    console.log('MY CHANGE KEYSPACE PAGE URI', URI);
+    // console.log('MY CHANGE KEYSPACE PAGE URI', URI);
 
     fetch(URI)
       .then((res) => res.json())

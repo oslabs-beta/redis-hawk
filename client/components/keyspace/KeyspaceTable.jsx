@@ -71,15 +71,15 @@ function KeyspaceTable(props) {
   const [loading, setLoading] = React.useState(false);
 
   const handlePageChange = (params) => {
-    console.log('current page in params', params.page);
+    console.log('current page in params in handle page change', params.page);
     props.updatePageNum(params.page + 1);
-    console.log('pageNum in props', props.pageNum + 1);
+    console.log('pageNum in props in handle page change', props.pageNum);
     const funcOptions = {
       pageSize: props.pageSize,
-      pageNum: props.pageNum + 1,
+      pageNum: params.page + 1,
       refreshScan: 0,
     };
-    console.log('my funcOptions', funcOptions);
+    // console.log('my funcOptions', funcOptions);
     props.changeKeyspacePage(
       props.currInstance,
       props.currDatabase,
@@ -90,6 +90,21 @@ function KeyspaceTable(props) {
   const handlePageSizeChange = (params) => {
     setPageSize(params.pageSize);
     props.updatePageSize(params.pageSize);
+    console.log('my current pageNum in params', params.page);
+    console.log('my current pageNum in props', props.pageNum);
+    //this is so if your current page is 50 and you select 100, the page will refresh with 100
+    if (params.pageSize > props.pageSize) {
+      const funcOptions = {
+        pageSize: params.pageSize,
+        pageNum: params.page + 1,
+        refreshScan: 0,
+      };
+      props.changeKeyspacePage(
+        props.currInstance,
+        props.currDatabase,
+        funcOptions
+      );
+    }
   };
 
   const data =
