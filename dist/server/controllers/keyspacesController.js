@@ -210,6 +210,43 @@ var keyspacesController = {
             res.locals.keyspaces = keyspacesResponse;
         }
         return next();
+    },
+    getKeyspaceHistories: function (req, res, next) {
+        var dbIndex = +req.params.dbIndex;
+        var historiesLog = res.locals.monitors[0].keyspaces[dbIndex].keyspaceHistories;
+        var requestHistoryCount = +req.query.historiesCount;
+        if (requestHistoryCount > historiesLog.historiesCount
+            || (req.params.historyCount && isNaN(requestHistoryCount))) {
+            return next({
+                log: 'Request provided an incorrect historyCount parameter',
+                status: 400,
+                message: { err: 'historyCount is invalid - please ensure it is a number and a valid count received from a previous response' }
+            });
+        }
+        var responseData = {
+            historyCount: historiesLog.historiesCount,
+            histories: []
+        };
+        var count = requestHistoryCount ? historiesLog.historiesCount - requestHistoryCount : historiesLog.historiesCount;
+        var current = historiesLog.tail;
+        var keynameFilter = req.query.keynameFilter;
+        while (count > 0) {
+            var filteredKeys = keynameFilter ? current.keys.filter(function (el) {
+                return el.key.includes(keynameFilter.toString());
+            }) : current.keys;
+            var totalMemoryUsage = filteredKeys.reduce(function (acc, el) {
+                return acc + el.memoryUsage;
+            }, 0);
+            responseData.histories.push({
+                timestamp: current.timestamp,
+                keyCount: filteredKeys.length,
+                memoryUsage: totalMemoryUsage
+            });
+            current = current.previous;
+            count -= 1;
+        }
+        res.locals.histories = responseData;
+        return next();
     }
 };
 exports.default = keyspacesController;

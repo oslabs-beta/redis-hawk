@@ -64,25 +64,28 @@ var recordKeyspaceHistory = function (monitor, dbIndex) { return __awaiter(void 
                 keyDetails = [];
                 cursor = '0';
                 keys = [];
-                return [4, monitor.redisClient.scan(cursor)];
+                return [4, monitor.redisClient.select(dbIndex)];
             case 1:
-                _a = _c.sent(), cursor = _a[0], keys = _a[1];
-                _c.label = 2;
+                _c.sent();
+                return [4, monitor.redisClient.scan(cursor)];
             case 2:
+                _a = _c.sent(), cursor = _a[0], keys = _a[1];
+                _c.label = 3;
+            case 3:
                 keys.forEach(function (key) {
                     keyDetails.push({
                         key: key,
-                        memoryUsage: 0
+                        memoryUsage: 1
                     });
                 });
                 return [4, monitor.redisClient.scan(cursor)];
-            case 3:
-                _b = _c.sent(), cursor = _b[0], keys = _b[1];
-                _c.label = 4;
             case 4:
-                if (cursor !== '0') return [3, 2];
+                _b = _c.sent(), cursor = _b[0], keys = _b[1];
                 _c.label = 5;
             case 5:
+                if (cursor !== '0') return [3, 3];
+                _c.label = 6;
+            case 6:
                 monitor.keyspaces[dbIndex].keyspaceHistories.add(keyDetails);
                 return [2];
         }

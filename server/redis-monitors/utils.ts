@@ -58,14 +58,16 @@ export const recordKeyspaceHistory = async (monitor: RedisMonitor, dbIndex: numb
   let cursor = '0';
   let keys: string[] = [];
 
+  await monitor.redisClient.select(dbIndex);
   //@ts-ignore
   [cursor, keys] = await monitor.redisClient.scan(cursor)
+
 
   do {
     keys.forEach(key => {
       keyDetails.push({
         key: key,
-        memoryUsage: 0
+        memoryUsage: 1
       });
     });
 
@@ -75,5 +77,4 @@ export const recordKeyspaceHistory = async (monitor: RedisMonitor, dbIndex: numb
   while (cursor !== '0')
 
   monitor.keyspaces[dbIndex].keyspaceHistories.add(keyDetails);
-
 }

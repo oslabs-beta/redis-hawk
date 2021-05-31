@@ -6,21 +6,22 @@ import { promisify } from 'util'; //promisify some node-redis client functionali
 
 import app from '../../server/server';
 import redisMonitors from '../../server/redis-monitors/redis-monitors'
+import { recordKeyspaceHistory } from '../../server/redis-monitors/utils';
 
 const testConnections = JSON.parse(readFileSync(resolve(__dirname, '../../server/configs/tests-config.json')).toString());
 
 enum ENDPOINT_NAMES { KEYSPACES, KEYSPACE_HISTORIES, EVENTS, EVENT_TOTALS };
 
-
 describe('Route Integration Tests', () => {
 
-  type redisModel = {
+  type RedisModel = {
     client: redis.RedisClient;
     host: string;
     port: number;
     instanceId: number;
+    recordKeyspaceHistoryFrequency: number;
   }
-  let redisModels: redisModel[] = [];
+  let redisModels: RedisModel[] = [];
 
   //Start test redis servers and corresponding clients
   beforeAll(async () => {
@@ -35,7 +36,8 @@ describe('Route Integration Tests', () => {
         client: redisClient,
         host: conn.host,
         port: conn.port,
-        instanceId: instanceId
+        instanceId: instanceId,
+        recordKeyspaceHistoryFrequency: conn.recordKeyspaceHistoryFrequency
       };
 
       redisModels.push(redisModel);
@@ -121,6 +123,14 @@ describe('Route Integration Tests', () => {
       for (const model of redisModels) {
         await model.client.flushall();
       }
+
+      //clear out any logs in the monitors
+      for (const monitor of redisMonitors) {
+        for (const keyspace of monitor.keyspaces) {
+          keyspace.eventLog.reset();
+          keyspace.keyspaceHistories.reset()
+        }
+      }
     });
 
     //GET request for all keyspaces across all instances
@@ -180,8 +190,6 @@ describe('Route Integration Tests', () => {
           }));
         });
       });
-
-
     });
 
     //GET request for a specific keyspace
@@ -243,16 +251,178 @@ describe('Route Integration Tests', () => {
     });
   });
 
-  describe('/api/v2/events', () => {
 
-    beforeAll(() => {
-      //clear out any preceding events logged in the monitors
+  describe('/api/v2/keyspaces/histories', () => {
+
+    afterAll(() => {
       for (const monitor of redisMonitors) {
         for (const keyspace of monitor.keyspaces) {
           keyspace.eventLog.reset();
+          keyspace.keyspaceHistories.reset();
         }
       }
     });
+
+    describe('GET /:instanceId/:dbIndex', () => {
+
+      describe('Without query parameters', () => {
+      
+        let response;
+        beforeAll(async () => {
+          /*
+            Utilizes mock timers to periodically use Redis commands and record them at different time intervals
+            After commands are performed, sends request to grab keyspace history.
+          */
+
+          //Clear out any existing keyspace histories
+          for (const monitor of redisMonitors) {
+            for (const keyspace of monitor.keyspaces) {
+              keyspace.keyspaceHistories.reset();
+            }
+          }
+
+          let monitor;
+          redisMonitors.forEach((redisMonitor) => {
+            if (redisMonitor.instanceId === redisModels[0].instanceId) {
+              monitor = redisMonitor;
+            }
+          })
+
+          const client = redisModels[0].client;
+          await client.select(0);
+          await client.set('key1', 'val');
+          await client.set('key2', 'val2');
+          await client.lpush('key3', 'el3', 'el2', 'el1');
+    
+          await recordKeyspaceHistory(monitor, 0);
+
+          
+          await client.set('key4', 'val');
+          await client.set('key5', 'val2');
+          await client.lpush('key6', 'el3', 'el2', 'el1');
+          await recordKeyspaceHistory(monitor, 0);
+
+          await client.del('key6');      
+          await recordKeyspaceHistory(monitor, 0);
+
+          response = await request(app).get('/api/v2/keyspaces/histories/1/0');
+        });
+
+        afterAll(async () => {
+          for (const monitor of redisMonitors) {
+            for (const keyspace of monitor.keyspaces) {
+              keyspace.keyspaceHistories.reset();
+            }
+          }
+
+          for (const model of redisModels) {
+            await model.client.flushall();
+          }
+        });
+
+        it('should respond with a 200 status code and JSON', async () => {
+          expect(response.status).toEqual(200);
+          expect(response.headers['content-type']).toEqual(
+            expect.stringContaining('json')
+          );
+        });
+
+        //Mocks passage of time in order to test the correct historyCount
+        it('should have return the correct number of histories recorded', () => {
+          expect(response.body.historyCount).toEqual(3);
+          expect(response.body.histories).toHaveLength(3);
+        });
+
+        it('should return the correct data in the histories property', () => {
+
+          const histories = response.body.histories;
+          expect(histories[2].keyCount).toEqual(3);
+          expect(histories[1].keyCount).toEqual(6);
+          expect(histories[0].keyCount).toEqual(5);
+
+          histories.forEach(history => {
+            expect(history.timestamp).toBeLessThanOrEqual(Date.now());
+            expect(history.timestamp).toBeGreaterThanOrEqual(
+              Date.now() - redisModels[0].recordKeyspaceHistoryFrequency * 4
+            );
+            expect(history.memoryUsage).toBeGreaterThan(0);
+          });
+        });
+
+        it('should order the histories from newest to oldest', () => {
+
+          const histories = response.body.histories;
+          expect(histories[0].timestamp).toBeGreaterThanOrEqual(histories[1].timestamp);
+          expect(histories[1].timestamp).toBeGreaterThanOrEqual(histories[2].timestamp);
+        });
+
+      });
+
+      describe('Handling query parameters', () => {
+
+        let response;
+        beforeAll(async () => {
+
+          //Clear out any existing keyspace histories
+          for (const monitor of redisMonitors) {
+            for (const keyspace of monitor.keyspaces) {
+              keyspace.keyspaceHistories.reset();
+            }
+          }
+
+          let monitor;
+          redisMonitors.forEach((redisMonitor) => {
+            if (redisMonitor.instanceId === redisModels[0].instanceId) {
+              monitor = redisMonitor;
+            }
+          })
+
+          const client = redisModels[0].client;
+          await client.select(3);
+          await client.set('key1', 'val');
+          await client.set('key2', 'val');
+    
+          await recordKeyspaceHistory(monitor, 3);
+
+          await client.set('beep3', 'val');
+          await recordKeyspaceHistory(monitor, 3);
+
+          await client.set('beep4', 'val');
+          await recordKeyspaceHistory(monitor, 3);
+
+          response = await request(app).get(`/api/v2/keyspaces/histories/${redisModels[0].instanceId}/3?historiesCount=1&keynameFilter=beep`);
+        });
+
+        afterAll(async () => {
+
+          for (const monitor of redisMonitors) {
+            for (const keyspace of monitor.keyspaces) {
+              keyspace.keyspaceHistories.reset();
+            }
+          }
+          for (const model of redisModels) {
+            await model.client.flushall();
+          }
+        });
+
+        it('should give the right number of histories based on the historiesCount parameter', () => {
+          expect(response.body.histories).toHaveLength(2);
+        });
+
+        it('should return the new historyCount from the redisMonitor process', () => {
+          expect(response.body.historyCount).toEqual(3);
+        })
+
+        it('the keycounts should reflect the keynameFilter specified', () => {
+          expect(response.body.histories[0].keyCount).toEqual(2);
+          expect(response.body.histories[1].keyCount).toEqual(1);
+        });
+      });
+    });
+
+  })
+
+  describe('/api/v2/events', () => {
 
     describe('GET "/"', () => {
 
