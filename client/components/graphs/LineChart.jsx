@@ -69,10 +69,10 @@ const LineChart = () => {
     "09:20",
   ];
   const dataArray = [
-    80, 200, 230, 200, 100, 60, 70, 80, 99, 23, 50, 88, 99, 100, 105, 80, 200,
-    230, 200, 100, 60, 70, 80, 99, 23, 50, 88, 99, 100, 105, 80, 200, 230, 200,
-    100, 60, 70, 80, 99, 23, 50, 88, 99, 100, 105, 80, 200, 230, 200, 100, 60,
-    70, 80, 99, 23, 50, 88, 99, 100, 105,
+    80, 50, 75, 90, 100, 60, 70, 80, 99, 23, 50, 88, 99, 100, 105, 80, 200, 135,
+    108, 100, 60, 70, 80, 99, 23, 50, 88, 99, 100, 105, 80, 200, 230, 200, 100,
+    60, 70, 80, 99, 23, 50, 88, 99, 100, 105, 80, 35, 75, 200, 100, 60, 70, 80,
+    99, 23, 50, 88, 99, 100, 105,
   ];
   const chart = () => {
     setChartData({
@@ -83,7 +83,7 @@ const LineChart = () => {
           data: dataArray,
           backgroundColor: ["red"],
           borderColor: "white",
-          borderWidth: "2.5",
+          borderWidth: "2",
           pointBorderColor: "red",
           pointHoverBackgroundColor: "#55bae7",
         },
@@ -97,11 +97,7 @@ const LineChart = () => {
   }, []);
 
   const options = {
-    legend: {
-      labels: {
-        fontsize: "25px",
-      },
-    },
+    responsive: true,
     animation: {
       duration: 0,
     },
@@ -110,7 +106,7 @@ const LineChart = () => {
         pan: {
           enabled: true,
           mode: "xy",
-          speed: 10,
+          speed: 7,
         },
         zoom: {
           wheel: {
@@ -125,7 +121,7 @@ const LineChart = () => {
         limits: {
           y: {
             min: 0,
-            max: Math.max(...dataArray) + 50,
+            max: Math.max(...dataArray) + 25,
           },
         },
       },
@@ -171,7 +167,7 @@ const LineChart = () => {
   };
 
   return (
-    <div style={{ height: "100px", width: "800px" }}>
+    <div>
       <Line
         data={chartData}
         height={400}
