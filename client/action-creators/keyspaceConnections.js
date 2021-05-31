@@ -91,10 +91,10 @@ export const refreshKeyspaceActionCreator =
 // }
 export const changeKeyspacePageActionCreator =
   (instanceId, dbIndex, queryOptions) => (dispatch) => {
-    let URI = `api/v2/keyspaces/${instanceId}/${dbIndex}/?`;
+    let URI = `api/v2/keyspaces/${instanceId}/${dbIndex}/?pageSize=${queryOptions.pageSize}&pageNum=${queryOptions.pageNum}`;
     //this may have an issue in here - be aware of queryOptions
-    if (queryOptions.pageSize) URI += `pageSize=${queryOptions.pageSize}`;
-    if (queryOptions.pageNum) URI += `&pageNum=${queryOptions.pageNum}`;
+    // if (queryOptions.pageSize) URI += `pageSize=${queryOptions.pageSize}`;
+    // if (queryOptions.pageNum) URI += `&pageNum=${queryOptions.pageNum}`;
     if (queryOptions.keyNameFilter)
       URI += `&keyNameFilter=${queryOptions.keyNameFilter}`;
     if (queryOptions.keyTypeFilter)

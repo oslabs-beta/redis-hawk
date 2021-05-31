@@ -70,6 +70,10 @@ function KeyspaceTable(props) {
   const [pageSize, setPageSize] = React.useState(25);
   const [loading, setLoading] = React.useState(false);
 
+  const handlePageChange = (params) => {
+    console.log('current page in params', params.page);
+  };
+
   const handlePageSizeChange = (params) => {
     console.log('params', params);
     setPageSize(params.pageSize);
@@ -91,11 +95,12 @@ function KeyspaceTable(props) {
         autoPageSize={false}
         loading={loading}
         pagination
-        paginationMode={'server'}
+        paginationMode='server'
         rowCount={props.myCount}
         pageSize={pageSize}
         rowsPerPageOptions={[5, 10, 25, 50, 100]}
         onPageSizeChange={handlePageSizeChange}
+        onPageChange={handlePageChange}
         columns={[
           { field: 'key', width: '25%' },
           { field: 'value', width: '49%' },
