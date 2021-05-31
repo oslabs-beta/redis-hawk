@@ -1,68 +1,6 @@
-// import * as React from 'react';
-// import { DataGrid } from '@material-ui/data-grid';
-// import { useDemoData } from '@material-ui/x-grid-data-generator';
-
-// function loadServerRows(page, data) {
-//   return new Promise((resolve) => {
-//     setTimeout(() => {
-//       resolve(data.rows.slice(page * 5, (page + 1) * 5));
-//     }, Math.random() * 500 + 100); // simulate network latency
-//   });
-// }
-
-// function KeyspaceTable() {
-//   const { data } = useDemoData({
-//     dataSet: 'Commodity',
-//     rowLength: 100,
-//     maxColumns: 6,
-//   });
-
-//   const [page, setPage] = React.useState(0);
-//   const [rows, setRows] = React.useState([]);
-//   const [loading, setLoading] = React.useState(false);
-
-//   const handlePageChange = (params) => {
-//     setPage(params.page);
-//   };
-
-//   React.useEffect(() => {
-//     let active = true;
-
-//     (async () => {
-//       setLoading(true);
-//       const newRows = await loadServerRows(page, data);
-
-//       if (!active) {
-//         return;
-//       }
-
-//       setRows(newRows);
-//       setLoading(false);
-//     })();
-
-//     return () => {
-//       active = false;
-//     };
-//   }, [page, data]);
-
-//   return (
-//     <div style={{ height: 400, width: '100%' }}>
-//       <DataGrid
-//         rows={rows}
-//         columns={data.columns}
-//         pagination
-//         pageSize={5}
-//         rowCount={100}
-//         paginationMode='server'
-//         onPageChange={handlePageChange}
-//         loading={loading}
-//       />
-//     </div>
-//   );
-// }
-
 import * as React from 'react';
 import { DataGrid } from '@material-ui/data-grid';
+import regeneratorRuntime from 'regenerator-runtime';
 
 function KeyspaceTable(props) {
   // console.log('props in keyspace table', props);
@@ -107,6 +45,29 @@ function KeyspaceTable(props) {
     }
   };
 
+  const filterQuery = {
+    pageSize: props.pageSize,
+    pageNum: props.pageNum,
+  };
+
+  const handleFilterModelChange = (params) => {
+    console.log('params in onfilterchange', params);
+    console.log('params i need', params.filterModel.items[0].columnField);
+    console.log('params i need', params.filterModel.items[0].value);
+
+    if (params.filterModel.items[0].columnField === 'name') {
+      filterQuery.keyNameFilter = params.filterModel.items[0].value;
+    }
+    //value filter not done in the backend yet
+    // if (params.filterModel.items[0].columnField === 'value') {
+    //   filterQuery.keyValueFilter = params.filterModel.items[0].value
+    // }
+    if (params.filterModel.items[0].columnField === 'type') {
+      filterQuery.keyTypeFilter = params.filterModel.items[0].value;
+    }
+    console.log(filterQuery);
+  };
+
   const data =
     props.keyspace[props.currInstance - 1].keyspaces[props.currDatabase].data;
 
@@ -116,14 +77,14 @@ function KeyspaceTable(props) {
 
   // console.log('data in keyspace table', data);
   return (
-    <div
-      style={{ height: 400, width: '100%', backgroundColor: 'rgb(233, 0, 0)' }}
-    >
+    <div style={{ height: 400, width: '100%' }}>
       <DataGrid
         autoPageSize={false}
         loading={loading}
         pagination
         paginationMode='server'
+        filterMode='server'
+        onFilterModelChange={handleFilterModelChange}
         rowCount={props.myCount}
         pageSize={pageSize}
         rowsPerPageOptions={[5, 10, 25, 50, 100]}
@@ -135,6 +96,7 @@ function KeyspaceTable(props) {
           { field: 'type', width: '25%' },
         ]}
         rows={data}
+        isRowSelectable={false}
       />
     </div>
   );

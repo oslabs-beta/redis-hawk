@@ -60,6 +60,7 @@
     "redux-devtools-extension": "^2.13.9",
     "redux-mock-store": "^1.5.4",
     "redux-thunk": "^2.3.0",
+    "regenerator-runtime": "^0.13.7",
     "sass": "^1.32.13",
     "styled-components": "^5.3.0",
     "ws": "^7.4.5"
