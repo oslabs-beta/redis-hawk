@@ -23,14 +23,21 @@ const createClients = async () => {
     const server = new RedisServer(PORT);
 
     try {
-      await server.open()
+      await server.open();
     } catch (e) {
-      console.log(`Could not start a new server on port ${PORT} - a server may already be running on this port`);
+      console.log(`Could not start a new server on port ${PORT} - a server may already be running on this port: ${e}`);
     }
 
     const client = redis.createClient({host: '127.0.0.1', port: PORT});
-    client.config('SET', 'notify-keyspace-events', 'KEA');
     client.select = promisify(client.select).bind(client);
+    client.config = promisify(client.config).bind(client);
+
+    try {
+      await client.config('SET', 'notify-keyspace-events');
+    } catch(e) {
+      `Could not set keyspace notifications for client at port ${PORT}: ${e}`;
+    }
+
     client.on('error', (error) => {
       console.log(`Redis client error occured (port ${PORT}): ${error}
       Please ensure you have a redis server running on this port.
