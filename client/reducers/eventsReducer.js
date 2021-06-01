@@ -33,7 +33,7 @@ const eventsReducer = (state = initialState, action) => {
       const allEvents = action.payload.events;
       events = state.events.slice();
       events = allEvents;
-      console.log("events in eventreducer", events);
+      // console.log("events in eventreducer", events);
       return {
         ...state,
         events,

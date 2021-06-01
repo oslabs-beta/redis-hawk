@@ -17,7 +17,6 @@ const instanceInfo = (state = initialState, action) => {
   switch (action.type) {
     case types.UPDATE_INSTANCEINFO: {
       const instances = action.payload;
-      console.log("payload in instanceInfo", action.payload);
       return {
         ...state,
         instanceInfo: instances,
