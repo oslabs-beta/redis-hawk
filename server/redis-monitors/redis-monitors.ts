@@ -14,6 +14,7 @@ import * as redis from 'redis';
 import { RedisInstance, RedisMonitor, Keyspace } from './models/interfaces';
 import { EventLog, KeyspaceHistoriesLog } from './models/data-stores';
 import { promisifyClientMethods, recordKeyspaceHistory } from './utils';
+import { getKeyspace } from '../controllers/utils';
 
 const instances: RedisInstance[] = process.env.IS_TEST ?
   JSON.parse(fs.readFileSync(path.resolve(__dirname, '../configs/tests-config.json')).toString())
@@ -49,10 +50,11 @@ const initMonitor = async (monitor: RedisMonitor): Promise<void> => {
   //This should be futher modularized for readability and maintanability
   for (let dbIndex = 0; dbIndex < monitor.databases; dbIndex++) {
 
+    const keyspaceSnapshot = await getKeyspace(monitor.redisClient, dbIndex);
     const keyspace: Keyspace = {
       eventLog: new EventLog(),
       keyspaceHistories: new KeyspaceHistoriesLog(),
-      keyspaceSnapshot: [],
+      keyspaceSnapshot: keyspaceSnapshot,
       eventLogSnapshot: []
     }
 

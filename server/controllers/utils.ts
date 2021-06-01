@@ -4,7 +4,6 @@ import { promisify } from 'util';
 
 const getValue = async (key: string, type: string, redisClient: RedisClient): Promise<any> => {
 
-
   let value;
   switch (type) {
 
@@ -24,7 +23,7 @@ const getValue = async (key: string, type: string, redisClient: RedisClient): Pr
       value = await redisClient.smembers(key);
     }; break;
 
-    case 'sortedSet': {
+    case 'zset': {
       //@ts-ignore - incorrect type errors for promisified method's return value
       //note:  will need to include a range with the key to return all values in 
       //the sorted set

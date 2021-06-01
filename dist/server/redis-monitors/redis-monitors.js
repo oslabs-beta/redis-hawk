@@ -60,6 +60,7 @@ var path = __importStar(require("path"));
 var redis = __importStar(require("redis"));
 var data_stores_1 = require("./models/data-stores");
 var utils_1 = require("./utils");
+var utils_2 = require("../controllers/utils");
 var instances = process.env.IS_TEST ?
     JSON.parse(fs.readFileSync(path.resolve(__dirname, '../configs/tests-config.json')).toString())
     : JSON.parse(fs.readFileSync(path.resolve(__dirname, '../configs/config.json')).toString());
@@ -94,24 +95,42 @@ var initMonitor = function (monitor) { return __awaiter(void 0, void 0, void 0, 
                 return [3, 7];
             case 7:
                 _loop_1 = function (dbIndex) {
-                    var keyspace = {
-                        eventLog: new data_stores_1.EventLog(),
-                        keyspaceHistories: new data_stores_1.KeyspaceHistoriesLog(),
-                        keyspaceSnapshot: [],
-                        eventLogSnapshot: []
-                    };
-                    monitor.keyspaces.push(keyspace);
-                    monitor.keyspaceSubscriber.on('pmessage', function (channel, message, event) {
-                        if (+message.match(/[0-9*]/)[0] === dbIndex) {
-                            var key = message.replace(/__keyspace@[0-9]*__:/, '');
-                            monitor.keyspaces[dbIndex].eventLog.add(key, event);
+                    var keyspaceSnapshot, keyspace;
+                    return __generator(this, function (_b) {
+                        switch (_b.label) {
+                            case 0: return [4, utils_2.getKeyspace(monitor.redisClient, dbIndex)];
+                            case 1:
+                                keyspaceSnapshot = _b.sent();
+                                keyspace = {
+                                    eventLog: new data_stores_1.EventLog(),
+                                    keyspaceHistories: new data_stores_1.KeyspaceHistoriesLog(),
+                                    keyspaceSnapshot: keyspaceSnapshot,
+                                    eventLogSnapshot: []
+                                };
+                                monitor.keyspaces.push(keyspace);
+                                monitor.keyspaceSubscriber.on('pmessage', function (channel, message, event) {
+                                    if (+message.match(/[0-9*]/)[0] === dbIndex) {
+                                        var key = message.replace(/__keyspace@[0-9]*__:/, '');
+                                        monitor.keyspaces[dbIndex].eventLog.add(key, event);
+                                    }
+                                });
+                                setInterval(utils_1.recordKeyspaceHistory, monitor.recordKeyspaceHistoryFrequency, monitor, dbIndex);
+                                return [2];
                         }
                     });
-                    setInterval(utils_1.recordKeyspaceHistory, monitor.recordKeyspaceHistoryFrequency, monitor, dbIndex);
                 };
-                for (dbIndex = 0; dbIndex < monitor.databases; dbIndex++) {
-                    _loop_1(dbIndex);
-                }
+                dbIndex = 0;
+                _a.label = 8;
+            case 8:
+                if (!(dbIndex < monitor.databases)) return [3, 11];
+                return [5, _loop_1(dbIndex)];
+            case 9:
+                _a.sent();
+                _a.label = 10;
+            case 10:
+                dbIndex++;
+                return [3, 8];
+            case 11:
                 monitor.keyspaceSubscriber.psubscribe('__keyspace@*__:*');
                 return [2];
         }

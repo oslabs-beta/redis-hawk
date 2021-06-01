@@ -47,7 +47,7 @@ var getValue = function (key, type, redisClient) { return __awaiter(void 0, void
                     case 'string': return [3, 1];
                     case 'list': return [3, 3];
                     case 'set': return [3, 5];
-                    case 'sortedSet': return [3, 7];
+                    case 'zset': return [3, 7];
                     case 'hash': return [3, 9];
                 }
                 return [3, 11];
