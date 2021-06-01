@@ -13,9 +13,10 @@ const totalEventsReducer = (state = initialState, action) => {
   switch (action.type) {
     case types.GET_EVENT_TOTALS: {
       const events = action.payload.totalEvents;
-      totalEvents = state.totalEvents.slice();
+
+      totalEvents = state.totalEvents;
       totalEvents.eventTotals.push(...events.eventTotals);
-      totalEvents.eventTally = events.evenTotal;
+      totalEvents.eventTally = events.eventTotal;
 
       return {
         ...state,

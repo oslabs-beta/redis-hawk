@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import FilterNav from './navbars/FilterNav.jsx';
-import PageNav from './navbars/PageNav.jsx';
-import InstanceNav from './navbars/InstanceNav.jsx';
-import KeyspaceComponent from './keyspace/KeyspaceComponent.jsx';
-import GraphComponent from './graphs/GraphComponent.jsx';
-import EventComponent from './events/EventComponent.jsx';
-import './styles/styles.scss';
-import { connect } from 'react-redux';
-import * as actions from '../action-creators/connections';
-import * as keyspaceActions from '../action-creators/keyspaceConnections';
-import '../../node_modules/react-vis/dist/style.css';
-
+import React, { Component } from "react";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import FilterNav from "./navbars/FilterNav.jsx";
+import PageNav from "./navbars/PageNav.jsx";
+import InstanceNav from "./navbars/InstanceNav.jsx";
+import KeyspaceComponent from "./keyspace/KeyspaceComponent.jsx";
+import GraphComponent from "./graphs/GraphComponent.jsx";
+import EventComponent from "./events/EventComponent.jsx";
+import "./styles/styles.scss";
+import { connect } from "react-redux";
+import * as actions from "../action-creators/connections";
+import * as keyspaceActions from "../action-creators/keyspaceConnections";
+import * as eventActions from "../action-creators/eventsConnections";
+import "../../node_modules/react-vis/dist/style.css";
 
 ///still need to check dispatchers here
 
@@ -24,8 +24,7 @@ const mapStateToProps = (store) => {
 
 const mapDispatchToProps = (dispatch) => ({
   loadKeyspace: () => dispatch(keyspaceActions.loadKeyspaceActionCreator()),
-  updateEvents: (dbIndex) =>
-    dispatch(actions.updateEventsActionCreator(dbIndex)),
+  loadAllEvents: () => dispatch(eventActions.loadAllEventsActionCreator()),
   updateInstanceInfo: () => dispatch(actions.updateInstanceInfoActionCreator()),
 });
 
@@ -36,8 +35,7 @@ class App extends Component {
 
   componentDidMount() {
     this.props.loadKeyspace();
-    console.log('loaded keyspace');
-    // this.props.updateEvents();
+    this.props.loadAllEvents();
     this.props.updateInstanceInfo();
   }
 

@@ -1,5 +1,6 @@
 import * as types from "../actions/actionTypes";
 
+
 // sample response from get to '/'
 //{
 //  data: [ (array of Instances)
@@ -51,7 +52,7 @@ export const loadAllEventsActionCreator = () => (dispatch) => {
 
 // * timestamp: time when the event occurred
 
-export const refreshKeyspaceActionCreator =
+export const refreshEventsActionCreator =
   (instanceId, dbIndex, pageSize, pageNum, refreshData) => (dispatch) => {
     fetch(
       `api/v2/events/${instanceId}/${dbIndex}/?pageSize=${pageSize}&pageNum=${pageNum}&refreshScan=${refreshData}`
@@ -99,7 +100,7 @@ export const changeEventsPageActionCreator =
       URI += `&keyTypeFilter=${queryParams.keyTypeFilter}`;
     if (queryParams.refreshData)
       URI += `&refreshData=${queryParams.refreshData}`;
-    
+
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {
@@ -119,8 +120,8 @@ export const changeEventsPageActionCreator =
 export const getTotalEventsActionCreator =
   (instanceId, dbIndex, queryParams) => (dispatch) => {
     console.log("in getTotalEventsActionCreator");
-    let URI = `api/v2/events/${instanceId}/${dbIndex}/`;
-    if (queryParams){
+    let URI = `api/v2/events/totals/${instanceId}/${dbIndex}/`;
+    if (queryParams) {
       if (queryParams.eventTotal) {
         if (queryParams.eventTypes)
           URI += `?eventTotal=${queryParams.eventTotal}/&${queryParams.eventTypes}`;
@@ -136,19 +137,20 @@ export const getTotalEventsActionCreator =
         if (queryParams.keynameFilter)
           URI += `?timeInterval=${queryParams.timeInterval}/&keynameFilter=${queryParams.keynameFilter}`;
         else {
-          URI += `?timeInterval=${queryParms.timeInterval}`;
+          URI += `?timeInterval=${queryParams.timeInterval}`;
         }
       }
-
     }
+
     console.log("URI in eventTotalsActionCreator", URI);
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {
         console.log("response in getTotalEventsActionCreator", response);
-        let allEvents = response.data;
+        const allEvents = response;
+        console.log("allEvents after fetch", allEvents);
         dispatch({
-          type: types.LOAD_ALL_EVENTS,
+          type: types.GET_EVENT_TOTALS,
           payload: {
             totalEvents: allEvents,
             currInstance: instanceId,
