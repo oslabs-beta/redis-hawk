@@ -33,7 +33,7 @@ const createClients = async () => {
     client.config = promisify(client.config).bind(client);
 
     try {
-      await client.config('SET', 'notify-keyspace-events');
+      await client.config('SET', 'notify-keyspace-events', 'KEA');
     } catch(e) {
       `Could not set keyspace notifications for client at port ${PORT}: ${e}`;
     }
