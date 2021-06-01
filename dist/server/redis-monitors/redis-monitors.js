@@ -69,27 +69,30 @@ var initMonitor = function (monitor) { return __awaiter(void 0, void 0, void 0, 
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4, monitor.redisClient.config('SET', 'notify-keyspace-events', 'KEA')];
+                redisMonitors.push(monitor);
+                _a.label = 1;
             case 1:
-                _a.sent();
-                return [3, 3];
+                _a.trys.push([1, 3, , 4]);
+                return [4, monitor.redisClient.config('SET', 'notify-keyspace-events', 'KEA')];
             case 2:
+                _a.sent();
+                return [3, 4];
+            case 3:
                 e_1 = _a.sent();
                 console.log("Could not configure client to publish keyspace event noficiations");
-                return [3, 3];
-            case 3:
-                _a.trys.push([3, 5, , 6]);
-                return [4, monitor.redisClient.config('GET', 'databases')];
+                return [3, 4];
             case 4:
+                _a.trys.push([4, 6, , 7]);
+                return [4, monitor.redisClient.config('GET', 'databases')];
+            case 5:
                 res = _a.sent();
                 monitor.databases = +res[1];
-                return [3, 6];
-            case 5:
+                return [3, 7];
+            case 6:
                 e_2 = _a.sent();
                 console.log("Could not get database count from client");
-                return [3, 6];
-            case 6:
+                return [3, 7];
+            case 7:
                 _loop_1 = function (dbIndex) {
                     var keyspace = {
                         eventLog: new data_stores_1.EventLog(),
@@ -110,7 +113,6 @@ var initMonitor = function (monitor) { return __awaiter(void 0, void 0, void 0, 
                     _loop_1(dbIndex);
                 }
                 monitor.keyspaceSubscriber.psubscribe('__keyspace@*__:*');
-                redisMonitors.push(monitor);
                 return [2];
         }
     });

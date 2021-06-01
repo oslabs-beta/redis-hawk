@@ -26,6 +26,7 @@ const initMonitor = async (monitor: RedisMonitor): Promise<void> => {
   For a given initialized RedisMonitor, configures the monitoring behaviors for the monitored instance.
 */
   
+  redisMonitors.push(monitor);
   //Subscribe to all keyspace events
   try {
     await monitor.redisClient.config('SET', 'notify-keyspace-events', 'KEA');
@@ -75,9 +76,7 @@ const initMonitor = async (monitor: RedisMonitor): Promise<void> => {
     ); 
   }
 
-  monitor.keyspaceSubscriber.psubscribe('__keyspace@*__:*')
-  redisMonitors.push(monitor);
-
+  monitor.keyspaceSubscriber.psubscribe('__keyspace@*__:*');
 }
 
 instances.forEach((instance: RedisInstance, idx: number): void => {
