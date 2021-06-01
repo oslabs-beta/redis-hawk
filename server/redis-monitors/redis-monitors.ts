@@ -21,26 +21,11 @@ const instances: RedisInstance[] = process.env.IS_TEST ?
 
 const redisMonitors: RedisMonitor[] = [];
 
-instances.forEach( async (instance: RedisInstance, idx: number): Promise<void> => {
-
-  //Promisify methods for the redis client for async/await capability
-  const client: redis.RedisClient = promisifyClientMethods(
-    redis.createClient({host: instance.host, port: instance.port})
-  );
-
-  //Subscriber does not require any promisified methods
-  const subscriber: redis.RedisClient = redis.createClient({host: instance.host, port: instance.port});
-
-  const monitor: RedisMonitor = {
-    instanceId: idx + 1,
-    redisClient: client,
-    keyspaceSubscriber: subscriber,
-    host: instance.host,
-    port: instance.port,
-    keyspaces: [],
-    recordKeyspaceHistoryFrequency: instance.recordKeyspaceHistoryFrequency
-  }
-
+const initMonitor = async (monitor: RedisMonitor): Promise<void> => {
+/*
+  For a given initialized RedisMonitor, configures the monitoring behaviors for the monitored instance.
+*/
+  
   //Subscribe to all keyspace events
   try {
     await monitor.redisClient.config('SET', 'notify-keyspace-events', 'KEA');
@@ -92,6 +77,45 @@ instances.forEach( async (instance: RedisInstance, idx: number): Promise<void> =
 
   monitor.keyspaceSubscriber.psubscribe('__keyspace@*__:*')
   redisMonitors.push(monitor);
+
+}
+
+instances.forEach((instance: RedisInstance, idx: number): void => {
+/*
+  For each instance in the config.json, set up a RedisMonitor object
+  initialized with the instance details and a node-redis client for
+  both the redisClient (used for performing general commands) and the keyspaceSubscriber
+*/
+
+  let client: redis.RedisClient;
+  let subscriber: redis.RedisClient;
+  if (instance.host && instance.port) {
+    client = redis.createClient({host: instance.host, port: instance.port});
+    subscriber = redis.createClient({host: instance.host, port: instance.port});
+  } else if (instance.url) {
+    client = redis.createClient({url: instance.url});
+    subscriber = redis.createClient({url: instance.url});
+  } else {
+    console.log(`No valid connection host/port or URL provided - check your config. Instance details: ${instance}`);
+    return
+  }
+
+  //Promisify methods for the redis client for async/await capability
+  //Subscriber does not require any promisified method
+  client = promisifyClientMethods(client);
+
+  const monitor: RedisMonitor = {
+    instanceId: idx + 1,
+    redisClient: client,
+    keyspaceSubscriber: subscriber,
+    host: instance.host,
+    port: instance.port,
+    url: instance.url,
+    keyspaces: [],
+    recordKeyspaceHistoryFrequency: instance.recordKeyspaceHistoryFrequency
+  }
+
+  initMonitor(monitor);
 })
 
 export default redisMonitors;

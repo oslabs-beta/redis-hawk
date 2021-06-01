@@ -64,45 +64,32 @@ var instances = process.env.IS_TEST ?
     JSON.parse(fs.readFileSync(path.resolve(__dirname, '../configs/tests-config.json')).toString())
     : JSON.parse(fs.readFileSync(path.resolve(__dirname, '../configs/config.json')).toString());
 var redisMonitors = [];
-instances.forEach(function (instance, idx) { return __awaiter(void 0, void 0, void 0, function () {
-    var client, subscriber, monitor, e_1, res, e_2, _loop_1, dbIndex;
+var initMonitor = function (monitor) { return __awaiter(void 0, void 0, void 0, function () {
+    var e_1, res, e_2, _loop_1, dbIndex;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                client = utils_1.promisifyClientMethods(redis.createClient({ host: instance.host, port: instance.port }));
-                subscriber = redis.createClient({ host: instance.host, port: instance.port });
-                monitor = {
-                    instanceId: idx + 1,
-                    redisClient: client,
-                    keyspaceSubscriber: subscriber,
-                    host: instance.host,
-                    port: instance.port,
-                    keyspaces: [],
-                    recordKeyspaceHistoryFrequency: instance.recordKeyspaceHistoryFrequency
-                };
-                _a.label = 1;
-            case 1:
-                _a.trys.push([1, 3, , 4]);
+                _a.trys.push([0, 2, , 3]);
                 return [4, monitor.redisClient.config('SET', 'notify-keyspace-events', 'KEA')];
-            case 2:
+            case 1:
                 _a.sent();
-                return [3, 4];
-            case 3:
+                return [3, 3];
+            case 2:
                 e_1 = _a.sent();
                 console.log("Could not configure client to publish keyspace event noficiations");
-                return [3, 4];
-            case 4:
-                _a.trys.push([4, 6, , 7]);
+                return [3, 3];
+            case 3:
+                _a.trys.push([3, 5, , 6]);
                 return [4, monitor.redisClient.config('GET', 'databases')];
-            case 5:
+            case 4:
                 res = _a.sent();
                 monitor.databases = +res[1];
-                return [3, 7];
-            case 6:
+                return [3, 6];
+            case 5:
                 e_2 = _a.sent();
                 console.log("Could not get database count from client");
-                return [3, 7];
-            case 7:
+                return [3, 6];
+            case 6:
                 _loop_1 = function (dbIndex) {
                     var keyspace = {
                         eventLog: new data_stores_1.EventLog(),
@@ -127,5 +114,33 @@ instances.forEach(function (instance, idx) { return __awaiter(void 0, void 0, vo
                 return [2];
         }
     });
-}); });
+}); };
+instances.forEach(function (instance, idx) {
+    var client;
+    var subscriber;
+    if (instance.host && instance.port) {
+        client = redis.createClient({ host: instance.host, port: instance.port });
+        subscriber = redis.createClient({ host: instance.host, port: instance.port });
+    }
+    else if (instance.url) {
+        client = redis.createClient({ url: instance.url });
+        subscriber = redis.createClient({ url: instance.url });
+    }
+    else {
+        console.log("No valid connection host/port or URL provided - check your config. Instance details: " + instance);
+        return;
+    }
+    client = utils_1.promisifyClientMethods(client);
+    var monitor = {
+        instanceId: idx + 1,
+        redisClient: client,
+        keyspaceSubscriber: subscriber,
+        host: instance.host,
+        port: instance.port,
+        url: instance.url,
+        keyspaces: [],
+        recordKeyspaceHistoryFrequency: instance.recordKeyspaceHistoryFrequency
+    };
+    initMonitor(monitor);
+});
 exports.default = redisMonitors;
