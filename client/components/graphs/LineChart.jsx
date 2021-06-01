@@ -6,15 +6,10 @@ import Chart from "chart.js/auto";
 import { cyan } from "@material-ui/core/colors";
 
 const LineChart = (props) => {
-  const [chartData, setChartData] = useState(props.data);
-  const [loading, setLoading] = useState(true);
+  const [chartData, setChartData] = useState({});
   console.log("props in LineChart", props);
   // array is newest to oldest
-  let labels = [];
-  let eventsArray = [];
-  const params = {
-    timeInterval: 10000,
-  };
+
   // const chart = () => {
   //   // if (props.totalEvents) {
   //   const totalEvents = props.totalEvents.eventTotals;
@@ -29,7 +24,7 @@ const LineChart = (props) => {
   //   }
   //   // }
   // };
-  console.log("loading in LineChart", loading);
+
   // useState inside chart function
   // const data = {
   //   labels: labels,
@@ -76,12 +71,21 @@ const LineChart = (props) => {
   // };
   // chart();
   console.log("props.data in LineChart", props.data);
-  console.log("props.wasCalled", props.wasCalled);
+  // const setGraphUpdate = () => {
+  //   return setInterval(
+  //     props.getNextEvents(props.currInstance, props.currDatabase, {
+  //       eventTotal: props.totalEvents.eventTotal,
+  //     })
+  //   );
+  // };
+  // if (props.totalEvents.eventTotal) {
+  //   setTimeout(setGraphUpdate, 7000);
+  // }
+
   const data = props.data;
   useEffect(() => {
     // console.log("props in useEffect", props);
     Chart.register(zoomPlugin);
-    setChartData(props.data)
   }, []);
 
   const options = {
@@ -99,7 +103,7 @@ const LineChart = (props) => {
         zoom: {
           wheel: {
             enabled: true,
-            speed: 0.001,
+            speed: 0.01,
             modifier: "shift",
           },
           pinch: {
@@ -115,7 +119,8 @@ const LineChart = (props) => {
         limits: {
           y: {
             min: 0,
-            max: Math.max(...eventsArray) + 50,
+            // max: max,
+            // minRange: Math.max(...props.data.datasets.data) + 50,
           },
         },
       },
@@ -162,7 +167,7 @@ const LineChart = (props) => {
   return (
     <div>
       <Line
-        data={chartData}
+        data={props.data}
         height={400}
         width={600}
         options={options}

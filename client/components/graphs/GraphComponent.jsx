@@ -43,7 +43,7 @@ class GraphComponent extends Component {
       timeInterval: 7000,
     });
     // }
-    setTimeout(setInterval(this.setGraphUpdate, 7000), 7000);
+    // setTimeout(setInterval(this.setGraphUpdate, 7000), 7000);
   }
   getInitialData(currInstance, currDB, params) {
     this.props.getEvents(currInstance, currDB, params);
