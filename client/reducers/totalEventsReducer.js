@@ -28,7 +28,32 @@ const totalEventsReducer = (state = initialState, action) => {
     case types.GET_EVENT_TOTALS: {
       const datasets = action.payload.datasets;
       const labels = action.payload.labels;
-      console.log('action payload in tEReducer', action.payload)
+      console.log("action payload in tEReducer", action.payload);
+      return {
+        ...state,
+        data: {
+          totalEvents: action.payload.totalEvents,
+          labels: labels,
+          datasets: [
+            {
+              label: "Number of Events",
+              data: datasets,
+              backgroundColor: ["red"],
+              borderColor: "white",
+              borderWidth: "2",
+              pointBorderColor: "red",
+              pointHoverBackgroundColor: "#55bae7",
+            },
+          ],
+        },
+      };
+    }
+    case types.GET_NEXT_EVENTS: {
+      const datasets = action.payload.datasets;
+      const labels = action.payload.labels;
+      console.log("action payload in getEventsReducer", action.payload);
+
+      console.log("data in getnextevents reducer", state.data);
       return {
         ...state,
         data: {

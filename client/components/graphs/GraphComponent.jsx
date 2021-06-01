@@ -21,6 +21,10 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(
       eventActions.getTotalEventsActionCreator(instanceId, dbIndex, queryParams)
     ),
+  getNextEvents: (instanceId, dbIndex, queryParams) =>
+    dispatch(
+      eventActions.getNextEventsActionCreator(instanceId, dbIndex, queryParams)
+    ),
 });
 
 class GraphComponent extends Component {
@@ -28,14 +32,14 @@ class GraphComponent extends Component {
     super(props);
     this.state = {
       wasCalled: false,
-      params: { timeInterval: 20000 },
+      params: { timeInterval: 10000 },
       eventParams: { eventTotal: this.props.eventTotal },
     };
     this.setGraphUpdate = this.setGraphUpdate.bind(this);
   }
   componentDidMount() {
     console.log("in graphComponent CDMount");
-    console.log("state event paraws", this.state.eventParams);
+    // console.log("state event params", this.state.eventParams);
     const self = this;
     // if (this.state.wasCalled === true) {
     //   setInterval(
@@ -47,13 +51,11 @@ class GraphComponent extends Component {
     //     3000
     //   );
     // } else {
-    this.getInitialData(
-      this.props.currInstance,
-      this.props.currDatabase,
-      this.state.params
-    );
+    this.getInitialData(this.props.currInstance, this.props.currDatabase, {
+      timeInterval: 10000,
+    });
     // }
-    setInterval(this.setGraphUpdate, 5000);
+    // setInterval(this.setGraphUpdate, 5000);
   }
   getInitialData(currInstance, currDB, params) {
     this.props.getEvents(currInstance, currDB, params);
@@ -63,9 +65,9 @@ class GraphComponent extends Component {
     console.log("this.state.wasCalled", this.state.wasCalled);
   }
   setGraphUpdate() {
-      console.log('this.props.eventTotal',this.props.totalEvents)
+    console.log("this.props.eventTotal", this.props.totalEvents);
 
-    return this.props.getEvents(
+    return this.props.getNextEvents(
       this.props.currInstance,
       this.props.currDatabase,
       // this.state.eventParams
