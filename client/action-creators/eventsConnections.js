@@ -1,4 +1,4 @@
-import * as types from "../actions/actionTypes";
+import * as types from '../actions/actionTypes';
 
 // sample response from get to '/'
 //{
@@ -29,10 +29,10 @@ import * as types from "../actions/actionTypes";
 // }
 
 export const loadAllEventsActionCreator = () => (dispatch) => {
-  fetch("/api/v2/events")
+  fetch('/api/v2/events')
     .then((res) => res.json())
     .then((response) => {
-      console.log("response in loadAllEventsActionCreator", response);
+      console.log('response in loadAllEventsActionCreator', response);
       let allEvents = response.data;
       dispatch({
         type: types.LOAD_ALL_EVENTS,
@@ -59,7 +59,7 @@ export const refreshKeyspaceActionCreator =
       .then((res) => res.json())
       .then((response) => {
         // response should be
-        console.log("response in refreshEventsActionCreator", response);
+        console.log('response in refreshEventsActionCreator', response);
         let refreshEvents = response;
         dispatch({
           type: types.REFRESH_EVENTS,
@@ -97,13 +97,13 @@ export const changeEventsPageActionCreator =
       URI += `&keyNameFilter=${queryParams.keyNameFilters}`;
     if (queryParams.keyTypeFilter)
       URI += `&keyTypeFilter=${queryParams.keyTypeFilter}`;
-    if (queryParams.refreshData)
+    if (queryParams.refreshData !== undefined)
       URI += `&refreshData=${queryParams.refreshData}`;
-    
+
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {
-        console.log("response in changeEventsPageActionCreator", response);
+        console.log('response in changeEventsPageActionCreator', response);
         let nextPageEvents = response;
         dispatch({
           type: types.CHANGE_EVENTS_PAGE,
@@ -118,9 +118,9 @@ export const changeEventsPageActionCreator =
 
 export const getTotalEventsActionCreator =
   (instanceId, dbIndex, queryParams) => (dispatch) => {
-    console.log("in getTotalEventsActionCreator");
+    console.log('in getTotalEventsActionCreator');
     let URI = `api/v2/events/${instanceId}/${dbIndex}/`;
-    if (queryParams){
+    if (queryParams) {
       if (queryParams.eventTotal) {
         if (queryParams.eventTypes)
           URI += `?eventTotal=${queryParams.eventTotal}/&${queryParams.eventTypes}`;
@@ -139,13 +139,12 @@ export const getTotalEventsActionCreator =
           URI += `?timeInterval=${queryParms.timeInterval}`;
         }
       }
-
     }
-    console.log("URI in eventTotalsActionCreator", URI);
+    console.log('URI in eventTotalsActionCreator', URI);
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {
-        console.log("response in getTotalEventsActionCreator", response);
+        console.log('response in getTotalEventsActionCreator', response);
         let allEvents = response.data;
         dispatch({
           type: types.LOAD_ALL_EVENTS,

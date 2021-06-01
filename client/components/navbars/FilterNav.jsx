@@ -140,16 +140,7 @@ class FilterNav extends Component {
             pageNum={this.props.pageNum}
             pageSize={this.props.pageSize}
           />
-          <button
-            className='filter-button'
-            id='clearFilterButton'
-            onClick={(e) => {
-              e.preventDefault();
-              this.props.updateCurrDisplay('', '');
-            }}
-          >
-            Clear Filter
-          </button>
+
           <button
             className='filter-button'
             id='searchButton'

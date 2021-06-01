@@ -1,39 +1,5 @@
 import * as types from '../actions/actionTypes';
 
-export const updateEventsActionCreator =
-  (instanceId, dbIndex, currIndex) => (dispatch) => {
-    let url;
-    if (instanceId && dbIndex && currIndex) {
-      url = `/api/events/${instanceId}/${dbIndex}?eventTotal=${currIndex}`;
-    } else {
-      url = '/api/events';
-    }
-    fetch(url)
-      .then((res) => res.json())
-      .then((res) => {
-        let events;
-        if (!dbIndex) {
-          // console.log('events resopnse in updateEventsActionCreator', res);
-          events = res.data;
-        } else {
-          events = res.data[0].keyspaces[0];
-        }
-        dispatch({
-          type: types.UPDATE_EVENTS,
-          //is this the proper syntax to add dbIndex???
-          payload: {
-            events: events,
-            currDatabase: dbIndex,
-            currInstance: instanceId,
-          },
-        });
-        // }
-      })
-      .catch((err) => {
-        console.log('error in updateEventsActionCreator: ', err);
-      });
-  };
-
 //NEEDS COMPLETION ONCE WE GET WHAT THE DATA WILL LOOK LIKE FROM BACKEND
 export const updateKeyGraphActionCreator =
   (instanceId, dbIndex) => (dispatch) => {

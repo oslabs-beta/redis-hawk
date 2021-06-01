@@ -99,10 +99,10 @@ export const changeKeyspacePageActionCreator =
       URI += `&keyNameFilter=${queryOptions.keyNameFilter}`;
     if (queryOptions.keyTypeFilter)
       URI += `&keyTypeFilter=${queryOptions.keyTypeFilter}`;
-    if (queryOptions.refreshScan)
+    if (queryOptions.refreshScan !== undefined)
       URI += `&refreshScan=${queryOptions.refreshScan}`;
 
-    // console.log('MY CHANGE KEYSPACE PAGE URI', URI);
+    console.log('MY CHANGE KEYSPACE PAGE URI', URI);
 
     fetch(URI)
       .then((res) => res.json())
