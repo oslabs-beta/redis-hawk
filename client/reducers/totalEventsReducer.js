@@ -28,7 +28,7 @@ const totalEventsReducer = (state = initialState, action) => {
     case types.GET_EVENT_TOTALS: {
       const datasets = action.payload.datasets;
       const labels = action.payload.labels;
-      console.log("action payload in tEReducer", action.payload);
+      console.log('action payload in tEReducer', action.payload)
       return {
         ...state,
         data: {

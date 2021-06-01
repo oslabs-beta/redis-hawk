@@ -10,7 +10,7 @@ const mapStateToProps = (store) => {
     currInstance: store.currInstanceStore.currInstance,
     currDatabase: store.currDatabaseStore.currDatabase,
     totalEvents: store.totalEventsStore.totalEvents,
-    data: store.totalEventsStore.data
+    data: store.totalEventsStore.data,
   };
 };
 
@@ -29,12 +29,13 @@ class GraphComponent extends Component {
     this.state = {
       wasCalled: false,
       params: { timeInterval: 20000 },
+      eventParams: { eventTotal: this.props.eventTotal },
     };
     this.setGraphUpdate = this.setGraphUpdate.bind(this);
   }
   componentDidMount() {
     console.log("in graphComponent CDMount");
-
+    console.log("state event paraws", this.state.eventParams);
     const self = this;
     // if (this.state.wasCalled === true) {
     //   setInterval(
@@ -52,18 +53,23 @@ class GraphComponent extends Component {
       this.state.params
     );
     // }
+    setInterval(this.setGraphUpdate, 5000);
   }
   getInitialData(currInstance, currDB, params) {
     this.props.getEvents(currInstance, currDB, params);
     this.setState({
       wasCalled: true,
     });
+    console.log("this.state.wasCalled", this.state.wasCalled);
   }
   setGraphUpdate() {
+      console.log('this.props.eventTotal',this.props.totalEvents)
+
     return this.props.getEvents(
       this.props.currInstance,
       this.props.currDatabase,
-      this.props.eventParams
+      // this.state.eventParams
+      { eventTotal: this.props.totalEvents }
     );
   }
 
@@ -71,17 +77,17 @@ class GraphComponent extends Component {
     console.log("props in graphComponent", this.props);
 
     // if (this.props.data) {
-      return (
-        <div id='graphsComponentContainer' className='GraphComponent-Container'>
-          <LineChart
-            getEvents={this.props.getEvents}
-            currInstance={this.props.currInstance}
-            currDatabase={this.props.currDatabase}
-            // totalEvents={this.props.totalEvents}
-            data={this.props.data}
-          />
-        </div>
-      );
+    return (
+      <div id='graphsComponentContainer' className='GraphComponent-Container'>
+        <LineChart
+          getEvents={this.props.getEvents}
+          currInstance={this.props.currInstance}
+          currDatabase={this.props.currDatabase}
+          // totalEvents={this.props.totalEvents}
+          data={this.props.data}
+        />
+      </div>
+    );
     // }
   }
 }

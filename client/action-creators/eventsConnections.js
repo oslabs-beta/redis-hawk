@@ -127,7 +127,7 @@ export const getTotalEventsActionCreator =
         if (queryParams.keynameFilter)
           URI += `?eventTotal=${queryParams.eventTotal}/&keynameFilter=${queryParams.keynameFilter}`;
         else {
-          URI += `?eventTotal=${queryParms.eventTotal}`;
+          URI += `?eventTotal=${queryParams.eventTotal}`;
         }
       }
       if (queryParams.timeInterval) {
@@ -142,34 +142,70 @@ export const getTotalEventsActionCreator =
     }
 
     console.log("URI in eventTotalsActionCreator", URI);
-    fetch(URI)
-      .then((res) => res.json())
-      .then((response) => {
-        console.log("response in getTotalEventsActionCreator", response);
-        const allEvents = response;
-        console.log("allEvents after fetch", allEvents);
-        const labels = [];
-        const datasets = [];
-        for (let i = response.eventTotals.length - 1; i >= 0; i--) {
-          // console.log(totalEvents[i]);
-          const time = new Date(response.eventTotals[i].end_time)
-            .toString("MMddd")
-            .slice(16, 24);
-          // console.log(time);
-          labels.push(time);
-          datasets.push(response.eventTotals[i].eventCount);
-        }
-        console.log("labels", labels);
-        console.log("datasets", datasets);
-        dispatch({
-          type: types.GET_EVENT_TOTALS,
-          payload: {
-            labels: labels,
-            datasets: datasets,
-            totalEvents: allEvents,
-            currInstance: instanceId,
-            currDatabase: dbIndex,
-          },
+    if (queryParams.timeInterval) {
+      fetch(URI)
+        .then((res) => res.json())
+        .then((response) => {
+          console.log("response in getTotalEventsActionCreator", response);
+          const allEvents = response;
+          console.log("allEvents after fetch", allEvents);
+          const labels = [];
+          const datasets = [];
+          for (let i = response.eventTotals.length - 1; i >= 0; i--) {
+            // console.log(totalEvents[i]);
+            const time = new Date(response.eventTotals[i].end_time)
+              .toString("MMddd")
+              .slice(16, 24);
+            // console.log(time);
+            labels.push(time);
+            datasets.push(response.eventTotals[i].eventCount);
+          }
+          console.log("labels", labels);
+          console.log("datasets", datasets);
+          dispatch({
+            type: types.GET_EVENT_TOTALS,
+            payload: {
+              labels: labels,
+              datasets: datasets,
+              totalEvents: allEvents,
+              currInstance: instanceId,
+              currDatabase: dbIndex,
+            },
+          });
         });
-      });
+    } else {
+      fetch(URI)
+        .then((res) => res.json())
+        .then((response) => {
+          console.log("response in getTotalEventsActionCreator for eventTotalParameter", response);
+          const allEvents = response;
+          console.log("allEvents after fetch", allEvents);
+          const labels = [];
+          const datasets = [];
+          const time = new Date(response.eventTotals[0].end_time)
+          labels.push(time);
+          datasets.push(response.eventTotals[0].eventCount)
+          // for (let i = response.eventTotals.length - 1; i >= 0; i--) {
+          //   // console.log(totalEvents[i]);
+          //   const time = new Date(response.eventTotals[i].end_time)
+          //     .toString("MMddd")
+          //     .slice(16, 24);
+          //   // console.log(time);
+          //   labels.push(time);
+          //   datasets.push(response.eventTotals[i].eventCount);
+          // }
+          console.log("labels", labels);
+          console.log("datasets", datasets);
+          dispatch({
+            type: types.GET_EVENT_TOTALS,
+            payload: {
+              labels: labels,
+              datasets: datasets,
+              totalEvents: allEvents,
+              currInstance: instanceId,
+              currDatabase: dbIndex,
+            },
+          });
+        });
+    }
   };
