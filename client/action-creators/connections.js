@@ -65,9 +65,13 @@ export const updatePageActionCreator = (newPage) => ({
   payload: newPage,
 });
 
-export const updateCurrDisplayActionCreator = (filter, category) => ({
+//  {
+//  filterType: something
+//  filterValue: something
+//  }
+export const updateCurrDisplayActionCreator = (object) => ({
   type: types.UPDATE_CURRDISPLAY,
-  payload: { filter: filter, category: category },
+  payload: object,
 });
 
 export const updatePageNumActionCreator = (pageNum) => ({

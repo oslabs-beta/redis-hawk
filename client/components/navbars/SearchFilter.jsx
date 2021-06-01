@@ -208,24 +208,43 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SearchFilter() {
+export default function SearchFilter(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState('');
   const [category, setCategory] = React.useState('');
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    setValue('');
-    props.updateCurrDisplay(value, category);
-  };
 
   const handleChange = (event) => {
     console.log('handling change');
     setValue(event.target.value);
   };
-  function handleClick(event) {
-    setCategory(event.target.id);
+  function selectChange(event) {
+    setCategory(event.target.value);
+    props.updateCurrDisplay({
+      filterType: 'keyType',
+      filterValue: event.target.value,
+    });
   }
+
+  console.log(props.currDisplay);
+  function handleSubmit() {
+    //change the state of currDisplay
+    console.log('my current display in handle submit', props.currDisplay);
+    props.updateCurrDisplay({ filterType: 'keyName', filterValue: value });
+    const queryOptions = {
+      pageSize: props.pageSize,
+      pageNum: props.pageNum,
+      keyNameFilter: props.currDisplay.keyNameFilter,
+      keyTypeFilter: props.currDisplay.keyTypeFilter,
+      refreshScan: 0,
+    };
+    props.changeKeyspacePage(
+      props.currInstance,
+      props.currDatabase,
+      queryOptions
+    );
+  }
+
+  const newArea = [];
 
   return (
     <div style={{ width: '75%', display: 'flex', flexDirection: 'column' }}>
@@ -239,7 +258,7 @@ export default function SearchFilter() {
       </FormControl>
       <FormControl className={classes.formControl}>
         <InputLabel htmlFor='grouped-select'>key type filter</InputLabel>
-        <Select defaultValue='' id='grouped-select'>
+        <Select defaultValue='' id='grouped-select' onChange={selectChange}>
           <MenuItem value=''>
             <em>None</em>
           </MenuItem>
@@ -260,9 +279,12 @@ export default function SearchFilter() {
       >
         <Button color='default'>Cancel</Button>
         <Button color='default'>Clear</Button>
-        <Button color='default'>Filter</Button>
+        <Button onClick={handleSubmit} color='default'>
+          Filter
+        </Button>
         <Button color='default'>+</Button>
       </div>
+      <div>{newArea}</div>
     </div>
   );
 }

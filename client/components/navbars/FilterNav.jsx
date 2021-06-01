@@ -41,8 +41,8 @@ const mapDispatchToProps = (dispatch) => ({
     ),
   updateKeyGraph: (keyGraph) =>
     dispatch(actions.updateKeyGraphActionCreator(keyGraph)),
-  updateCurrDisplay: (filter, category) =>
-    dispatch(actions.updateCurrDisplayActionCreator(filter, category)),
+  updateCurrDisplay: (object) =>
+    dispatch(actions.updateCurrDisplayActionCreator(object)),
   updatePageNum: (pageNum) => {
     actions.updatePageActionCreator(pageNum);
   },
@@ -54,6 +54,7 @@ class FilterNav extends Component {
   }
 
   render() {
+    console.log(this.props.currDisplay);
     if (this.props.currPage === 'graphs') {
       return (
         <div className='filterNavContainer'>
@@ -101,6 +102,9 @@ class FilterNav extends Component {
             events={this.props.events[this.props.currDatabase]}
             currPage={this.props.currPage}
             updateCurrDisplay={this.props.updateCurrDisplay}
+            currDisplay={this.props.currDisplay}
+            currDatabase={this.props.currDatabase}
+            currInstance={this.props.currInstance}
           />
           <button
             className='filter-button'
@@ -139,6 +143,10 @@ class FilterNav extends Component {
             updateCurrDisplay={this.props.updateCurrDisplay}
             pageNum={this.props.pageNum}
             pageSize={this.props.pageSize}
+            changeKeyspacePage={this.props.changeKeyspacePage}
+            currDisplay={this.props.currDisplay}
+            currDatabase={this.props.currDatabase}
+            currInstance={this.props.currInstance}
           />
 
           <button
