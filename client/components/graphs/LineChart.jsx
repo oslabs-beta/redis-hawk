@@ -6,7 +6,7 @@ import Chart from "chart.js/auto";
 
 const LineChart = (props) => {
   const [chartData, setChartData] = useState({});
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
   console.log("props in LineChart", props);
   // array is newest to oldest
   let labels = [];
@@ -28,7 +28,7 @@ const LineChart = (props) => {
   //   }
   //   // }
   // };
-  console.log('loading in LineChart', loading)
+  console.log("loading in LineChart", loading);
   // useState inside chart function
   // const data = {
   //   labels: labels,
@@ -74,7 +74,8 @@ const LineChart = (props) => {
   //   });
   // };
   // chart();
-
+  console.log("props.data in LineChart", props.data);
+  const data = props.data;
   useEffect(() => {
     // console.log("props in useEffect", props);
     Chart.register(zoomPlugin);
@@ -95,7 +96,7 @@ const LineChart = (props) => {
         zoom: {
           wheel: {
             enabled: true,
-            speed: 0.075,
+            speed: 0.001,
           },
           pinch: {
             enabled: true,
@@ -105,7 +106,7 @@ const LineChart = (props) => {
         limits: {
           y: {
             min: 0,
-            max: Math.max(...eventsArray) + 5,
+            max: Math.max(...eventsArray) + 50,
           },
         },
       },
@@ -119,9 +120,9 @@ const LineChart = (props) => {
           color: "white",
         },
         ticks: {
-          major: {
-            enabled: true,
-          },
+          // major: {
+          //   enabled: true,
+          // },
           color: "white",
         },
         grid: {
@@ -141,12 +142,14 @@ const LineChart = (props) => {
           major: {
             enabled: true,
           },
+          autoskip: true,
+          max: 5,
           color: "white",
         },
       },
     },
   };
-  if (props.data) {
+  // if (props.data) {
   return (
     <div>
       <Line
@@ -165,9 +168,10 @@ const LineChart = (props) => {
       </button>
     </div>
   );
-  } else {
-    return <div>Loading...</div>;
-  }
+  // }
+  // else {
+  //   return <div>Loading...</div>;
+  // }
 };
 
 export default LineChart;

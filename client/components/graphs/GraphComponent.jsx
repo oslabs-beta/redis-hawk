@@ -38,40 +38,26 @@ class GraphComponent extends Component {
     this.setGraphUpdate = this.setGraphUpdate.bind(this);
   }
   componentDidMount() {
-    console.log("in graphComponent CDMount");
     // console.log("state event params", this.state.eventParams);
     const self = this;
-    // if (this.state.wasCalled === true) {
-    //   setInterval(
-    //     self.setGraphUpdate(
-    //       this.props.currInstance,
-    //       this.props.currDatabase,
-    //       this.state.eventParams
-    //     ),
-    //     3000
-    //   );
-    // } else {
     this.getInitialData(this.props.currInstance, this.props.currDatabase, {
       timeInterval: 10000,
     });
     // }
-    // setInterval(this.setGraphUpdate, 5000);
+    // setTimeout(setInterval(this.setGraphUpdate, 10000), 10000);
   }
   getInitialData(currInstance, currDB, params) {
     this.props.getEvents(currInstance, currDB, params);
     this.setState({
       wasCalled: true,
     });
-    console.log("this.state.wasCalled", this.state.wasCalled);
   }
   setGraphUpdate() {
-    console.log("this.props.eventTotal", this.props.totalEvents);
-
     return this.props.getNextEvents(
       this.props.currInstance,
       this.props.currDatabase,
       // this.state.eventParams
-      { eventTotal: this.props.totalEvents }
+      { eventTotal: this.props.totalEvents.eventTotal }
     );
   }
 

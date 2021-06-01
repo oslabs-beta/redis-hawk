@@ -235,7 +235,8 @@ export const getNextEventsActionCreator =
         console.log("allEvents after fetch", allEvents);
         const labels = [];
         const datasets = [];
-        const time = new Date(response.eventTotals[0].end_time);
+        const time = new Date(response.eventTotals[0].end_time).toString("MMddd")
+              .slice(16, 24);
         labels.push(time);
         datasets.push(response.eventTotals[0].eventCount);
 

@@ -31,8 +31,8 @@ const totalEventsReducer = (state = initialState, action) => {
       console.log("action payload in tEReducer", action.payload);
       return {
         ...state,
+        totalEvents: action.payload.totalEvents,
         data: {
-          totalEvents: action.payload.totalEvents,
           labels: labels,
           datasets: [
             {
@@ -51,26 +51,31 @@ const totalEventsReducer = (state = initialState, action) => {
     case types.GET_NEXT_EVENTS: {
       const datasets = action.payload.datasets;
       const labels = action.payload.labels;
-      console.log("action payload in getEventsReducer", action.payload);
-
-      console.log("data in getnextevents reducer", state.data);
+      const dataCopy = state.data;
+      console.log("dataCopy", dataCopy);
+      // dataCopy.datasets[0].data.push(...datasets);
+      // dataCopy.labels.push(...labels);
+      datasets.forEach((events) => dataCopy.datasets[0].data.push(events));
+      labels.forEach((time) => {dataCopy.labels.push(time)});
+      console.log("data in getnextevents reducer", dataCopy);
       return {
         ...state,
-        data: {
-          totalEvents: action.payload.totalEvents,
-          labels: labels,
-          datasets: [
-            {
-              label: "Number of Events",
-              data: datasets,
-              backgroundColor: ["red"],
-              borderColor: "white",
-              borderWidth: "2",
-              pointBorderColor: "red",
-              pointHoverBackgroundColor: "#55bae7",
-            },
-          ],
-        },
+        dataCopy,
+        // data: {
+        //   totalEvents: action.payload.totalEvents,
+        //   labels: labels,
+        //   datasets: [
+        //     {
+        //       label: "Number of Events",
+        //       data: datasets,
+        //       backgroundColor: ["red"],
+        //       borderColor: "white",
+        //       borderWidth: "2",
+        //       pointBorderColor: "red",
+        //       pointHoverBackgroundColor: "#55bae7",
+        //     },
+        //   ],
+        // },
       };
     }
     default: {
