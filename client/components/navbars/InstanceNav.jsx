@@ -45,9 +45,20 @@ class InstanceNav extends Component {
           />
       }
 
+      let instanceDisplayName;
+      if (instance.host && instance.port) {
+        instanceDisplayName = `${instance.host}@${instance.port}`
+      } else if (instance.url) {
+        instanceDisplayName = instance.url;
+      } else {
+        instanceDisplayName = 'N/A';
+      }
+
       instances.push(
         <InstanceComponent
           instanceDetails={instance}
+          instanceId={instance.instanceId}
+          instanceDisplayName={instanceDisplayName}
           databases={databases}
           switchInstance={this.props.switchInstance}
           key={`instance-${idx}`}

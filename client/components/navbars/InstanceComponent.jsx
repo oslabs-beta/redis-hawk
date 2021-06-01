@@ -4,9 +4,9 @@ const InstanceComponent = (props) => {
   return (
     <div className='instance-container'>
       <p className='instance-display-text' onClick={() => {
-        props.switchInstance(props.instanceDetails.instanceId);
+        props.switchInstance(props.instanceId);
       }}>
-        Instance: {props.instanceDetails.host}@{props.instanceDetails.port}
+        Instance: {props.instanceDisplayName}
       </p>
       {props.databases}
     </div>
