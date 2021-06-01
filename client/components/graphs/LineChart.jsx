@@ -6,7 +6,6 @@ import Chart from "chart.js/auto";
 
 const LineChart = (props) => {
   const [chartData, setChartData] = useState({});
-  console.log("chartData", chartData);
   // const labels = [
   //   "07:00",
   //   "07:10",
@@ -79,22 +78,24 @@ const LineChart = (props) => {
   // array is newest to oldest
   let labels = [];
   let eventsArray = [];
-if (props.totalEvents) {
-  const totalEvents = props.totalEvents.eventTotals;
-  for (let i = totalEvents.length - 1; i >= 0; i--) {
-    // console.log(totalEvents[i]);
-    const time = new Date(totalEvents[i].end_time)
-      .toString("MMddd")
-      .slice(16, 24);
-    // console.log(time);
-    labels.push(time);
-    eventsArray.push(totalEvents[i].eventCount);
+  if (props.totalEvents) {
+    const totalEvents = props.totalEvents.eventTotals;
+    for (let i = totalEvents.length - 1; i >= 0; i--) {
+      // console.log(totalEvents[i]);
+      const time = new Date(totalEvents[i].end_time)
+        .toString("MMddd")
+        .slice(16, 24);
+      // console.log(time);
+      labels.push(time);
+      eventsArray.push(totalEvents[i].eventCount);
+    }
   }
-}
   // console.log("timeArray", timeArray);
   // console.log("eventsArray", eventsArray);
   const chart = () => {
-    
+    //  const params = { timeInterval: 10000 };
+
+    // props.getEvents(props.currInstance, props.currDatabase, params);
     setChartData({
       labels,
       datasets: [
@@ -112,6 +113,7 @@ if (props.totalEvents) {
   };
 
   useEffect(() => {
+    console.log("props in useEffect", props);
     Chart.register(zoomPlugin);
     chart();
   }, []);
@@ -185,25 +187,26 @@ if (props.totalEvents) {
       color: "white",
     },
   };
-
-  return (
-    <div>
-      <Line
-        data={chartData}
-        height={400}
-        width={600}
-        options={options}
-        style={{ backgroundColor: "black" }}></Line>
-      <button
-        onClick={() => {
-          // labels.push(`${Date.now().toString()}`);
-          // dataArray.push(Math.round(Math.random() * 100));
-          chart();
-        }}>
-        Refresh Zoom
-      </button>
-    </div>
-  );
+  if (props.totalEvents) {
+    return (
+      <div>
+        <Line
+          data={chartData}
+          height={400}
+          width={600}
+          options={options}
+          style={{ backgroundColor: "black" }}></Line>
+        <button
+          onClick={() => {
+            // labels.push(`${Date.now().toString()}`);
+            // dataArray.push(Math.round(Math.random() * 100));
+            chart();
+          }}>
+          Refresh Zoom
+        </button>
+      </div>
+    );
+  }
 };
 
 export default LineChart;
