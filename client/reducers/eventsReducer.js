@@ -31,9 +31,9 @@ const eventsReducer = (state = initialState, action) => {
   switch (action.type) {
     case types.LOAD_ALL_EVENTS: {
       const allEvents = action.payload.events;
-      events = state.events.splice();
+      events = state.events.slice();
       events = allEvents;
-
+      // console.log("events in eventreducer", events);
       return {
         ...state,
         events,
@@ -43,7 +43,7 @@ const eventsReducer = (state = initialState, action) => {
       const specificInstanceEvents = action.payload.events;
       const currInstance = action.payload.currInstance;
       const currDatabase = action.payload.currDatabase;
-      events = state.events.splice();
+      events = state.events.slice();
       events[currInstance - 1].keyspacees[currDatabase] =
         specificInstanceEvents;
 
@@ -56,7 +56,7 @@ const eventsReducer = (state = initialState, action) => {
       const specificInstanceEvents = action.payload.events;
       const currInstance = action.payload.currInstance;
       const currDatabase = action.payload.currDatabase;
-      events = state.events.splice();
+      events = state.events.slice();
       events[currInstance - 1].keyspacees[currDatabase] =
         specificInstanceEvents;
       return {

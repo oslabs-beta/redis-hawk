@@ -4,8 +4,9 @@ import * as types from "../actions/actionTypes.js";
 const initialState = {
   instanceInfo: [
     {
-      host: "",
-      port: "",
+      host: '',
+      port: '',
+      url: '',
       databases: 0,
       instanceId: 1,
       recordKeyspaceHistoryFrequency: 0,
@@ -17,7 +18,6 @@ const instanceInfo = (state = initialState, action) => {
   switch (action.type) {
     case types.UPDATE_INSTANCEINFO: {
       const instances = action.payload;
-      console.log("payload in instanceInfo", action.payload);
       return {
         ...state,
         instanceInfo: instances,

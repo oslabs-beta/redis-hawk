@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import SearchFilter from './SearchFilter.jsx';
 import * as actions from '../../action-creators/connections';
 import * as keyspaceActions from '../../action-creators/keyspaceConnections';
+import * as eventActions from '../../action-creators/eventsConnections';
 
 const mapStateToProps = (store) => {
   return {
@@ -19,8 +20,24 @@ const mapStateToProps = (store) => {
   };
 };
 const mapDispatchToProps = (dispatch) => ({
-  updateEvents: (events, currData, currIndex) =>
-    dispatch(actions.updateEventsActionCreator(events, currData, currIndex)),
+  refreshEvents: (currInstance, currDatabase, pageSize, pageNum, refreshData) =>
+    dispatch(
+      eventActions.refreshEventsActionCreator(
+        currInstance,
+        currDatabase,
+        pageSize,
+        pageNum,
+        refreshData
+      )
+    ),
+  changeEventsPage: (instanceId, dbIndex, queryOptions) =>
+    dispatch(
+      eventActions.changeKeyspacePageActionCreator(
+        instanceId,
+        dbIndex,
+        queryOptions
+      )
+    ),
   changeKeyspacePage: (instanceId, dbIndex, queryOptions) =>
     dispatch(
       keyspaceActions.changeKeyspacePageActionCreator(
@@ -54,13 +71,12 @@ class FilterNav extends Component {
   }
 
   render() {
-    console.log(this.props.currDisplay);
     if (this.props.currPage === 'graphs') {
       return (
         <div className='filterNavContainer'>
           <SearchFilter
             id='searchFilter'
-            events={this.props.events[this.props.currDatabase]}
+            events={this.props.events}
             currPage={this.props.currPage}
             updateCurrDisplay={this.props.updateCurrDisplay}
           />
@@ -148,7 +164,6 @@ class FilterNav extends Component {
             currDatabase={this.props.currDatabase}
             currInstance={this.props.currInstance}
           />
-
           <button
             className='filter-button'
             id='searchButton'

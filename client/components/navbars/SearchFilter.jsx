@@ -219,16 +219,16 @@ export default function SearchFilter(props) {
   };
   function selectChange(event) {
     setCategory(event.target.value);
-    props.updateCurrDisplay({
-      filterType: 'keyType',
-      filterValue: event.target.value,
-    });
   }
 
   console.log(props.currDisplay);
   function handleSubmit() {
     //change the state of currDisplay
     console.log('my current display in handle submit', props.currDisplay);
+    props.updateCurrDisplay({
+      filterType: 'keyType',
+      filterValue: category,
+    });
     props.updateCurrDisplay({ filterType: 'keyName', filterValue: value });
     const queryOptions = {
       pageSize: props.pageSize,

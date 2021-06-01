@@ -1,5 +1,5 @@
 //leave these separate for future developers in case they want to add functionality
-import * as types from '../actions/actionTypes.js';
+import * as types from "../actions/actionTypes.js";
 
 const initialState = {
   currInstance: 1,
@@ -14,9 +14,9 @@ const initialState = {
           pageNum: 4,
           data: [
             {
-              key: 'loading',
-              type: 'loading',
-              value: 'loading',
+              key: "loading",
+              type: "loading",
+              value: "loading",
             },
           ],
         },
@@ -30,11 +30,6 @@ const keyspaceReducer = (state = initialState, action) => {
 
   switch (action.type) {
     case types.LOAD_KEYSPACE: {
-      console.log(
-        'action payload in LOAD_KEYSPACE keyspace reducer',
-        action.payload
-      );
-
       const fullKeyspace = action.payload.keyspace;
       keyspace = state.keyspace.slice();
       keyspace = fullKeyspace;
@@ -47,7 +42,7 @@ const keyspaceReducer = (state = initialState, action) => {
     case types.REFRESH_KEYSPACE: {
       //this is for a particular database in a particular instance
       console.log(
-        'action payload in REFRESH_KEYSPACE keyspace reducer',
+        "action payload in REFRESH_KEYSPACE keyspace reducer",
         action.payload
       );
       const specificKeyspace = action.payload.keyspace;
@@ -64,11 +59,6 @@ const keyspaceReducer = (state = initialState, action) => {
       };
     }
     case types.CHANGE_KEYSPACE_PAGE: {
-      console.log(
-        'action payload in CHANGE_KEYSPACE_PAGE keyspace reducer',
-        action.payload
-      );
-
       const specificKeyspace = action.payload.keyspace;
       const currInstance = action.payload.currInstance;
       const currDatabase = action.payload.currDatabase;

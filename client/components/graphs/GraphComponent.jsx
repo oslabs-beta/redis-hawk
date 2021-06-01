@@ -10,46 +10,79 @@ const mapStateToProps = (store) => {
     currInstance: store.currInstanceStore.currInstance,
     currDatabase: store.currDatabaseStore.currDatabase,
     totalEvents: store.totalEventsStore.totalEvents,
+    data: store.totalEventsStore.data
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
   updateCurrentDisplay: (filter, category) =>
     dispatch(actions.updateCurrDisplayActionCreator(filter, category)),
-  initialEventsGet: (instanceId, dbIndex, currTotal) =>
-    dispatch(eventActions.getTotalEventsActionCreator(instanceId, dbIndex)),
+  getEvents: (instanceId, dbIndex, queryParams) =>
+    dispatch(
+      eventActions.getTotalEventsActionCreator(instanceId, dbIndex, queryParams)
+    ),
 });
 
 class GraphComponent extends Component {
   constructor(props) {
     super(props);
-    // this.setGraphUpdate = this.setGraphUpdate.bind(this);
-   
+    this.state = {
+      wasCalled: false,
+      params: { timeInterval: 20000 },
+    };
+    this.setGraphUpdate = this.setGraphUpdate.bind(this);
   }
-
   componentDidMount() {
+    console.log("in graphComponent CDMount");
+
     const self = this;
-    console.log("this.props", this.props);
-    self.props.initialEventsGet(
+    // if (this.state.wasCalled === true) {
+    //   setInterval(
+    //     self.setGraphUpdate(
+    //       this.props.currInstance,
+    //       this.props.currDatabase,
+    //       this.state.eventParams
+    //     ),
+    //     3000
+    //   );
+    // } else {
+    this.getInitialData(
       this.props.currInstance,
-      this.props.currDatabase
+      this.props.currDatabase,
+      this.state.params
     );
-    // setInterval(self.setGraphUpdate, 60000);
+    // }
   }
-  // setGraphUpdate() {
-  //   this.props.getTotalEvents(1, this.props.currDatabase, this.props.currTotal);
-  // }
+  getInitialData(currInstance, currDB, params) {
+    this.props.getEvents(currInstance, currDB, params);
+    this.setState({
+      wasCalled: true,
+    });
+  }
+  setGraphUpdate() {
+    return this.props.getEvents(
+      this.props.currInstance,
+      this.props.currDatabase,
+      this.props.eventParams
+    );
+  }
 
   render() {
-    return (
-      <div id='graphsComponentContainer' className='GraphComponent-Container'>
-        <LineChart
-          currInstance={this.props.currInstance}
-          currDatabase={this.props.currDatabase}
-          eventTotals={this.props.eventsTotals}
-        />
-      </div>
-    );
+    console.log("props in graphComponent", this.props);
+
+    // if (this.props.data) {
+      return (
+        <div id='graphsComponentContainer' className='GraphComponent-Container'>
+          <LineChart
+            getEvents={this.props.getEvents}
+            currInstance={this.props.currInstance}
+            currDatabase={this.props.currDatabase}
+            // totalEvents={this.props.totalEvents}
+            data={this.props.data}
+          />
+        </div>
+      );
+    // }
   }
 }
 

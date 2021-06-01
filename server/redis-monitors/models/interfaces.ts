@@ -5,17 +5,19 @@ Library of interfaces to represent data structures used by the RedisMonitors.
 import { RedisClient } from 'redis';
 
 export interface RedisInstance {
-  host: string;
-  port: number;
+  readonly host?: string;
+  readonly port?: number;
+  readonly url?: string;
   recordKeyspaceHistoryFrequency: number,
 };
 
 export interface RedisMonitor {
-  instanceId: number;
-  redisClient: RedisClient;
-  keyspaceSubscriber: RedisClient;
-  host: RedisInstance['host'];
-  port: RedisInstance['port'];
+  readonly instanceId: number;
+  readonly redisClient: RedisClient;
+  readonly keyspaceSubscriber: RedisClient;
+  host?: RedisInstance['host'];
+  port?: RedisInstance['port'];
+  url?: RedisInstance['url'];
   databases?: number; //Check property - should this be optional on object initialization?
   keyspaces: Keyspace[];
   recordKeyspaceHistoryFrequency: RedisInstance['recordKeyspaceHistoryFrequency'],

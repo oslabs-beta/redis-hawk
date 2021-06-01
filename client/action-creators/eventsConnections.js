@@ -32,7 +32,7 @@ export const loadAllEventsActionCreator = () => (dispatch) => {
   fetch('/api/v2/events')
     .then((res) => res.json())
     .then((response) => {
-      console.log('response in loadAllEventsActionCreator', response);
+      // console.log("response in loadAllEventsActionCreator", response);
       let allEvents = response.data;
       dispatch({
         type: types.LOAD_ALL_EVENTS,
@@ -51,7 +51,7 @@ export const loadAllEventsActionCreator = () => (dispatch) => {
 
 // * timestamp: time when the event occurred
 
-export const refreshKeyspaceActionCreator =
+export const refreshEventsActionCreator =
   (instanceId, dbIndex, pageSize, pageNum, refreshData) => (dispatch) => {
     fetch(
       `api/v2/events/${instanceId}/${dbIndex}/?pageSize=${pageSize}&pageNum=${pageNum}&refreshScan=${refreshData}`
@@ -61,6 +61,7 @@ export const refreshKeyspaceActionCreator =
         // response should be
         console.log('response in refreshEventsActionCreator', response);
         let refreshEvents = response;
+
         dispatch({
           type: types.REFRESH_EVENTS,
           payload: {
@@ -118,8 +119,7 @@ export const changeEventsPageActionCreator =
 
 export const getTotalEventsActionCreator =
   (instanceId, dbIndex, queryParams) => (dispatch) => {
-    console.log('in getTotalEventsActionCreator');
-    let URI = `api/v2/events/${instanceId}/${dbIndex}/`;
+    let URI = `api/v2/events/totals/${instanceId}/${dbIndex}/`;
     if (queryParams) {
       if (queryParams.eventTotal) {
         if (queryParams.eventTypes)
@@ -136,19 +136,36 @@ export const getTotalEventsActionCreator =
         if (queryParams.keynameFilter)
           URI += `?timeInterval=${queryParams.timeInterval}/&keynameFilter=${queryParams.keynameFilter}`;
         else {
-          URI += `?timeInterval=${queryParms.timeInterval}`;
+          URI += `?timeInterval=${queryParams.timeInterval}`;
         }
       }
     }
+
     console.log('URI in eventTotalsActionCreator', URI);
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {
         console.log('response in getTotalEventsActionCreator', response);
-        let allEvents = response.data;
+        const allEvents = response;
+        console.log('allEvents after fetch', allEvents);
+        const labels = [];
+        const datasets = [];
+        for (let i = response.eventTotals.length - 1; i >= 0; i--) {
+          // console.log(totalEvents[i]);
+          const time = new Date(response.eventTotals[i].end_time)
+            .toString('MMddd')
+            .slice(16, 24);
+          // console.log(time);
+          labels.push(time);
+          datasets.push(response.eventTotals[i].eventCount);
+        }
+        console.log('labels', labels);
+        console.log('datasets', datasets);
         dispatch({
-          type: types.LOAD_ALL_EVENTS,
+          type: types.GET_EVENT_TOTALS,
           payload: {
+            labels: labels,
+            datasets: datasets,
             totalEvents: allEvents,
             currInstance: instanceId,
             currDatabase: dbIndex,

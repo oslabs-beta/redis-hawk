@@ -28,7 +28,7 @@ export const loadKeyspaceActionCreator = () => (dispatch) => {
   fetch('/api/v2/keyspaces/?pageSize=25')
     .then((res) => res.json())
     .then((response) => {
-      console.log('response in loadKeyspaceActionCreator', response);
+      // console.log('response in loadKeyspaceActionCreator', response);
       let fullKeyspace = response.data;
       dispatch({
         type: types.LOAD_KEYSPACE,

@@ -9,7 +9,7 @@ import {
 } from "react-vis";
 
 const GraphHolder = (props) => {
-  console.log("props.currDatabase in graphHolder", props.currDatabase);
+
   const graphDataConverter = (array, initTime) => {
     const eventTimesArray = [];
     let temp = [];
