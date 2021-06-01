@@ -1,5 +1,6 @@
 import * as types from "../actions/actionTypes";
 
+
 // sample response from get to '/'
 //{
 //  data: [ (array of Instances)
@@ -149,7 +150,7 @@ export const getTotalEventsActionCreator =
         const allEvents = response;
         console.log("allEvents after fetch", allEvents);
         dispatch({
-          type: types.LOAD_ALL_EVENTS,
+          type: types.GET_EVENT_TOTALS,
           payload: {
             totalEvents: allEvents,
             currInstance: instanceId,

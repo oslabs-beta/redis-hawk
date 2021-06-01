@@ -71,12 +71,7 @@ class FilterNav extends Component {
   }
 
   render() {
-    console.log(
-      "this.props in filterNav graph before conditional render",
-      this.props
-    );
     if (this.props.currPage === "graphs") {
-      console.log("this.props in filterNav graph render", this.props);
       return (
         <div className='filterNavContainer'>
           <SearchFilter

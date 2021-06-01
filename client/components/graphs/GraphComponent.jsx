@@ -30,27 +30,27 @@ class GraphComponent extends Component {
 
   componentDidMount() {
     const params = { timeInterval: 10000 };
+    
     const self = this;
     self.props.getEvents(
       this.props.currInstance,
       this.props.currDatabase,
       params
     );
-    console.log("this.props after getEvents", this.props);
-
-    // setInterval(self.getEvents, 60000);
+    console.log('this.props', this.props.totalEvents.eventTally)
   }
   // setGraphUpdate() {
   //   this.props.getTotalEvents(1, this.props.currDatabase, this.props.currTotal);
   // }
 
   render() {
+    // console.log("this.props in render of graph comoponent", this.props);
     return (
       <div id='graphsComponentContainer' className='GraphComponent-Container'>
         <LineChart
           currInstance={this.props.currInstance}
           currDatabase={this.props.currDatabase}
-          eventTotals={this.props.eventsTotals}
+          totalEvents={this.props.totalEvents}
         />
       </div>
     );
