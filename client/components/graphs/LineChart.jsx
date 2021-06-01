@@ -3,9 +3,10 @@ import { Line } from "react-chartjs-2";
 import zoomPlugin from "chartjs-plugin-zoom";
 import Hammer from "hammerjs";
 import Chart from "chart.js/auto";
+import { cyan } from "@material-ui/core/colors";
 
 const LineChart = (props) => {
-  const [chartData, setChartData] = useState({});
+  const [chartData, setChartData] = useState(props.data);
   const [loading, setLoading] = useState(true);
   console.log("props in LineChart", props);
   // array is newest to oldest
@@ -75,10 +76,12 @@ const LineChart = (props) => {
   // };
   // chart();
   console.log("props.data in LineChart", props.data);
+  console.log("props.wasCalled", props.wasCalled);
   const data = props.data;
   useEffect(() => {
     // console.log("props in useEffect", props);
     Chart.register(zoomPlugin);
+    setChartData(props.data)
   }, []);
 
   const options = {
@@ -97,12 +100,18 @@ const LineChart = (props) => {
           wheel: {
             enabled: true,
             speed: 0.001,
+            modifier: "shift",
           },
           pinch: {
             enabled: true,
           },
           mode: "xy",
+          drag: {
+            enabled: true,
+            backgroundColor: cyan,
+          },
         },
+
         limits: {
           y: {
             min: 0,
@@ -153,7 +162,7 @@ const LineChart = (props) => {
   return (
     <div>
       <Line
-        data={props.data}
+        data={chartData}
         height={400}
         width={600}
         options={options}
@@ -162,7 +171,6 @@ const LineChart = (props) => {
         onClick={() => {
           // labels.push(`${Date.now().toString()}`);
           // dataArray.push(Math.round(Math.random() * 100));
-          chart();
         }}>
         Refresh Zoom
       </button>

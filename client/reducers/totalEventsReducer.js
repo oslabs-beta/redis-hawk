@@ -51,7 +51,7 @@ const totalEventsReducer = (state = initialState, action) => {
     case types.GET_NEXT_EVENTS: {
       const datasets = action.payload.datasets;
       const labels = action.payload.labels;
-      const dataCopy = state.data;
+      const dataCopy = Object.assign({}, state.data)
       console.log("dataCopy", dataCopy);
       // dataCopy.datasets[0].data.push(...datasets);
       // dataCopy.labels.push(...labels);
@@ -60,6 +60,7 @@ const totalEventsReducer = (state = initialState, action) => {
       console.log("data in getnextevents reducer", dataCopy);
       return {
         ...state,
+        totalEvents: action.payload.totalEvents,
         dataCopy,
         // data: {
         //   totalEvents: action.payload.totalEvents,

@@ -38,13 +38,12 @@ class GraphComponent extends Component {
     this.setGraphUpdate = this.setGraphUpdate.bind(this);
   }
   componentDidMount() {
-    // console.log("state event params", this.state.eventParams);
     const self = this;
     this.getInitialData(this.props.currInstance, this.props.currDatabase, {
-      timeInterval: 10000,
+      timeInterval: 7000,
     });
     // }
-    // setTimeout(setInterval(this.setGraphUpdate, 10000), 10000);
+    setTimeout(setInterval(this.setGraphUpdate, 7000), 7000);
   }
   getInitialData(currInstance, currDB, params) {
     this.props.getEvents(currInstance, currDB, params);
@@ -68,11 +67,14 @@ class GraphComponent extends Component {
     return (
       <div id='graphsComponentContainer' className='GraphComponent-Container'>
         <LineChart
+          getNextEvents={this.props.getNextEvents}
           getEvents={this.props.getEvents}
           currInstance={this.props.currInstance}
           currDatabase={this.props.currDatabase}
+          totalEvents={this.props.totalEvents}
           // totalEvents={this.props.totalEvents}
           data={this.props.data}
+          wasCalled={this.state.wasCalled}
         />
       </div>
     );
