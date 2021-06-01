@@ -6,79 +6,16 @@ import Chart from "chart.js/auto";
 
 const LineChart = (props) => {
   const [chartData, setChartData] = useState({});
-  // const labels = [
-  //   "07:00",
-  //   "07:10",
-  //   "07:15",
-  //   "07:30",
-  //   "07:40",
-  //   "07:50",
-  //   "08:00",
-  //   "08:10",
-  //   "08:20",
-  //   "08:30",
-  //   "08:40",
-  //   "08:50",
-  //   "09:00",
-  //   "09:10",
-  //   "09:20",
-  //   "07:00",
-  //   "07:10",
-  //   "07:15",
-  //   "07:30",
-  //   "07:40",
-  //   "07:50",
-  //   "08:00",
-  //   "08:10",
-  //   "08:20",
-  //   "08:30",
-  //   "08:40",
-  //   "08:50",
-  //   "09:00",
-  //   "09:10",
-  //   "09:20",
-  //   "07:00",
-  //   "07:10",
-  //   "07:15",
-  //   "07:30",
-  //   "07:40",
-  //   "07:50",
-  //   "08:00",
-  //   "08:10",
-  //   "08:20",
-  //   "08:30",
-  //   "08:40",
-  //   "08:50",
-  //   "09:00",
-  //   "09:10",
-  //   "09:20",
-  //   "07:00",
-  //   "07:10",
-  //   "07:15",
-  //   "07:30",
-  //   "07:40",
-  //   "07:50",
-  //   "08:00",
-  //   "08:10",
-  //   "08:20",
-  //   "08:30",
-  //   "08:40",
-  //   "08:50",
-  //   "09:00",
-  //   "09:10",
-  //   "09:20",
-  // ];
-  // const dataArray = [
-  //   80, 50, 75, 90, 100, 60, 70, 80, 99, 23, 50, 88, 99, 100, 105, 80, 200, 135,
-  //   108, 100, 60, 70, 80, 99, 23, 50, 88, 99, 100, 105, 80, 200, 230, 200, 100,
-  //   60, 70, 80, 99, 23, 50, 88, 99, 100, 105, 80, 35, 75, 200, 100, 60, 70, 80,
-  //   99, 23, 50, 88, 99, 100, 105,
-  // ];
-
+  const [loading, setLoading] = useState(true)
+  console.log("props in LineChart", props);
   // array is newest to oldest
   let labels = [];
   let eventsArray = [];
-  if (props.totalEvents) {
+  const params = {
+    timeInterval: 10000,
+  };
+  const chart = () => {
+    // if (props.totalEvents) {
     const totalEvents = props.totalEvents.eventTotals;
     for (let i = totalEvents.length - 1; i >= 0; i--) {
       // console.log(totalEvents[i]);
@@ -89,33 +26,58 @@ const LineChart = (props) => {
       labels.push(time);
       eventsArray.push(totalEvents[i].eventCount);
     }
+    // }
+  };
+  console.log('loading in LineChart', loading)
+  // useState inside chart function
+  const data = {
+    labels: labels,
+    datasets: [
+      {
+        label: "Number of Events",
+        data: eventsArray,
+        backgroundColor: ["red"],
+        borderColor: "white",
+        borderWidth: "2",
+        pointBorderColor: "red",
+        pointHoverBackgroundColor: "#55bae7",
+      },
+    ],
+  };
+  function addData(chart, label, data) {
+    chart.data.labels.push(label);
+    chart.data.datasets.forEach((dataset) => {
+      dataset.data.push(data);
+    });
+    chart.update();
   }
+
   // console.log("timeArray", timeArray);
   // console.log("eventsArray", eventsArray);
-  const chart = () => {
-    //  const params = { timeInterval: 10000 };
+  // const chart = () => {
+  //   //  const params = { timeInterval: 10000 };
 
-    // props.getEvents(props.currInstance, props.currDatabase, params);
-    setChartData({
-      labels,
-      datasets: [
-        {
-          label: "Number of Events",
-          data: eventsArray,
-          backgroundColor: ["red"],
-          borderColor: "white",
-          borderWidth: "2",
-          pointBorderColor: "red",
-          pointHoverBackgroundColor: "#55bae7",
-        },
-      ],
-    });
-  };
+  //   // props.getEvents(props.currInstance, props.currDatabase, params);
+  //   setChartData({
+  //     labels,
+  //     datasets: [
+  //       {
+  //         label: "Number of Events",
+  //         data: eventsArray,
+  //         backgroundColor: ["red"],
+  //         borderColor: "white",
+  //         borderWidth: "2",
+  //         pointBorderColor: "red",
+  //         pointHoverBackgroundColor: "#55bae7",
+  //       },
+  //     ],
+  //   });
+  // };
+  chart();
 
   useEffect(() => {
-    console.log("props in useEffect", props);
+    // console.log("props in useEffect", props);
     Chart.register(zoomPlugin);
-    chart();
   }, []);
 
   const options = {
@@ -183,29 +145,28 @@ const LineChart = (props) => {
         },
       },
     },
-    grid: {
-      color: "white",
-    },
   };
-  if (props.totalEvents) {
-    return (
-      <div>
-        <Line
-          data={chartData}
-          height={400}
-          width={600}
-          options={options}
-          style={{ backgroundColor: "black" }}></Line>
-        <button
-          onClick={() => {
-            // labels.push(`${Date.now().toString()}`);
-            // dataArray.push(Math.round(Math.random() * 100));
-            chart();
-          }}>
-          Refresh Zoom
-        </button>
-      </div>
-    );
+  if (loading === false) {
+  return (
+    <div>
+      <Line
+        data={data}
+        height={400}
+        width={600}
+        options={options}
+        style={{ backgroundColor: "black" }}></Line>
+      <button
+        onClick={() => {
+          // labels.push(`${Date.now().toString()}`);
+          // dataArray.push(Math.round(Math.random() * 100));
+          chart();
+        }}>
+        Refresh Zoom
+      </button>
+    </div>
+  );
+  } else {
+    return <div>Loading...</div>;
   }
 };
 

@@ -1,6 +1,5 @@
 import * as types from "../actions/actionTypes";
 
-
 // sample response from get to '/'
 //{
 //  data: [ (array of Instances)
@@ -33,7 +32,7 @@ export const loadAllEventsActionCreator = () => (dispatch) => {
   fetch("/api/v2/events")
     .then((res) => res.json())
     .then((response) => {
-      console.log("response in loadAllEventsActionCreator", response);
+      // console.log("response in loadAllEventsActionCreator", response);
       let allEvents = response.data;
       dispatch({
         type: types.LOAD_ALL_EVENTS,
@@ -62,6 +61,7 @@ export const refreshEventsActionCreator =
         // response should be
         console.log("response in refreshEventsActionCreator", response);
         let refreshEvents = response;
+
         dispatch({
           type: types.REFRESH_EVENTS,
           payload: {
@@ -119,7 +119,6 @@ export const changeEventsPageActionCreator =
 
 export const getTotalEventsActionCreator =
   (instanceId, dbIndex, queryParams) => (dispatch) => {
-    console.log("in getTotalEventsActionCreator");
     let URI = `api/v2/events/totals/${instanceId}/${dbIndex}/`;
     if (queryParams) {
       if (queryParams.eventTotal) {
@@ -149,9 +148,24 @@ export const getTotalEventsActionCreator =
         console.log("response in getTotalEventsActionCreator", response);
         const allEvents = response;
         console.log("allEvents after fetch", allEvents);
+        const labels = [];
+        const dataset = [];
+        for (let i = response.eventTotals.length - 1; i >= 0; i--) {
+          // console.log(totalEvents[i]);
+          const time = new Date(response.eventTotals[i].end_time)
+            .toString("MMddd")
+            .slice(16, 24);
+          // console.log(time);
+          labels.push(time);
+          dataset.push(response.eventTotals[i].eventCount);
+        }
+        console.log("labels", labels);
+        console.log("dataset", dataset);
         dispatch({
           type: types.GET_EVENT_TOTALS,
           payload: {
+            labels: labels,
+            datasets: datasets,
             totalEvents: allEvents,
             currInstance: instanceId,
             currDatabase: dbIndex,
