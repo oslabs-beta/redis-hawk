@@ -91,9 +91,6 @@ describe('Route Integration Tests', () => {
     it('should provide the correct connection details', () => {
 
       response.body.instances.forEach((instanceDetail, idx) => {
-
-        //Each instance detail object in the response body
-        //Should contain the corresponding instance object from the test connections JSON
         expect(instanceDetail).toEqual(expect.objectContaining(
           testConnections[idx]
         ));

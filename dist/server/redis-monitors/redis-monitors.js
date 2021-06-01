@@ -60,26 +60,17 @@ var path = __importStar(require("path"));
 var redis = __importStar(require("redis"));
 var data_stores_1 = require("./models/data-stores");
 var utils_1 = require("./utils");
+var utils_2 = require("../controllers/utils");
 var instances = process.env.IS_TEST ?
     JSON.parse(fs.readFileSync(path.resolve(__dirname, '../configs/tests-config.json')).toString())
     : JSON.parse(fs.readFileSync(path.resolve(__dirname, '../configs/config.json')).toString());
 var redisMonitors = [];
-instances.forEach(function (instance, idx) { return __awaiter(void 0, void 0, void 0, function () {
-    var client, subscriber, monitor, e_1, res, e_2, _loop_1, dbIndex;
+var initMonitor = function (monitor) { return __awaiter(void 0, void 0, void 0, function () {
+    var e_1, res, e_2, _loop_1, dbIndex;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                client = utils_1.promisifyClientMethods(redis.createClient({ host: instance.host, port: instance.port }));
-                subscriber = redis.createClient({ host: instance.host, port: instance.port });
-                monitor = {
-                    instanceId: idx + 1,
-                    redisClient: client,
-                    keyspaceSubscriber: subscriber,
-                    host: instance.host,
-                    port: instance.port,
-                    keyspaces: [],
-                    recordKeyspaceHistoryFrequency: instance.recordKeyspaceHistoryFrequency
-                };
+                redisMonitors.push(monitor);
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
@@ -104,28 +95,73 @@ instances.forEach(function (instance, idx) { return __awaiter(void 0, void 0, vo
                 return [3, 7];
             case 7:
                 _loop_1 = function (dbIndex) {
-                    var keyspace = {
-                        eventLog: new data_stores_1.EventLog(),
-                        keyspaceHistories: new data_stores_1.KeyspaceHistoriesLog(),
-                        keyspaceSnapshot: [],
-                        eventLogSnapshot: []
-                    };
-                    monitor.keyspaces.push(keyspace);
-                    monitor.keyspaceSubscriber.on('pmessage', function (channel, message, event) {
-                        if (+message.match(/[0-9*]/)[0] === dbIndex) {
-                            var key = message.replace(/__keyspace@[0-9]*__:/, '');
-                            monitor.keyspaces[dbIndex].eventLog.add(key, event);
+                    var keyspaceSnapshot, keyspace;
+                    return __generator(this, function (_b) {
+                        switch (_b.label) {
+                            case 0: return [4, utils_2.getKeyspace(monitor.redisClient, dbIndex)];
+                            case 1:
+                                keyspaceSnapshot = _b.sent();
+                                keyspace = {
+                                    eventLog: new data_stores_1.EventLog(),
+                                    keyspaceHistories: new data_stores_1.KeyspaceHistoriesLog(),
+                                    keyspaceSnapshot: keyspaceSnapshot,
+                                    eventLogSnapshot: []
+                                };
+                                monitor.keyspaces.push(keyspace);
+                                monitor.keyspaceSubscriber.on('pmessage', function (channel, message, event) {
+                                    if (+message.match(/[0-9*]/)[0] === dbIndex) {
+                                        var key = message.replace(/__keyspace@[0-9]*__:/, '');
+                                        monitor.keyspaces[dbIndex].eventLog.add(key, event);
+                                    }
+                                });
+                                setInterval(utils_1.recordKeyspaceHistory, monitor.recordKeyspaceHistoryFrequency, monitor, dbIndex);
+                                return [2];
                         }
                     });
-                    setInterval(utils_1.recordKeyspaceHistory, monitor.recordKeyspaceHistoryFrequency, monitor, dbIndex);
                 };
-                for (dbIndex = 0; dbIndex < monitor.databases; dbIndex++) {
-                    _loop_1(dbIndex);
-                }
+                dbIndex = 0;
+                _a.label = 8;
+            case 8:
+                if (!(dbIndex < monitor.databases)) return [3, 11];
+                return [5, _loop_1(dbIndex)];
+            case 9:
+                _a.sent();
+                _a.label = 10;
+            case 10:
+                dbIndex++;
+                return [3, 8];
+            case 11:
                 monitor.keyspaceSubscriber.psubscribe('__keyspace@*__:*');
-                redisMonitors.push(monitor);
                 return [2];
         }
     });
-}); });
+}); };
+instances.forEach(function (instance, idx) {
+    var client;
+    var subscriber;
+    if (instance.host && instance.port) {
+        client = redis.createClient({ host: instance.host, port: instance.port });
+        subscriber = redis.createClient({ host: instance.host, port: instance.port });
+    }
+    else if (instance.url) {
+        client = redis.createClient({ url: instance.url });
+        subscriber = redis.createClient({ url: instance.url });
+    }
+    else {
+        console.log("No valid connection host/port or URL provided - check your config. Instance details: " + instance);
+        return;
+    }
+    client = utils_1.promisifyClientMethods(client);
+    var monitor = {
+        instanceId: idx + 1,
+        redisClient: client,
+        keyspaceSubscriber: subscriber,
+        host: instance.host,
+        port: instance.port,
+        url: instance.url,
+        keyspaces: [],
+        recordKeyspaceHistoryFrequency: instance.recordKeyspaceHistoryFrequency
+    };
+    initMonitor(monitor);
+});
 exports.default = redisMonitors;

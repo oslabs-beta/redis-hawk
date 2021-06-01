@@ -1,4 +1,4 @@
-import * as types from "../actions/actionTypes";
+import * as types from '../actions/actionTypes';
 
 // sample response from get to '/'
 //{
@@ -29,7 +29,7 @@ import * as types from "../actions/actionTypes";
 // }
 
 export const loadAllEventsActionCreator = () => (dispatch) => {
-  fetch("/api/v2/events")
+  fetch('/api/v2/events')
     .then((res) => res.json())
     .then((response) => {
       // console.log("response in loadAllEventsActionCreator", response);
@@ -59,7 +59,7 @@ export const refreshEventsActionCreator =
       .then((res) => res.json())
       .then((response) => {
         // response should be
-        console.log("response in refreshEventsActionCreator", response);
+        console.log('response in refreshEventsActionCreator', response);
         let refreshEvents = response;
 
         dispatch({
@@ -98,13 +98,13 @@ export const changeEventsPageActionCreator =
       URI += `&keyNameFilter=${queryParams.keyNameFilters}`;
     if (queryParams.keyTypeFilter)
       URI += `&keyTypeFilter=${queryParams.keyTypeFilter}`;
-    if (queryParams.refreshData)
+    if (queryParams.refreshData !== undefined)
       URI += `&refreshData=${queryParams.refreshData}`;
 
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {
-        console.log("response in changeEventsPageActionCreator", response);
+        console.log('response in changeEventsPageActionCreator', response);
         let nextPageEvents = response;
         dispatch({
           type: types.CHANGE_EVENTS_PAGE,
@@ -232,7 +232,7 @@ export const getNextEventsActionCreator =
       .then((response) => {
         console.log("response in getNextEventsActionCreators", response);
         const allEvents = response;
-        console.log("allEvents after fetch", allEvents);
+        console.log('allEvents after fetch', allEvents);
         const labels = [];
         const datasets = [];
         const time = new Date(response.eventTotals[0].end_time).toString("MMddd")

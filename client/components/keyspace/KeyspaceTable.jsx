@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 import regeneratorRuntime from 'regenerator-runtime';
@@ -8,6 +7,13 @@ function KeyspaceTable(props) {
 
   const [pageSize, setPageSize] = React.useState(25);
   const [loading, setLoading] = React.useState(false);
+  const [filterQuery, setFilterQuery] = React.useState({
+    pageNum: null,
+    pageSize: null,
+    refreshScan: null,
+    keyNameFilter: null,
+    keyTypeFilter: null,
+  });
 
   const handlePageChange = (params) => {
     console.log('current page in params in handle page change', params.page);
@@ -46,29 +52,65 @@ function KeyspaceTable(props) {
     }
   };
 
-  const filterQuery = {
-    pageSize: props.pageSize,
-    pageNum: props.pageNum,
-  };
+  const handleFilterModelChange = React.useCallback((params) => {
+    console.log(props.pageSize);
+    // setFilterQuery({
+    //   pageSize: props.pageSize,
+    //   pageNum: props.pageNum,
+    //   refreshScan: 0,
+    //   keyTypeFilter: params.filterModel.items[0].value,
+    // });
+    setFilterQuery(
+      (filterQuery.pageSize = props.pageSize),
+      (filterQuery.pageNum = props.pageNum),
+      (filterQuery.refreshScan = 0)
+    );
 
-  const handleFilterModelChange = (params) => {
-    console.log('params in onfilterchange', params);
-    console.log('params i need', params.filterModel.items[0].columnField);
-    console.log('params i need', params.filterModel.items[0].value);
-
+    console.log('filterQuery', filterQuery);
     if (params.filterModel.items[0].columnField === 'name') {
-      filterQuery.keyNameFilter = params.filterModel.items[0].value;
+      let keyNameFilter = params.filterModel.items[0].value;
+      setFilterQuery((filterQuery.keyNameFilter = keyNameFilter));
     }
-    //value filter not done in the backend yet
+    // value filter not done in the backend yet
     // if (params.filterModel.items[0].columnField === 'value') {
     //   filterQuery.keyValueFilter = params.filterModel.items[0].value
     // }
     if (params.filterModel.items[0].columnField === 'type') {
-      filterQuery.keyTypeFilter = params.filterModel.items[0].value;
+      let keyTypeFilter = params.filterModel.items[0].value;
+      console.log('my keytype filter', keyTypeFilter);
+      console.log(filterQuery);
+      setFilterQuery((filterQuery.keyTypeFilter = keyTypeFilter));
     }
-    console.log(filterQuery);
-  };
 
+    props.changeKeyspacePage(
+      props.currInstance,
+      props.currDatabase,
+      filterQuery
+    );
+  }, []);
+
+  // React.useEffect(() => {
+  //   let active = true;
+
+  //   (async () => {
+  //     setLoading(true);
+  //     await props.changeKeyspacePage(
+  //       props.currInstance,
+  //       props.currDatabase,
+  //       filterQuery
+  //     );
+
+  //     if (!active) {
+  //       return;
+  //     }
+
+  //     setLoading(false);
+  //   })();
+
+  //   return () => {
+  //     active = false;
+  //   };
+  // }, [filterQuery]);
 
   const data =
     props.keyspace[props.currInstance - 1].keyspaces[props.currDatabase].data;
@@ -79,7 +121,6 @@ function KeyspaceTable(props) {
 
   // console.log('data in keyspace table', data);
   return (
-
     <div style={{ height: 400, width: '100%' }}>
       <DataGrid
         autoPageSize={false}
@@ -88,6 +129,7 @@ function KeyspaceTable(props) {
         paginationMode='server'
         filterMode='server'
         onFilterModelChange={handleFilterModelChange}
+        disableSelectionOnClick={true}
         rowCount={props.myCount}
         pageSize={pageSize}
         rowsPerPageOptions={[5, 10, 25, 50, 100]}
@@ -104,6 +146,5 @@ function KeyspaceTable(props) {
     </div>
   );
 }
-
 
 export default KeyspaceTable;

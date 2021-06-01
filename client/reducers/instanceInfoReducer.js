@@ -4,8 +4,9 @@ import * as types from "../actions/actionTypes.js";
 const initialState = {
   instanceInfo: [
     {
-      host: "",
-      port: "",
+      host: '',
+      port: '',
+      url: '',
       databases: 0,
       instanceId: 1,
       recordKeyspaceHistoryFrequency: 0,

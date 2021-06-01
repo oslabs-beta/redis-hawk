@@ -20,6 +20,7 @@ const connectionsController: ConnectionsController = {
           instanceId: idx + 1,
           host: redisMonitor.host,
           port: redisMonitor.port,
+          url: redisMonitor.url,
           databases: redisMonitor.databases,
           recordKeyspaceHistoryFrequency: redisMonitor.recordKeyspaceHistoryFrequency
         }
