@@ -25,7 +25,7 @@ import * as types from '../actions/actionTypes';
 //   ];
 // }
 export const loadKeyspaceActionCreator = () => (dispatch) => {
-  fetch('/api/v2/keyspaces/?pageSize=25')
+  fetch('/api/v2/keyspaces/?pageSize=25&refreshScan=0')
     .then((res) => res.json())
     .then((response) => {
       // console.log('response in loadKeyspaceActionCreator', response);
@@ -95,10 +95,10 @@ export const changeKeyspacePageActionCreator =
     //this may have an issue in here - be aware of queryOptions
     // if (queryOptions.pageSize) URI += `pageSize=${queryOptions.pageSize}`;
     // if (queryOptions.pageNum) URI += `&pageNum=${queryOptions.pageNum}`;
-    if (queryOptions.keyNameFilter)
-      URI += `&keyNameFilter=${queryOptions.keyNameFilter}`;
-    if (queryOptions.keyTypeFilter)
-      URI += `&keyTypeFilter=${queryOptions.keyTypeFilter}`;
+    if (queryOptions.keyNameFilter.length !== 0)
+      URI += `&keynameFilter=${queryOptions.keyNameFilter}`;
+    if (queryOptions.keyTypeFilter.length !== 0)
+      URI += `&keytypeFilter=${queryOptions.keyTypeFilter}`;
     if (queryOptions.refreshScan !== undefined)
       URI += `&refreshScan=${queryOptions.refreshScan}`;
 
