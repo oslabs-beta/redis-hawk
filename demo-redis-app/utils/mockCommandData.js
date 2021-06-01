@@ -17,70 +17,77 @@ mockData.strings = {
   },
 
   createValue() {
-    const names = ["Abigail", "Arthur", "James", "Wesley"];
-    const name = names[Math.floor(Math.random() * 4)];
-    const message = `${name} is a ${faker.hacker.adjective()} ${faker.hacker.noun()} working on ${faker.company.catchPhrase()}! Wow!`;
-    // console.log("message", message);
-    return message;
+    return faker.lorem.sentence();
   },
 };
+
 /* <<<<< Lists >>>>> */
 mockData.lists = {
   createKey() {
-    return `list:${Math.floor(Math.random() * 10000)}`;
+    return `names:${Math.floor(Math.random() * 10000)}`;
   },
 
   createValue() {
-    return ["testmsg1", "testmsg2", "testmsg3", "testmsg4"];
+
+    let list = [];
+    for (let i = 0; i < 5; i++) {
+      list.push(faker.name.firstName());
+    }
+    return list;
   },
 };
 
 /* <<<<< Sets >>>>> */
 mockData.sets = {
   createKey() {
-    return `set:${Math.floor(Math.random() * 10000)}`;
+    return `tech:${Math.floor(Math.random() * 10000)}`;
   },
 
   createValue() {
-    return ["setval1", "setval2", "setval3", "setval4"]
+
+    const set = new Set();
+    for (let i = 0; i < 5; i++) {
+      set.add(faker.company.bs());
+    }
+    return Array.from(set);
   }
 };
 
 /* <<<<< Sorted Sets >>>>> */
 mockData.sortedSets = {
   createKey() {
-    return `sortedset:${Math.floor(Math.random() * 10000)}`;
+    return `leaders:${Math.floor(Math.random() * 10000)}`;
   },
 
   createValue() {
-    return [
-      1, "sortedset1",
-      2, "sortedset2",
-      3, "sortedset3",
-      4, "sortedset4"
-    ]
+
+    const zset = [];
+
+    for (let i = 0; i < 5; i++) {
+      zset.push(Math.floor(Math.random()) * 1000);
+      zset.push(faker.internet.userName());
+    }
+
+    return zset;
   }
 };
 
 /* <<<<< Hashes >>>>> */
 mockData.hashes = {
   createKey() {
-    return `hash:${Math.floor(Math.random() * 100000)}`;
+    return `user:${Math.floor(Math.random() * 100000)}`;
   },
 
   createValue() {
-    return {
-      user: "tester",
-      pass: "pass1234",
-      age: 27,
-      occupation: "gokart mechanic",
-    };
+
+    const user = {
+      username: faker.internet.userName(),
+      email: faker.internet.email(),
+      country: faker.address.country()
+    }
+    
+    return user
   },
 };
 
-mockData.sets = {
-  createKey() { },
-
-  createValue() { },
-};
 module.exports = mockData;
