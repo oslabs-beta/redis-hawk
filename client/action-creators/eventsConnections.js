@@ -149,7 +149,7 @@ export const getTotalEventsActionCreator =
         const allEvents = response;
         console.log("allEvents after fetch", allEvents);
         const labels = [];
-        const dataset = [];
+        const datasets = [];
         for (let i = response.eventTotals.length - 1; i >= 0; i--) {
           // console.log(totalEvents[i]);
           const time = new Date(response.eventTotals[i].end_time)
@@ -157,10 +157,10 @@ export const getTotalEventsActionCreator =
             .slice(16, 24);
           // console.log(time);
           labels.push(time);
-          dataset.push(response.eventTotals[i].eventCount);
+          datasets.push(response.eventTotals[i].eventCount);
         }
         console.log("labels", labels);
-        console.log("dataset", dataset);
+        console.log("datasets", datasets);
         dispatch({
           type: types.GET_EVENT_TOTALS,
           payload: {

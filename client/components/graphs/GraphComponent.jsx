@@ -10,6 +10,7 @@ const mapStateToProps = (store) => {
     currInstance: store.currInstanceStore.currInstance,
     currDatabase: store.currDatabaseStore.currDatabase,
     totalEvents: store.totalEventsStore.totalEvents,
+    data: store.totalEventsStore.data
   };
 };
 
@@ -28,11 +29,9 @@ class GraphComponent extends Component {
     this.state = {
       wasCalled: false,
       params: { timeInterval: 20000 },
-      eventParams: { eventTotal: this.props.totalEvents.eventTally },
     };
     this.setGraphUpdate = this.setGraphUpdate.bind(this);
   }
-
   componentDidMount() {
     console.log("in graphComponent CDMount");
 
@@ -69,20 +68,21 @@ class GraphComponent extends Component {
   }
 
   render() {
-    // console.log("this.props in render of graph comoponent", this.props);
-    console.log("totalEvents", this.props.totalEvents);
-    if (this.props.totalEvents) {
+    console.log("props in graphComponent", this.props);
+
+    // if (this.props.data) {
       return (
         <div id='graphsComponentContainer' className='GraphComponent-Container'>
           <LineChart
             getEvents={this.props.getEvents}
             currInstance={this.props.currInstance}
             currDatabase={this.props.currDatabase}
-            totalEvents={this.props.totalEvents}
+            // totalEvents={this.props.totalEvents}
+            data={this.props.data}
           />
         </div>
       );
-    }
+    // }
   }
 }
 

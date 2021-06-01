@@ -14,43 +14,43 @@ const LineChart = (props) => {
   const params = {
     timeInterval: 10000,
   };
-  const chart = () => {
-    // if (props.totalEvents) {
-    const totalEvents = props.totalEvents.eventTotals;
-    for (let i = totalEvents.length - 1; i >= 0; i--) {
-      // console.log(totalEvents[i]);
-      const time = new Date(totalEvents[i].end_time)
-        .toString("MMddd")
-        .slice(16, 24);
-      // console.log(time);
-      labels.push(time);
-      eventsArray.push(totalEvents[i].eventCount);
-    }
-    // }
-  };
+  // const chart = () => {
+  //   // if (props.totalEvents) {
+  //   const totalEvents = props.totalEvents.eventTotals;
+  //   for (let i = totalEvents.length - 1; i >= 0; i--) {
+  //     // console.log(totalEvents[i]);
+  //     const time = new Date(totalEvents[i].end_time)
+  //       .toString("MMddd")
+  //       .slice(16, 24);
+  //     // console.log(time);
+  //     labels.push(time);
+  //     eventsArray.push(totalEvents[i].eventCount);
+  //   }
+  //   // }
+  // };
   console.log('loading in LineChart', loading)
   // useState inside chart function
-  const data = {
-    labels: labels,
-    datasets: [
-      {
-        label: "Number of Events",
-        data: eventsArray,
-        backgroundColor: ["red"],
-        borderColor: "white",
-        borderWidth: "2",
-        pointBorderColor: "red",
-        pointHoverBackgroundColor: "#55bae7",
-      },
-    ],
-  };
-  function addData(chart, label, data) {
-    chart.data.labels.push(label);
-    chart.data.datasets.forEach((dataset) => {
-      dataset.data.push(data);
-    });
-    chart.update();
-  }
+  // const data = {
+  //   labels: labels,
+  //   datasets: [
+  //     {
+  //       label: "Number of Events",
+  //       data: eventsArray,
+  //       backgroundColor: ["red"],
+  //       borderColor: "white",
+  //       borderWidth: "2",
+  //       pointBorderColor: "red",
+  //       pointHoverBackgroundColor: "#55bae7",
+  //     },
+  //   ],
+  // };
+  // function addData(chart, label, data) {
+  //   chart.data.labels.push(label);
+  //   chart.data.datasets.forEach((dataset) => {
+  //     dataset.data.push(data);
+  //   });
+  //   chart.update();
+  // }
 
   // console.log("timeArray", timeArray);
   // console.log("eventsArray", eventsArray);
@@ -73,7 +73,7 @@ const LineChart = (props) => {
   //     ],
   //   });
   // };
-  chart();
+  // chart();
 
   useEffect(() => {
     // console.log("props in useEffect", props);
@@ -146,11 +146,11 @@ const LineChart = (props) => {
       },
     },
   };
-  if (loading === false) {
+  if (props.data) {
   return (
     <div>
       <Line
-        data={data}
+        data={props.data}
         height={400}
         width={600}
         options={options}
