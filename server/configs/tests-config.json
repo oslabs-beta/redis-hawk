@@ -5,7 +5,7 @@
     "recordKeyspaceHistoryFrequency": 60000
   },
   {
-    "host": "127.0.0.1",
+    "url": "redis://127.0.0.1:49153",
     "port": 49153,
     "recordKeyspaceHistoryFrequency": 60000
   }
