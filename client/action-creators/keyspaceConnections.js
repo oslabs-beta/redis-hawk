@@ -95,9 +95,9 @@ export const changeKeyspacePageActionCreator =
     //this may have an issue in here - be aware of queryOptions
     // if (queryOptions.pageSize) URI += `pageSize=${queryOptions.pageSize}`;
     // if (queryOptions.pageNum) URI += `&pageNum=${queryOptions.pageNum}`;
-    if (queryOptions.keyNameFilter.length !== 0)
+    if (queryOptions.keyNameFilter.length !== 0 || queryOptions.keyNameFilter)
       URI += `&keynameFilter=${queryOptions.keyNameFilter}`;
-    if (queryOptions.keyTypeFilter.length !== 0)
+    if (queryOptions.keyTypeFilter.length !== 0 || queryOptions.keyTypeFilter)
       URI += `&keytypeFilter=${queryOptions.keyTypeFilter}`;
     if (queryOptions.refreshScan !== undefined)
       URI += `&refreshScan=${queryOptions.refreshScan}`;
