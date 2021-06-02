@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import GraphHolder from "./GraphHolder.jsx";
-import LineChart from "./LineChart.jsx";
-import LineChartBeta from "./LineChartBeta.jsx";
+// import LineChart from "./LineChart.jsx";
+import EventTotalsChart from "./EventTotalsChart.jsx";
 import { connect } from "react-redux";
 import * as actions from "../../action-creators/connections";
 import * as eventActions from "../../action-creators/eventsConnections";
@@ -77,7 +77,7 @@ class GraphComponent extends Component {
           data={this.props.data}
           wasCalled={this.state.wasCalled}
         /> */}
-        <LineChartBeta
+        <EventTotalsChart
           currInstance={this.props.currInstance}
           currDatabase={this.props.currDatabase}
         />

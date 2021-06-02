@@ -4,11 +4,11 @@ import zoomPlugin from "chartjs-plugin-zoom";
 import Hammer from "hammerjs";
 import Chart from "chart.js/auto";
 
-class LineChart extends Component {
+class EventTotalsChart extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      totalEvents: { eventTotal: 0 },
+      totalEvents: 0,
       data: {
         labels: [],
         datasets: [
@@ -73,7 +73,7 @@ class LineChart extends Component {
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {
-        console.log("response in fetch of LineChartBeta", response);
+        console.log("response in GETMOREDATA fetch of LineChartBeta", response);
         const eventTotal = response.eventTotal;
         const eventCount = response.eventTotals[0].eventCount;
         console.log("this.state.data before assign", this.state.data);
@@ -86,7 +86,7 @@ class LineChart extends Component {
 
         this.setState({
           ...this.state,
-          eventTotal: eventTotal,
+          totalEvents: eventTotal,
           data: dataCopy,
         });
       });
@@ -166,6 +166,7 @@ class LineChart extends Component {
                   major: {
                     enabled: true,
                   },
+                  beginAtZero: true,
                   autoskip: true,
                   max: 5,
                   color: "white",
@@ -192,4 +193,4 @@ class LineChart extends Component {
 
 // export default LineChart;
 
-export default LineChart;
+export default EventTotalsChart;
