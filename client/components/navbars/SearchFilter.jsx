@@ -297,7 +297,6 @@ export default function SearchFilter(props) {
           alignItem: 'center',
         }}
       >
-        <Button color='default'>Cancel</Button>
         <Button onClick={clearFilter} color='default'>
           Clear
         </Button>
