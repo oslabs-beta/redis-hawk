@@ -8,13 +8,6 @@ function KeyspaceTable(props) {
 
   const [pageSize, setPageSize] = React.useState(25);
   const [loading, setLoading] = React.useState(false);
-  // const [filterQuery, setFilterQuery] = React.useState({
-  //   pageNum: null,
-  //   pageSize: null,
-  //   refreshScan: null,
-  //   keyNameFilter: null,
-  //   keyTypeFilter: null,
-  // });
 
   const handlePageChange = (params) => {
     props.updatePageNum(params.page + 1);
@@ -44,6 +37,8 @@ function KeyspaceTable(props) {
         pageSize: params.pageSize,
         pageNum: params.page + 1,
         refreshScan: 0,
+        keyNameFilter: props.currDisplay.keyNameFilter,
+        keyTypeFilter: props.currDisplay.keyTypeFilter,
       };
       props.changeKeyspacePage(
         props.currInstance,

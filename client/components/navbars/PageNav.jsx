@@ -49,6 +49,8 @@ const PageNav = (props) => {
     //need to have current graph updated to page 1 -- re render?
     props.updatePageNum(1);
   }
+  function handleEventsClick() {}
+  function handleGraphsClick() {}
   return (
     <div id='pageNavContainer'>
       <Link to='/' style={{ textDecoration: 'none' }}>

@@ -75,7 +75,7 @@ class FilterNav extends Component {
     if (this.props.currPage === 'graphs') {
       return (
         <div className='filterNavContainer'>
-          <SearchFilter
+          {/* <SearchFilter
             id='searchFilter'
             events={this.props.events}
             currPage={this.props.currPage}
@@ -99,7 +99,7 @@ class FilterNav extends Component {
             }}
           >
             Refresh
-          </button>
+          </button> */}
         </div>
       );
     } else if (this.props.currPage === 'events') {

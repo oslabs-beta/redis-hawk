@@ -1,5 +1,5 @@
 //leave these separate for future developers in case they want to add functionality
-import * as types from "../actions/actionTypes.js";
+import * as types from '../actions/actionTypes.js';
 
 const initialState = {
   currInstance: 1,
@@ -9,14 +9,14 @@ const initialState = {
       instanceId: 1,
       keyspaces: [
         {
-          eventTotal: 0,
-          pageSize: 50,
+          eventTotal: 1,
+          pageSize: 25,
           pageNum: 4,
           data: [
             {
-              key: "loading",
-              event: "loading",
-              timestamp: "loading",
+              key: 'loading',
+              event: 'loading',
+              timestamp: 'loading',
             },
           ],
         },
@@ -43,13 +43,13 @@ const eventsReducer = (state = initialState, action) => {
       const specificInstanceEvents = action.payload.events;
       const currInstance = action.payload.currInstance;
       const currDatabase = action.payload.currDatabase;
-      events = state.events.slice();
+      let updateEvents = state.events.slice();
       events[currInstance - 1].keyspacees[currDatabase] =
         specificInstanceEvents;
 
       return {
         ...state,
-        events,
+        events: updateEvents,
       };
     }
     case types.CHANGE_EVENTS_PAGE: {
@@ -57,8 +57,7 @@ const eventsReducer = (state = initialState, action) => {
       const currInstance = action.payload.currInstance;
       const currDatabase = action.payload.currDatabase;
       events = state.events.slice();
-      events[currInstance - 1].keyspacees[currDatabase] =
-        specificInstanceEvents;
+      events[currInstance - 1].keyspaces[currDatabase] = specificInstanceEvents;
       return {
         ...state,
         events,

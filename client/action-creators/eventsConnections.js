@@ -29,10 +29,10 @@ import * as types from '../actions/actionTypes';
 // }
 
 export const loadAllEventsActionCreator = () => (dispatch) => {
-  fetch('/api/v2/events/?pageSize=25')
+  fetch('api/v2/events/?pageSize=25')
     .then((res) => res.json())
     .then((response) => {
-      // console.log("response in loadAllEventsActionCreator", response);
+      console.log('response in loadAllEventsActionCreator', response);
       let allEvents = response.data;
       dispatch({
         type: types.LOAD_ALL_EVENTS,
@@ -72,8 +72,8 @@ export const refreshEventsActionCreator =
         });
       });
   };
-//change the page and handle the filters for keyspace
-//requirements: instanceId, dbIndex, page Size, page num, keyname filter, keytype filter, refreshScan = 0 - need to know whether there is a
+//change the page and handle the filters for EVENTS
+//requirements: instanceId, dbIndex, page Size, page num, keyname filter, EVENTTYPE filter, refreshData = 0 - need to know whether there is a
 //OPTIONS PARAMETER BEING USED HERE CALLED QUERYOPTIONS
 //response:
 // {
@@ -93,15 +93,18 @@ export const refreshEventsActionCreator =
 export const changeEventsPageActionCreator =
   (instanceId, dbIndex, queryParams) => (dispatch) => {
     let URI = `api/v2/events/${instanceId}/${dbIndex}/?`;
+    console.log('queryParams', queryParams);
     //this may have an issue in here - be aware of queryParams
     if (queryParams.pageSize) URI += `pageSize=${queryParams.pageSize}`;
     if (queryParams.pageNum) URI += `&pageNum=${queryParams.pageNum}`;
-    if (queryParams.keyNameFilters)
-      URI += `&keyNameFilter=${queryParams.keyNameFilters}`;
-    if (queryParams.keyTypeFilter)
-      URI += `&keyTypeFilter=${queryParams.keyTypeFilter}`;
+    if (queryParams.keyNameFilter.length !== 0 || queryParams.keyNameFilter)
+      URI += `&keynameFilter=${queryParams.keyNameFilter}`;
+    if (queryParams.keyEventFilter.length !== 0 || queryParams.keyEventFilter)
+      URI += `&eventTypeFilter=${queryParams.keyEventFilter}`;
     if (queryParams.refreshData !== undefined)
       URI += `&refreshData=${queryParams.refreshData}`;
+
+    console.log('uri in change events page action creator', URI);
 
     fetch(URI)
       .then((res) => res.json())
@@ -118,6 +121,8 @@ export const changeEventsPageActionCreator =
         });
       });
   };
+
+////////////////////////EVENT GRAPHS////////////////////////////////////
 
 export const getTotalEventsActionCreator =
   (instanceId, dbIndex, queryParams) => (dispatch) => {
