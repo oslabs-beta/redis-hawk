@@ -1,0 +1,28 @@
+@import './config/_variables.scss';
+
+.filterNavContainer {
+  display: flex;
+  margin: 2em 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+#refreshButton {
+  height: 30%;
+  align-self: center;
+  background-color: $PRIMARY_RED;
+  border: 1px solid $PRIMARY_RED;
+  border-radius: 5px;
+  
+  @media screen and (max-height: $small) {
+    font-size: 0.7em;
+  }
+
+  @media screen and (max-height: $large) {
+    font-size: 0.875vw;
+  }
+}
+
+#refreshButton:hover {
+  cursor: pointer;
+}

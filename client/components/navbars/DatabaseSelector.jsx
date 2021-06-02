@@ -14,6 +14,7 @@ const DatabaseSelector = (props) => {
 
   return (
     <div className='database-selector-container'>
+      <span className='database-selector-prompt'>Select Database: </span>
       <select 
         className='database-selector'
         onChange={(e) => {

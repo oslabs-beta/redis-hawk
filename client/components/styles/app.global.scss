@@ -1,0 +1,40 @@
+@import "./config/_variables";
+
+html {
+  @media screen and (max-width: $small) {
+    min-width: $small;
+  }
+}
+
+body {
+
+  @media screen and (max-width: $small) {
+    font-size: 1em;
+  }
+
+  @media screen and (min-width: $large) {
+    font-size: 1.25vw;
+  }
+
+  background-color: $PRIMARY_DARK;
+  color: $PRIMARY_LIGHT;
+  font-family: $PRIMARY_FONT;
+  width: 90%;
+  padding: 2em 0;
+  margin: 0 auto;
+}
+
+#app {
+  display: flex;
+
+  #tabs-container {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    align-items: center;
+  }
+
+  #tabs-container > * {
+    width: 80%;
+  }
+}

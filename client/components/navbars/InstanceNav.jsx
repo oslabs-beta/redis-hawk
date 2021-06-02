@@ -4,6 +4,8 @@ import InstanceComponent from "./InstanceComponent.jsx";
 import DatabaseSelector from "./DatabaseSelector.jsx";
 import * as actions from "../../action-creators/connections";
 
+import '../styles/instances.scss';
+
 const mapStateToProps = (store) => ({
   instanceInfo: store.instanceInfoStore.instanceInfo,
   currInstance: store.currInstanceStore.currInstance,
@@ -35,14 +37,17 @@ class InstanceNav extends Component {
 
       //If instance is currently selected
       //Pass down a DatabaseSelector component
-      let databases;
-      let instanceClickHandler;
+      let databases, className;
       if (instance.instanceId === this.props.currInstance) {
         databases = <DatabaseSelector 
           switchDatabase={this.props.switchDatabase}
           dbCount={instance.databases}
           currDatabase={this.props.currDatabase}
           />
+
+        className = 'selected-instance-container';
+      } else {
+        className = 'instance-container';
       }
 
       let instanceDisplayName;
@@ -62,12 +67,14 @@ class InstanceNav extends Component {
           databases={databases}
           switchInstance={this.props.switchInstance}
           key={`instance-${idx}`}
+          className={className}
         />
       )
     })
 
     return (
-      <div className='InstanceNav-Container'>
+      <div className='instance-nav-container'>
+        <h2 className='instance-nav-header'>Connections</h2>
         {instances}
       </div>
     );
