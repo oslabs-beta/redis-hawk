@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import GraphHolder from "./GraphHolder.jsx";
-import LineChart from "./LineChart.jsx";
+import EventTotalsChart from "./EventTotalsChart.jsx";
+import KeyspaceHistoriesChart from "./KeyspaceHistoriesChart.jsx"
 import { connect } from "react-redux";
 import * as actions from "../../action-creators/connections";
 import * as eventActions from "../../action-creators/eventsConnections";
@@ -10,7 +11,7 @@ const mapStateToProps = (store) => {
     currInstance: store.currInstanceStore.currInstance,
     currDatabase: store.currDatabaseStore.currDatabase,
     totalEvents: store.totalEventsStore.totalEvents,
-    data: store.totalEventsStore.data
+    data: store.totalEventsStore.data,
   };
 };
 
@@ -21,6 +22,10 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(
       eventActions.getTotalEventsActionCreator(instanceId, dbIndex, queryParams)
     ),
+  getNextEvents: (instanceId, dbIndex, queryParams) =>
+    dispatch(
+      eventActions.getNextEventsActionCreator(instanceId, dbIndex, queryParams)
+    ),
 });
 
 class GraphComponent extends Component {
@@ -28,30 +33,18 @@ class GraphComponent extends Component {
     super(props);
     this.state = {
       wasCalled: false,
-      params: { timeInterval: 20000 },
+      params: { timeInterval: 10000 },
+      eventParams: { eventTotal: this.props.eventTotal },
     };
     this.setGraphUpdate = this.setGraphUpdate.bind(this);
   }
   componentDidMount() {
-    console.log("in graphComponent CDMount");
-
     const self = this;
-    // if (this.state.wasCalled === true) {
-    //   setInterval(
-    //     self.setGraphUpdate(
-    //       this.props.currInstance,
-    //       this.props.currDatabase,
-    //       this.state.eventParams
-    //     ),
-    //     3000
-    //   );
-    // } else {
-    this.getInitialData(
-      this.props.currInstance,
-      this.props.currDatabase,
-      this.state.params
-    );
+    // this.getInitialData(this.props.currInstance, this.props.currDatabase, {
+    //   timeInterval: 7000,
+    // });
     // }
+    // setTimeout(setInterval(this.setGraphUpdate, 7000), 7000);
   }
   getInitialData(currInstance, currDB, params) {
     this.props.getEvents(currInstance, currDB, params);
@@ -60,10 +53,11 @@ class GraphComponent extends Component {
     });
   }
   setGraphUpdate() {
-    return this.props.getEvents(
+    return this.props.getNextEvents(
       this.props.currInstance,
       this.props.currDatabase,
-      this.props.eventParams
+      // this.state.eventParams
+      { eventTotal: this.props.totalEvents.eventTotal }
     );
   }
 
@@ -71,17 +65,28 @@ class GraphComponent extends Component {
     console.log("props in graphComponent", this.props);
 
     // if (this.props.data) {
-      return (
-        <div id='graphsComponentContainer' className='GraphComponent-Container'>
-          <LineChart
-            getEvents={this.props.getEvents}
-            currInstance={this.props.currInstance}
-            currDatabase={this.props.currDatabase}
-            // totalEvents={this.props.totalEvents}
-            data={this.props.data}
-          />
-        </div>
-      );
+    return (
+      <div id='graphsComponentContainer' className='GraphComponent-Container'>
+        {/* <LineChart
+          getNextEvents={this.props.getNextEvents}
+          getEvents={this.props.getEvents}
+          currInstance={this.props.currInstance}
+          currDatabase={this.props.currDatabase}
+          totalEvents={this.props.totalEvents}
+          // totalEvents={this.props.totalEvents}
+          data={this.props.data}
+          wasCalled={this.state.wasCalled}
+        /> */}
+        <EventTotalsChart
+          currInstance={this.props.currInstance}
+          currDatabase={this.props.currDatabase}
+        />
+        <KeyspaceHistoriesChart
+          currInstance={this.props.currInstance}
+          currDatabase={this.props.currDatabase}
+        />
+      </div>
+    );
     // }
   }
 }

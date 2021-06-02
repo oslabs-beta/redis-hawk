@@ -2,18 +2,37 @@ import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import zoomPlugin from "chartjs-plugin-zoom";
 import Hammer from "hammerjs";
+import { connect } from "react-redux";
 import Chart from "chart.js/auto";
+import * as eventActions from "../../action-creators/eventsConnections";
+import { cyan } from "@material-ui/core/colors";
+const mapStateToProps = (store) => {
+  return {
+    currInstance: store.currInstanceStore.currInstance,
+    currDatabase: store.currDatabaseStore.currDatabase,
+    totalEvents: store.totalEventsStore.totalEvents,
+    data: store.totalEventsStore.data,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  updateCurrentDisplay: (filter, category) =>
+    dispatch(actions.updateCurrDisplayActionCreator(filter, category)),
+  getEvents: (instanceId, dbIndex, queryParams) =>
+    dispatch(
+      eventActions.getTotalEventsActionCreator(instanceId, dbIndex, queryParams)
+    ),
+  getNextEvents: (instanceId, dbIndex, queryParams) =>
+    dispatch(
+      eventActions.getNextEventsActionCreator(instanceId, dbIndex, queryParams)
+    ),
+});
 
 const LineChart = (props) => {
   const [chartData, setChartData] = useState({});
-  const [loading, setLoading] = useState(true)
   console.log("props in LineChart", props);
   // array is newest to oldest
-  let labels = [];
-  let eventsArray = [];
-  const params = {
-    timeInterval: 10000,
-  };
+
   // const chart = () => {
   //   // if (props.totalEvents) {
   //   const totalEvents = props.totalEvents.eventTotals;
@@ -28,7 +47,7 @@ const LineChart = (props) => {
   //   }
   //   // }
   // };
-  console.log('loading in LineChart', loading)
+
   // useState inside chart function
   // const data = {
   //   labels: labels,
@@ -51,6 +70,18 @@ const LineChart = (props) => {
   //   });
   //   chart.update();
   // }
+  const setGraphUpdate = () => {
+    return props.getNextEvents(
+      props.currInstance,
+      props.currDatabase,
+      // state.eventParams
+      { eventTotal: props.totalEvents.eventTotal }
+    );
+  };
+  if (props.totalEvents) {
+    // console.log('props.totalEvents in LineChart',props.totalEvents.eventTotal)
+    setTimeout(setInterval(setGraphUpdate, 7000), 7000);
+  }
 
   // console.log("timeArray", timeArray);
   // console.log("eventsArray", eventsArray);
@@ -74,7 +105,19 @@ const LineChart = (props) => {
   //   });
   // };
   // chart();
+  console.log("props.data in LineChart", props.data);
+  // const setGraphUpdate = () => {
+  //   return setInterval(
+  //     props.getNextEvents(props.currInstance, props.currDatabase, {
+  //       eventTotal: props.totalEvents.eventTotal,
+  //     })
+  //   );
+  // };
+  // if (props.totalEvents.eventTotal) {
+  //   setTimeout(setGraphUpdate, 7000);
+  // }
 
+  const data = props.data;
   useEffect(() => {
     // console.log("props in useEffect", props);
     Chart.register(zoomPlugin);
@@ -95,17 +138,24 @@ const LineChart = (props) => {
         zoom: {
           wheel: {
             enabled: true,
-            speed: 0.075,
+            speed: 0.01,
+            modifier: "shift",
           },
           pinch: {
             enabled: true,
           },
           mode: "xy",
+          drag: {
+            enabled: true,
+            backgroundColor: cyan,
+          },
         },
+
         limits: {
           y: {
             min: 0,
-            max: Math.max(...eventsArray) + 5,
+            // max: max,
+            // minRange: Math.max(...props.data.datasets.data) + 50,
           },
         },
       },
@@ -119,9 +169,9 @@ const LineChart = (props) => {
           color: "white",
         },
         ticks: {
-          major: {
-            enabled: true,
-          },
+          // major: {
+          //   enabled: true,
+          // },
           color: "white",
         },
         grid: {
@@ -141,12 +191,14 @@ const LineChart = (props) => {
           major: {
             enabled: true,
           },
+          autoskip: true,
+          max: 5,
           color: "white",
         },
       },
     },
   };
-  if (props.data) {
+  // if (props.data) {
   return (
     <div>
       <Line
@@ -159,15 +211,17 @@ const LineChart = (props) => {
         onClick={() => {
           // labels.push(`${Date.now().toString()}`);
           // dataArray.push(Math.round(Math.random() * 100));
-          chart();
         }}>
         Refresh Zoom
       </button>
     </div>
   );
-  } else {
-    return <div>Loading...</div>;
-  }
+  // }
+  // else {
+  //   return <div>Loading...</div>;
+  // }
 };
 
-export default LineChart;
+// export default LineChart;
+
+export default connect(mapStateToProps, mapDispatchToProps)(LineChart);

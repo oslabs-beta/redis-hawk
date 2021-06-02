@@ -31,8 +31,8 @@ const totalEventsReducer = (state = initialState, action) => {
       console.log("action payload in tEReducer", action.payload);
       return {
         ...state,
+        totalEvents: action.payload.totalEvents,
         data: {
-          totalEvents: action.payload.totalEvents,
           labels: labels,
           datasets: [
             {
@@ -46,6 +46,43 @@ const totalEventsReducer = (state = initialState, action) => {
             },
           ],
         },
+      };
+    }
+    case types.GET_NEXT_EVENTS: {
+      const datasets = action.payload.datasets;
+      const currInstance = state.currInstance;
+      const currDatabase = state.currDatabase;
+      const labels = action.payload.labels;
+      const dataCopy = Object.assign({}, state.data);
+      console.log("dataCopy", dataCopy);
+      // dataCopy.datasets[0].data.push(...datasets);
+      // dataCopy.labels.push(...labels);
+      datasets.forEach((events) => dataCopy.datasets[0].data.push(events));
+      labels.forEach((time) => {
+        dataCopy.labels.push(time);
+      });
+      console.log("data in getnextevents reducer", dataCopy);
+      return {
+        ...state,
+        currInstance,
+        currDatabase,
+        totalEvents: action.payload.totalEvents,
+        dataCopy,
+        // data: {
+        //   totalEvents: action.payload.totalEvents,
+        //   labels: labels,
+        //   datasets: [
+        //     {
+        //       label: "Number of Events",
+        //       data: datasets,
+        //       backgroundColor: ["red"],
+        //       borderColor: "white",
+        //       borderWidth: "2",
+        //       pointBorderColor: "red",
+        //       pointHoverBackgroundColor: "#55bae7",
+        //     },
+        //   ],
+        // },
       };
     }
     default: {
