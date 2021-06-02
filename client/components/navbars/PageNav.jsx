@@ -5,6 +5,8 @@ import * as keyspaceActions from '../../action-creators/keyspaceConnections';
 
 import { connect } from 'react-redux';
 
+import '../styles/pagenav.scss';
+
 const mapStateToProps = (store) => {
   return {
     currPage: store.currPageStore.currPage,

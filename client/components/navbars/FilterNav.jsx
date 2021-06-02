@@ -5,6 +5,8 @@ import * as actions from '../../action-creators/connections';
 import * as keyspaceActions from '../../action-creators/keyspaceConnections';
 import * as eventActions from '../../action-creators/eventsConnections';
 
+import '../styles/filternav.scss';
+
 const mapStateToProps = (store) => {
   return {
     //need to map currInstance
