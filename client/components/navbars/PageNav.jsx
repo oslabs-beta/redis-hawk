@@ -35,7 +35,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const PageNav = (props) => {
   function handleKeyspaceClick() {
-    console.log('this.props', props);
+    // console.log('this.props', props);
     props.updateCurrDisplay({ filterType: 'keyName', filterValue: '' });
     props.updateCurrDisplay({ filterType: 'keyType', filterValue: '' });
     props.updatePage('keyspace');

@@ -12,11 +12,10 @@ const initialState = {
 const currentDisplayReducer = (state = initialState, action) => {
   switch (action.type) {
     case types.UPDATE_CURRDISPLAY: {
-      console.log('initial state', state);
       console.log('action payload in update curr display', action);
       //copy the state
       let currDisplay = state.currDisplay;
-      console.log('beginning curr state', currDisplay);
+
       //if payload at filtertype is name
       if (action.payload.filterType === 'keyName')
         currDisplay.keyNameFilter = action.payload.filterValue;
@@ -27,7 +26,6 @@ const currentDisplayReducer = (state = initialState, action) => {
       //if payload at filtertype is event
       if (action.payload.filterType === 'keyEvent')
         currDisplay.keyEventFilter = action.payload.filterValue;
-      console.log('updated state in update curr display', currDisplay);
 
       return {
         ...state,

@@ -9,7 +9,6 @@ import '../styles/filternav.scss';
 
 const mapStateToProps = (store) => {
   return {
-    //need to map currInstance
     keyspace: store.keyspaceStore.keyspace,
     events: store.eventsStore.events,
     keyGraph: store.keyGraphStore.keyGraph,
@@ -151,6 +150,8 @@ class FilterNav extends Component {
           </button>
         </div>
       );
+
+      //KEYSPACE PAGE : COMPLETED
     } else {
       return (
         <div className='filterNavContainer'>

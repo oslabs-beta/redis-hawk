@@ -1,5 +1,5 @@
 //leave these separate for future developers in case they want to add functionality
-import * as types from "../actions/actionTypes.js";
+import * as types from '../actions/actionTypes.js';
 
 const initialState = {
   instanceInfo: [
@@ -31,8 +31,3 @@ const instanceInfo = (state = initialState, action) => {
 };
 
 export default instanceInfo;
-
-// instanceId: 1,
-//     host: '',
-//     port: 0,
-//     numberOfDBs: 0,
