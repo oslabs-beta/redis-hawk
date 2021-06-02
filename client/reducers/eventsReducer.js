@@ -1,5 +1,5 @@
 //leave these separate for future developers in case they want to add functionality
-import * as types from "../actions/actionTypes.js";
+import * as types from '../actions/actionTypes.js';
 
 const initialState = {
   currInstance: 1,
@@ -9,14 +9,14 @@ const initialState = {
       instanceId: 1,
       keyspaces: [
         {
-          eventTotal: 0,
-          pageSize: 50,
+          eventTotal: 1,
+          pageSize: 25,
           pageNum: 4,
           data: [
             {
-              key: "loading",
-              event: "loading",
-              timestamp: "loading",
+              key: 'loading',
+              event: 'loading',
+              timestamp: 'loading',
             },
           ],
         },
@@ -31,25 +31,26 @@ const eventsReducer = (state = initialState, action) => {
   switch (action.type) {
     case types.LOAD_ALL_EVENTS: {
       const allEvents = action.payload.events;
-      // events = state.events.slice();
-      events = allEvents;
-      console.log("events in eventreducer", events);
+      let allNewEvents = state.events.slice();
+      allNewEvents = allEvents;
+      // console.log("events in eventreducer", events);
       return {
         ...state,
-        events,
+        events: allNewEvents,
       };
     }
     case types.REFRESH_EVENTS: {
+      console.log('action payload in refresh events', action.payload);
+      let updateEvents = state.events.slice();
       const specificInstanceEvents = action.payload.events;
       const currInstance = action.payload.currInstance;
       const currDatabase = action.payload.currDatabase;
-      events = state.events.slice();
-      events[currInstance - 1].keyspacees[currDatabase] =
+      updateEvents[currInstance - 1].keyspaces[currDatabase] =
         specificInstanceEvents;
 
       return {
         ...state,
-        events,
+        events: updateEvents,
       };
     }
     case types.CHANGE_EVENTS_PAGE: {
@@ -59,9 +60,8 @@ const eventsReducer = (state = initialState, action) => {
       const currInstance = action.payload.currInstance;
       const currDatabase = action.payload.currDatabase;
       events = state.events.slice();
-      events[currInstance - 1].keyspacees[currDatabase] =
-        specificInstanceEvents;
-      console.log("events after assign", events);
+      events[currInstance - 1].keyspaces[currDatabase] = specificInstanceEvents;
+
       return {
         ...state,
         events,

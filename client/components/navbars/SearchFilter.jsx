@@ -21,23 +21,23 @@ export default function SearchFilter(props) {
   const [category, setCategory] = React.useState('');
 
   const handleChange = (event) => {
-    console.log('handling change');
     setValue(event.target.value);
+    console.log('handlechange', event.target.value);
   };
   function selectChange(event) {
     setCategory(event.target.value);
+    console.log('selectchange', event.target.value);
   }
 
   //submitting the filter
   function handleSubmit() {
-    console.log('my value and category', value, category);
     //change the state of currDisplay
     props.updateCurrDisplay({
       filterType: 'keyType',
       filterValue: category,
     });
     props.updateCurrDisplay({ filterType: 'keyName', filterValue: value });
-    console.log('my current display in handle submit', props.currDisplay);
+
     const queryOptions = {
       pageSize: props.pageSize,
       pageNum: props.pageNum,
@@ -46,6 +46,26 @@ export default function SearchFilter(props) {
       refreshScan: 0,
     };
     props.changeKeyspacePage(
+      props.currInstance,
+      props.currDatabase,
+      queryOptions
+    );
+  }
+
+  function handleEventSubmit() {
+    props.updateCurrDisplay({
+      filterType: 'keyEvent',
+      filterValue: category,
+    });
+    props.updateCurrDisplay({ filterType: 'keyName', filterValue: value });
+    const queryOptions = {
+      pageSize: props.pageSize,
+      pageNum: props.pageNum,
+      keyNameFilter: props.currDisplay.keyNameFilter,
+      keyEventFilter: props.currDisplay.keyEventFilter,
+      refreshScan: 0,
+    };
+    props.changeEventsPage(
       props.currInstance,
       props.currDatabase,
       queryOptions
@@ -71,59 +91,117 @@ export default function SearchFilter(props) {
     );
   }
 
+  function clearEventFilter() {
+    setValue('');
+    setCategory('');
+    props.updateCurrDisplay({ filterType: 'keyName', filterValue: '' });
+    props.updateCurrDisplay({ filterType: 'keyEvent', filterValue: '' });
+    const queryOptions = {
+      pageSize: props.pageSize,
+      pageNum: props.pageNum,
+      refreshScan: 0,
+      keyNameFilter: props.currDisplay.keyNameFilter,
+      keyEventFilter: props.currDisplay.keyEventFilter,
+    };
+    props.changeEventsPage(
+      props.currInstance,
+      props.currDatabase,
+      queryOptions
+    );
+  }
+
   const newArea = [];
 
-  return (
-    <div style={{ width: '75%', display: 'flex', flexDirection: 'column' }}>
-      <FormControl className={classes.formControl}>
-        <TextField
-          id='standard-secondary'
-          label='key name filter'
-          color='secondary'
-          onChange={handleChange}
-        />
-      </FormControl>
-      <FormControl className={classes.formControl}>
-        <InputLabel htmlFor='grouped-select'>key type filter</InputLabel>
-        <Select defaultValue='' id='grouped-select' onChange={selectChange}>
-          <MenuItem value=''>
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={'string'}>string</MenuItem>
-          <MenuItem value={'list'}>list</MenuItem>
-          <MenuItem value={'set'}>set</MenuItem>
-          <MenuItem value={'zset'}>zset</MenuItem>
-          <MenuItem value={'hash'}>hash</MenuItem>
-        </Select>
-      </FormControl>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignItem: 'center',
-        }}
-      >
-        <Button onClick={clearFilter} color='default'>
-          Clear
-        </Button>
-        <Button onClick={handleSubmit} color='default'>
-          Filter
-        </Button>
-        <Button color='default'>+</Button>
+  if (props.currPage === 'keyspace') {
+    return (
+      <div style={{ width: '75%', display: 'flex', flexDirection: 'column' }}>
+        <FormControl className={classes.formControl}>
+          <TextField
+            id='standard-secondary'
+            label='key name filter'
+            color='secondary'
+            onChange={handleChange}
+          />
+        </FormControl>
+        <FormControl className={classes.formControl}>
+          <InputLabel htmlFor='grouped-select'>key type filter</InputLabel>
+          <Select defaultValue='' id='grouped-select' onChange={selectChange}>
+            <MenuItem value=''>
+              <em>None</em>
+            </MenuItem>
+            <MenuItem value={'string'}>string</MenuItem>
+            <MenuItem value={'list'}>list</MenuItem>
+            <MenuItem value={'set'}>set</MenuItem>
+            <MenuItem value={'zset'}>zset</MenuItem>
+            <MenuItem value={'hash'}>hash</MenuItem>
+          </Select>
+        </FormControl>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItem: 'center',
+          }}
+        >
+          <Button onClick={clearFilter} color='default'>
+            Clear
+          </Button>
+          <Button onClick={handleSubmit} color='default'>
+            Filter
+          </Button>
+          <Button color='default'>+</Button>
+        </div>
+        <div>{newArea}</div>
       </div>
-      <div>{newArea}</div>
-    </div>
-  );
-}
+    );
 
-// <button
-//             className='filter-button'
-//             id='clearFilterButton'
-//             onClick={(e) => {
-//               e.preventDefault();
-//               this.props.updateCurrDisplay('', '');
-//             }}
-//           >
-//             Clear Filter
-//           </button>
+    ////////////////////////
+  } else if (props.currPage === 'events') {
+    return (
+      <div style={{ width: '75%', display: 'flex', flexDirection: 'column' }}>
+        <FormControl className={classes.formControl}>
+          <TextField
+            id='standard-secondary'
+            label='key name filter'
+            color='secondary'
+            onChange={handleChange}
+          />
+        </FormControl>
+        <FormControl className={classes.formControl}>
+          <InputLabel htmlFor='grouped-select'>key event filter</InputLabel>
+          <Select defaultValue='' id='grouped-select' onChange={selectChange}>
+            <MenuItem value=''>
+              <em>None</em>
+            </MenuItem>
+
+            <MenuItem value={'set'}>set</MenuItem>
+            <MenuItem value={'expire'}>expire</MenuItem>
+            <MenuItem value={'hset'}>hset</MenuItem>
+            <MenuItem value={'sadd'}>sadd</MenuItem>
+            <MenuItem value={'lpush'}>lpush</MenuItem>
+            <MenuItem value={'zadd'}>zadd</MenuItem>
+            <MenuItem value={'expired'}>expired</MenuItem>
+          </Select>
+        </FormControl>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItem: 'center',
+          }}
+        >
+          <Button onClick={clearEventFilter} color='default'>
+            Clear
+          </Button>
+          <Button onClick={handleEventSubmit} color='default'>
+            Filter
+          </Button>
+          <Button color='default'>+</Button>
+        </div>
+        <div>{newArea}</div>
+      </div>
+    );
+  }
+}

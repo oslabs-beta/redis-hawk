@@ -4,8 +4,6 @@ import KeyspaceTable from './KeyspaceTable.jsx';
 import * as actions from '../../action-creators/connections';
 import * as keyspaceActions from '../../action-creators/keyspaceConnections';
 
-//withRouter??? -- for props.history -- stretch??
-
 const mapStateToProps = (store) => {
   return {
     currInstance: store.currInstanceStore.currInstance,
