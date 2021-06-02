@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 import regeneratorRuntime from 'regenerator-runtime';
+import { updateCurrDisplayActionCreator } from '../../action-creators/connections';
 
 function KeyspaceTable(props) {
   // console.log('props in keyspace table', props);
@@ -22,6 +23,8 @@ function KeyspaceTable(props) {
     const funcOptions = {
       pageSize: props.pageSize,
       pageNum: params.page + 1,
+      keyNameFilter: props.currDisplay.keyNameFilter,
+      keyTypeFilter: props.currDisplay.keyTypeFilter,
       refreshScan: 0,
     };
     // console.log('my funcOptions', funcOptions);
