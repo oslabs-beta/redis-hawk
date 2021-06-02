@@ -54,7 +54,10 @@ mockCommands.delString = async (client) => {
 }
 
 /* <<<<< Lists >>>>> */
-mockCommands.lpushList = (client) => {
+mockCommands.lpushList = async (client) => {
+
+  await selectRandomDatabase(client);
+
   const key = mockData.lists.createKey();
   client.lpush(key, mockData.lists.createValue(), (err, res) => {
     if (!err) console.log(`Key LPUSH: ${key}`);
@@ -69,7 +72,10 @@ mockCommands.lpushList = (client) => {
   });
 }
 
-mockCommands.lrangeList = (client) => {
+mockCommands.lrangeList = async (client) => {
+
+  await selectRandomDatabase(client);
+
   const key = mockData.lists.createKey();
   client.lrange(key, 0, -1, (err, res) => {
     if (!err) console.log(`Key LRANGE ${key}: ${res}`);
@@ -77,7 +83,10 @@ mockCommands.lrangeList = (client) => {
   });
 }
 
-mockCommands.lpopList = (client) => {
+mockCommands.lpopList = async (client) => {
+
+  await selectRandomDatabase(client);
+
   const key = mockData.lists.createKey();
   client.lpop(key, (err, res) => {
     if (!err) console.log(`Key LPOP: ${key}, ${res}`);
@@ -86,7 +95,10 @@ mockCommands.lpopList = (client) => {
 }
 
 /* <<<<< Sets >>>>> */
-mockCommands.saddSet = (client) => {
+mockCommands.saddSet = async (client) => {
+
+  await selectRandomDatabase(client);
+
   const key = mockData.sets.createKey();
   client.sadd(key, mockData.sets.createValue(), (err, res) => {
     if (!err) console.log(`Key SADD: ${key}`);
@@ -101,7 +113,10 @@ mockCommands.saddSet = (client) => {
   });
 }
 
-mockCommands.smembersSet = (client) => {
+mockCommands.smembersSet = async (client) => {
+
+  await selectRandomDatabase(client);
+
   const key = mockData.sets.createKey();
   client.smembers(key, (err, res) => {
     if (!err) console.log(`Key SMEMBERS ${key}: ${res}`);
@@ -109,7 +124,10 @@ mockCommands.smembersSet = (client) => {
   });
 }
 
-mockCommands.spopSet = (client) => {
+mockCommands.spopSet = async (client) => {
+
+  await selectRandomDatabase(client);
+
   const key = mockData.sets.createKey();
   client.spop(key, (err, res) => {
     if (!err) console.log(`Key SPOP: ${key} ${res}`);
@@ -117,7 +135,10 @@ mockCommands.spopSet = (client) => {
   });
 }
 /* <<<<< Sorted Sets >>>>> */
-mockCommands.zaddSortedSet = (client) => {
+mockCommands.zaddSortedSet = async (client) => {
+ 
+  await selectRandomDatabase(client);
+
   const key = mockData.sortedSets.createKey();
   client.zadd(key, mockData.sortedSets.createValue(), (err, res) => {
     if (!err) console.log(`Key ZADD: ${key}`);
@@ -132,7 +153,10 @@ mockCommands.zaddSortedSet = (client) => {
   });
 }
 
-mockCommands.zrangeSortedSet = (client) => {
+mockCommands.zrangeSortedSet = async (client) => {
+  
+  await selectRandomDatabase(client);
+
   const key = mockData.sortedSets.createKey();
   client.zrange(key, 0, -1, (err, res) => {
     if (!err) console.log(`Key ZRANGE ${key}: ${res}`);
@@ -140,7 +164,7 @@ mockCommands.zrangeSortedSet = (client) => {
   });
 }
 
-mockCommands.zpopminSortedSet = (client) => {
+mockCommands.zpopminSortedSet = async (client) => {
   const key = mockData.sortedSets.createKey();
   client.zpopmin(key, (err, res) => {
     if (!err) console.log(`Key ZPOPMIN ${key}: ${res}`);
@@ -149,7 +173,10 @@ mockCommands.zpopminSortedSet = (client) => {
 }
 
 /* <<<<< Hashes >>>>> */
-mockCommands.hmsetHash = (client) => {
+mockCommands.hmsetHash = async (client) => {
+
+  await selectRandomDatabase(client);
+
   const key = mockData.hashes.createKey();
   client.hmset(key, mockData.hashes.createValue(), (err, res) => {
     if (!err) console.log(`Key HMSET ${key}`);
@@ -164,7 +191,10 @@ mockCommands.hmsetHash = (client) => {
   });
 }
 
-mockCommands.hgetallHash = (client) => {
+mockCommands.hgetallHash = async (client) => {
+
+  await selectRandomDatabase(client);
+
   const key = mockData.hashes.createKey();
   client.hgetall(key, (err, res) => {
     if (!err) console.log(`Key HGETALL ${key}:  ${res}`);
@@ -172,7 +202,10 @@ mockCommands.hgetallHash = (client) => {
   });
 }
 
-mockCommands.delHash = (client) => {
+mockCommands.delHash = async (client) => {
+
+  await selectRandomDatabase(client);
+
   const key = mockData.hashes.createKey();
   client.del(key, (err, res) => {
     if (!err) console.log(`Key DEL: ${key}`);
