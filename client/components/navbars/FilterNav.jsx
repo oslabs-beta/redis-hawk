@@ -32,7 +32,7 @@ const mapDispatchToProps = (dispatch) => ({
     ),
   changeEventsPage: (instanceId, dbIndex, queryOptions) =>
     dispatch(
-      eventActions.changeKeyspacePageActionCreator(
+      eventActions.changeEventsPageActionCreator(
         instanceId,
         dbIndex,
         queryOptions

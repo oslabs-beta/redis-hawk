@@ -245,6 +245,25 @@ export default function SearchFilter(props) {
     );
   }
 
+  function clearFilter() {
+    setValue('');
+    setCategory('');
+    props.updateCurrDisplay({ filterType: 'keyName', filterValue: '' });
+    props.updateCurrDisplay({ filterType: 'keyType', filterValue: '' });
+    const queryOptions = {
+      pageSize: props.pageSize,
+      pageNum: props.pageNum,
+      refreshScan: 0,
+      keyNameFilter: props.currDisplay.keyNameFilter,
+      keyTypeFilter: props.currDisplay.keyTypeFilter,
+    };
+    props.changeKeyspacePage(
+      props.currInstance,
+      props.currDatabase,
+      queryOptions
+    );
+  }
+
   const newArea = [];
 
   return (
@@ -278,8 +297,9 @@ export default function SearchFilter(props) {
           alignItem: 'center',
         }}
       >
-        <Button color='default'>Cancel</Button>
-        <Button color='default'>Clear</Button>
+        <Button onClick={clearFilter} color='default'>
+          Clear
+        </Button>
         <Button onClick={handleSubmit} color='default'>
           Filter
         </Button>
