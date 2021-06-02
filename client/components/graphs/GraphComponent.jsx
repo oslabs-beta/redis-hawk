@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import GraphHolder from "./GraphHolder.jsx";
-// import LineChart from "./LineChart.jsx";
 import EventTotalsChart from "./EventTotalsChart.jsx";
+import KeyspaceHistoriesChart from "./KeyspaceHistoriesChart.jsx"
 import { connect } from "react-redux";
 import * as actions from "../../action-creators/connections";
 import * as eventActions from "../../action-creators/eventsConnections";
@@ -78,6 +78,10 @@ class GraphComponent extends Component {
           wasCalled={this.state.wasCalled}
         /> */}
         <EventTotalsChart
+          currInstance={this.props.currInstance}
+          currDatabase={this.props.currDatabase}
+        />
+        <KeyspaceHistoriesChart
           currInstance={this.props.currInstance}
           currDatabase={this.props.currDatabase}
         />
