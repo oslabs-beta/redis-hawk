@@ -15,7 +15,14 @@ class EventsChartFilterNav extends Component {
     console.log("this.props.intervalStart", this.props.intervalStart);
     return (
       <div className='filterNavContainer'>
-        <EventsChartFilter id='searchFilter' events={this.props.events}  />
+        <EventsChartFilter
+          id='searchFilter'
+          currInstance={this.props.currInstance}
+          currDatabase={this.props.currDatabase}
+          filterBy={this.props.filterBy}
+          setInt={this.props.setInt}
+          clearInt={this.props.clearInt}
+        />
         <button
           className='toggleInterval'
           id='clearFilterButton'
@@ -27,7 +34,7 @@ class EventsChartFilterNav extends Component {
               this.props.setInt();
             }
           }}>
-          Stop/Start Update
+          Pause Interval
         </button>
         <button
           className='filter-button'
@@ -35,6 +42,7 @@ class EventsChartFilterNav extends Component {
           onClick={(e) => {
             e.preventDefault();
             this.props.clearInt();
+            this.props.resetState();
             this.props.getMoreData();
             this.props.setInt();
           }}>

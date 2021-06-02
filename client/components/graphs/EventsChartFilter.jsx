@@ -30,7 +30,8 @@ export default function EventsChartFilter(props) {
 
   //submitting the filter
   function handleSubmit(currInstance, currDatabase, queryParam) {
-
+    e.preventDefault();
+    const URI = `/api/events/`
   }
   // const clearFilter = () => {
   //      setValue('');

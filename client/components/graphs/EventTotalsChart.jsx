@@ -23,7 +23,7 @@ class EventTotalsChart extends Component {
             borderWidth: ".75",
             pointBorderColor: "red",
             pointBorderWidth: "1",
-            pointRadius: "2.5",
+            pointRadius: "2",
             pointHoverBackgroundColor: "gray",
           },
         ],
@@ -33,6 +33,7 @@ class EventTotalsChart extends Component {
     this.getMoreData = this.getMoreData.bind(this);
     this.setInt = this.setInt.bind(this);
     this.clearInt = this.clearInt.bind(this);
+    this.resetState = this.resetState.bind(this);
   }
 
   componentDidMount() {
@@ -68,7 +69,7 @@ class EventTotalsChart extends Component {
         });
       });
   }
-
+  
   getMoreData() {
     const URI = `api/v2/events/totals/${this.props.currInstance}/${this.props.currDatabase}/?eventTotal=${this.state.totalEvents}`;
     fetch(URI)
@@ -103,6 +104,16 @@ class EventTotalsChart extends Component {
       intervalStart: false,
     });
     clearInterval(this.intervalID);
+  }
+  resetState() {
+    // const newDatasets= [];
+    // const newLabels = [];
+    const newState = Object.assign({}, this.state)
+    newState.labels = [];
+    newState.data.datasets[0].data = [];
+    this.setState({
+      newState
+    })
   }
 
   render() {
@@ -196,6 +207,7 @@ class EventTotalsChart extends Component {
           clearInt={this.clearInt}
           intervalStart={this.state.intervalStart}
           filterBy={this.state.filterBy}
+          resetState={this.resetState}
         />
       </div>
     );
