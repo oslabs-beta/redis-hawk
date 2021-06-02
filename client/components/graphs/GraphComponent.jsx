@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import GraphHolder from "./GraphHolder.jsx";
 import EventTotalsChart from "./EventTotalsChart.jsx";
 import KeyspaceHistoriesChart from "./KeyspaceHistoriesChart.jsx"
 import { connect } from "react-redux";

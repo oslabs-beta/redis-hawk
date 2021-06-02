@@ -17,9 +17,11 @@ class KeyspaceHistoriesChart extends Component {
             data: [],
             backgroundColor: ["red"],
             borderColor: "white",
-            borderWidth: "2",
+            borderWidth: ".75",
             pointBorderColor: "red",
-            pointHoverBackgroundColor: "#55bae7",
+            pointBorderWidth: "1",
+            pointRadius: "2",
+            pointHoverBackgroundColor: "gray",
           },
         ],
       },
@@ -29,6 +31,7 @@ class KeyspaceHistoriesChart extends Component {
   }
 
   componentDidMount() {
+    console.log("in keyspaceHistories chart");
     Chart.register(zoomPlugin);
     this.getInitialData();
     setTimeout(setInterval(this.getMoreData, 20000), 10000);
@@ -39,6 +42,7 @@ class KeyspaceHistoriesChart extends Component {
   getInitialData() {
     const URI = `api/v2/keyspaces/histories/${this.props.currInstance}/${this.props.currDatabase}/`;
     console.log("URI in fetch", URI);
+    console.log("this.state before fetch in initialData", this.state);
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {
@@ -46,11 +50,11 @@ class KeyspaceHistoriesChart extends Component {
         const allHistories = response;
         console.log("this.state.data before assign", this.state.data);
         const dataCopy = Object.assign({}, this.state.data);
-        // dataCopy.labels = [];
         console.log("dataCopy before loop", dataCopy);
-        dataCopy.labels = [];
         // const labels = [];
         // const datasets = [];
+        dataCopy.labels = [];
+        dataCopy.datasets[0].data = [];
         for (let i = response.histories.length - 1; i >= 0; i--) {
           const time = new Date(response.histories[i].end_time)
             .toString("MMddd")
@@ -71,10 +75,15 @@ class KeyspaceHistoriesChart extends Component {
   getMoreData() {
     const URI = `api/v2/keyspaces/histories/${this.props.currInstance}/${this.props.currDatabase}/?historyCount=${this.state.historyCount}`;
     console.log("URI in fetch", URI);
+    console.log("this.state before fetch in getMoreData", this.state);
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {
         console.log("response in GETMOREDATA fetch of LineChartBeta", response);
+        console.log(
+          "this.state.labels in get more events before reassignment",
+          this.state.data.labels
+        );
         const historyCount = response.historyCount;
         const keyCount = response.histories[0].keyCount;
         console.log("this.state.data before assign", this.state.data);

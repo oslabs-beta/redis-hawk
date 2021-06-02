@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SearchFilter(props) {
+export default function EventsChartSearchFilter(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState('');
   const [category, setCategory] = React.useState('');

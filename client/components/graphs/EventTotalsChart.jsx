@@ -3,11 +3,13 @@ import { Line } from "react-chartjs-2";
 import zoomPlugin from "chartjs-plugin-zoom";
 import Hammer from "hammerjs";
 import Chart from "chart.js/auto";
+import EventsChartFilterNav from "./EventsChartFilterNav.jsx";
 
 class EventTotalsChart extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      intervalStart: false,
       totalEvents: 0,
       data: {
         labels: [],
@@ -17,12 +19,18 @@ class EventTotalsChart extends Component {
             data: [],
             backgroundColor: ["red"],
             borderColor: "white",
-            borderWidth: "2",
+            borderWidth: ".75",
             pointBorderColor: "red",
-            pointHoverBackgroundColor: "#55bae7",
+            pointBorderWidth: "1",
+            pointRadius: "2.5",
+            pointHoverBackgroundColor: "gray",
           },
         ],
       },
+      setInt: () => {
+        setInterval(this.getMoreData, 7000);
+        this.state.intervalStart = true;
+      }
     };
     this.getInitialData = this.getInitialData.bind(this);
     this.getMoreData = this.getMoreData.bind(this);
@@ -31,11 +39,10 @@ class EventTotalsChart extends Component {
   componentDidMount() {
     Chart.register(zoomPlugin);
     this.getInitialData();
-    setTimeout(setInterval(this.getMoreData, 7000), 10000);
+    setTimeout(setInterval(this.setInt), 10000);
   }
-
+  
   getInitialData() {
-    const queryParams = { timeInterval: 7000 };
     const URI = `api/v2/events/totals/${this.props.currInstance}/${this.props.currDatabase}/?timeInterval=7000`;
     console.log("URI in fetch", URI);
     fetch(URI)
@@ -68,7 +75,6 @@ class EventTotalsChart extends Component {
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {
-
         const eventTotal = response.eventTotal;
         const eventCount = response.eventTotals[0].eventCount;
         const dataCopy = Object.assign({}, this.state.data);
@@ -84,6 +90,11 @@ class EventTotalsChart extends Component {
           data: dataCopy,
         });
       });
+  }
+
+  clearInt () {
+    clearInterval(this.state.setInt)
+    this.state.intervalStart = false;
   }
 
   render() {
@@ -169,13 +180,13 @@ class EventTotalsChart extends Component {
             },
           }}
           style={{ backgroundColor: "black" }}></Line>
-        <button
-          onClick={() => {
-            // labels.push(`${Date.now().toString()}`);
-            // dataArray.push(Math.round(Math.random() * 100));
-          }}>
-          Refresh Zoom
-        </button>
+          <EventsChartFilterNav 
+            getInitialData={this.getInitialData}
+            getMoreData={this.getMoreData}
+            setInt={this.state.setInt}
+            clearInt={this.clearInt}
+            intervalStart={this.state.intervalStart}
+          />
       </div>
     );
   }
