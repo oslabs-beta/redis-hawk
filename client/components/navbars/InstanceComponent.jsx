@@ -2,11 +2,11 @@ import React from "react";
 
 const InstanceComponent = (props) => {
   return (
-    <div className='instance-container'>
+    <div className={props.className}>
       <p className='instance-display-text' onClick={() => {
         props.switchInstance(props.instanceId);
       }}>
-        Instance: {props.instanceDisplayName}
+        {props.instanceDisplayName}
       </p>
       {props.databases}
     </div>

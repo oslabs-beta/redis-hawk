@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Link } from "react-router-dom";
 import * as actions from "../../action-creators/connections";
 import { connect } from "react-redux";
 
+import '../styles/pagenav.scss';
+
 const mapStateToProps = (store) => {
   return {
     currPage: store.currPageStore.currPage,

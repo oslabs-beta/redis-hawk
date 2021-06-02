@@ -6,12 +6,14 @@ import InstanceNav from "./navbars/InstanceNav.jsx";
 import KeyspaceComponent from "./keyspace/KeyspaceComponent.jsx";
 import GraphComponent from "./graphs/GraphComponent.jsx";
 import EventComponent from "./events/EventComponent.jsx";
-import "./styles/styles.scss";
 import { connect } from "react-redux";
 import * as actions from "../action-creators/connections";
 import * as keyspaceActions from "../action-creators/keyspaceConnections";
 import * as eventActions from "../action-creators/eventsConnections";
 import "../../node_modules/react-vis/dist/style.css";
+
+
+import './styles/app.global.scss';
 
 ///still need to check dispatchers here
 
@@ -43,15 +45,17 @@ class App extends Component {
     return (
       <div id='app'>
         <BrowserRouter>
-          <FilterNav />
-          <PageNav />
           <InstanceNav />
-          {/* create a react router to switch between the main area of divs */}
-          <Switch>
-            <Route exact path='/' render={() => <KeyspaceComponent />} />
-            <Route path='/events' render={() => <EventComponent />} />
-            <Route path='/graphs' render={() => <GraphComponent />} />
+          <div id='tabs-container'>
+            <PageNav />
+            <FilterNav />
+            {/* create a react router to switch between the main area of divs */}
+            <Switch>
+              <Route exact path='/' render={() => <KeyspaceComponent />} />
+              <Route path='/events' render={() => <EventComponent />} />
+              <Route path='/graphs' render={() => <GraphComponent />} />
           </Switch>
+          </div>
         </BrowserRouter>
       </div>
     );
