@@ -8,7 +8,7 @@ class LineChart extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      totalEvents: 0,
+      totalEvents: { eventTotal: 0 },
       data: {
         labels: [],
         datasets: [
@@ -25,11 +25,13 @@ class LineChart extends Component {
       },
     };
     this.getInitialData = this.getInitialData.bind(this);
+    this.getMoreData = this.getMoreData.bind(this);
   }
 
   componentDidMount() {
     Chart.register(zoomPlugin);
     this.getInitialData();
+    setTimeout(setInterval(this.getMoreData, 7000), 10000);
   }
 
   getInitialData() {
@@ -59,6 +61,32 @@ class LineChart extends Component {
         console.log("dataCopy", dataCopy);
         this.setState({
           ...this.state,
+          totalEvents: allEvents.eventTotal,
+          data: dataCopy,
+        });
+      });
+  }
+
+  getMoreData() {
+    const URI = `api/v2/events/totals/${this.props.currInstance}/${this.props.currDatabase}/?eventTotal=${this.state.totalEvents}`;
+    console.log("URI in fetch", URI);
+    fetch(URI)
+      .then((res) => res.json())
+      .then((response) => {
+        console.log("response in fetch of LineChartBeta", response);
+        const eventTotal = response.eventTotal;
+        const eventCount = response.eventTotals[0].eventCount;
+        console.log("this.state.data before assign", this.state.data);
+        const dataCopy = Object.assign({}, this.state.data);
+        const time = new Date(response.eventTotals[0].end_time)
+          .toString("MMddd")
+          .slice(16, 24);
+        dataCopy.labels.push(time);
+        dataCopy.datasets[0].data.push(eventCount);
+
+        this.setState({
+          ...this.state,
+          eventTotal: eventTotal,
           data: dataCopy,
         });
       });
@@ -86,23 +114,22 @@ class LineChart extends Component {
                 zoom: {
                   wheel: {
                     enabled: true,
-                    speed: 0.01,
+                    speed: 0.05,
                     modifier: "shift",
                   },
                   pinch: {
                     enabled: true,
                   },
                   mode: "xy",
-                  drag: {
-                    enabled: true,
-                    backgroundColor: "cyan",
-                  },
+                  // drag: {
+                  //   enabled: true,
+                  //   backgroundColor: "cyan",
+                  // },
                 },
 
                 limits: {
                   y: {
                     min: 0,
-                    // max: max,
                     // minRange: Math.max(...props.data.datasets.data) + 50,
                   },
                 },
