@@ -81,16 +81,7 @@ class FilterNav extends Component {
             currPage={this.props.currPage}
             updateCurrDisplay={this.props.updateCurrDisplay}
           />
-          <button
-            className='filter-button'
-            id='clearFilterButton'
-            onClick={(e) => {
-              e.preventDefault();
-              this.props.updateCurrDisplay('', '');
-            }}
-          >
-            Clear Filter
-          </button>
+
           <button
             className='filter-button'
             id='refreshButton'
@@ -123,16 +114,7 @@ class FilterNav extends Component {
             currDatabase={this.props.currDatabase}
             currInstance={this.props.currInstance}
           />
-          <button
-            className='filter-button'
-            id='clearFilterButton'
-            onClick={(e) => {
-              e.preventDefault();
-              this.props.updateCurrDisplay('', '');
-            }}
-          >
-            Clear Filter
-          </button>
+
           <button
             className='filter-button'
             id='searchButton'

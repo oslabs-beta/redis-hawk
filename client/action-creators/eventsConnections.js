@@ -29,7 +29,7 @@ import * as types from '../actions/actionTypes';
 // }
 
 export const loadAllEventsActionCreator = () => (dispatch) => {
-  fetch('/api/v2/events')
+  fetch('/api/v2/events/?pageSize=25')
     .then((res) => res.json())
     .then((response) => {
       // console.log("response in loadAllEventsActionCreator", response);
@@ -88,6 +88,8 @@ export const refreshEventsActionCreator =
 //         }
 //     ]
 // }
+
+//FIX THIS!!
 export const changeEventsPageActionCreator =
   (instanceId, dbIndex, queryParams) => (dispatch) => {
     let URI = `api/v2/events/${instanceId}/${dbIndex}/?`;
@@ -121,7 +123,7 @@ export const getTotalEventsActionCreator =
   (instanceId, dbIndex, queryParams) => (dispatch) => {
     let URI = `api/v2/events/totals/${instanceId}/${dbIndex}/`;
     if (queryParams) {
-      console.log("queryParams", queryParams);
+      console.log('queryParams', queryParams);
       // if (queryParams.eventTotal) {
       //   if (queryParams.eventTypes)
       //     URI += `?eventTotal=${queryParams.eventTotal}/&${queryParams.eventTypes}`;
@@ -142,18 +144,18 @@ export const getTotalEventsActionCreator =
       }
     }
 
-    console.log("URI in eventTotalsActionCreator", URI);
+    console.log('URI in eventTotalsActionCreator', URI);
     if (queryParams.timeInterval) {
       fetch(URI)
         .then((res) => res.json())
         .then((response) => {
-          console.log("response in getTotalEventsActionCreator", response);
+          console.log('response in getTotalEventsActionCreator', response);
           const allEvents = response;
           const labels = [];
           const datasets = [];
           for (let i = response.eventTotals.length - 1; i >= 0; i--) {
             const time = new Date(response.eventTotals[i].end_time)
-              .toString("MMddd")
+              .toString('MMddd')
               .slice(16, 24);
             labels.push(time);
             datasets.push(response.eventTotals[i].eventCount);
@@ -226,22 +228,23 @@ export const getNextEventsActionCreator =
         }
       }
     }
-    console.log("URI in eventTotalsActionCreator", URI);
+    console.log('URI in eventTotalsActionCreator', URI);
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {
-        console.log("response in getNextEventsActionCreators", response);
+        console.log('response in getNextEventsActionCreators', response);
         const allEvents = response;
         console.log('allEvents after fetch', allEvents);
         const labels = [];
         const datasets = [];
-        const time = new Date(response.eventTotals[0].end_time).toString("MMddd")
-              .slice(16, 24);
+        const time = new Date(response.eventTotals[0].end_time)
+          .toString('MMddd')
+          .slice(16, 24);
         labels.push(time);
         datasets.push(response.eventTotals[0].eventCount);
 
-        console.log("labels", labels);
-        console.log("datasets", datasets);
+        console.log('labels', labels);
+        console.log('datasets', datasets);
         dispatch({
           type: types.GET_NEXT_EVENTS,
           payload: {
