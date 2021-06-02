@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function EventsChartSearchFilter(props) {
+export default function EventsChartFilter(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState('');
   const [category, setCategory] = React.useState('');
@@ -29,28 +29,13 @@ export default function EventsChartSearchFilter(props) {
   }
 
   //submitting the filter
-  function handleSubmit() {
-    console.log('my value and category', value, category);
-    //change the state of currDisplay
-    props.updateCurrDisplay({
-      filterType: 'keyType',
-      filterValue: category,
-    });
-    props.updateCurrDisplay({ filterType: 'keyName', filterValue: value });
-    console.log('my current display in handle submit', props.currDisplay);
-    const queryOptions = {
-      pageSize: props.pageSize,
-      pageNum: props.pageNum,
-      keyNameFilter: props.currDisplay.keyNameFilter,
-      keyTypeFilter: props.currDisplay.keyTypeFilter,
-      refreshScan: 0,
-    };
-    props.changeKeyspacePage(
-      props.currInstance,
-      props.currDatabase,
-      queryOptions
-    );
+  function handleSubmit(currInstance, currDatabase, queryParam) {
+
   }
+  // const clearFilter = () => {
+  //      setValue('');
+  //   setCategory('');
+  // }
 
   function clearFilter() {
     setValue('');
@@ -89,11 +74,8 @@ export default function EventsChartSearchFilter(props) {
           <MenuItem value=''>
             <em>None</em>
           </MenuItem>
-          <MenuItem value={'string'}>string</MenuItem>
-          <MenuItem value={'list'}>list</MenuItem>
-          <MenuItem value={'set'}>set</MenuItem>
-          <MenuItem value={'zset'}>zset</MenuItem>
-          <MenuItem value={'hash'}>hash</MenuItem>
+          <MenuItem value={'string'}>keyname</MenuItem>
+          <MenuItem value={'string'}>event type</MenuItem>
         </Select>
       </FormControl>
       <div

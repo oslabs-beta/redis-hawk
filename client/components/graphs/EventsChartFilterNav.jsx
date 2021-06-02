@@ -4,32 +4,27 @@ import React, { Component } from "react";
 // import * as actions from "../../action-creators/connections";
 // import * as keyspaceActions from "../../action-creators/keyspaceConnections";
 // import * as eventActions from "../../action-creators/eventsConnections";
-import EventsChartSearchFilter from "./EventsChartSearchFilter.jsx"
+import EventsChartFilter from "./EventsChartFilter.jsx";
 import "../styles/filternav.scss";
 
 class EventsChartFilterNav extends Component {
   constructor(props) {
     super(props);
   }
-
   render() {
+    console.log("this.props.intervalStart", this.props.intervalStart);
     return (
       <div className='filterNavContainer'>
-        <EventsChartSearchFilter
-          id='searchFilter'
-          events={this.props.events}
-        />
+        <EventsChartFilter id='searchFilter' events={this.props.events}  />
         <button
           className='toggleInterval'
           id='clearFilterButton'
           onClick={(e) => {
             e.preventDefault();
-            if (this.props.intervalStart){
-            this.props.clearInt;
-
-            }
-            else {
-              this.props.setInt()
+            if (this.props.intervalStart) {
+              this.props.clearInt();
+            } else {
+              this.props.setInt();
             }
           }}>
           Stop/Start Update
@@ -41,7 +36,8 @@ class EventsChartFilterNav extends Component {
             e.preventDefault();
             this.props.clearInt();
             this.props.getMoreData();
-            this.props.setInt();}}>
+            this.props.setInt();
+          }}>
           Refresh
         </button>
       </div>

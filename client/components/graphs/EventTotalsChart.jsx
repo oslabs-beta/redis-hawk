@@ -10,6 +10,7 @@ class EventTotalsChart extends Component {
     super(props);
     this.state = {
       intervalStart: false,
+      filterBy: { eventTypes: "", keynameFilter: "" },
       totalEvents: 0,
       data: {
         labels: [],
@@ -27,21 +28,19 @@ class EventTotalsChart extends Component {
           },
         ],
       },
-      setInt: () => {
-        setInterval(this.getMoreData, 7000);
-        this.state.intervalStart = true;
-      }
     };
     this.getInitialData = this.getInitialData.bind(this);
     this.getMoreData = this.getMoreData.bind(this);
+    this.setInt = this.setInt.bind(this);
+    this.clearInt = this.clearInt.bind(this);
   }
 
   componentDidMount() {
     Chart.register(zoomPlugin);
     this.getInitialData();
-    setTimeout(setInterval(this.setInt), 10000);
+    setTimeout(this.setInt, 10000);
   }
-  
+
   getInitialData() {
     const URI = `api/v2/events/totals/${this.props.currInstance}/${this.props.currDatabase}/?timeInterval=7000`;
     console.log("URI in fetch", URI);
@@ -91,13 +90,23 @@ class EventTotalsChart extends Component {
         });
       });
   }
-
-  clearInt () {
-    clearInterval(this.state.setInt)
-    this.state.intervalStart = false;
+  setInt() {
+    this.intervalID = setInterval(this.getMoreData, 7000);
+    if (!this.state.intervalStart) {
+      this.setState({
+        intervalStart: true,
+      });
+    }
+  }
+  clearInt() {
+    this.setState({
+      intervalStart: false,
+    });
+    clearInterval(this.intervalID);
   }
 
   render() {
+    console.log("intervalStart", this.state.intervalStart);
     return (
       <div>
         <Line
@@ -180,13 +189,14 @@ class EventTotalsChart extends Component {
             },
           }}
           style={{ backgroundColor: "black" }}></Line>
-          <EventsChartFilterNav 
-            getInitialData={this.getInitialData}
-            getMoreData={this.getMoreData}
-            setInt={this.state.setInt}
-            clearInt={this.clearInt}
-            intervalStart={this.state.intervalStart}
-          />
+        <EventsChartFilterNav
+          getInitialData={this.getInitialData}
+          getMoreData={this.getMoreData}
+          setInt={this.setInt}
+          clearInt={this.clearInt}
+          intervalStart={this.state.intervalStart}
+          filterBy={this.state.filterBy}
+        />
       </div>
     );
   }
