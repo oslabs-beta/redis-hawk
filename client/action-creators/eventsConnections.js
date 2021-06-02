@@ -54,7 +54,7 @@ export const loadAllEventsActionCreator = () => (dispatch) => {
 export const refreshEventsActionCreator =
   (instanceId, dbIndex, pageSize, pageNum, refreshData) => (dispatch) => {
     fetch(
-      `api/v2/events/${instanceId}/${dbIndex}/?pageSize=${pageSize}&pageNum=${pageNum}&refreshScan=${refreshData}`
+      `api/v2/events/${instanceId}/${dbIndex}/?pageSize=${pageSize}&pageNum=${pageNum}&refreshData=${refreshData}`
     )
       .then((res) => res.json())
       .then((response) => {
