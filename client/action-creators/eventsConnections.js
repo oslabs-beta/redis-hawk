@@ -60,6 +60,10 @@ export const refreshEventsActionCreator =
       .then((response) => {
         // response should be
         console.log('response in refreshEventsActionCreator', response);
+        if (response.data.length < 1) {
+          console.log('no new events!');
+          return;
+        }
         let refreshEvents = response;
 
         dispatch({

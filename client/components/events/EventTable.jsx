@@ -242,7 +242,6 @@
 
 import * as React from 'react';
 import { DataGrid } from '@material-ui/data-grid';
-import { useDemoData } from '@material-ui/x-grid-data-generator';
 
 function EventTable(props) {
   // console.log('props in keyspace table', props);
@@ -289,6 +288,8 @@ function EventTable(props) {
   const data =
     props.events[props.currInstance - 1].keyspaces[props.currDatabase].data;
 
+  console.log(' props in event table', props);
+  console.log('data in event table', data);
   for (let i = 0; i < data.length; i += 1) {
     data[i].id = i;
   }

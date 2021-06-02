@@ -31,20 +31,21 @@ const eventsReducer = (state = initialState, action) => {
   switch (action.type) {
     case types.LOAD_ALL_EVENTS: {
       const allEvents = action.payload.events;
-      events = state.events.slice();
-      events = allEvents;
+      let allNewEvents = state.events.slice();
+      allNewEvents = allEvents;
       // console.log("events in eventreducer", events);
       return {
         ...state,
-        events,
+        events: allNewEvents,
       };
     }
     case types.REFRESH_EVENTS: {
+      console.log('action payload in refresh events', action.payload);
+      let updateEvents = state.events.slice();
       const specificInstanceEvents = action.payload.events;
       const currInstance = action.payload.currInstance;
       const currDatabase = action.payload.currDatabase;
-      let updateEvents = state.events.slice();
-      events[currInstance - 1].keyspacees[currDatabase] =
+      updateEvents[currInstance - 1].keyspaces[currDatabase] =
         specificInstanceEvents;
 
       return {
