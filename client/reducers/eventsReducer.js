@@ -31,9 +31,9 @@ const eventsReducer = (state = initialState, action) => {
   switch (action.type) {
     case types.LOAD_ALL_EVENTS: {
       const allEvents = action.payload.events;
-      events = state.events.slice();
+      // events = state.events.slice();
       events = allEvents;
-      // console.log("events in eventreducer", events);
+      console.log("events in eventreducer", events);
       return {
         ...state,
         events,
@@ -53,12 +53,15 @@ const eventsReducer = (state = initialState, action) => {
       };
     }
     case types.CHANGE_EVENTS_PAGE: {
-      const specificInstanceEvents = action.payload.events;
+      console.log("payload in eventsReducer", action.payload);
+      const specificInstanceEvents = action.payload.events.data;
+      console.log("specificInstance", specificInstanceEvents);
       const currInstance = action.payload.currInstance;
       const currDatabase = action.payload.currDatabase;
       events = state.events.slice();
       events[currInstance - 1].keyspacees[currDatabase] =
         specificInstanceEvents;
+      console.log("events after assign", events);
       return {
         ...state,
         events,

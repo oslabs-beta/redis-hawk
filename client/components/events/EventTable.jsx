@@ -256,23 +256,24 @@ function EventTable(props) {
     keyTypeFilter: null,
   });
 
-  const handlePageChange = (params) => {
-    console.log("current page in params in handle page change", params.page);
-    props.updatePageNum(params.page + 1);
-    console.log("pageNum in props in handle page change", props.pageNum);
-    const funcOptions = {
-      pageSize: props.pageSize,
-      pageNum: params.page + 1,
-      refreshScan: 0,
-    };
-    // console.log('my funcOptions', funcOptions);
-    props.changeKeyspacePage(
-      props.currInstance,
-      props.currDatabase,
-      funcOptions
-    );
-  };
-
+ const handlePageChange = (params) => {
+   console.log("current page in params in handle page change", params.page);
+   props.updatePageNum(params.page + 1);
+   console.log("pageNum in props in handle page change", props.pageNum);
+   const funcOptions = {
+     pageSize: props.pageSize,
+     pageNum: params.page + 1,
+     keyNameFilter: props.currDisplay.keyNameFilter,
+     keyTypeFilter: props.currDisplay.keyTypeFilter,
+     refreshScan: 0,
+   };
+   // console.log('my funcOptions', funcOptions);
+   props.changeEventsPage(
+     props.currInstance,
+     props.currDatabase,
+     funcOptions
+   );
+ };
   const handlePageSizeChange = (params) => {
     setPageSize(params.pageSize);
     props.updatePageSize(params.pageSize);
@@ -285,7 +286,7 @@ function EventTable(props) {
         pageNum: params.page + 1,
         refreshScan: 0,
       };
-      props.changeKeyspacePage(
+      props.changeEventsPage(
         props.currInstance,
         props.currDatabase,
         funcOptions
@@ -323,7 +324,7 @@ function EventTable(props) {
       setFilterQuery((filterQuery.keyTypeFilter = keyTypeFilter));
     }
 
-    props.changeKeyspacePage(
+    props.changeEventsPage(
       props.currInstance,
       props.currDatabase,
       filterQuery

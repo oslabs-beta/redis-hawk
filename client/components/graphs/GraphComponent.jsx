@@ -62,7 +62,6 @@ class GraphComponent extends Component {
   }
 
   render() {
-    console.log("props in graphComponent", this.props);
 
     // if (this.props.data) {
     return (
