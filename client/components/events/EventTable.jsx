@@ -243,6 +243,7 @@
 import * as React from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 
+
 function EventTable(props) {
   // console.log('props in keyspace table', props);
 
@@ -290,6 +291,7 @@ function EventTable(props) {
 
   console.log(' props in event table', props);
   console.log('data in event table', data);
+
   for (let i = 0; i < data.length; i += 1) {
     data[i].id = i;
   }
@@ -307,12 +309,14 @@ function EventTable(props) {
         rowCount={props.myCount}
         pageSize={pageSize}
         rowsPerPageOptions={[5, 10, 25, 50, 100]}
+
         onPageSizeChange={handleEventPageSizeChange}
         onPageChange={handleEventPageChange}
         columns={[
           { field: 'key', width: '25%' },
           { field: 'event', width: '25%' },
           { field: 'timestamp', width: '%' },
+
         ]}
         rows={data}
         isRowSelectable={false}
