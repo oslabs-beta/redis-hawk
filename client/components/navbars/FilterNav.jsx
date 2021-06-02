@@ -9,7 +9,6 @@ import '../styles/filternav.scss';
 
 const mapStateToProps = (store) => {
   return {
-    //need to map currInstance
     keyspace: store.keyspaceStore.keyspace,
     events: store.eventsStore.events,
     keyGraph: store.keyGraphStore.keyGraph,
@@ -74,44 +73,7 @@ class FilterNav extends Component {
 
   render() {
     if (this.props.currPage === 'graphs') {
-      return (
-        <div className='filterNavContainer'>
-          <SearchFilter
-            id='searchFilter'
-            events={this.props.events}
-            currPage={this.props.currPage}
-            updateCurrDisplay={this.props.updateCurrDisplay}
-          />
-          <button
-            className='filter-button'
-            id='clearFilterButton'
-            onClick={(e) => {
-              e.preventDefault();
-              this.props.updateCurrDisplay('', '');
-            }}
-          >
-            Clear Filter
-          </button>
-          <button
-            className='filter-button'
-            id='refreshButton'
-            onClick={(e) => {
-              e.preventDefault();
-              let currLength =
-                this.props.events[this.props.currDatabase].length - 1;
-              console.log('current length of events', currLength);
-              console.log(
-                'this is our current database',
-                this.props.currDatabase
-              );
-              //change 1 to this.props.currInstance
-              this.props.updateEvents(1, this.props.currDatabase, currLength);
-            }}
-          >
-            Refresh
-          </button>
-        </div>
-      );
+      return <div className='filterNavContainer'></div>;
     } else if (this.props.currPage === 'events') {
       return (
         <div className='filterNavContainer'>
@@ -123,27 +85,32 @@ class FilterNav extends Component {
             currDisplay={this.props.currDisplay}
             currDatabase={this.props.currDatabase}
             currInstance={this.props.currInstance}
+            changeEventsPage={this.props.changeEventsPage}
+            pageSize={this.props.pageSize}
+            pageNum={this.props.pageNum}
           />
-          <button
-            className='filter-button'
-            id='clearFilterButton'
-            onClick={(e) => {
-              e.preventDefault();
-              this.props.updateCurrDisplay('', '');
-            }}
-          >
-            Clear Filter
-          </button>
+
           <button
             className='filter-button'
             id='searchButton'
             onClick={(e) => {
               e.preventDefault();
-              let currLength =
-                this.props.events[this.props.currDatabase].length;
-              console.log('current length of events', currLength);
-              //replace 1 with this.props.currInstance
-              this.props.refreshEvents(this.props.currInstance, this.props.currDatabase, this.props.pageSize, this.props.pageNum);
+              console.log(
+                'currInstance',
+                this.props.currInstance,
+                'currDatabase',
+                this.props.currDatabase
+              );
+              //pageNum is always going to be 1 on refresh and refreshScan is going to be 1
+              this.props.refreshEvents(
+                this.props.currInstance,
+                this.props.currDatabase,
+                this.props.pageSize,
+                1,
+                1
+              );
+              //need to have current graph updated to page 1 -- re render?
+              this.props.updatePageNum(1);
             }}
             id='refreshButton'
           >
@@ -151,6 +118,8 @@ class FilterNav extends Component {
           </button>
         </div>
       );
+
+      //KEYSPACE PAGE : COMPLETED
     } else {
       return (
         <div className='filterNavContainer'>

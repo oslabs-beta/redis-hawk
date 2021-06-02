@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Link } from 'react-router-dom';
 import * as actions from '../../action-creators/connections';
 import * as keyspaceActions from '../../action-creators/keyspaceConnections';
+import * as eventsActions from '../../action-creators/eventsConnections';
 
 import { connect } from 'react-redux';
 
@@ -31,11 +32,22 @@ const mapDispatchToProps = (dispatch) => ({
         refreshScan
       )
     ),
+  refreshEvents: (instanceId, dbIndex, pageSize, pageNum, refreshData) => {
+    dispatch(
+      eventsActions.refreshEventsActionCreator(
+        instanceId,
+        dbIndex,
+        pageSize,
+        pageNum,
+        refreshData
+      )
+    );
+  },
 });
 
 const PageNav = (props) => {
   function handleKeyspaceClick() {
-    console.log('this.props', props);
+    // console.log('this.props', props);
     props.updateCurrDisplay({ filterType: 'keyName', filterValue: '' });
     props.updateCurrDisplay({ filterType: 'keyType', filterValue: '' });
     props.updatePage('keyspace');
@@ -49,6 +61,19 @@ const PageNav = (props) => {
     //need to have current graph updated to page 1 -- re render?
     props.updatePageNum(1);
   }
+  function handleEventsClick() {
+    props.updateCurrDisplay({ filterType: 'keyName', filterValue: '' });
+    props.updateCurrDisplay({ filterType: 'keyEvent', filterValue: '' });
+    props.updatePage('events');
+    props.refreshEvents(
+      props.currInstance,
+      props.currDatabase,
+      props.pageSize,
+      1,
+      1
+    );
+  }
+  function handleGraphsClick() {}
   return (
     <div id='pageNavContainer'>
       <Link to='/' style={{ textDecoration: 'none' }}>
@@ -70,9 +95,7 @@ const PageNav = (props) => {
           className={
             props.currPage === 'events' ? 'selected-page-toggle' : 'page-toggle'
           }
-          onClick={() => {
-            props.updatePage('events');
-          }}
+          onClick={handleEventsClick}
         >
           Events
         </div>

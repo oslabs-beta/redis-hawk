@@ -10,9 +10,11 @@ const databaseReducer = (state = initialState, action) => {
     case types.SWITCH_DATABASE: {
       const dbIndex = action.payload;
       console.log('payload in Switch database reducer', dbIndex);
+      let numberDB = Number(dbIndex);
+      console.log('number database', numberDB);
       return {
         ...state,
-        currDatabase: dbIndex,
+        currDatabase: numberDB,
       };
     }
     default: {

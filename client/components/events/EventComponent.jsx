@@ -34,11 +34,11 @@
 
 // export default connect(mapStateToProps, null)(EventComponent);
 
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import EventTable from "./EventTable.jsx";
-import * as actions from "../../action-creators/connections";
-import * as eventActions from "../../action-creators/eventsConnections";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import EventTable from './EventTable.jsx';
+import * as actions from '../../action-creators/connections';
+import * as eventActions from '../../action-creators/eventsConnections';
 
 //withRouter??? -- for props.history -- stretch??
 
@@ -73,7 +73,8 @@ class EventComponent extends Component {
   }
 
   render() {
-    console.log("all the props in event component", this.props);
+    console.log('all the props in event component', this.props);
+
     return (
       <div id='eventComponentContainer' className='EventComponent-Container'>
         <EventTable
