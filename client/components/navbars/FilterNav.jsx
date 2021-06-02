@@ -143,7 +143,7 @@ class FilterNav extends Component {
                 this.props.events[this.props.currDatabase].length;
               console.log('current length of events', currLength);
               //replace 1 with this.props.currInstance
-              this.props.updateEvents(1, this.props.currDatabase, currLength);
+              this.props.refreshEvents(this.props.currInstance, this.props.currDatabase, this.props.pageSize, this.props.pageNum);
             }}
             id='refreshButton'
           >
