@@ -31,11 +31,13 @@ class KeyspaceHistoriesChart extends Component {
   componentDidMount() {
     Chart.register(zoomPlugin);
     this.getInitialData();
-    setTimeout(setInterval(this.getMoreData, 7000), 10000);
+    setTimeout(setInterval(this.getMoreData, 20000), 10000);
   }
 
+  // if you want to test at a smaller interval, run npm run cp after changing
+  //number to server/configs/config.json
   getInitialData() {
-    const URI = `api/v2/keyspaces/histories/${this.props.currInstance}/${this.props.currDatabase}/?historiescount=${this.state.historyCount}`;
+    const URI = `api/v2/keyspaces/histories/${this.props.currInstance}/${this.props.currDatabase}/`;
     console.log("URI in fetch", URI);
     fetch(URI)
       .then((res) => res.json())
@@ -44,9 +46,9 @@ class KeyspaceHistoriesChart extends Component {
         const allHistories = response;
         console.log("this.state.data before assign", this.state.data);
         const dataCopy = Object.assign({}, this.state.data);
-        dataCopy.labels = [];
+        // dataCopy.labels = [];
         console.log("dataCopy before loop", dataCopy);
-
+        dataCopy.labels = [];
         // const labels = [];
         // const datasets = [];
         for (let i = response.histories.length - 1; i >= 0; i--) {
@@ -67,25 +69,26 @@ class KeyspaceHistoriesChart extends Component {
   }
 
   getMoreData() {
-    const URI = `api/v2/events/totals/${this.props.currInstance}/${this.props.currDatabase}/?eventTotal=${this.state.totalEvents}`;
+    const URI = `api/v2/keyspaces/histories/${this.props.currInstance}/${this.props.currDatabase}/?historyCount=${this.state.historyCount}`;
     console.log("URI in fetch", URI);
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {
         console.log("response in GETMOREDATA fetch of LineChartBeta", response);
-        const eventTotal = response.eventTotal;
-        const eventCount = response.eventTotals[0].eventCount;
+        const historyCount = response.historyCount;
+        const keyCount = response.histories[0].keyCount;
         console.log("this.state.data before assign", this.state.data);
         const dataCopy = Object.assign({}, this.state.data);
-        const time = new Date(response.eventTotals[0].end_time)
+        const time = new Date(response.histories[0].timestamp)
           .toString("MMddd")
           .slice(16, 24);
+        console.log("time var in keyspaceHisto");
         dataCopy.labels.push(time);
-        dataCopy.datasets[0].data.push(eventCount);
+        dataCopy.datasets[0].data.push(keyCount);
 
         this.setState({
           ...this.state,
-          totalEvents: eventTotal,
+          historyCount: historyCount,
           data: dataCopy,
         });
       });

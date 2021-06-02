@@ -41,12 +41,9 @@ class EventTotalsChart extends Component {
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {
-        console.log("response in fetch of LineChartBeta", response);
         const allEvents = response;
-        console.log("this.state.data before assign", this.state.data);
         const dataCopy = Object.assign({}, this.state.data);
         dataCopy.labels = [];
-        console.log("dataCopy before loop", dataCopy);
 
         // const labels = [];
         // const datasets = [];
@@ -58,7 +55,6 @@ class EventTotalsChart extends Component {
           dataCopy.labels.push(time);
           dataCopy.datasets[0].data.push(response.eventTotals[i].eventCount);
         }
-        console.log("dataCopy", dataCopy);
         this.setState({
           ...this.state,
           totalEvents: allEvents.eventTotal,
@@ -69,14 +65,12 @@ class EventTotalsChart extends Component {
 
   getMoreData() {
     const URI = `api/v2/events/totals/${this.props.currInstance}/${this.props.currDatabase}/?eventTotal=${this.state.totalEvents}`;
-    console.log("URI in fetch", URI);
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {
-        console.log("response in GETMOREDATA fetch of LineChartBeta", response);
+
         const eventTotal = response.eventTotal;
         const eventCount = response.eventTotals[0].eventCount;
-        console.log("this.state.data before assign", this.state.data);
         const dataCopy = Object.assign({}, this.state.data);
         const time = new Date(response.eventTotals[0].end_time)
           .toString("MMddd")
