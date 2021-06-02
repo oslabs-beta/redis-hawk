@@ -50,16 +50,22 @@ const totalEventsReducer = (state = initialState, action) => {
     }
     case types.GET_NEXT_EVENTS: {
       const datasets = action.payload.datasets;
+      const currInstance = state.currInstance;
+      const currDatabase = state.currDatabase;
       const labels = action.payload.labels;
-      const dataCopy = Object.assign({}, state.data)
+      const dataCopy = Object.assign({}, state.data);
       console.log("dataCopy", dataCopy);
       // dataCopy.datasets[0].data.push(...datasets);
       // dataCopy.labels.push(...labels);
       datasets.forEach((events) => dataCopy.datasets[0].data.push(events));
-      labels.forEach((time) => {dataCopy.labels.push(time)});
+      labels.forEach((time) => {
+        dataCopy.labels.push(time);
+      });
       console.log("data in getnextevents reducer", dataCopy);
       return {
         ...state,
+        currInstance,
+        currDatabase,
         totalEvents: action.payload.totalEvents,
         dataCopy,
         // data: {

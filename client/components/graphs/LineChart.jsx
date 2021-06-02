@@ -2,8 +2,31 @@ import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import zoomPlugin from "chartjs-plugin-zoom";
 import Hammer from "hammerjs";
+import { connect } from "react-redux";
 import Chart from "chart.js/auto";
+import * as eventActions from "../../action-creators/eventsConnections";
 import { cyan } from "@material-ui/core/colors";
+const mapStateToProps = (store) => {
+  return {
+    currInstance: store.currInstanceStore.currInstance,
+    currDatabase: store.currDatabaseStore.currDatabase,
+    totalEvents: store.totalEventsStore.totalEvents,
+    data: store.totalEventsStore.data,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  updateCurrentDisplay: (filter, category) =>
+    dispatch(actions.updateCurrDisplayActionCreator(filter, category)),
+  getEvents: (instanceId, dbIndex, queryParams) =>
+    dispatch(
+      eventActions.getTotalEventsActionCreator(instanceId, dbIndex, queryParams)
+    ),
+  getNextEvents: (instanceId, dbIndex, queryParams) =>
+    dispatch(
+      eventActions.getNextEventsActionCreator(instanceId, dbIndex, queryParams)
+    ),
+});
 
 const LineChart = (props) => {
   const [chartData, setChartData] = useState({});
@@ -47,6 +70,18 @@ const LineChart = (props) => {
   //   });
   //   chart.update();
   // }
+  const setGraphUpdate = () => {
+    return props.getNextEvents(
+      props.currInstance,
+      props.currDatabase,
+      // state.eventParams
+      { eventTotal: props.totalEvents.eventTotal }
+    );
+  };
+  if (props.totalEvents) {
+    // console.log('props.totalEvents in LineChart',props.totalEvents.eventTotal)
+    setTimeout(setInterval(setGraphUpdate, 7000), 7000);
+  }
 
   // console.log("timeArray", timeArray);
   // console.log("eventsArray", eventsArray);
@@ -187,4 +222,6 @@ const LineChart = (props) => {
   // }
 };
 
-export default LineChart;
+// export default LineChart;
+
+export default connect(mapStateToProps, mapDispatchToProps)(LineChart);
