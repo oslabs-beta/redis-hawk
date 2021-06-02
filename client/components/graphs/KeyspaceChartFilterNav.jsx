@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import EventsChartFilter from "./EventsChartFilter.jsx";
+import KeyspaceChartFilter from "./KeyspaceChartFilter.jsx";
 import "../styles/filternav.scss";
 
-class EventsChartFilterNav extends Component {
+class KeyspaceChartFilterNav extends Component {
   constructor(props) {
     super(props);
   }
@@ -10,7 +10,7 @@ class EventsChartFilterNav extends Component {
     console.log("this.props in EventsChartFilter", this.props);
     return (
       <div className='filterNavContainer'>
-        <EventsChartFilter
+        <KeyspaceChartFilter
           id='searchFilter'
           currInstance={this.props.currInstance}
           currDatabase={this.props.currDatabase}
@@ -48,4 +48,4 @@ class EventsChartFilterNav extends Component {
   }
 }
 
-export default EventsChartFilterNav;
+export default KeyspaceChartFilterNav;

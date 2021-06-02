@@ -69,7 +69,7 @@ class EventTotalsChart extends Component {
         });
       });
   }
-  
+
   getMoreData() {
     const URI = `api/v2/events/totals/${this.props.currInstance}/${this.props.currDatabase}/?eventTotal=${this.state.totalEvents}`;
     fetch(URI)
@@ -108,12 +108,12 @@ class EventTotalsChart extends Component {
   resetState() {
     // const newDatasets= [];
     // const newLabels = [];
-    const newState = Object.assign({}, this.state)
+    const newState = Object.assign({}, this.state);
     newState.labels = [];
     newState.data.datasets[0].data = [];
     this.setState({
-      newState
-    })
+      newState,
+    });
   }
 
   render() {
@@ -208,6 +208,8 @@ class EventTotalsChart extends Component {
           intervalStart={this.state.intervalStart}
           filterBy={this.state.filterBy}
           resetState={this.resetState}
+          currInstance={this.props.currInstance}
+          currDatabase={this.props.currDatabase}
         />
       </div>
     );

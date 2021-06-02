@@ -3,7 +3,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 
@@ -14,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function EventsChartFilter(props) {
+export default function KeyspaceChartFilter(props) {
   const classes = useStyles();
   const [valueKey, setValueKey] = React.useState("");
   const [valueEvent, setValueEvent] = React.useState("");
@@ -28,22 +27,27 @@ export default function EventsChartFilter(props) {
     setValueEvent(event.target.value);
   };
 
-  const handleChangeSubmit = (event) => {
-    console.log("handling change");
-    setValue(event.target.value);
-  };
+  // const handleChangeSubmit = (event) => {
+  //   console.log("handling change");
+  //   setValue(event.target.value);
+  // };
   function selectChange(event) {
     setCategory(event.target.value);
   }
-  console.log("props in eventsChartFilter", props);
   //submitting the filter
   function handleSubmit(currInstance, currDatabase, queryParams) {
-    console.log("queryParams.keynameFilter in handlesubmit", queryParams.keynameFilter);
-    console.log('type of queryparmskeynamefilter', typeof queryParams.keynameFilter)
+    console.log(
+      "queryParams.keynameFilter in handlesubmit",
+      queryParams.keynameFilter
+    );
+    console.log(
+      "type of queryparmskeynamefilter",
+      typeof queryParams.keynameFilter
+    );
     let URI;
     // if (queryParams) {
     if (queryParams.keynameFilter)
-      URI = `/api/v2/events/totals/${currInstance}/${currDatabase}/?timeInterval=7000&keynameFilter=${queryParams.keynameFilter}`;
+      URI = `/api/events/${currInstance}/${currDatabase}/?timeInterval=7000&keynameFilter=${queryParams.keynameFilter}`;
     if (queryParams.filterType)
       URI = `/api/events/${currInstance}/${currDatabase}/?timeInterval=7000&keynameFilter=${queryParams.filterType}`;
     console.log("URI in handleSubmit FETCH", URI);

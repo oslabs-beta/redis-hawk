@@ -3,12 +3,14 @@ import { Line } from "react-chartjs-2";
 import zoomPlugin from "chartjs-plugin-zoom";
 import Hammer from "hammerjs";
 import Chart from "chart.js/auto";
+import KeyspaceChartFilterNav from "./KeyspaceChartFilterNav.jsx";
 
 class KeyspaceHistoriesChart extends Component {
   constructor(props) {
     super(props);
     this.state = {
       historyCount: 0,
+      filterBy: { eventTypes: "", keynameFilter: "" },
       data: {
         labels: [],
         datasets: [
@@ -28,6 +30,9 @@ class KeyspaceHistoriesChart extends Component {
     };
     this.getInitialData = this.getInitialData.bind(this);
     this.getMoreData = this.getMoreData.bind(this);
+    this.setInt = this.setInt.bind(this);
+    this.clearInt = this.clearInt.bind(this);
+    this.resetState = this.resetState.bind(this);
   }
 
   componentDidMount() {
@@ -101,6 +106,30 @@ class KeyspaceHistoriesChart extends Component {
           data: dataCopy,
         });
       });
+  }
+  setInt() {
+    this.intervalID = setInterval(this.getMoreData, 7000);
+    if (!this.state.intervalStart) {
+      this.setState({
+        intervalStart: true,
+      });
+    }
+  }
+  clearInt() {
+    this.setState({
+      intervalStart: false,
+    });
+    clearInterval(this.intervalID);
+  }
+  resetState() {
+    // const newDatasets= [];
+    // const newLabels = [];
+    const newState = Object.assign({}, this.state);
+    newState.labels = [];
+    newState.data.datasets[0].data = [];
+    this.setState({
+      newState,
+    });
   }
 
   render() {
@@ -186,6 +215,17 @@ class KeyspaceHistoriesChart extends Component {
             },
           }}
           style={{ backgroundColor: "black" }}></Line>
+        <KeyspaceChartFilterNav
+          getInitialData={this.getInitialData}
+          getMoreData={this.getMoreData}
+          setInt={this.setInt}
+          clearInt={this.clearInt}
+          intervalStart={this.state.intervalStart}
+          filterBy={this.state.filterBy}
+          resetState={this.resetState}
+          currInstance={this.props.currInstance}
+          currDatabase={this.props.currDatabase}
+        />
       </div>
     );
   }
