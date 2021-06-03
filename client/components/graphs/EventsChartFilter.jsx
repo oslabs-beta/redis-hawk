@@ -115,6 +115,7 @@ class EventsChartFilter extends Component {
       fetch(URI)
         .then((res) => res.json())
         .then((response) => {
+          
           const eventTotal = response.eventTotal;
           const eventCount = response.eventTotals[0].eventCount;
           const dataCopy = Object.assign({}, this.state.data);
@@ -144,10 +145,10 @@ class EventsChartFilter extends Component {
     document.getElementById('standard-secondary').value = "";
     document.getElementById("event-type-filter").value = "";
     this.props.clearInt();
+    this.props.clearFilterIntID();
     this.props.resetState();
     this.props.getInitialData();
     this.props.getMoreData();
-    this.props.setInt();
     this.setState({
       valueKey: "",
       valueEvent: "",
@@ -183,6 +184,8 @@ class EventsChartFilter extends Component {
             onClick={(e) => {
               e.preventDefault();
               this.props.resetState();
+              // this.props.clearInt();
+              // this.props.clearFilterIntID();
               // e.preventDefault();
               console.log("this.props in onclick function", this.props);
               console.log("valueKey", this.state.valueKey);

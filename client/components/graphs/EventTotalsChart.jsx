@@ -11,7 +11,8 @@ class EventTotalsChart extends Component {
     super(props);
     this.state = {
       intervalStart: false,
-      intervalId: 0,
+      intervalFilterStart: false,
+      refresh: false,
       totalEvents: 0,
       intervals: 0,
       data: {
@@ -39,6 +40,7 @@ class EventTotalsChart extends Component {
     this.getInitialFilteredData = this.getInitialFilteredData.bind(this);
     this.setIntFilter = this.setIntFilter.bind(this);
     this.clearChart = this.clearInt.bind(this);
+    this.clearFilterIntID = this.clearFilterIntID.bind(this);
   }
   chartReference = {};
   componentDidMount() {
@@ -59,9 +61,8 @@ class EventTotalsChart extends Component {
         console.log("response in GETINIT FETCH", response);
         const dataCopy = Object.assign({}, this.state.data);
         dataCopy.labels = [];
+        dataCopy.datasets[0].data = [];
 
-        // const labels = [];
-        // const datasets = [];
         for (let i = response.eventTotals.length - 1; i >= 0; i--) {
           const time = new Date(response.eventTotals[i].end_time)
             .toString("MMddd")
@@ -70,6 +71,7 @@ class EventTotalsChart extends Component {
           dataCopy.labels.push(time);
           dataCopy.datasets[0].data.push(response.eventTotals[i].eventCount);
         }
+        console.log("dataCopy after loop", dataCopy);
         this.setState({
           ...this.state,
           totalEvents: allEvents.eventTotal,
@@ -102,9 +104,13 @@ class EventTotalsChart extends Component {
   }
 
   getInitialFilteredData(currInstance, currDatabase, queryParams) {
-    if (this.intervalID) {
+    // if (this.intervalID) {
+      console.log()
       this.clearInt();
-    }
+    // }
+    // if (this.filterIntID) {
+      this.clearFilterIntID();
+    // }
     // this.resetState();
     // this.clearChart();
     console.log("intervals count IN GETINITIALFILTERED", this.state.intervals);
@@ -118,16 +124,20 @@ class EventTotalsChart extends Component {
         const allEvents = response;
         const dataCopy = Object.assign({}, this.state.data);
         dataCopy.labels = [];
+        dataCopy.datasets[0].data = [];
+
         console.log();
         // const labels = [];
         // const datasets = [];
         for (let i = response.eventTotals.length - 1; i >= 0; i--) {
-          const time = new Date(response.eventTotals[i].end_time)
-            .toString("MMddd")
-            .slice(16, 24);
+          if (response.eventTotals[i].eventCount > 0) {
+            const time = new Date(response.eventTotals[i].end_time)
+              .toString("MMddd")
+              .slice(16, 24);
 
-          dataCopy.labels.push(time);
-          dataCopy.datasets[0].data.push(response.eventTotals[i].eventCount);
+            dataCopy.labels.push(time);
+            dataCopy.datasets[0].data.push(response.eventTotals[i].eventCount);
+          }
         }
 
         this.setState({
@@ -148,7 +158,6 @@ class EventTotalsChart extends Component {
       this.setState({
         ...this.state,
         intervalStart: true,
-        intervalId: this.intervalID,
         intervals: newInt,
       });
     }
@@ -158,14 +167,23 @@ class EventTotalsChart extends Component {
     console.log("INTERVALS STATE IN CLEARINT", this.state.intervals);
     console.log("intervalStart", this.state.intervalStart);
     console.log("clearing IntervalID:", this.intervalID);
-    if (this.state.intervalStart) {
+    if (this.intervalID) {
       const newInt = this.state.intervals - 1;
       clearInterval(this.intervalID);
       this.setState({
         ...this.state,
         intervalStart: false,
-        intervalId: 0,
         intervals: newInt,
+      });
+    }
+  }
+  clearFilterIntID() {
+    if (this.filterIntID) {
+      ("console.log clearing FILTER_INT_ID");
+      clearInterval(this.filterIntID);
+      this.setState({
+        ...this.state,
+        intervalFilterStart: false,
       });
     }
   }
@@ -173,16 +191,26 @@ class EventTotalsChart extends Component {
     let lineChart = this.reference.chartInstance;
     lineChart.resetState();
   }
-
   setIntFilter(currInstance, currDatabase, totalEvents, queryParams) {
     console.log("props.intervalStart", this.state.intervalStart);
-    console.log("intervals count in SETINTFILTER", this.state.intervals);
-
-    if (this.state.intervalId !== 0) {
+    console.log('intervalID', this.intervalID)
+    console.log('filterIntID', this.filterIntID)
+    // console.log("intervals count in SETINTFILTER", this.state.intervals);
+    // const newInt = this.state.intervals + 1;
+    // this.setState({
+    //   ...this.state,
+    //   intervals: newInt
+    // })
+    if (this.intervalID) {
       this.clearInt();
+    }
+    if (this.filterIntID) {
+      this.clearFilterIntID();
     }
     let self = this;
     function getMoreFilteredData() {
+      // console.log("intervals count in GETMOREFILTEREDDATA", self.state.intervals);
+
       const URI = `/api/v2/events/totals/${currInstance}/${currDatabase}/?eventTotal=${totalEvents}&keynameFilter=${queryParams.keynameFilter}`;
       console.log("URI in getMoreFiltered FETCH", URI);
       fetch(URI)
@@ -207,16 +235,14 @@ class EventTotalsChart extends Component {
             ...self.state,
             totalEvents: eventTotal,
             data: dataCopy,
-            intervalId: self.intervalID,
           });
         });
 
       // setTimeout(getMoreFilteredData, 7000);
     }
-    const id = setInterval(getMoreFilteredData, 7000);
+    this.filterIntID = setInterval(getMoreFilteredData, 7000);
     this.setState({
-      intervalStart: true,
-      filterIntervalId: id,
+      intervalFilterStart: true,
     });
   }
 
@@ -258,6 +284,9 @@ class EventTotalsChart extends Component {
           getInitialFilteredData={this.getInitialFilteredData}
           getMoreFilteredData={this.getMoreFilteredData}
           setIntFilter={this.setIntFilter}
+          intervals={this.state.intervals}
+          clearFilterIntID={this.clearFilterIntID}
+          refresh={this.state.refresh}
         />
 
         <Line
