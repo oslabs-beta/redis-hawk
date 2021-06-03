@@ -21,6 +21,10 @@ app.use('/api/v2/events', eventsRouterv2);
 app.use('/api/keyspaces', keyspacesRouter);
 app.use('/api/v2/keyspaces', keyspacesRouterv2);
 
+app.get('/dist/bundle.js', (req: express.Request, res: express.Response): void => {
+  res.status(200).sendFile(path.resolve(__dirname, '../bundle.js')));
+})
+
 app.get('/', (req: express.Request, res: express.Response): void => {
   res.status(200).sendFile(path.resolve(__dirname, "./assets/index.html"));
 });

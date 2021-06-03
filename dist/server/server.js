@@ -17,6 +17,9 @@ app.use('/api/events', eventsRouter_1.default);
 app.use('/api/v2/events', eventsRouter_v2_1.default);
 app.use('/api/keyspaces', keyspacesRouter_1.default);
 app.use('/api/v2/keyspaces', keyspacesRouter_v2_1.default);
+app.get('/dist/bundle.js', function (req, res) {
+    res.status(200).sendFile(path_1.default.resolve(__dirname, '../bundle.js'));
+});
 app.get('/', function (req, res) {
     res.status(200).sendFile(path_1.default.resolve(__dirname, "./assets/index.html"));
 });
