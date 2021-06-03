@@ -11,7 +11,7 @@ import * as actions from "../action-creators/connections";
 import * as keyspaceActions from "../action-creators/keyspaceConnections";
 import * as eventActions from "../action-creators/eventsConnections";
 import "../../node_modules/react-vis/dist/style.css";
-
+import Logo from '../redishawk-logo.svg';
 
 import './styles/app.global.scss';
 
@@ -43,20 +43,26 @@ class App extends Component {
 
   render() {
     return (
-      <div id='app'>
-        <BrowserRouter>
-          <InstanceNav />
-          <div id='tabs-container'>
-            <PageNav />
-            <FilterNav />
-            {/* create a react router to switch between the main area of divs */}
-            <Switch>
-              <Route exact path='/' render={() => <KeyspaceComponent />} />
-              <Route path='/events' render={() => <EventComponent />} />
-              <Route path='/graphs' render={() => <GraphComponent />} />
-          </Switch>
+
+      <div id='global'>
+          <div id='logo-container'>
+            <Logo/>
           </div>
-        </BrowserRouter>
+        <div id='app'>
+          <BrowserRouter>
+            <InstanceNav />
+            <div id='tabs-container'>
+              <PageNav />
+              <FilterNav />
+              {/* create a react router to switch between the main area of divs */}
+              <Switch>
+                <Route exact path='/' render={() => <KeyspaceComponent />} />
+                <Route path='/events' render={() => <EventComponent />} />
+                <Route path='/graphs' render={() => <GraphComponent />} />
+            </Switch>
+            </div>
+          </BrowserRouter>
+        </div>
       </div>
     );
   }

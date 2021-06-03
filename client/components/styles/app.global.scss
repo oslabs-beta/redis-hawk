@@ -6,6 +6,17 @@ html {
   }
 }
 
+#logo-container {
+  position: absolute;
+
+  svg {
+    width: 100px;
+    height: 100px;
+  }
+
+  left: 30px;
+}
+
 body {
   @media screen and (max-width: $small) {
     font-size: 1em;
@@ -18,13 +29,13 @@ body {
   background-color: $PRIMARY_DARK;
   color: $PRIMARY_LIGHT;
   font-family: $PRIMARY_FONT;
-  width: 90%;
-  padding: 2em 0;
-  margin: 0 auto;
 }
 
 #app {
   display: flex;
+  width: 90%;
+  padding: 2em 0;
+  margin: 0 auto;
 
   #tabs-container {
     display: flex;
