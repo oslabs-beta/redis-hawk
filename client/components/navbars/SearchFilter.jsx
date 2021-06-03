@@ -124,7 +124,7 @@ export default function SearchFilter(props) {
           />
         </FormControl>
         <FormControl className={classes.formControl}>
-          <InputLabel htmlFor='grouped-select'>key type filter</InputLabel>
+          <InputLabel color='secondary' htmlFor='grouped-select'>key type filter</InputLabel>
           <Select defaultValue='' id='grouped-select' onChange={selectChange}>
             <MenuItem value=''>
               <em>None</em>
@@ -143,6 +143,7 @@ export default function SearchFilter(props) {
             justifyContent: 'center',
             alignItem: 'center',
           }}
+          className='filter-buttons-container'
         >
           <Button onClick={clearFilter} color='default'>
             Clear
@@ -158,7 +159,7 @@ export default function SearchFilter(props) {
 
   } else if (props.currPage === 'events') {
     return (
-      <div style={{ width: '75%', display: 'flex', flexDirection: 'column' }}>
+      <div className='search-filters'>
         <FormControl className={classes.formControl}>
           <TextField
             id='standard-secondary'
@@ -190,6 +191,7 @@ export default function SearchFilter(props) {
             justifyContent: 'center',
             alignItem: 'center',
           }}
+          className='filter-buttons-container'
         >
           <Button onClick={clearEventFilter} color='default'>
             Clear
