@@ -85,18 +85,19 @@ function KeyspaceTable(props) {
 
   for (let i = 0; i < data.length; i += 1) {
     data[i].id = i;
-    // let hashData = makeString(data[i]);
+
     if (data[i].type === 'hash') {
+      console.log('this is what i looked like before', data[i].value);
       let obj = data[i].value;
-      console.log('obj', obj);
+      // console.log('obj', obj);
       let objArray = Object.keys(obj);
       let newString = '';
       objArray.forEach((el) => {
         newString += `${el}: ${obj[el]}, `;
       });
-      console.log(newString);
+      // console.log(newString);
       data[i].value = newString;
-      console.log('my new hash', data[i]);
+      // console.log('my new hash', data[i]);
     }
   }
 
@@ -104,6 +105,8 @@ function KeyspaceTable(props) {
   return (
     <div style={{ height: 400, width: '100%' }}>
       <DataGrid
+        // autoHeight={true}
+        // disableExtendRowFullWidth={true}
         disableColumnFilter
         autoPageSize={false}
         loading={loading}
@@ -116,9 +119,9 @@ function KeyspaceTable(props) {
         onPageSizeChange={handlePageSizeChange}
         onPageChange={handlePageChange}
         columns={[
-          { field: 'key', width: '25%' },
-          { field: 'value', width: '49%' },
-          { field: 'type', width: '25%' },
+          { field: 'key', width: '125px' },
+          { field: 'value', width: '475px' },
+          { field: 'type', width: '125px' },
         ]}
         rows={data}
         isRowSelectable={false}
