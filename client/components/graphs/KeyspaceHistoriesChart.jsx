@@ -3,12 +3,14 @@ import { Line } from "react-chartjs-2";
 import zoomPlugin from "chartjs-plugin-zoom";
 import Hammer from "hammerjs";
 import Chart from "chart.js/auto";
+import KeyspaceChartFilterNav from "./KeyspaceChartFilterNav.jsx";
 
 class KeyspaceHistoriesChart extends Component {
   constructor(props) {
     super(props);
     this.state = {
       historyCount: 0,
+      filterBy: { eventTypes: "", keynameFilter: "" },
       data: {
         labels: [],
         datasets: [
@@ -17,15 +19,20 @@ class KeyspaceHistoriesChart extends Component {
             data: [],
             backgroundColor: ["red"],
             borderColor: "white",
-            borderWidth: "2",
+            borderWidth: ".75",
             pointBorderColor: "red",
-            pointHoverBackgroundColor: "#55bae7",
+            pointBorderWidth: "1",
+            pointRadius: "2",
+            pointHoverBackgroundColor: "gray",
           },
         ],
       },
     };
     this.getInitialData = this.getInitialData.bind(this);
     this.getMoreData = this.getMoreData.bind(this);
+    this.setInt = this.setInt.bind(this);
+    this.clearInt = this.clearInt.bind(this);
+    this.resetState = this.resetState.bind(this);
   }
 
   componentDidMount() {
@@ -38,19 +45,16 @@ class KeyspaceHistoriesChart extends Component {
   //number to server/configs/config.json
   getInitialData() {
     const URI = `api/v2/keyspaces/histories/${this.props.currInstance}/${this.props.currDatabase}/`;
-    console.log("URI in fetch", URI);
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {
-        console.log("response in fetch of KeyspaceChart", response);
         const allHistories = response;
-        console.log("this.state.data before assign", this.state.data);
+
         const dataCopy = Object.assign({}, this.state.data);
-        // dataCopy.labels = [];
-        console.log("dataCopy before loop", dataCopy);
-        dataCopy.labels = [];
         // const labels = [];
         // const datasets = [];
+        dataCopy.labels = [];
+        dataCopy.datasets[0].data = [];
         for (let i = response.histories.length - 1; i >= 0; i--) {
           const time = new Date(response.histories[i].end_time)
             .toString("MMddd")
@@ -59,39 +63,88 @@ class KeyspaceHistoriesChart extends Component {
           dataCopy.labels.push(time);
           dataCopy.datasets[0].data.push(response.histories[i].keyCount);
         }
-        console.log("dataCopy", dataCopy);
-        this.setState({
-          ...this.state,
-          historyCount: allHistories.historyCount,
-          data: dataCopy,
+        // this.setState({
+        //   ...this.state,
+        //   historyCount: allHistories.historyCount,
+        //   data: dataCopy,
+        // });
+        this.setState(() => {
+          return {
+            ...this.state,
+            historyCount: allHistories.historyCount,
+            data: dataCopy,
+          };
         });
       });
   }
 
   getMoreData() {
     const URI = `api/v2/keyspaces/histories/${this.props.currInstance}/${this.props.currDatabase}/?historyCount=${this.state.historyCount}`;
-    console.log("URI in fetch", URI);
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {
-        console.log("response in GETMOREDATA fetch of LineChartBeta", response);
+
+ 
         const historyCount = response.historyCount;
         const keyCount = response.histories[0].keyCount;
-        console.log("this.state.data before assign", this.state.data);
         const dataCopy = Object.assign({}, this.state.data);
         const time = new Date(response.histories[0].timestamp)
           .toString("MMddd")
           .slice(16, 24);
-        console.log("time var in keyspaceHisto");
         dataCopy.labels.push(time);
         dataCopy.datasets[0].data.push(keyCount);
 
-        this.setState({
-          ...this.state,
-          historyCount: historyCount,
-          data: dataCopy,
+        // this.setState({
+        //   ...this.state,
+        //   historyCount: historyCount,
+        //   data: dataCopy,
+        // });
+        this.setState(() => {
+          return {
+            ...this.state,
+            historyCount: historyCount,
+            data: dataCopy,
+          };
         });
       });
+  }
+  setInt() {
+    this.intervalID = setInterval(this.getMoreData, 7000);
+    if (!this.state.intervalStart) {
+      // this.setState({
+      //   intervalStart: true,
+      // });
+          this.setState(()=>{
+            return{
+            intervalStart: true,
+          }
+        });
+    }
+  }
+  clearInt() {
+    this.setState({
+      intervalStart: false,
+    });
+
+    this.setState(() => {
+      return {
+        intervalStart: false,
+      }
+    });
+    clearInterval(this.intervalID);
+  }
+  resetState() {
+    // const newDatasets= [];
+    // const newLabels = [];
+    const newState = Object.assign({}, this.state);
+    newState.labels = [];
+    newState.data.datasets[0].data = [];
+    // this.setState({
+    //   newState,
+    // });
+    this.setState(() => {
+      return newState;
+    });
   }
 
   render() {
@@ -177,6 +230,17 @@ class KeyspaceHistoriesChart extends Component {
             },
           }}
           style={{ backgroundColor: "black" }}></Line>
+        <KeyspaceChartFilterNav
+          getInitialData={this.getInitialData}
+          getMoreData={this.getMoreData}
+          setInt={this.setInt}
+          clearInt={this.clearInt}
+          intervalStart={this.state.intervalStart}
+          filterBy={this.state.filterBy}
+          resetState={this.resetState}
+          currInstance={this.props.currInstance}
+          currDatabase={this.props.currDatabase}
+        />
       </div>
     );
   }
