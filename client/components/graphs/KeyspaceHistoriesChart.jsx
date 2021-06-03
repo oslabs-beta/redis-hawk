@@ -187,7 +187,6 @@ class KeyspaceHistoriesChart extends Component {
     }
     let self = this;
     function getMoreFilteredData() {
-      
       const URI = `/api/v2/keyspaces/histories/${currInstance}/${currDatabase}/?historiesCount=${self.state.historyCount}&keynameFilter=${queryParams.keynameFilter}`;
       console.log("URI in getMoreFiltered FETCH", URI);
       fetch(URI)
@@ -288,8 +287,14 @@ class KeyspaceHistoriesChart extends Component {
       return newState;
     });
   }
-
   render() {
+    let zoomMax;
+    if (this.state.data.datasets[0].data) {
+      const max = Math.max(...this.state.data.datasets[0].data)
+      zoomMax = Math.round(max + max*.15)
+    } else {
+      zoomMax = null;
+    }
     return (
       <div>
         <h3>Keyspaces Over Time</h3>
@@ -346,6 +351,7 @@ class KeyspaceHistoriesChart extends Component {
                 limits: {
                   y: {
                     min: 0,
+                    max: zoomMax,
                     // minRange: Math.max(...this.props.data.datasets.data) + 50,
                   },
                 },

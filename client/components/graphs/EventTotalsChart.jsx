@@ -265,6 +265,13 @@ class EventTotalsChart extends Component {
   }
 
   render() {
+    let zoomMax;
+    if (this.state.data.datasets[0].data) {
+      const max = Math.max(...this.state.data.datasets[0].data);
+      zoomMax = Math.round(max + max * 0.15);
+    } else {
+      zoomMax = null;
+    }
     return (
       <div>
         <h3>Events Over Time</h3>
@@ -326,6 +333,8 @@ class EventTotalsChart extends Component {
                 limits: {
                   y: {
                     min: 0,
+                    max: zoomMax,
+                    minRange: zoomMax,
                     // minRange: Math.max(...this.props.data.datasets.data) + 50,
                   },
                 },
