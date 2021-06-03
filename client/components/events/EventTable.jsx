@@ -310,9 +310,9 @@ function EventTable(props) {
         onPageSizeChange={handleEventPageSizeChange}
         onPageChange={handleEventPageChange}
         columns={[
-          { field: 'key', width: '25%' },
-          { field: 'event', width: '25%' },
-          { field: 'timestamp', width: '%' },
+          { field: 'key', width: 250 },
+          { field: 'event', width: 250 },
+          { field: 'timestamp', width: 250 },
         ]}
         rows={data}
         isRowSelectable={false}
