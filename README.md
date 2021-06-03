@@ -10,11 +10,11 @@ It can be deployed locally on your desktop or on a server for continuous and rem
 
 ## Table of Contents
 
-* [Features](##Features)
-* [Demo](##Demo)
-* [Installation](##Installation)
-* [Configuration](##Configuration)
-* [Feature Roadmap](##feature-roadmap)
+* [Features](#features)
+* [Demo](#demo)
+* [Installation](#installation)
+* [Configuration](#configuration)
+* [Feature Roadmap](#feature-roadmap)
 
 ## Features
 
@@ -29,15 +29,15 @@ redis-hawk allows you to monitor the keyspace and its events within all database
 
 With redis-hawk you can:
 
-Access keyspaces information and visualize trends
+Access keyspace information and visualize trends
 
 ![click-through-pages-gif](https://elasticbeanstalk-us-east-2-310828374226.s3.us-east-2.amazonaws.com/demo/click-through-pages.gif)
 
-View all databases at all instances of your deployment
+View all databases for all instances of your deployment
 
 ![instance-and-databases-for-events](https://elasticbeanstalk-us-east-2-310828374226.s3.us-east-2.amazonaws.com/demo/instance-and-dbs-for-events.gif)
 
-Filter your keyspaces
+Filter by key names, event types, or data types
 
 ![filtering-and-refreshing-events](https://elasticbeanstalk-us-east-2-310828374226.s3.us-east-2.amazonaws.com/demo/filtering-and-refreshing-events.gif)
 
@@ -71,7 +71,7 @@ OR
 npm run dev
 ```
 
-Then, please configure your redis-hawk monitoring options as decribed in the subsequent [Configuration](##Configuration) section.
+Then, please configure your redis-hawk monitoring options as decribed in the subsequent [Configuration](#configuration) section.
 ## Configuration
 
 Currently, configuration for your redis-hawk monitoring deployment must be managed via a `config.json`, located in the root directory of the repository. We will aim to support configuration directly via the web application in the near future.
@@ -105,7 +105,6 @@ The `config.json` defaults to monitoring the default local Redis instance via th
   * While the `SCAN` command is non-blocking and rapid, it may have performance impacts for your Redis deployment if utilized very frequently for larger Redis deployments.
   * For more details on `SCAN` performance and behavior, please read the [Redis documentation](https://redis.io/commands/scan).
 
-<a name="feature-roadmap"></a>
 ## Feature Roadmap
 
 The development team intends to continue improving redis-hawk and adding more features. Future features will include:
