@@ -36,7 +36,6 @@ class KeyspaceHistoriesChart extends Component {
   }
 
   componentDidMount() {
-    console.log("THIS.STATE IN COMPONENTDIDMOUNT", this.state);
     Chart.register(zoomPlugin);
     this.getInitialData();
     setTimeout(setInterval(this.getMoreData, 20000), 10000);
@@ -46,16 +45,12 @@ class KeyspaceHistoriesChart extends Component {
   //number to server/configs/config.json
   getInitialData() {
     const URI = `api/v2/keyspaces/histories/${this.props.currInstance}/${this.props.currDatabase}/`;
-    console.log("URI in fetch", URI);
-    console.log("this.state before fetch in initialData", this.state);
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {
-        console.log("response in fetch of KeyspaceChart", response);
         const allHistories = response;
-        console.log("this.state.data before assign", this.state.data);
+
         const dataCopy = Object.assign({}, this.state.data);
-        console.log("dataCopy before loop", dataCopy);
         // const labels = [];
         // const datasets = [];
         dataCopy.labels = [];
@@ -68,14 +63,12 @@ class KeyspaceHistoriesChart extends Component {
           dataCopy.labels.push(time);
           dataCopy.datasets[0].data.push(response.histories[i].keyCount);
         }
-        console.log("dataCopy", dataCopy);
         // this.setState({
         //   ...this.state,
         //   historyCount: allHistories.historyCount,
         //   data: dataCopy,
         // });
         this.setState(() => {
-          console.log("THIS.SETSTATE IN GET INITIAL DATA");
           return {
             ...this.state,
             historyCount: allHistories.historyCount,
@@ -87,24 +80,17 @@ class KeyspaceHistoriesChart extends Component {
 
   getMoreData() {
     const URI = `api/v2/keyspaces/histories/${this.props.currInstance}/${this.props.currDatabase}/?historyCount=${this.state.historyCount}`;
-    console.log("URI in fetch", URI);
-    console.log("this.state before fetch in getMoreData", this.state);
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {
-        console.log("response in GETMOREDATA fetch of LineChartBeta", response);
-        console.log(
-          "this.state.labels in get more events before reassignment",
-          this.state.data.labels
-        );
+
+ 
         const historyCount = response.historyCount;
         const keyCount = response.histories[0].keyCount;
-        console.log("this.state.data before assign", this.state.data);
         const dataCopy = Object.assign({}, this.state.data);
         const time = new Date(response.histories[0].timestamp)
           .toString("MMddd")
           .slice(16, 24);
-        console.log("time var in keyspaceHisto");
         dataCopy.labels.push(time);
         dataCopy.datasets[0].data.push(keyCount);
 
@@ -114,7 +100,6 @@ class KeyspaceHistoriesChart extends Component {
         //   data: dataCopy,
         // });
         this.setState(() => {
-          console.log('THIS.SETSTATE IN GETMOREDATA IN KEYSPACE HISTORY TABLE IN GETMOREDATA', this.state)
           return {
             ...this.state,
             historyCount: historyCount,
@@ -130,7 +115,6 @@ class KeyspaceHistoriesChart extends Component {
       //   intervalStart: true,
       // });
           this.setState(()=>{
-            console.log('THIS.STATE IN SETINT', this.state)
             return{
             intervalStart: true,
           }
@@ -143,7 +127,6 @@ class KeyspaceHistoriesChart extends Component {
     });
 
     this.setState(() => {
-      console.log('SETTING STATE IN CLEARIN!!!');
       return {
         intervalStart: false,
       }
@@ -160,7 +143,6 @@ class KeyspaceHistoriesChart extends Component {
     //   newState,
     // });
     this.setState(() => {
-      console.log('SETTING STATE IN RESETSTATE METHOD');
       return newState;
     });
   }

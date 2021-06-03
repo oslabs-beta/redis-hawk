@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -7,38 +7,58 @@ import Select from "@material-ui/core/Select";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 
-const useStyles = makeStyles((theme) => ({
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-  },
-}));
-
-export default function EventsChartFilter(props) {
-  const classes = useStyles();
-  const [valueKey, setValueKey] = React.useState("");
-  const [valueEvent, setValueEvent] = React.useState("");
-
-  const handleChangeKey = (event) => {
-    console.log("handling change");
-    setValueKey(event.target.value);
-  };
-  const handleChangeEvent = (event) => {
-    console.log("handling change");
-    setValueEvent(event.target.value);
-  };
-
-  const handleChangeSubmit = (event) => {
-    console.log("handling change");
-    setValue(event.target.value);
-  };
-  function selectChange(event) {
-    setCategory(event.target.value);
+// const useStyles = makeStyles((theme) => ({
+//   formControl: {
+//     margin: theme.spacing(1),
+//     minWidth: 120,
+//   },
+// }));
+// classes: {formControl}
+class EventsChartFilter extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      valueKey: "",
+      valueEvent: "",
+      // classes: {
+      //   formControl: {
+      //     marin: this.spacing(1),
+      //     minwidth: 120,
+      //   },
+      // },
+    };
+    this.handleChangeKey = this.handleChangeKey.bind(this);
+    this.handleChangeEvent = this.handleChangeEvent.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.clearFilter = this.clearFilter.bind(this);
   }
-  console.log("props in eventsChartFilter", props);
+
+  //  [valueKey, setValueKey] = React.useState("");
+  //  [valueEvent, setValueEvent] = React.useState("");
+
+  handleChangeKey(event) {
+    console.log("handling change");
+    this.setState({
+      valueKey: event.target.value,
+    });
+  }
+  handleChangeEvent(event) {
+    console.log("handling change");
+    this.setState({
+      valueEvent: event.target.value,
+    });
+  }
+
+  // handleChangeSubmit = (event) => {
+  //   console.log("handling change");
+  //   setValue(event.target.value);
+  // };
+  // selectChange(event) {
+  //   setCategory(event.target.value);
+  // }
   //submitting the filter
-  function handleSubmit(currInstance, currDatabase, queryParams) {
-    props.clearInt();
+  handleSubmit(currInstance, currDatabase, queryParams) {
+    this.props.clearInt();
     console.log(
       "queryParams.keynameFilter in handlesubmit",
       queryParams.keynameFilter
@@ -61,7 +81,7 @@ export default function EventsChartFilter(props) {
         const allEvents = response;
         const dataCopy = Object.assign({}, this.state.data);
         dataCopy.labels = [];
-
+        console.log();
         // const labels = [];
         // const datasets = [];
         for (let i = response.eventTotals.length - 1; i >= 0; i--) {
@@ -119,70 +139,81 @@ export default function EventsChartFilter(props) {
   //   setCategory('');
   // }
 
-  function clearFilter() {
-    setValueKey("");
-    setValueEvent("");
-    // props.updateCurrDisplay({ filterType: "keyName", filterValue: "" });
-    // props.updateCurrDisplay({ filterType: "keyType", filterValue: "" });
-    // const queryOptions = {
-    //   pageSize: props.pageSize,
-    //   pageNum: props.pageNum,
-    //   refreshScan: 0,
-    //   keyNameFilter: props.currDisplay.keyNameFilter,
-    //   keyTypeFilter: props.currDisplay.keyTypeFilter,
-    // };
-    // props.changeKeyspacePage(
-    //   props.currInstance,
-    //   props.currDatabase,
-    //   queryOptions
-    // );
+  clearFilter() {
+    this.setState({
+      ...state,
+      valueKey: "",
+      valueEvent: "",
+    });
   }
+  render() {
+    console.log("props in EventChartFilter Render", this.props);
+    const newArea = [];
 
-  const newArea = [];
+    return (
+      <div style={{ width: "75%", display: "flex", flexDirection: "column" }}>
+        <FormControl>
+          <TextField
+            id='standard-secondary'
+            label='key name filter'
+            color='secondary'
+            onChange={this.handleChangeKey}
+          />
+        </FormControl>
+        <FormControl>
+          <TextField
+            id='standard-secondary'
+            label='event-type filter'
+            color='secondary'
+            onChange={this.handleChangeEvent}
+          />
+        </FormControl>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItem: "center",
+          }}>
+          <Button onClick={this.clearFilter} color='default'>
+            Clear
+          </Button>
+          <Button
+            onClick={(e) => {
+              e.preventDefault();
+              console.log("this.props in onclick function", this.props);
+              this.props.clearInt();
+              this.props.resetState();
+              console.log("valueKey", this.state.valueKey);
+              const params = {
+                keynameFilter: this.state.valueKey,
+                eventTypes: this.state.valueEvent,
+              };
+              function timeout() {
+                this.props.setIntFilter(
+                  this.props.currInstance,
+                  this.props.currDatabase,
+                  this.props.totalEvents,
+                  queryParams
+                );
+              }
 
-  return (
-    <div style={{ width: "75%", display: "flex", flexDirection: "column" }}>
-      <FormControl className={classes.formControl}>
-        <TextField
-          id='standard-secondary'
-          label='key name filter'
-          color='secondary'
-          onChange={handleChangeKey}
-        />
-      </FormControl>
-      <FormControl className={classes.formControl}>
-        <TextField
-          id='standard-secondary'
-          label='event-type filter'
-          color='secondary'
-          onChange={handleChangeEvent}
-        />
-      </FormControl>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItem: "center",
-        }}>
-        <Button onClick={clearFilter} color='default'>
-          Clear
-        </Button>
-        <Button
-          onClick={(e) => {
-            e.preventDefault();
-            console.log("valueKey", valueKey);
-            const params = { keynameFilter: valueKey, eventTypes: valueEvent };
-            handleSubmit(props.currInstance, props.currDatabase, params);
-          }}
-          color='default'>
-          Filter
-        </Button>
-        <Button color='default'>+</Button>
+              this.props.getInitialFilteredData(
+                this.props.currInstance,
+                this.props.currDatabase,
+                params
+              );
+              setTimeout(timeout, 7000);
+            }}
+            color='default'>
+            Filter
+          </Button>
+          <Button color='default'>+</Button>
+        </div>
+        <div>{newArea}</div>
       </div>
-      <div>{newArea}</div>
-    </div>
-  );
+    );
+  }
 }
 
 // <button
@@ -195,3 +226,4 @@ export default function EventsChartFilter(props) {
 //           >
 //             Clear Filter
 //           </button>
+export default EventsChartFilter;

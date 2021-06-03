@@ -7,15 +7,19 @@ class EventsChartFilterNav extends Component {
     super(props);
   }
   render() {
+    // console.log("props in EventsChartFilterNav", this.props);
     return (
       <div className='filterNavContainer'>
         <EventsChartFilter
           id='searchFilter'
           currInstance={this.props.currInstance}
           currDatabase={this.props.currDatabase}
-          filterBy={this.props.filterBy}
           setInt={this.props.setInt}
           clearInt={this.props.clearInt}
+          intervalStart={this.props.intervalStart}
+          getInitialFilteredData={this.props.getInitialFilteredData}
+          setIntFilter={this.props.setIntFilter}
+          resetState={this.props.resetState}
         />
         <button
           className='toggleInterval'
