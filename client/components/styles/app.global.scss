@@ -1,4 +1,4 @@
-@import "./config/_variables";
+@import './config/_variables';
 
 html {
   @media screen and (max-width: $small) {
@@ -7,7 +7,6 @@ html {
 }
 
 body {
-
   @media screen and (max-width: $small) {
     font-size: 1em;
   }
@@ -37,4 +36,8 @@ body {
   #tabs-container > * {
     width: 80%;
   }
+}
+
+.table-header {
+  font-size: large;
 }

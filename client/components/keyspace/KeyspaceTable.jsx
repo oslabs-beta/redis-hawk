@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { DataGrid } from '@material-ui/data-grid';
-import regeneratorRuntime from 'regenerator-runtime';
-import { updateCurrDisplayActionCreator } from '../../action-creators/connections';
+import { makeStyles } from '@material-ui/core/styles';
 
 function KeyspaceTable(props) {
   // console.log('props in keyspace table', props);
@@ -48,47 +47,46 @@ function KeyspaceTable(props) {
     }
   };
 
-  // const handleFilterModelChange = React.useCallback((params) => {
-
-  //   setFilterQuery(
-  //     (filterQuery.pageSize = props.pageSize),
-  //     (filterQuery.pageNum = props.pageNum),
-  //     (filterQuery.refreshScan = 0)
-  //   );
-
-  //   // console.log('filterQuery', filterQuery);
-  //   if (params.filterModel.items[0].columnField === 'name') {
-  //     let keyNameFilter = params.filterModel.items[0].value;
-  //     setFilterQuery((filterQuery.keyNameFilter = keyNameFilter));
-  //   }
-  //   // value filter not done in the backend yet
-  //   // if (params.filterModel.items[0].columnField === 'value') {
-  //   //   filterQuery.keyValueFilter = params.filterModel.items[0].value
-  //   // }
-  //   if (params.filterModel.items[0].columnField === 'type') {
-  //     let keyTypeFilter = params.filterModel.items[0].value;
-
-  //     setFilterQuery((filterQuery.keyTypeFilter = keyTypeFilter));
-  //   }
-
-  //   props.changeKeyspacePage(
-  //     props.currInstance,
-  //     props.currDatabase,
-  //     filterQuery
-  //   );
-  // }, []);
-
   const data =
     props.keyspace[props.currInstance - 1].keyspaces[props.currDatabase].data;
 
+  //replace all objects in an array with strings
+
   for (let i = 0; i < data.length; i += 1) {
     data[i].id = i;
+
+    if (data[i].type === 'hash') {
+      // console.log('this is what i looked like before', data[i].value);
+      let obj = data[i].value;
+      // console.log('obj', obj);
+      let objArray = Object.keys(obj);
+      let newString = '';
+      objArray.forEach((el) => {
+        newString += `${el}: ${obj[el]}, `;
+      });
+      // console.log(newString);
+      data[i].value = newString;
+      // console.log('my new hash', data[i]);
+    }
   }
+
+  const useStyles = makeStyles({
+    dataGrid: {
+      borderRadius: 3,
+      border: 'solid rgb(200, 200, 200) 1px',
+      color: 'rgb(200, 200, 200)',
+      fontFamily: "'Nunito Sans', 'sans-serif'",
+    },
+  });
+  const classes = useStyles();
 
   // console.log('data in keyspace table', data);
   return (
     <div style={{ height: 400, width: '100%' }}>
       <DataGrid
+        // autoHeight={true}
+        // disableExtendRowFullWidth={true}
+        className={classes.dataGrid}
         disableColumnFilter
         autoPageSize={false}
         loading={loading}
@@ -101,9 +99,24 @@ function KeyspaceTable(props) {
         onPageSizeChange={handlePageSizeChange}
         onPageChange={handlePageChange}
         columns={[
-          { field: 'key', width: '25%' },
-          { field: 'value', width: '49%' },
-          { field: 'type', width: '25%' },
+          {
+            field: 'key',
+            width: 150,
+            // headerAlign: 'center',
+            headerClassName: 'table-header',
+          },
+          {
+            field: 'value',
+            width: 475,
+            // headerAlign: 'center',
+            headerClassName: 'table-header',
+          },
+          {
+            field: 'type',
+            width: 125,
+            // headerAlign: 'center',
+            headerClassName: 'table-header',
+          },
         ]}
         rows={data}
         isRowSelectable={false}

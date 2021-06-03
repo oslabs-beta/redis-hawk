@@ -47,6 +47,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const PageNav = (props) => {
   function handleKeyspaceClick() {
+    document.getElementById('standard-secondary').value = '';
     // console.log('this.props', props);
     props.updateCurrDisplay({ filterType: 'keyName', filterValue: '' });
     props.updateCurrDisplay({ filterType: 'keyType', filterValue: '' });
@@ -62,6 +63,7 @@ const PageNav = (props) => {
     props.updatePageNum(1);
   }
   function handleEventsClick() {
+    document.getElementById('standard-secondary').value = '';
     props.updateCurrDisplay({ filterType: 'keyName', filterValue: '' });
     props.updateCurrDisplay({ filterType: 'keyEvent', filterValue: '' });
     props.updatePage('events');
