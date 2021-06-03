@@ -152,13 +152,13 @@ export default function SearchFilter(props) {
           className='filter-buttons-container'
         >
           <Button onClick={clearFilter} color='default'>
-            Clear
+            Clear Filter
           </Button>
 
           <Button onClick={handleSubmit} color='default'>
-            Filter
+            Apply Filter
           </Button>
-          <Button color='default'>+</Button>
+          {/* <Button color='default'>+</Button> */}
         </div>
         <div>{newArea}</div>
       </div>
@@ -201,12 +201,12 @@ export default function SearchFilter(props) {
           className='filter-buttons-container'
         >
           <Button onClick={clearEventFilter} color='default'>
-            Clear
+            Clear Filter
           </Button>
           <Button onClick={handleEventSubmit} color='default'>
-            Filter
+            Apply FIlter
           </Button>
-          <Button color='default'>+</Button>
+          {/* <Button color='default'>+</Button> */}
         </div>
         <div>{newArea}</div>
       </div>

@@ -16,45 +16,73 @@
   .MuiInputLabel-root {
     color: $PRIMARY_LIGHT;
     font-family: $PRIMARY_FONT;
-  }
 
-  .Mui-focused {
-    color: $PRIMARY_LIGHT;
+    @media screen and (max-width: $small) {
+      font-size: 0.8em;
+    }
+    @media screen and (min-width: $large) {
+      font-size: 1vw;
+    }
+    
   }
 
   .MuiSelect-icon {
     color: $PRIMARY_LIGHT;
   }
 
-  .MuiSelect-filled {
-    background-color: yellow;
-  }
-
   .filter-buttons-container {
-    margin: 0.5em 0 0;
+
+    @media screen and (max-width: $small) {
+      margin: 0.5em 0 0;
+    }
+    @media screen and (min-width: $large) {
+      margin: 0.65vw 0 0;
+    }
     
     button {
       font-family: $PRIMARY_FONT;
       color: $PRIMARY_LIGHT;
+      
+      @media screen and (max-width: $small) {
+        margin: 0 3em;
+        font-size: 0.9em;
+        // border: 1px solid $PRIMARY_LIGHT;
+      }
+      @media screen and (min-width: $large) {
+        margin: 0 3.75vw;
+        font-size: 1.12vw;
+      }
+      
     }
+  }
+
+  .MuiInput-input {
+    border-bottom: 1px solid $PRIMARY_LIGHT;
   }
 
 }
 
+#filter-button-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30%;
+}
 
 #refreshButton {
-  height: 30%;
+  height: 20%;
   align-self: center;
   background-color: $PRIMARY_RED;
   border: 1px solid $PRIMARY_RED;
   border-radius: 5px;
+  font-family: $PRIMARY_FONT;
   
   @media screen and (max-height: $small) {
-    font-size: 0.7em;
+    font-size: 0.8em;
   }
 
   @media screen and (max-height: $large) {
-    font-size: 0.875vw;
+    font-size: 1.0vw;
   }
 }
 
