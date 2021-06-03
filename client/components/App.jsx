@@ -18,11 +18,11 @@ import './styles/app.global.scss';
 ///still need to check dispatchers here
 
 //not using this right now
-const mapStateToProps = (store) => {
-  return {
-    database: store.currDatabaseStore.currDatabase,
-  };
-};
+// const mapStateToProps = (store) => {
+//   return {
+//     database: store.currDatabaseStore.currDatabase,
+//   };
+// };
 
 const mapDispatchToProps = (dispatch) => ({
   loadKeyspace: () => dispatch(keyspaceActions.loadKeyspaceActionCreator()),
@@ -68,4 +68,4 @@ class App extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(null, mapDispatchToProps)(App);

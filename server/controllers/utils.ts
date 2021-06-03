@@ -73,6 +73,6 @@ export const getKeyspace = async (redisClient: RedisClient, dbIdx: number): Prom
     keys = scanResults[1];
 
   } while (cursor !== '0');
-
+  
   return res;
 };

@@ -65,35 +65,8 @@ var instances = process.env.IS_TEST ?
     JSON.parse(fs.readFileSync(path.resolve(__dirname, '../tests-config/tests-config.json')).toString())
     : JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../config.json')).toString());
 var redisMonitors = [];
-var initKeyspace = function (monitor, dbIndex) { return __awaiter(void 0, void 0, void 0, function () {
-    var eventLog, keyspaceSnapshot, keyspace;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                eventLog = new data_stores_1.EventLog();
-                monitor.keyspaceSubscriber.on('pmessage', function (channel, message, event) {
-                    if (+message.match(/[0-9]+/)[0] === dbIndex) {
-                        var key = message.replace(/__keyspace@[0-9]*__:/, '');
-                        eventLog.add(key, event);
-                    }
-                });
-                return [4, utils_2.getKeyspace(monitor.redisClient, dbIndex)];
-            case 1:
-                keyspaceSnapshot = _a.sent();
-                keyspace = {
-                    eventLog: eventLog,
-                    keyspaceHistories: new data_stores_1.KeyspaceHistoriesLog(),
-                    keyspaceSnapshot: keyspaceSnapshot,
-                    eventLogSnapshot: []
-                };
-                monitor.keyspaces.push(keyspace);
-                setInterval(utils_1.recordKeyspaceHistory, monitor.recordKeyspaceHistoryFrequency, monitor, dbIndex);
-                return [2];
-        }
-    });
-}); };
 var initMonitor = function (monitor) { return __awaiter(void 0, void 0, void 0, function () {
-    var e_1, res, e_2, dbIndex;
+    var e_1, res, e_2, _loop_1, dbIndex;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -122,10 +95,45 @@ var initMonitor = function (monitor) { return __awaiter(void 0, void 0, void 0, 
                 return [3, 7];
             case 7:
                 monitor.keyspaceSubscriber.psubscribe('__keyspace@*__:*');
-                for (dbIndex = 0; dbIndex < monitor.databases; dbIndex++) {
-                    initKeyspace(monitor, dbIndex);
-                }
-                return [2];
+                _loop_1 = function (dbIndex) {
+                    var eventLog, keyspaceSnapshot, keyspace;
+                    return __generator(this, function (_b) {
+                        switch (_b.label) {
+                            case 0:
+                                eventLog = new data_stores_1.EventLog();
+                                monitor.keyspaceSubscriber.on('pmessage', function (channel, message, event) {
+                                    if (+message.match(/[0-9]+/)[0] === dbIndex) {
+                                        var key = message.replace(/__keyspace@[0-9]*__:/, '');
+                                        eventLog.add(key, event);
+                                    }
+                                });
+                                return [4, utils_2.getKeyspace(monitor.redisClient, dbIndex)];
+                            case 1:
+                                keyspaceSnapshot = _b.sent();
+                                keyspace = {
+                                    eventLog: eventLog,
+                                    keyspaceHistories: new data_stores_1.KeyspaceHistoriesLog(),
+                                    keyspaceSnapshot: keyspaceSnapshot,
+                                    eventLogSnapshot: []
+                                };
+                                monitor.keyspaces.push(keyspace);
+                                setInterval(utils_1.recordKeyspaceHistory, monitor.recordKeyspaceHistoryFrequency, monitor, dbIndex);
+                                return [2];
+                        }
+                    });
+                };
+                dbIndex = 0;
+                _a.label = 8;
+            case 8:
+                if (!(dbIndex < monitor.databases)) return [3, 11];
+                return [5, _loop_1(dbIndex)];
+            case 9:
+                _a.sent();
+                _a.label = 10;
+            case 10:
+                dbIndex++;
+                return [3, 8];
+            case 11: return [2];
         }
     });
 }); };

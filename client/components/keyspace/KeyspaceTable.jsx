@@ -49,26 +49,31 @@ function KeyspaceTable(props) {
     }
   };
 
-  const data =
-    props.keyspace[props.currInstance - 1].keyspaces[props.currDatabase].data;
-
   //replace all objects in an array with strings
 
-  for (let i = 0; i < data.length; i += 1) {
-    data[i].id = i;
+  let data = [];
 
-    if (data[i].type === 'hash') {
-      // console.log('this is what i looked like before', data[i].value);
-      let obj = data[i].value;
-      // console.log('obj', obj);
-      let objArray = Object.keys(obj);
-      let newString = '';
-      objArray.forEach((el) => {
-        newString += `${el}: ${obj[el]}, `;
-      });
-      // console.log(newString);
-      data[i].value = newString;
-      // console.log('my new hash', data[i]);
+  //set data if there is data present (myCount is 0 if there is no key data)
+  if (props.myCount) {
+    data = props.keyspace[props.currInstance - 1]
+            .keyspaces[props.currDatabase].data;
+
+    for (let i = 0; i < data.length; i += 1) {
+      data[i].id = i;
+
+      if (data[i].type === 'hash') {
+        // console.log('this is what i looked like before', data[i].value);
+        let obj = data[i].value;
+        // console.log('obj', obj);
+        let objArray = Object.keys(obj);
+        let newString = '';
+        objArray.forEach((el) => {
+          newString += `${el}: ${obj[el]}, `;
+        });
+        // console.log(newString);
+        data[i].value = newString;
+        // console.log('my new hash', data[i]);
+      }
     }
   }
 
