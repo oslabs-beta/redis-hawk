@@ -112,6 +112,7 @@ class FilterNav extends Component {
               //need to have current graph updated to page 1 -- re render?
               this.props.updatePageNum(1);
               document.getElementById('standard-secondary').value = '';
+              document.getElementById('secondary-secondary').value = '';
             }}
             id='refreshButton'
           >
