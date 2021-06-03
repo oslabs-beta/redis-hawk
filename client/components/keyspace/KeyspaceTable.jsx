@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { DataGrid } from '@material-ui/data-grid';
-import regeneratorRuntime from 'regenerator-runtime';
-import { updateCurrDisplayActionCreator } from '../../action-creators/connections';
+import { makeStyles } from '@material-ui/core/styles';
 
 function KeyspaceTable(props) {
   // console.log('props in keyspace table', props);
@@ -71,12 +70,23 @@ function KeyspaceTable(props) {
     }
   }
 
+  const useStyles = makeStyles({
+    dataGrid: {
+      borderRadius: 3,
+      border: 'solid rgb(200, 200, 200) 1px',
+      color: 'rgb(200, 200, 200)',
+      fontFamily: "'Nunito Sans', 'sans-serif'",
+    },
+  });
+  const classes = useStyles();
+
   // console.log('data in keyspace table', data);
   return (
     <div style={{ height: 400, width: '100%' }}>
       <DataGrid
         // autoHeight={true}
         // disableExtendRowFullWidth={true}
+        className={classes.dataGrid}
         disableColumnFilter
         autoPageSize={false}
         loading={loading}
@@ -89,9 +99,24 @@ function KeyspaceTable(props) {
         onPageSizeChange={handlePageSizeChange}
         onPageChange={handlePageChange}
         columns={[
-          { field: 'key', width: 150 },
-          { field: 'value', width: 475 },
-          { field: 'type', width: 125 },
+          {
+            field: 'key',
+            width: 150,
+            // headerAlign: 'center',
+            headerClassName: 'table-header',
+          },
+          {
+            field: 'value',
+            width: 475,
+            // headerAlign: 'center',
+            headerClassName: 'table-header',
+          },
+          {
+            field: 'type',
+            width: 125,
+            // headerAlign: 'center',
+            headerClassName: 'table-header',
+          },
         ]}
         rows={data}
         isRowSelectable={false}

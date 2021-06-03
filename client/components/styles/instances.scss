@@ -2,7 +2,7 @@
 
 .instance-nav-container {
   border-right: 3px solid $PRIMARY_LIGHT;
-  width: 30%;
+  width: 23%;
 
   .instance-nav-header {
 
@@ -31,11 +31,11 @@
       margin: 3% 0;
 
       @media screen and (max-width: $small) {
-        font-size: 1.25em;
+        font-size: 1em;
       }
   
       @media screen and (min-width: $large) {
-        font-size: 1.56vw
+        font-size: 1.25vw
       }
     }
   }
@@ -50,11 +50,11 @@
   .database-selector-prompt {
 
     @media screen and (max-width: $small) {
-      font-size: 1em;
+      font-size: 0.8em;
     }
 
     @media screen and (min-width: $large) {
-      font-size: 1.25vw;
+      font-size: 1vw;
     }
 
   }
