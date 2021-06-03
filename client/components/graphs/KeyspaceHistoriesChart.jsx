@@ -36,7 +36,7 @@ class KeyspaceHistoriesChart extends Component {
   }
 
   componentDidMount() {
-    console.log("in keyspaceHistories chart");
+    console.log("THIS.STATE IN COMPONENTDIDMOUNT", this.state);
     Chart.register(zoomPlugin);
     this.getInitialData();
     setTimeout(setInterval(this.getMoreData, 20000), 10000);
@@ -69,10 +69,18 @@ class KeyspaceHistoriesChart extends Component {
           dataCopy.datasets[0].data.push(response.histories[i].keyCount);
         }
         console.log("dataCopy", dataCopy);
-        this.setState({
-          ...this.state,
-          historyCount: allHistories.historyCount,
-          data: dataCopy,
+        // this.setState({
+        //   ...this.state,
+        //   historyCount: allHistories.historyCount,
+        //   data: dataCopy,
+        // });
+        this.setState(() => {
+          console.log("THIS.SETSTATE IN GET INITIAL DATA");
+          return {
+            ...this.state,
+            historyCount: allHistories.historyCount,
+            data: dataCopy,
+          };
         });
       });
   }
@@ -100,24 +108,45 @@ class KeyspaceHistoriesChart extends Component {
         dataCopy.labels.push(time);
         dataCopy.datasets[0].data.push(keyCount);
 
-        this.setState({
-          ...this.state,
-          historyCount: historyCount,
-          data: dataCopy,
+        // this.setState({
+        //   ...this.state,
+        //   historyCount: historyCount,
+        //   data: dataCopy,
+        // });
+        this.setState(() => {
+          console.log('THIS.SETSTATE IN GETMOREDATA IN KEYSPACE HISTORY TABLE IN GETMOREDATA', this.state)
+          return {
+            ...this.state,
+            historyCount: historyCount,
+            data: dataCopy,
+          };
         });
       });
   }
   setInt() {
     this.intervalID = setInterval(this.getMoreData, 7000);
     if (!this.state.intervalStart) {
-      this.setState({
-        intervalStart: true,
-      });
+      // this.setState({
+      //   intervalStart: true,
+      // });
+          this.setState(()=>{
+            console.log('THIS.STATE IN SETINT', this.state)
+            return{
+            intervalStart: true,
+          }
+        });
     }
   }
   clearInt() {
     this.setState({
       intervalStart: false,
+    });
+
+    this.setState(() => {
+      console.log('SETTING STATE IN CLEARIN!!!');
+      return {
+        intervalStart: false,
+      }
     });
     clearInterval(this.intervalID);
   }
@@ -127,8 +156,12 @@ class KeyspaceHistoriesChart extends Component {
     const newState = Object.assign({}, this.state);
     newState.labels = [];
     newState.data.datasets[0].data = [];
-    this.setState({
-      newState,
+    // this.setState({
+    //   newState,
+    // });
+    this.setState(() => {
+      console.log('SETTING STATE IN RESETSTATE METHOD');
+      return newState;
     });
   }
 

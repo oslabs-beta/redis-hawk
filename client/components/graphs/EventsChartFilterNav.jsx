@@ -7,7 +7,6 @@ class EventsChartFilterNav extends Component {
     super(props);
   }
   render() {
-    console.log("this.props in EventsChartFilter", this.props);
     return (
       <div className='filterNavContainer'>
         <EventsChartFilter

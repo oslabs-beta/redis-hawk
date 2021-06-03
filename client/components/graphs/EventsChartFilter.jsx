@@ -38,44 +38,104 @@ export default function EventsChartFilter(props) {
   console.log("props in eventsChartFilter", props);
   //submitting the filter
   function handleSubmit(currInstance, currDatabase, queryParams) {
-    console.log("queryParams.keynameFilter in handlesubmit", queryParams.keynameFilter);
-    console.log('type of queryparmskeynamefilter', typeof queryParams.keynameFilter)
+    props.clearInt();
+    console.log(
+      "queryParams.keynameFilter in handlesubmit",
+      queryParams.keynameFilter
+    );
+    console.log(
+      "type of queryparmskeynamefilter",
+      typeof queryParams.keynameFilter
+    );
     let URI;
     // if (queryParams) {
     if (queryParams.keynameFilter)
       URI = `/api/v2/events/totals/${currInstance}/${currDatabase}/?timeInterval=7000&keynameFilter=${queryParams.keynameFilter}`;
     if (queryParams.filterType)
-      URI = `/api/events/${currInstance}/${currDatabase}/?timeInterval=7000&keynameFilter=${queryParams.filterType}`;
+      URI = `/api/v2/events/totals/${currInstance}/${currDatabase}/?timeInterval=7000&keynameFilter=${queryParams.filterType}`;
     console.log("URI in handleSubmit FETCH", URI);
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {
         console.log("response in handleSubmit of Filter", response);
+        const allEvents = response;
+        const dataCopy = Object.assign({}, this.state.data);
+        dataCopy.labels = [];
+
+        // const labels = [];
+        // const datasets = [];
+        for (let i = response.eventTotals.length - 1; i >= 0; i--) {
+          const time = new Date(response.eventTotals[i].end_time)
+            .toString("MMddd")
+            .slice(16, 24);
+
+          dataCopy.labels.push(time);
+          dataCopy.datasets[0].data.push(response.eventTotals[i].eventCount);
+        }
+        this.setState({
+          ...this.state,
+          totalEvents: allEvents.eventTotal,
+          data: dataCopy,
+        });
       });
     // }
+    function getMoreFilteredData(
+      currInstance,
+      currDatabase,
+      totalEvents,
+      queryParams
+    ) {
+      let URI;
+      // if (queryParams) {
+      if (queryParams.keynameFilter)
+        URI = `/api/v2/events/totals/${currInstance}/${currDatabase}/?totalEvents=${this.props.totalEvents}&keynameFilter=${queryParams.keynameFilter}`;
+      if (queryParams.filterType)
+        URI = `/api/v2/events/totals/${currInstance}/${currDatabase}/?totalEvents=${this.props.totalEvents}&keynameFilter=${queryParams.filterType}`;
+      console.log("URI in handleSubmit FETCH", URI);
+      fetch(URI)
+        .then((res) => res.json())
+        .then((response) => {
+          const eventTotal = response.eventTotal;
+          const eventCount = response.eventTotals[0].eventCount;
+          const dataCopy = Object.assign({}, this.state.data);
+          const time = new Date(response.eventTotals[0].end_time)
+            .toString("MMddd")
+            .slice(16, 24);
+          dataCopy.labels.push(time);
+          dataCopy.datasets[0].data.push(eventCount);
+
+          this.setState({
+            ...this.state,
+            totalEvents: eventTotal,
+            data: dataCopy,
+          });
+        });
+    }
+    setTimeout(getMoreFilteredData, 7000);
   }
+
   // const clearFilter = () => {
   //      setValue('');
   //   setCategory('');
   // }
 
   function clearFilter() {
-    setValue("");
-    setCategory("");
-    props.updateCurrDisplay({ filterType: "keyName", filterValue: "" });
-    props.updateCurrDisplay({ filterType: "keyType", filterValue: "" });
-    const queryOptions = {
-      pageSize: props.pageSize,
-      pageNum: props.pageNum,
-      refreshScan: 0,
-      keyNameFilter: props.currDisplay.keyNameFilter,
-      keyTypeFilter: props.currDisplay.keyTypeFilter,
-    };
-    props.changeKeyspacePage(
-      props.currInstance,
-      props.currDatabase,
-      queryOptions
-    );
+    setValueKey("");
+    setValueEvent("");
+    // props.updateCurrDisplay({ filterType: "keyName", filterValue: "" });
+    // props.updateCurrDisplay({ filterType: "keyType", filterValue: "" });
+    // const queryOptions = {
+    //   pageSize: props.pageSize,
+    //   pageNum: props.pageNum,
+    //   refreshScan: 0,
+    //   keyNameFilter: props.currDisplay.keyNameFilter,
+    //   keyTypeFilter: props.currDisplay.keyTypeFilter,
+    // };
+    // props.changeKeyspacePage(
+    //   props.currInstance,
+    //   props.currDatabase,
+    //   queryOptions
+    // );
   }
 
   const newArea = [];
