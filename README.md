@@ -1,8 +1,7 @@
-(insert centered logo here)
+<p align='center'>
+  <img src='https://elasticbeanstalk-us-east-2-310828374226.s3.us-east-2.amazonaws.com/demo/redishawk-logo%20%281%29.png' width="341" height="256"/>
+</p>
 
-(insert link to launch website and medium article here)
-
-(insert badges here)
 # redis-hawk
 
 redis-hawk is an easy-to-use monitoring and visualizing web application for understanding granular key-level details for your Redis deployment.
@@ -11,11 +10,11 @@ It can be deployed locally on your desktop or on a server for continuous and rem
 
 ## Table of Contents
 
-* [Features](##Features)
-* [Demo](##Demo)
-* [Installation](##Installation)
-* [Configuration](##Configuration)
-* [Feature Roadmap](##feature-roadmap)
+* [Features](#features)
+* [Demo](#demo)
+* [Installation](#installation)
+* [Configuration](#configuration)
+* [Feature Roadmap](#feature-roadmap)
 
 ## Features
 
@@ -26,18 +25,29 @@ redis-hawk allows you to monitor the keyspace and its events within all database
 * View graphs to understand both key and event volumes over time
 * Utilize flexible filters to filter based on a keyname pattern, specific data type, and/or event type.
 
-## Demo - TBD
+## Demo
 
-(screenshot initial state of app)
+With redis-hawk you can:
 
-(how to switch instances / databases)
+Access keyspace information and visualize trends
 
-(demo of keyspace tab and filtering/pagination)
+![click-through-pages-gif](https://elasticbeanstalk-us-east-2-310828374226.s3.us-east-2.amazonaws.com/demo/click-through-pages.gif)
 
-(demo of events tab and filtering/pagination)
+View all databases for all instances of your deployment
 
-(demo of graphs and filtering)
+![instance-and-databases-for-events](https://elasticbeanstalk-us-east-2-310828374226.s3.us-east-2.amazonaws.com/demo/instance-and-dbs-for-events.gif)
 
+Filter by key names, event types, or data types
+
+![filtering-and-refreshing-events](https://elasticbeanstalk-us-east-2-310828374226.s3.us-east-2.amazonaws.com/demo/filtering-and-refreshing-events.gif)
+
+Customize your keyspace view
+
+![filtering-pagination-on-keyspace](https://elasticbeanstalk-us-east-2-310828374226.s3.us-east-2.amazonaws.com/demo/filtering-pagination-on-keyspace.gif)
+
+Filter, zoom, and pan through your graphs
+
+![filtering-zooming-on-graph](https://elasticbeanstalk-us-east-2-310828374226.s3.us-east-2.amazonaws.com/demo/filtering-zooming-on-graph.gif)
 
 ## Installation
 
@@ -61,7 +71,7 @@ OR
 npm run dev
 ```
 
-Then, please configure your redis-hawk monitoring options as decribed in the subsequent [Configuration](##Configuration) section.
+Then, please configure your redis-hawk monitoring options as decribed in the subsequent [Configuration](#configuration) section.
 ## Configuration
 
 Currently, configuration for your redis-hawk monitoring deployment must be managed via a `config.json`, located in the root directory of the repository. We will aim to support configuration directly via the web application in the near future.
@@ -95,7 +105,6 @@ The `config.json` defaults to monitoring the default local Redis instance via th
   * While the `SCAN` command is non-blocking and rapid, it may have performance impacts for your Redis deployment if utilized very frequently for larger Redis deployments.
   * For more details on `SCAN` performance and behavior, please read the [Redis documentation](https://redis.io/commands/scan).
 
-<a name="feature-roadmap"></a>
 ## Feature Roadmap
 
 The development team intends to continue improving redis-hawk and adding more features. Future features will include:
