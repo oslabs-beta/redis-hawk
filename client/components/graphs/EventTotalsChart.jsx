@@ -105,12 +105,8 @@ class EventTotalsChart extends Component {
       "type of queryparmskeynamefilter",
       typeof queryParams.keynameFilter
     );
-    let URI;
-    // if (queryParams) {
-    if (queryParams.keynameFilter)
-      URI = `/api/v2/events/totals/${currInstance}/${currDatabase}/?timeInterval=7000&keynameFilter=${queryParams.keynameFilter}`;
-    if (queryParams.filterType)
-      URI = `/api/v2/events/totals/${currInstance}/${currDatabase}/?timeInterval=7000&keynameFilter=${queryParams.filterType}`;
+    const URI = `/api/v2/events/totals/${currInstance}/${currDatabase}/?timeInterval=7000&keynameFilter=${queryParams.keynameFilter}`;
+
     console.log("URI in handleSubmit FETCH", URI);
     fetch(URI)
       .then((res) => res.json())
@@ -194,12 +190,7 @@ class EventTotalsChart extends Component {
       // currDatabase,
       // totalEvents,
       // queryParams
-      let URI;
-      // if (queryParams) {
-      if (queryParams.keynameFilter)
-        URI = `/api/v2/events/totals/${currInstance}/${currDatabase}/?eventTotal=${totalEvents}&keynameFilter=${queryParams.keynameFilter}`;
-      if (queryParams.filterType)
-        URI = `/api/v2/events/totals/${currInstance}/${currDatabase}/?eventTotal=${totalEvents}&keynameFilter=${queryParams.filterType}`;
+   const URI = `/api/v2/events/totals/${currInstance}/${currDatabase}/?eventTotal=${totalEvents}&keynameFilter=${queryParams.keynameFilter}`;
       console.log("URI in getMoreFiltered FETCH", URI);
       fetch(URI)
         .then((res) => res.json())

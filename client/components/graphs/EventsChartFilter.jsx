@@ -147,7 +147,7 @@ class EventsChartFilter extends Component {
     });
   }
   render() {
-    console.log("props in EventChartFilter Render", this.props);
+    // console.log("props in EventChartFilter Render", this.props);
     const newArea = [];
 
     return (
@@ -180,6 +180,7 @@ class EventsChartFilter extends Component {
           </Button>
           <Button
             onClick={() => {
+              this.props.resetState();
               // e.preventDefault();
               console.log("this.props in onclick function", this.props);
               console.log("valueKey", this.state.valueKey);
