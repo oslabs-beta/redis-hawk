@@ -65,6 +65,7 @@ export default function SearchFilter(props) {
       keyEventFilter: props.currDisplay.keyEventFilter,
       refreshScan: 0,
     };
+    console.log('myquery options in handle event submit', queryOptions);
     props.changeEventsPage(
       props.currInstance,
       props.currDatabase,
@@ -99,6 +100,7 @@ export default function SearchFilter(props) {
     setValue('');
     setCategory('');
     document.getElementById('standard-secondary').value = '';
+    document.getElementById('secondary-secondary').value = '';
 
     props.updateCurrDisplay({ filterType: 'keyName', filterValue: '' });
     props.updateCurrDisplay({ filterType: 'keyEvent', filterValue: '' });
@@ -130,7 +132,7 @@ export default function SearchFilter(props) {
           />
         </FormControl>
         <FormControl className={classes.formControl}>
-          <InputLabel color='secondary' htmlFor='grouped-select'>key type filter</InputLabel>
+          <InputLabel htmlFor='grouped-select'>key type filter</InputLabel>
           <Select defaultValue='' id='grouped-select' onChange={selectChange}>
             <MenuItem value='' selected>
               <em>None</em>
@@ -143,12 +145,6 @@ export default function SearchFilter(props) {
           </Select>
         </FormControl>
         <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItem: 'center',
-          }}
           className='filter-buttons-container'
         >
           <Button onClick={clearFilter} color='default'>
@@ -164,6 +160,7 @@ export default function SearchFilter(props) {
       </div>
     );
 
+    ////////////////////////
   } else if (props.currPage === 'events') {
     return (
       <div className='search-filters'>
@@ -176,35 +173,21 @@ export default function SearchFilter(props) {
           />
         </FormControl>
         <FormControl className={classes.formControl}>
-          <InputLabel htmlFor='grouped-select'>key event filter</InputLabel>
-          <Select defaultValue='' id='grouped-select' onChange={selectChange}>
-            <MenuItem value=''>
-              <em>None</em>
-            </MenuItem>
-
-            <MenuItem value={'set'}>set</MenuItem>
-            <MenuItem value={'expire'}>expire</MenuItem>
-            <MenuItem value={'hset'}>hset</MenuItem>
-            <MenuItem value={'sadd'}>sadd</MenuItem>
-            <MenuItem value={'lpush'}>lpush</MenuItem>
-            <MenuItem value={'zadd'}>zadd</MenuItem>
-            <MenuItem value={'expired'}>expired</MenuItem>
-          </Select>
+          <TextField
+            id='secondary-secondary'
+            label='key event filter'
+            color='secondary'
+            onChange={selectChange}
+          />
         </FormControl>
         <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItem: 'center',
-          }}
           className='filter-buttons-container'
         >
           <Button onClick={clearEventFilter} color='default'>
             Clear Filter
           </Button>
           <Button onClick={handleEventSubmit} color='default'>
-            Apply FIlter
+            Apply Filter
           </Button>
           {/* <Button color='default'>+</Button> */}
         </div>
