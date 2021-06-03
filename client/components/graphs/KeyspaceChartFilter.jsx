@@ -58,8 +58,9 @@ export default function KeyspaceChartFilter(props) {
   // }
 
   function clearFilter(e) {
-    // e.preventDefault();
+    e.preventDefault();
     props.clearInt();
+    props.clearFilterIntID();
     props.resetState();
     props.getInitialData();
     props.getMoreData();
@@ -83,7 +84,7 @@ export default function KeyspaceChartFilter(props) {
   }
 
   const newArea = [];
-  console.log("props in KSCHARTFILTER", props);
+  // console.log("props in KSCHARTFILTER", props);
   return (
     <div className='graph-search-filters'>
       <FormControl className={classes.formControl}>
@@ -101,6 +102,8 @@ export default function KeyspaceChartFilter(props) {
         <Button
           onClick={(e) => {
             e.preventDefault();
+            props.resetState();
+
             // e.preventDefault();
             console.log("props in onclick function", props);
             console.log("valueKey", valueKey);

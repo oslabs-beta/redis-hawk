@@ -23,6 +23,9 @@ class EventsChartFilterNav extends Component {
           totalEvents={this.props.totalEvents}
           getMoreData={this.props.getMoreData}
           getInitialData={this.props.getInitialData}
+          intervals={this.props.intervals}
+          clearFilterIntID={this.props.clearFilterIntID}
+          refresh={this.props.refresh}
         />
         <div className='graph-filter-button-container'>
           <button
@@ -37,6 +40,7 @@ class EventsChartFilterNav extends Component {
                 console.log("setting interval");
                 this.props.setInt();
               }
+
             }}>
             Pause Interval
           </button>
@@ -48,6 +52,7 @@ class EventsChartFilterNav extends Component {
               document.getElementById("standard-secondary").value = "";
               document.getElementById("event-type-filter").value = "";
               this.props.clearInt();
+              this.props.clearFilterIntID();
               this.props.resetState();
               this.props.getMoreData();
               this.props.setInt();
