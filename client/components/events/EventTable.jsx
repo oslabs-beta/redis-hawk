@@ -81,19 +81,19 @@ function EventTable(props) {
         columns={[
           {
             field: 'key',
-            width: 150,
+            flex: 0.4,
             // headerAlign: 'center',
             headerClassName: 'table-header',
           },
           {
             field: 'event',
-            width: 475,
+            flex: 0.3,
             // headerAlign: 'center',
             headerClassName: 'table-header',
           },
           {
             field: 'timestamp',
-            width: 125,
+            flex: 0.4,
             // headerAlign: 'center',
             headerClassName: 'table-header',
           },

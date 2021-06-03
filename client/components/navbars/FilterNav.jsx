@@ -89,35 +89,36 @@ class FilterNav extends Component {
             pageSize={this.props.pageSize}
             pageNum={this.props.pageNum}
           />
-
-          <button
-            className='filter-button'
-            id='searchButton'
-            onClick={(e) => {
-              e.preventDefault();
-              console.log(
-                'currInstance',
-                this.props.currInstance,
-                'currDatabase',
-                this.props.currDatabase
-              );
-              //pageNum is always going to be 1 on refresh and refreshScan is going to be 1
-              this.props.refreshEvents(
-                this.props.currInstance,
-                this.props.currDatabase,
-                this.props.pageSize,
-                1,
-                1
-              );
-              //need to have current graph updated to page 1 -- re render?
-              this.props.updatePageNum(1);
-              document.getElementById('standard-secondary').value = '';
-              document.getElementById('secondary-secondary').value = '';
-            }}
-            id='refreshButton'
-          >
-            Refresh
-          </button>
+          <div id='filter-button-container'>
+            <button
+              className='filter-button'
+              id='searchButton'
+              onClick={(e) => {
+                e.preventDefault();
+                console.log(
+                  'currInstance',
+                  this.props.currInstance,
+                  'currDatabase',
+                  this.props.currDatabase
+                );
+                //pageNum is always going to be 1 on refresh and refreshScan is going to be 1
+                this.props.refreshEvents(
+                  this.props.currInstance,
+                  this.props.currDatabase,
+                  this.props.pageSize,
+                  1,
+                  1
+                );
+                //need to have current graph updated to page 1 -- re render?
+                this.props.updatePageNum(1);
+                document.getElementById('standard-secondary').value = '';
+                document.getElementById('secondary-secondary').value = '';
+              }}
+              id='refreshButton'
+            >
+              Refresh
+            </button>
+          </div>
         </div>
       );
 
@@ -137,33 +138,35 @@ class FilterNav extends Component {
             currDatabase={this.props.currDatabase}
             currInstance={this.props.currInstance}
           />
-          <button
-            className='filter-button'
-            id='searchButton'
-            onClick={(e) => {
-              e.preventDefault();
-              console.log(
-                'currInstance',
-                this.props.currInstance,
-                'currDatabase',
-                this.props.currDatabase
-              );
-              //pageNum is always going to be 1 on refresh and refreshScan is going to be 1
-              this.props.refreshKeyspace(
-                this.props.currInstance,
-                this.props.currDatabase,
-                this.props.pageSize,
-                1,
-                1
-              );
-              //need to have current graph updated to page 1 -- re render?
-              this.props.updatePageNum(1);
-              document.getElementById('standard-secondary').value = '';
-            }}
-            id='refreshButton'
-          >
-            Refresh
-          </button>
+          <div id='filter-button-container'>
+            <button
+              className='filter-button'
+              id='searchButton'
+              onClick={(e) => {
+                e.preventDefault();
+                console.log(
+                  'currInstance',
+                  this.props.currInstance,
+                  'currDatabase',
+                  this.props.currDatabase
+                );
+                //pageNum is always going to be 1 on refresh and refreshScan is going to be 1
+                this.props.refreshKeyspace(
+                  this.props.currInstance,
+                  this.props.currDatabase,
+                  this.props.pageSize,
+                  1,
+                  1
+                );
+                //need to have current graph updated to page 1 -- re render?
+                this.props.updatePageNum(1);
+                document.getElementById('standard-secondary').value = '';
+              }}
+              id='refreshButton'
+            >
+              Refresh
+            </button>
+          </div>
         </div>
       );
     }

@@ -122,7 +122,7 @@ export default function SearchFilter(props) {
 
   if (props.currPage === 'keyspace') {
     return (
-      <div style={{ width: '75%', display: 'flex', flexDirection: 'column' }}>
+      <div className='search-filters'>
         <FormControl className={classes.formControl}>
           <TextField
             id='standard-secondary'
@@ -145,21 +145,16 @@ export default function SearchFilter(props) {
           </Select>
         </FormControl>
         <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItem: 'center',
-          }}
+          className='filter-buttons-container'
         >
           <Button onClick={clearFilter} color='default'>
-            Clear
+            Clear Filter
           </Button>
 
           <Button onClick={handleSubmit} color='default'>
-            Filter
+            Apply Filter
           </Button>
-          <Button color='default'>+</Button>
+          {/* <Button color='default'>+</Button> */}
         </div>
         <div>{newArea}</div>
       </div>
@@ -168,7 +163,7 @@ export default function SearchFilter(props) {
     ////////////////////////
   } else if (props.currPage === 'events') {
     return (
-      <div style={{ width: '75%', display: 'flex', flexDirection: 'column' }}>
+      <div className='search-filters'>
         <FormControl className={classes.formControl}>
           <TextField
             id='standard-secondary'
@@ -186,20 +181,15 @@ export default function SearchFilter(props) {
           />
         </FormControl>
         <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItem: 'center',
-          }}
+          className='filter-buttons-container'
         >
           <Button onClick={clearEventFilter} color='default'>
-            Clear
+            Clear Filter
           </Button>
           <Button onClick={handleEventSubmit} color='default'>
-            Filter
+            Apply Filter
           </Button>
-          <Button color='default'>+</Button>
+          {/* <Button color='default'>+</Button> */}
         </div>
         <div>{newArea}</div>
       </div>

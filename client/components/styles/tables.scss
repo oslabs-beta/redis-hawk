@@ -1,0 +1,19 @@
+@import './config/_variables.scss';
+
+.MuiDataGrid-footer p {
+  color: $PRIMARY_LIGHT;
+  font-family: $PRIMARY_FONT;
+}
+
+.MuiTablePagination-root {
+  color: $PRIMARY_LIGHT;
+}
+
+.MuiInputBase-input {
+  color: $PRIMARY_LIGHT !important;
+  font-family: $PRIMARY_FONT !important;
+}
+
+.MuiSvgIcon-root {
+  fill: $PRIMARY_LIGHT !important;
+}

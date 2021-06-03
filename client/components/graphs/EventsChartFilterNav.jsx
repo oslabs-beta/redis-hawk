@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import EventsChartFilter from "./EventsChartFilter.jsx";
-import "../styles/filternav.scss";
+import "../styles/graphfilters.scss";
 
 class EventsChartFilterNav extends Component {
   constructor(props) {
@@ -9,7 +9,7 @@ class EventsChartFilterNav extends Component {
   render() {
     // console.log("props in EventsChartFilterNav", this.props);
     return (
-      <div className='filterNavContainer'>
+      <div className='graph-filter-nav-container'>
         <EventsChartFilter
           id='searchFilter'
           currInstance={this.props.currInstance}
@@ -21,31 +21,33 @@ class EventsChartFilterNav extends Component {
           setIntFilter={this.props.setIntFilter}
           resetState={this.props.resetState}
         />
-        <button
-          className='toggleInterval'
-          id='clearFilterButton'
-          onClick={(e) => {
-            e.preventDefault();
-            if (this.props.intervalStart) {
+        <div className='graph-filter-button-container'>
+          <button
+            className='toggleInterval'
+            id='clear-interval-button'
+            onClick={(e) => {
+              e.preventDefault();
+              if (this.props.intervalStart) {
+                this.props.clearInt();
+              } else {
+                this.props.setInt();
+              }
+            }}>
+            Pause Interval
+          </button>
+          <button
+            className='filter-button'
+            id='refreshButton'
+            onClick={(e) => {
+              e.preventDefault();
               this.props.clearInt();
-            } else {
+              this.props.resetState();
+              this.props.getMoreData();
               this.props.setInt();
-            }
-          }}>
-          Pause Interval
-        </button>
-        <button
-          className='filter-button'
-          id='refreshButton'
-          onClick={(e) => {
-            e.preventDefault();
-            this.props.clearInt();
-            this.props.resetState();
-            this.props.getMoreData();
-            this.props.setInt();
-          }}>
-          Refresh
-        </button>
+            }}>
+            Refresh
+          </button>
+        </div>
       </div>
     );
   }
