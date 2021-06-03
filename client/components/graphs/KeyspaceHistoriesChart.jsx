@@ -10,6 +10,7 @@ class KeyspaceHistoriesChart extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      refresh: false,
       intervalStart: false,
       intervalFilterStart: false,
       historyCount: 0,
@@ -39,6 +40,7 @@ class KeyspaceHistoriesChart extends Component {
     this.getInitialFilteredData = this.getInitialFilteredData.bind(this);
     this.setIntFilter = this.setIntFilter.bind(this);
     this.clearFilterIntID = this.clearFilterIntID.bind(this);
+    this.toggleRefresh = this.toggleRefresh.bind(this);
   }
 
   componentDidMount() {
@@ -51,17 +53,26 @@ class KeyspaceHistoriesChart extends Component {
   //number to server/configs/config.json
   getInitialData() {
     const URI = `api/v2/keyspaces/histories/${this.props.currInstance}/${this.props.currDatabase}/`;
+    console.log("URI for GETINITDATA_KEYSPACES", URI);
+
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {
+        console.log("responsein GETINITALDATA", response);
         const allHistories = response;
         const dataCopy = Object.assign({}, this.state.data);
         // const labels = [];
         // const datasets = [];
+        console.log("dataCopy in KeyspaceHistories INIT GET", dataCopy);
         dataCopy.labels = [];
         dataCopy.datasets[0].data = [];
+        console.log(
+          "dataCopy in KeyspaceHistories INIT GET BEFORE LOOP",
+          dataCopy
+        );
+
         for (let i = response.histories.length - 1; i >= 0; i--) {
-          const time = new Date(response.histories[i].end_time)
+          const time = new Date(response.histories[i].timestamp)
             .toString("MMddd")
             .slice(16, 24);
 
@@ -85,17 +96,28 @@ class KeyspaceHistoriesChart extends Component {
 
   getMoreData() {
     const URI = `api/v2/keyspaces/histories/${this.props.currInstance}/${this.props.currDatabase}/?historyCount=${this.state.historyCount}`;
+    console.log("URI for GETMOREDATA_KEYSPACES", URI);
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {
+        console.log("response in getMoreDataKeyspaces", response);
         const historyCount = response.historyCount;
         const keyCount = response.histories[0].keyCount;
         const dataCopy = Object.assign({}, this.state.data);
+        // if (this.state.toggleRefresh === true) {
+        //   dataCopy.labels = [];
+        //   dataCopy.datasets[0].data = [];
+        //   this.setState({
+        //     ...state,
+        //     toggleRefresh: false,
+        //   });
+        // }
         const time = new Date(response.histories[0].timestamp)
           .toString("MMddd")
           .slice(16, 24);
         dataCopy.labels.push(time);
         dataCopy.datasets[0].data.push(keyCount);
+        console.log(dataCopy.datasets[0].data);
 
         // this.setState({
         //   ...this.state,
@@ -165,6 +187,7 @@ class KeyspaceHistoriesChart extends Component {
     }
     let self = this;
     function getMoreFilteredData() {
+      
       const URI = `/api/v2/keyspaces/histories/${currInstance}/${currDatabase}/?historiesCount=${self.state.historyCount}&keynameFilter=${queryParams.keynameFilter}`;
       console.log("URI in getMoreFiltered FETCH", URI);
       fetch(URI)
@@ -204,14 +227,14 @@ class KeyspaceHistoriesChart extends Component {
 
       // setTimeout(getMoreFilteredData, 7000);
     }
-    this.filterIntID = setInterval(getMoreFilteredData, 7000);
+    this.filterIntID = setInterval(getMoreFilteredData, 10000);
     this.setState({
       intervalFilterStart: true,
     });
   }
   setInt() {
     if (!this.state.intervalStart) {
-      this.intervalID = setInterval(this.getMoreData, 7000);
+      this.intervalID = setInterval(this.getMoreData, 10000);
       this.setState({
         ...this.state,
         intervalStart: true,
@@ -237,11 +260,26 @@ class KeyspaceHistoriesChart extends Component {
       });
     }
   }
+  toggleRefresh() {
+    console.log("this.state.refresh", this.state.refresh);
+    if (!this.state.refresh) {
+      this.setState({
+        ...this.state,
+        refresh: true,
+      });
+    } else {
+      this.setState({
+        ...this.state,
+        refresh: false,
+      });
+    }
+    console.log("this.state.refresh post toggle", this.state.refresh);
+  }
   resetState() {
     // const newDatasets= [];
     // const newLabels = [];
     const newState = Object.assign({}, this.state);
-    newState.labels = [];
+    newState.data.labels = [];
     newState.data.datasets[0].data = [];
     // this.setState({
     //   newState,
@@ -268,6 +306,8 @@ class KeyspaceHistoriesChart extends Component {
           getInitialFilteredData={this.getInitialFilteredData}
           setIntFilter={this.setIntFilter}
           clearFilterIntID={this.clearFilterIntID}
+          refresh={this.state.refresh}
+          toggleRefresh={this.toggleRefresh}
         />
 
         <Line

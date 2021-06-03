@@ -40,7 +40,6 @@ class EventsChartFilterNav extends Component {
                 console.log("setting interval");
                 this.props.setInt();
               }
-
             }}>
             Pause Interval
           </button>
@@ -54,6 +53,7 @@ class EventsChartFilterNav extends Component {
               this.props.clearInt();
               this.props.clearFilterIntID();
               this.props.resetState();
+              // this.props.getInitialData()
               this.props.getMoreData();
               this.props.setInt();
             }}>
