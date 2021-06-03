@@ -54,9 +54,9 @@ const eventsReducer = (state = initialState, action) => {
       };
     }
     case types.CHANGE_EVENTS_PAGE: {
-      console.log("payload in eventsReducer", action.payload);
-      const specificInstanceEvents = action.payload.events.data;
-      console.log("specificInstance", specificInstanceEvents);
+      console.log('payload in eventsReducer', action.payload);
+      const specificInstanceEvents = action.payload.events;
+      console.log('specificInstance', specificInstanceEvents);
       const currInstance = action.payload.currInstance;
       const currDatabase = action.payload.currDatabase;
       events = state.events.slice();
