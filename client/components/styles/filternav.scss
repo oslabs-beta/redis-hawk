@@ -7,6 +7,29 @@
   justify-content: space-between;
 }
 
+.search-filters {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+
+
+  .MuiInputLabel-root {
+    color: $PRIMARY_LIGHT;
+    font-family: $PRIMARY_FONT;
+  }
+
+  .Mui-focused {
+    color: $PRIMARY_LIGHT;
+  }
+
+  .MuiTextField-root {
+    border: 1px solid $PRIMARY_LIGHT;
+    // margin: 0.25em 0;
+  }
+}
+
+
+
 #refreshButton {
   height: 30%;
   align-self: center;

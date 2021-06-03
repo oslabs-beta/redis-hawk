@@ -114,7 +114,7 @@ export default function SearchFilter(props) {
 
   if (props.currPage === 'keyspace') {
     return (
-      <div style={{ width: '75%', display: 'flex', flexDirection: 'column' }}>
+      <div className='search-filters'>
         <FormControl className={classes.formControl}>
           <TextField
             id='standard-secondary'
@@ -156,7 +156,6 @@ export default function SearchFilter(props) {
       </div>
     );
 
-    ////////////////////////
   } else if (props.currPage === 'events') {
     return (
       <div style={{ width: '75%', display: 'flex', flexDirection: 'column' }}>
