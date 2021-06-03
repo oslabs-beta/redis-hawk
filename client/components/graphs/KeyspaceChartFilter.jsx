@@ -16,17 +16,11 @@ const useStyles = makeStyles((theme) => ({
 export default function KeyspaceChartFilter(props) {
   const classes = useStyles();
   const [valueKey, setValueKey] = React.useState("");
-  const [valueEvent, setValueEvent] = React.useState("");
 
   const handleChangeKey = (event) => {
     console.log("handling change");
     setValueKey(event.target.value);
   };
-  const handleChangeEvent = (event) => {
-    console.log("handling change");
-    setValueEvent(event.target.value);
-  };
-
   // const handleChangeSubmit = (event) => {
   //   console.log("handling change");
   //   setValue(event.target.value);
@@ -85,7 +79,7 @@ export default function KeyspaceChartFilter(props) {
   const newArea = [];
 
   return (
-    <div style={{ width: "75%", display: "flex", flexDirection: "column" }}>
+    <div className='graph-search-filters'>
       <FormControl className={classes.formControl}>
         <TextField
           id='standard-secondary'
@@ -94,35 +88,23 @@ export default function KeyspaceChartFilter(props) {
           onChange={handleChangeKey}
         />
       </FormControl>
-      <FormControl className={classes.formControl}>
-        <TextField
-          id='standard-secondary'
-          label='event-type filter'
-          color='secondary'
-          onChange={handleChangeEvent}
-        />
-      </FormControl>
       <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItem: "center",
-        }}>
+        className='graph-filter-buttons-container'
+      >
         <Button onClick={clearFilter} color='default'>
-          Clear
+          Clear Filter
         </Button>
         <Button
           onClick={(e) => {
             e.preventDefault();
             console.log("valueKey", valueKey);
-            const params = { keynameFilter: valueKey, eventTypes: valueEvent };
+            const params = { keynameFilter: valueKey };
             handleSubmit(props.currInstance, props.currDatabase, params);
           }}
           color='default'>
-          Filter
+          Apply Filter
         </Button>
-        <Button color='default'>+</Button>
+        {/* <Button color='default'>+</Button> */}
       </div>
       <div>{newArea}</div>
     </div>
