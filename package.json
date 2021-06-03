@@ -8,7 +8,7 @@
     "test": "IS_TEST=true jest --verbose",
     "start": "NODE_ENV=production nodemon dist/server/server.js",
     "dev": "NODE_ENV=development webpack serve --open & nodemon dist/server/server.js",
-    "cp": "copyfiles -u 1 server/configs/* server/assets/* dist/server/"
+    "cp": "copyfiles -u 1 server/tests-config/* server/assets/* dist/server/"
   },
   "jest": {
     "transform": {

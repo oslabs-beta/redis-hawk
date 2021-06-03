@@ -7,13 +7,16 @@ var express_1 = __importDefault(require("express"));
 var keyspacesController_1 = __importDefault(require("../controllers/keyspacesController"));
 var monitorsController_1 = __importDefault(require("../controllers/monitorsController"));
 var router = express_1.default.Router();
-router.get('/', monitorsController_1.default.findAllMonitors, keyspacesController_1.default.getKeyspacesForInstance, function (req, res) {
+router.get('/', monitorsController_1.default.findAllMonitors, keyspacesController_1.default.refreshKeyspace, keyspacesController_1.default.getKeyspacePages, function (req, res) {
     res.status(200).json(res.locals.keyspaces);
 });
-router.get('/:instanceId', monitorsController_1.default.findSingleMonitor, keyspacesController_1.default.getKeyspacesForInstance, function (req, res) {
+router.get('/:instanceId', monitorsController_1.default.findSingleMonitor, keyspacesController_1.default.refreshKeyspace, keyspacesController_1.default.getKeyspacePages, function (req, res) {
     res.status(200).json(res.locals.keyspaces);
 });
-router.get('/:instanceId/:dbIndex', monitorsController_1.default.findSingleMonitor, keyspacesController_1.default.getKeyspacesForInstance, function (req, res) {
+router.get('/:instanceId/:dbIndex', monitorsController_1.default.findSingleMonitor, keyspacesController_1.default.refreshKeyspace, keyspacesController_1.default.getKeyspacePages, function (req, res) {
     res.status(200).json(res.locals.keyspaces);
+});
+router.get('/histories/:instanceId/:dbIndex', monitorsController_1.default.findSingleMonitor, keyspacesController_1.default.getKeyspaceHistories, function (req, res) {
+    res.status(200).json(res.locals.histories);
 });
 exports.default = router;
