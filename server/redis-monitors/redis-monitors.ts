@@ -17,8 +17,8 @@ import { promisifyClientMethods, recordKeyspaceHistory } from './utils';
 import { getKeyspace } from '../controllers/utils';
 
 const instances: RedisInstance[] = process.env.IS_TEST ?
-  JSON.parse(fs.readFileSync(path.resolve(__dirname, '../configs/tests-config.json')).toString())
-  : JSON.parse(fs.readFileSync(path.resolve(__dirname, '../configs/config.json')).toString());
+  JSON.parse(fs.readFileSync(path.resolve(__dirname, '../tests-config/tests-config.json')).toString())
+  : JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../config.json')).toString());
 
 const redisMonitors: RedisMonitor[] = [];
 

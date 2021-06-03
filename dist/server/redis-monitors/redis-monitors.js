@@ -62,8 +62,8 @@ var data_stores_1 = require("./models/data-stores");
 var utils_1 = require("./utils");
 var utils_2 = require("../controllers/utils");
 var instances = process.env.IS_TEST ?
-    JSON.parse(fs.readFileSync(path.resolve(__dirname, '../configs/tests-config.json')).toString())
-    : JSON.parse(fs.readFileSync(path.resolve(__dirname, '../configs/config.json')).toString());
+    JSON.parse(fs.readFileSync(path.resolve(__dirname, '../tests-config/tests-config.json')).toString())
+    : JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../config.json')).toString());
 var redisMonitors = [];
 var initKeyspace = function (monitor, dbIndex) { return __awaiter(void 0, void 0, void 0, function () {
     var eventLog, keyspaceSnapshot, keyspace;
