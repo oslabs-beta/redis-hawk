@@ -48,36 +48,6 @@ function KeyspaceTable(props) {
     }
   };
 
-  // const handleFilterModelChange = React.useCallback((params) => {
-
-  //   setFilterQuery(
-  //     (filterQuery.pageSize = props.pageSize),
-  //     (filterQuery.pageNum = props.pageNum),
-  //     (filterQuery.refreshScan = 0)
-  //   );
-
-  //   // console.log('filterQuery', filterQuery);
-  //   if (params.filterModel.items[0].columnField === 'name') {
-  //     let keyNameFilter = params.filterModel.items[0].value;
-  //     setFilterQuery((filterQuery.keyNameFilter = keyNameFilter));
-  //   }
-  //   // value filter not done in the backend yet
-  //   // if (params.filterModel.items[0].columnField === 'value') {
-  //   //   filterQuery.keyValueFilter = params.filterModel.items[0].value
-  //   // }
-  //   if (params.filterModel.items[0].columnField === 'type') {
-  //     let keyTypeFilter = params.filterModel.items[0].value;
-
-  //     setFilterQuery((filterQuery.keyTypeFilter = keyTypeFilter));
-  //   }
-
-  //   props.changeKeyspacePage(
-  //     props.currInstance,
-  //     props.currDatabase,
-  //     filterQuery
-  //   );
-  // }, []);
-
   const data =
     props.keyspace[props.currInstance - 1].keyspaces[props.currDatabase].data;
 
@@ -87,7 +57,7 @@ function KeyspaceTable(props) {
     data[i].id = i;
 
     if (data[i].type === 'hash') {
-      console.log('this is what i looked like before', data[i].value);
+      // console.log('this is what i looked like before', data[i].value);
       let obj = data[i].value;
       // console.log('obj', obj);
       let objArray = Object.keys(obj);
@@ -119,9 +89,9 @@ function KeyspaceTable(props) {
         onPageSizeChange={handlePageSizeChange}
         onPageChange={handlePageChange}
         columns={[
-          { field: 'key', width: '125px' },
-          { field: 'value', width: '475px' },
-          { field: 'type', width: '125px' },
+          { field: 'key', width: 150 },
+          { field: 'value', width: 475 },
+          { field: 'type', width: 125 },
         ]}
         rows={data}
         isRowSelectable={false}
