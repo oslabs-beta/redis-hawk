@@ -139,15 +139,22 @@ class EventsChartFilter extends Component {
   //   setCategory('');
   // }
 
-  clearFilter() {
+  clearFilter(e) {
+    e.preventDefault();
+    document.getElementById('standard-secondary').value = "";
+    document.getElementById("event-type-filter").value = "";
+    this.props.clearInt();
+    this.props.resetState();
+    this.props.getInitialData();
+    this.props.getMoreData();
+    this.props.setInt();
     this.setState({
-      ...state,
       valueKey: "",
       valueEvent: "",
     });
   }
   render() {
-    console.log("props in EventChartFilter Render", this.props);
+    // console.log("props in EventChartFilter Render", this.props);
     const newArea = [];
 
     return (
@@ -162,44 +169,47 @@ class EventsChartFilter extends Component {
         </FormControl>
         <FormControl>
           <TextField
-            id='standard-secondary'
+            id='event-type-filter'
             label='event type filter'
             color='secondary'
             onChange={this.handleChangeEvent}
           />
         </FormControl>
-        <div
-          className='graph-filter-buttons-container'
-          >
+        <div className='graph-filter-buttons-container'>
           <Button onClick={this.clearFilter} color='default'>
             Clear Filter
           </Button>
           <Button
             onClick={(e) => {
               e.preventDefault();
-              console.log("this.props in onclick function", this.props);
-              this.props.clearInt();
               this.props.resetState();
+              // e.preventDefault();
+              console.log("this.props in onclick function", this.props);
               console.log("valueKey", this.state.valueKey);
               const params = {
                 keynameFilter: this.state.valueKey,
                 eventTypes: this.state.valueEvent,
               };
-              function timeout() {
-                this.props.setIntFilter(
-                  this.props.currInstance,
-                  this.props.currDatabase,
-                  this.props.totalEvents,
-                  queryParams
-                );
-              }
+              // function timeout() {
+              //   this.props.setIntFilter(
+              //     this.props.currInstance,
+              //     this.props.currDatabase,
+              //     this.props.totalEvents,
+              //     queryParams
+              //   );
+              // }
 
               this.props.getInitialFilteredData(
                 this.props.currInstance,
                 this.props.currDatabase,
                 params
               );
-              setTimeout(timeout, 7000);
+              this.props.setIntFilter(
+                this.props.currInstance,
+                this.props.currDatabase,
+                this.props.totalEvents,
+                params
+              );
             }}
             color='default'>
             Apply Filter

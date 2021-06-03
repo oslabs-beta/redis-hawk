@@ -20,16 +20,21 @@ class EventsChartFilterNav extends Component {
           getInitialFilteredData={this.props.getInitialFilteredData}
           setIntFilter={this.props.setIntFilter}
           resetState={this.props.resetState}
+          totalEvents={this.props.totalEvents}
+          getMoreData={this.props.getMoreData}
+          getInitialData={this.props.getInitialData}
         />
         <div className='graph-filter-button-container'>
           <button
             className='toggleInterval'
             id='clear-interval-button'
             onClick={(e) => {
-              e.preventDefault();
+              console.log("props.intervalStart", this.props.intervalStart);
+              // console.log("intervalId in click", this.props.intervalId);
               if (this.props.intervalStart) {
                 this.props.clearInt();
               } else {
+                console.log("setting interval");
                 this.props.setInt();
               }
             }}>
@@ -40,6 +45,8 @@ class EventsChartFilterNav extends Component {
             id='refreshButton'
             onClick={(e) => {
               e.preventDefault();
+              document.getElementById("standard-secondary").value = "";
+              document.getElementById("event-type-filter").value = "";
               this.props.clearInt();
               this.props.resetState();
               this.props.getMoreData();

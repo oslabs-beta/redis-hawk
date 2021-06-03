@@ -4,14 +4,16 @@ import zoomPlugin from "chartjs-plugin-zoom";
 import Hammer from "hammerjs";
 import Chart from "chart.js/auto";
 import EventsChartFilterNav from "./EventsChartFilterNav.jsx";
+import "../styles/graphs.scss";
 
 class EventTotalsChart extends Component {
   constructor(props) {
     super(props);
     this.state = {
       intervalStart: false,
-      filterIntervalId: 0,
+      intervalId: 0,
       totalEvents: 0,
+      intervals: 0,
       data: {
         labels: [],
         datasets: [
@@ -35,22 +37,26 @@ class EventTotalsChart extends Component {
     this.clearInt = this.clearInt.bind(this);
     this.resetState = this.resetState.bind(this);
     this.getInitialFilteredData = this.getInitialFilteredData.bind(this);
-    // this.getMoreFilteredData = this.getMoreFilteredData.bind(this);
     this.setIntFilter = this.setIntFilter.bind(this);
+    this.clearChart = this.clearInt.bind(this);
   }
-
+  chartReference = {};
   componentDidMount() {
     Chart.register(zoomPlugin);
     this.getInitialData();
     setTimeout(this.setInt, 10000);
+
+    console.log("chartRef", this.chartReference);
   }
 
   getInitialData() {
+    console.log("interval count", this.state.intervals);
     const URI = `api/v2/events/totals/${this.props.currInstance}/${this.props.currDatabase}/?timeInterval=7000`;
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {
         const allEvents = response;
+        console.log("response in GETINIT FETCH", response);
         const dataCopy = Object.assign({}, this.state.data);
         dataCopy.labels = [];
 
@@ -73,6 +79,7 @@ class EventTotalsChart extends Component {
   }
 
   getMoreData() {
+    console.log("intervals count IN GET MORE DATA", this.state.intervals);
     const URI = `api/v2/events/totals/${this.props.currInstance}/${this.props.currDatabase}/?eventTotal=${this.state.totalEvents}`;
     fetch(URI)
       .then((res) => res.json())
@@ -95,26 +102,19 @@ class EventTotalsChart extends Component {
   }
 
   getInitialFilteredData(currInstance, currDatabase, queryParams) {
-    this.clearInt();
-    console.log(
-      "queryParams.keynameFilter in getInitialFilteredData",
-      queryParams.keynameFilter
-    );
-    console.log(
-      "type of queryparmskeynamefilter",
-      typeof queryParams.keynameFilter
-    );
-    let URI;
-    // if (queryParams) {
-    if (queryParams.keynameFilter)
-      URI = `/api/v2/events/totals/${currInstance}/${currDatabase}/?timeInterval=7000&keynameFilter=${queryParams.keynameFilter}`;
-    if (queryParams.filterType)
-      URI = `/api/v2/events/totals/${currInstance}/${currDatabase}/?timeInterval=7000&keynameFilter=${queryParams.filterType}`;
+    if (this.intervalID) {
+      this.clearInt();
+    }
+    // this.resetState();
+    // this.clearChart();
+    console.log("intervals count IN GETINITIALFILTERED", this.state.intervals);
+    const URI = `/api/v2/events/totals/${currInstance}/${currDatabase}/?timeInterval=7000&keynameFilter=${queryParams.keynameFilter}`;
+
     console.log("URI in handleSubmit FETCH", URI);
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {
-        console.log("response in handleSubmit of Filter", response);
+        console.log("response in GETMOREFILTERED of Filter", response);
         const allEvents = response;
         const dataCopy = Object.assign({}, this.state.data);
         dataCopy.labels = [];
@@ -129,6 +129,7 @@ class EventTotalsChart extends Component {
           dataCopy.labels.push(time);
           dataCopy.datasets[0].data.push(response.eventTotals[i].eventCount);
         }
+
         this.setState({
           ...this.state,
           totalEvents: allEvents.eventTotal,
@@ -137,81 +138,76 @@ class EventTotalsChart extends Component {
       });
   }
 
-  // getMoreFilteredData(currInstance, currDatabase, totalEvents, queryParams) {
-  //   let URI;
-  //   // if (queryParams) {
-  //   if (queryParams.keynameFilter)
-  //     URI = `/api/v2/events/totals/${currInstance}/${currDatabase}/?totalEvents=${totalEvents}&keynameFilter=${queryParams.keynameFilter}`;
-  //   if (queryParams.filterType)
-  //     URI = `/api/v2/events/totals/${currInstance}/${currDatabase}/?totalEvents=${totalEvents}&keynameFilter=${queryParams.filterType}`;
-  //   console.log("URI in handleSubmit FETCH", URI);
-  //   fetch(URI)
-  //     .then((res) => res.json())
-  //     .then((response) => {
-  //       const eventTotal = response.eventTotal;
-  //       const eventCount = response.eventTotals[0].eventCount;
-  //       const dataCopy = Object.assign({}, this.state.data);
-  //       const time = new Date(response.eventTotals[0].end_time)
-  //         .toString("MMddd")
-  //         .slice(16, 24);
-  //       dataCopy.labels.push(time);
-  //       dataCopy.datasets[0].data.push(eventCount);
-
-  //       this.setState({
-  //         ...this.state,
-  //         totalEvents: eventTotal,
-  //         data: dataCopy,
-  //       });
-  //     });
-
-  //   // setTimeout(getMoreFilteredData, 7000);
-  // }
-
   setInt() {
-    this.intervalID = setInterval(this.getMoreData, 7000);
+    console.log("intervalStart", this.state.intervalStart);
+    console.log("INTERVALSCOUNT IN SETINT", this.state.intervals);
+
     if (!this.state.intervalStart) {
+      this.intervalID = setInterval(this.getMoreData, 7000);
+      const newInt = this.state.intervals + 1;
       this.setState({
+        ...this.state,
         intervalStart: true,
+        intervalId: this.intervalID,
+        intervals: newInt,
       });
     }
   }
 
   clearInt() {
-    this.setState({
-      intervalStart: false,
-    });
-    clearInterval(this.intervalID);
+    console.log("INTERVALS STATE IN CLEARINT", this.state.intervals);
+    console.log("intervalStart", this.state.intervalStart);
+    console.log("clearing IntervalID:", this.intervalID);
+    if (this.state.intervalStart) {
+      const newInt = this.state.intervals - 1;
+      clearInterval(this.intervalID);
+      this.setState({
+        ...this.state,
+        intervalStart: false,
+        intervalId: 0,
+        intervals: newInt,
+      });
+    }
+  }
+  clearChart() {
+    let lineChart = this.reference.chartInstance;
+    lineChart.resetState();
   }
 
   setIntFilter(currInstance, currDatabase, totalEvents, queryParams) {
+    console.log("props.intervalStart", this.state.intervalStart);
+    console.log("intervals count in SETINTFILTER", this.state.intervals);
+
+    if (this.state.intervalId !== 0) {
+      this.clearInt();
+    }
+    let self = this;
     function getMoreFilteredData() {
-    // currInstance,
-    // currDatabase,
-    // totalEvents,
-    // queryParams
-      let URI;
-      // if (queryParams) {
-      if (queryParams.keynameFilter)
-        URI = `/api/v2/events/totals/${currInstance}/${currDatabase}/?totalEvents=${totalEvents}&keynameFilter=${queryParams.keynameFilter}`;
-      if (queryParams.filterType)
-        URI = `/api/v2/events/totals/${currInstance}/${currDatabase}/?totalEvents=${totalEvents}&keynameFilter=${queryParams.filterType}`;
-      console.log("URI in handleSubmit FETCH", URI);
+      const URI = `/api/v2/events/totals/${currInstance}/${currDatabase}/?eventTotal=${totalEvents}&keynameFilter=${queryParams.keynameFilter}`;
+      console.log("URI in getMoreFiltered FETCH", URI);
       fetch(URI)
         .then((res) => res.json())
         .then((response) => {
           const eventTotal = response.eventTotal;
           const eventCount = response.eventTotals[0].eventCount;
-          const dataCopy = Object.assign({}, this.state.data);
-          const time = new Date(response.eventTotals[0].end_time)
-            .toString("MMddd")
-            .slice(16, 24);
-          dataCopy.labels.push(time);
-          dataCopy.datasets[0].data.push(eventCount);
+          console.log("this.state looking for DATA", self.state);
+          const dataCopy = Object.assign({}, self.state.data);
+          for (let i = response.eventTotals.length - 1; i >= 0; i--) {
+            const time = new Date(response.eventTotals[i].end_time)
+              .toString("MMddd")
+              .slice(16, 24);
 
-          this.setState({
-            ...this.state,
+            dataCopy.labels.push(time);
+            dataCopy.datasets[0].data.push(response.eventTotals[i].eventCount);
+          }
+          console.log("this.filterInterval");
+          const newInt = self.state.intervals + 1;
+
+          self.setState({
+            ...self.state,
             totalEvents: eventTotal,
             data: dataCopy,
+            intervalId: self.intervalID,
           });
         });
 
@@ -224,33 +220,56 @@ class EventTotalsChart extends Component {
     });
   }
 
-  clearIntFilter() {
-    clearInterval(this.state.intervalId);
-    this.setState({
-      intervalStart: false,
-      filterIntervalId: 0,
-    });
-  }
+  // clearIntFilter() {
+  //   clearInterval(this.state.filterIntervalId);
+  //   this.setState({
+  //     intervalStart: false,
+  //     filterIntervalId: 0,
+  //   });
+  // }
   resetState() {
-    // const newDatasets= [];
-    // const newLabels = [];
     const newState = Object.assign({}, this.state);
-    newState.labels = [];
+    this.clearInt();
+    newState.data.labels = [];
     newState.data.datasets[0].data = [];
+    newState.totalEvents = 0;
+    console.log("newstate", newState);
     this.setState({
-      newState,
+      ...newState,
     });
+    console.log("STATE AFTER RESET STATE", this.state);
   }
 
   render() {
     return (
       <div>
+        <h3>Events Over Time</h3>
+        <EventsChartFilterNav
+          getInitialData={this.getInitialData}
+          getMoreData={this.getMoreData}
+          setInt={this.setInt}
+          clearInt={this.clearInt}
+          intervalStart={this.state.intervalStart}
+          intervalId={this.state.intervalId}
+          resetState={this.resetState}
+          currInstance={this.props.currInstance}
+          currDatabase={this.props.currDatabase}
+          totalEvents={this.state.totalEvents}
+          getInitialFilteredData={this.getInitialFilteredData}
+          getMoreFilteredData={this.getMoreFilteredData}
+          setIntFilter={this.setIntFilter}
+        />
+
         <Line
+          ref={(reference) => (this.chartReference = reference)}
           data={this.state.data}
-          height={400}
+          height={200}
           width={600}
           options={{
             responsive: true,
+            layout: {
+              padding: 10,
+            },
             animation: {
               duration: 0,
             },
@@ -259,7 +278,7 @@ class EventTotalsChart extends Component {
                 pan: {
                   enabled: true,
                   mode: "xy",
-                  speed: 7,
+                  speed: 10,
                 },
                 zoom: {
                   wheel: {
@@ -280,7 +299,14 @@ class EventTotalsChart extends Component {
                 limits: {
                   y: {
                     min: 0,
-                    // minRange: Math.max(...props.data.datasets.data) + 50,
+                    // minRange: Math.max(...this.props.data.datasets.data) + 50,
+                  },
+                },
+                legends: {
+                  labels: {
+                    font: {
+                      family: " 'Nunito Sans', 'sans-serif'",
+                    },
                   },
                 },
               },
@@ -301,6 +327,7 @@ class EventTotalsChart extends Component {
                 },
                 grid: {
                   display: false,
+                  borderColor: "white",
                 },
               },
               y: {
@@ -311,6 +338,7 @@ class EventTotalsChart extends Component {
                 },
                 grid: {
                   display: false,
+                  borderColor: "white",
                 },
                 ticks: {
                   major: {
@@ -324,21 +352,9 @@ class EventTotalsChart extends Component {
               },
             },
           }}
-          style={{ backgroundColor: "black" }}></Line>
-        <EventsChartFilterNav
-          getInitialData={this.getInitialData}
-          getMoreData={this.getMoreData}
-          setInt={this.setInt}
-          clearInt={this.clearInt}
-          intervalStart={this.state.intervalStart}
-          resetState={this.resetState}
-          currInstance={this.props.currInstance}
-          currDatabase={this.props.currDatabase}
-          totalEvents={this.props.totalEvents}
-          getInitialFilteredData={this.getInitialFilteredData}
-          getMoreFilteredData={this.getMoreFilteredData}
-          setIntFilter={this.setIntFilter}
-        />
+          style={{ backgroundColor: "rgba(49, 51, 51)" }}></Line>
+
+        <hr></hr>
       </div>
     );
   }

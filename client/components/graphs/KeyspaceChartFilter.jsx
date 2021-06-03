@@ -54,52 +54,79 @@ export default function KeyspaceChartFilter(props) {
   }
   // const clearFilter = () => {
   //      setValue('');
-  //   setCategory('');
+
   // }
 
-  function clearFilter() {
-    setValue("");
-    setCategory("");
-    props.updateCurrDisplay({ filterType: "keyName", filterValue: "" });
-    props.updateCurrDisplay({ filterType: "keyType", filterValue: "" });
-    const queryOptions = {
-      pageSize: props.pageSize,
-      pageNum: props.pageNum,
-      refreshScan: 0,
-      keyNameFilter: props.currDisplay.keyNameFilter,
-      keyTypeFilter: props.currDisplay.keyTypeFilter,
-    };
-    props.changeKeyspacePage(
-      props.currInstance,
-      props.currDatabase,
-      queryOptions
-    );
+  function clearFilter(e) {
+    // e.preventDefault();
+    props.clearInt();
+    props.resetState();
+    props.getInitialData();
+    props.getMoreData();
+    setValueKey("");
+    document.getElementById("my-text-field").value = "";
+    // setCategory("");
+    // props.updateCurrDisplay({ filterType: "keyName", filterValue: "" });
+    // props.updateCurrDisplay({ filterType: "keyType", filterValue: "" });
+    // const queryOptions = {
+    //   pageSize: props.pageSize,
+    //   pageNum: props.pageNum,
+    //   refreshScan: 0,
+    //   keyNameFilter: props.currDisplay.keyNameFilter,
+    //   keyTypeFilter: props.currDisplay.keyTypeFilter,
+    // };
+    // props.changeKeyspacePage(
+    //   props.currInstance,
+    //   props.currDatabase,
+    //   queryOptions
+    // );
   }
 
   const newArea = [];
-
+  console.log("props in KSCHARTFILTER", props);
   return (
     <div className='graph-search-filters'>
       <FormControl className={classes.formControl}>
         <TextField
-          id='standard-secondary'
+          id='my-text-field'
           label='key name filter'
           color='secondary'
           onChange={handleChangeKey}
         />
       </FormControl>
-      <div
-        className='graph-filter-buttons-container'
-      >
+      <div className='graph-filter-buttons-container'>
         <Button onClick={clearFilter} color='default'>
           Clear Filter
         </Button>
         <Button
           onClick={(e) => {
             e.preventDefault();
+            // e.preventDefault();
+            console.log("props in onclick function", props);
             console.log("valueKey", valueKey);
-            const params = { keynameFilter: valueKey };
-            handleSubmit(props.currInstance, props.currDatabase, params);
+            const params = {
+              keynameFilter: valueKey,
+            };
+            // function timeout() {
+            //   this.props.setIntFilter(
+            //     this.props.currInstance,
+            //     this.props.currDatabase,
+            //     this.props.totalEvents,
+            //     queryParams
+            //   );
+            // }
+
+            props.getInitialFilteredData(
+              props.currInstance,
+              props.currDatabase,
+              params
+            );
+            props.setIntFilter(
+              props.currInstance,
+              props.currDatabase,
+              props.totalEvents,
+              params
+            );
           }}
           color='default'>
           Apply Filter
