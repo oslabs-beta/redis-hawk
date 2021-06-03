@@ -81,8 +81,23 @@ function KeyspaceTable(props) {
   const data =
     props.keyspace[props.currInstance - 1].keyspaces[props.currDatabase].data;
 
+  //replace all objects in an array with strings
+
   for (let i = 0; i < data.length; i += 1) {
     data[i].id = i;
+    // let hashData = makeString(data[i]);
+    if (data[i].type === 'hash') {
+      let obj = data[i].value;
+      console.log('obj', obj);
+      let objArray = Object.keys(obj);
+      let newString = '';
+      objArray.forEach((el) => {
+        newString += `${el}: ${obj[el]}, `;
+      });
+      console.log(newString);
+      data[i].value = newString;
+      console.log('my new hash', data[i]);
+    }
   }
 
   // console.log('data in keyspace table', data);
