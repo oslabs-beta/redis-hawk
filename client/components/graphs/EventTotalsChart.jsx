@@ -93,9 +93,10 @@ class EventTotalsChart extends Component {
         });
       });
   }
-
+  
   getInitialFilteredData(currInstance, currDatabase, queryParams) {
     this.clearInt();
+    this.resetState();
     console.log(
       "queryParams.keynameFilter in getInitialFilteredData",
       queryParams.keynameFilter
@@ -245,6 +246,7 @@ class EventTotalsChart extends Component {
     const newState = Object.assign({}, this.state);
     newState.data.labels = [];
     newState.data.datasets[0].data = [];
+    newState.totalEvents = 0;
     this.setState({
       ...newState,
     });

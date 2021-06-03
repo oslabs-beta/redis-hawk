@@ -179,11 +179,9 @@ class EventsChartFilter extends Component {
             Clear
           </Button>
           <Button
-            onClick={(e) => {
-              e.preventDefault();
+            onClick={() => {
+              // e.preventDefault();
               console.log("this.props in onclick function", this.props);
-              this.props.clearInt();
-              this.props.resetState();
               console.log("valueKey", this.state.valueKey);
               const params = {
                 keynameFilter: this.state.valueKey,
