@@ -75,8 +75,12 @@ export default function SearchFilter(props) {
   function clearFilter() {
     setValue('');
     setCategory('');
+    document.getElementById('standard-secondary').value = '';
+
     props.updateCurrDisplay({ filterType: 'keyName', filterValue: '' });
     props.updateCurrDisplay({ filterType: 'keyType', filterValue: '' });
+    console.log('value', value);
+    console.log('category', category);
     const queryOptions = {
       pageSize: props.pageSize,
       pageNum: props.pageNum,
@@ -94,6 +98,8 @@ export default function SearchFilter(props) {
   function clearEventFilter() {
     setValue('');
     setCategory('');
+    document.getElementById('standard-secondary').value = '';
+
     props.updateCurrDisplay({ filterType: 'keyName', filterValue: '' });
     props.updateCurrDisplay({ filterType: 'keyEvent', filterValue: '' });
     const queryOptions = {
@@ -114,7 +120,7 @@ export default function SearchFilter(props) {
 
   if (props.currPage === 'keyspace') {
     return (
-      <div style={{ width: '75%', display: 'flex', flexDirection: 'column' }}>
+      <div className='search-filters'>
         <FormControl className={classes.formControl}>
           <TextField
             id='standard-secondary'
@@ -124,9 +130,9 @@ export default function SearchFilter(props) {
           />
         </FormControl>
         <FormControl className={classes.formControl}>
-          <InputLabel htmlFor='grouped-select'>key type filter</InputLabel>
+          <InputLabel color='secondary' htmlFor='grouped-select'>key type filter</InputLabel>
           <Select defaultValue='' id='grouped-select' onChange={selectChange}>
-            <MenuItem value=''>
+            <MenuItem value='' selected>
               <em>None</em>
             </MenuItem>
             <MenuItem value={'string'}>string</MenuItem>
@@ -143,10 +149,12 @@ export default function SearchFilter(props) {
             justifyContent: 'center',
             alignItem: 'center',
           }}
+          className='filter-buttons-container'
         >
           <Button onClick={clearFilter} color='default'>
             Clear
           </Button>
+
           <Button onClick={handleSubmit} color='default'>
             Filter
           </Button>
@@ -156,10 +164,9 @@ export default function SearchFilter(props) {
       </div>
     );
 
-    ////////////////////////
   } else if (props.currPage === 'events') {
     return (
-      <div style={{ width: '75%', display: 'flex', flexDirection: 'column' }}>
+      <div className='search-filters'>
         <FormControl className={classes.formControl}>
           <TextField
             id='standard-secondary'
@@ -191,6 +198,7 @@ export default function SearchFilter(props) {
             justifyContent: 'center',
             alignItem: 'center',
           }}
+          className='filter-buttons-container'
         >
           <Button onClick={clearEventFilter} color='default'>
             Clear
