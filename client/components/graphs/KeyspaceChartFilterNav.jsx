@@ -7,7 +7,7 @@ class KeyspaceChartFilterNav extends Component {
     super(props);
   }
   render() {
-    console.log("this.props in EventsChartFilter", this.props);
+    console.log("this.props in KEYSPACECHARTFILTERNAV", this.props);
     return (
       <div className='graph-filter-nav-container'>
         <KeyspaceChartFilter
@@ -17,11 +17,17 @@ class KeyspaceChartFilterNav extends Component {
           filterBy={this.props.filterBy}
           setInt={this.props.setInt}
           clearInt={this.props.clearInt}
+          intervalStart={this.props.intervalStart}
+          getInitialFilteredData={this.props.getInitialFilteredData}
+          setIntFilter={this.props.setIntFilter}
+          resetState={this.props.resetState}
+          totalEvents={this.props.totalEvents}
+          getMoreData={this.props.getMoreData}
+          getInitialData={this.props.getInitialData}
         />
-        <div 
+        <div
           className='graph-filter-button-container'
-          id='keyspace-graph-filter-buttons-container' 
-        >
+          id='keyspace-graph-filter-buttons-container'>
           <button
             className='toggleInterval'
             id='clear-interval-button'
@@ -42,8 +48,9 @@ class KeyspaceChartFilterNav extends Component {
               e.preventDefault();
               this.props.clearInt();
               this.props.resetState();
-              this.props.getMoreData();
-              this.props.setInt();
+              this.props.getInitialData();
+              this.props.getMoreDat();
+              document.getElementById("my-text-field").value = "";
             }}>
             Refresh
           </button>

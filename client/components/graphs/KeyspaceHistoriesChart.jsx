@@ -4,6 +4,7 @@ import zoomPlugin from "chartjs-plugin-zoom";
 import Hammer from "hammerjs";
 import Chart from "chart.js/auto";
 import KeyspaceChartFilterNav from "./KeyspaceChartFilterNav.jsx";
+import "../styles/graphs.scss";
 
 class KeyspaceHistoriesChart extends Component {
   constructor(props) {
@@ -33,6 +34,8 @@ class KeyspaceHistoriesChart extends Component {
     this.setInt = this.setInt.bind(this);
     this.clearInt = this.clearInt.bind(this);
     this.resetState = this.resetState.bind(this);
+    this.getInitialFilteredData = this.getInitialFilteredData.bind(this);
+    this.setIntFilter = this.setIntFilter.bind(this);
   }
 
   componentDidMount() {
@@ -83,8 +86,6 @@ class KeyspaceHistoriesChart extends Component {
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {
-
- 
         const historyCount = response.historyCount;
         const keyCount = response.histories[0].keyCount;
         const dataCopy = Object.assign({}, this.state.data);
@@ -108,17 +109,110 @@ class KeyspaceHistoriesChart extends Component {
         });
       });
   }
+  getInitialFilteredData(currInstance, currDatabase, queryParams) {
+    if (this.intervalID) {
+      this.clearInt();
+    }
+    this.resetState();
+    const URI = `/api/v2/keyspaces/histories/${currInstance}/${currDatabase}/?historiesCount=0&keynameFilter=${queryParams.keynameFilter}`;
+
+    console.log("URI in handleSubmit FETCH", URI);
+    fetch(URI)
+      .then((res) => res.json())
+      .then((response) => {
+        const allHistories = response;
+
+        const dataCopy = Object.assign({}, this.state.data);
+        // const labels = [];
+        // const datasets = [];
+        dataCopy.labels = [];
+        dataCopy.datasets[0].data = [];
+        for (let i = response.histories.length - 1; i >= 0; i--) {
+          const time = new Date(response.histories[i].end_time)
+            .toString("MMddd")
+            .slice(16, 24);
+
+          dataCopy.labels.push(time);
+          dataCopy.datasets[0].data.push(response.histories[i].keyCount);
+        }
+        // this.setState({
+        //   ...this.state,
+        //   historyCount: allHistories.historyCount,
+        //   data: dataCopy,
+        // });
+        this.setState(() => {
+          return {
+            ...this.state,
+            historyCount: allHistories.historyCount,
+            data: dataCopy,
+          };
+        });
+      });
+  }
+  setIntFilter(currInstance, currDatabase, totalEvents, queryParams) {
+    console.log("props.intervalStart", this.state.intervalStart);
+
+    if (this.intervalID) {
+      this.clearInt();
+    }
+    let self = this;
+    function getMoreFilteredData() {
+      const URI = `/api/v2/keyspaces/histories/${currInstance}/${currDatabase}/?historiesCount=${self.state.historyCount}&keynameFilter=${queryParams.keynameFilter}`;
+      console.log("URI in getMoreFiltered FETCH", URI);
+      fetch(URI)
+        .then((res) => res.json())
+        .then((response) => {
+          console.log(
+            "response in KEYSPACES HISTORIES GETMOREFILTERED of Filter",
+            response
+          );
+          const allHistories = response;
+          const dataCopy = Object.assign({}, self.state.data);
+          // const labels = [];
+          // const datasets = [];
+          dataCopy.labels = [];
+          dataCopy.datasets[0].data = [];
+          for (let i = response.histories.length - 1; i >= 0; i--) {
+            const time = new Date(response.histories[i].end_time)
+              .toString("MMddd")
+              .slice(16, 24);
+
+            dataCopy.labels.push(time);
+            dataCopy.datasets[0].data.push(response.histories[i].keyCount);
+          }
+          // this.setState({
+          //   ...this.state,
+          //   historyCount: allHistories.historyCount,
+          //   data: dataCopy,
+          // });
+          self.setState(() => {
+            return {
+              ...self.state,
+              historyCount: allHistories.historyCount,
+              data: dataCopy,
+            };
+          });
+        });
+
+      // setTimeout(getMoreFilteredData, 7000);
+    }
+    const id = setInterval(getMoreFilteredData, 7000);
+    this.setState({
+      intervalStart: true,
+      filterIntervalId: id,
+    });
+  }
   setInt() {
     this.intervalID = setInterval(this.getMoreData, 7000);
     if (!this.state.intervalStart) {
       this.setState({
         intervalStart: true,
       });
-        //   this.setState(()=>{
-        //     return{
-        //     intervalStart: true,
-        //   }
-        // });
+      //   this.setState(()=>{
+      //     return{
+      //     intervalStart: true,
+      //   }
+      // });
     }
   }
   clearInt() {
@@ -129,7 +223,7 @@ class KeyspaceHistoriesChart extends Component {
     this.setState(() => {
       return {
         intervalStart: false,
-      }
+      };
     });
     clearInterval(this.intervalID);
   }
@@ -150,12 +244,28 @@ class KeyspaceHistoriesChart extends Component {
   render() {
     return (
       <div>
+        <h3>Keyspaces Over Time</h3>
+        <KeyspaceChartFilterNav
+          getInitialData={this.getInitialData}
+          getMoreData={this.getMoreData}
+          setInt={this.setInt}
+          clearInt={this.clearInt}
+          intervalStart={this.state.intervalStart}
+          filterBy={this.state.filterBy}
+          resetState={this.resetState}
+          currInstance={this.props.currInstance}
+          currDatabase={this.props.currDatabase}
+          getInitialFilteredData={this.getInitialFilteredData}
+          setIntFilter={this.setIntFilter}
+        />
+
         <Line
           data={this.state.data}
-          height={400}
+          height={200}
           width={600}
           options={{
             responsive: true,
+            // maintainAspectRatio:false,
             animation: {
               duration: 0,
             },
@@ -164,7 +274,7 @@ class KeyspaceHistoriesChart extends Component {
                 pan: {
                   enabled: true,
                   mode: "xy",
-                  speed: 7,
+                  speed: 10,
                 },
                 zoom: {
                   wheel: {
@@ -185,7 +295,14 @@ class KeyspaceHistoriesChart extends Component {
                 limits: {
                   y: {
                     min: 0,
-                    // minRange: Math.max(...props.data.datasets.data) + 50,
+                    // minRange: Math.max(...this.props.data.datasets.data) + 50,
+                  },
+                },
+                legends: {
+                  labels: {
+                    font: {
+                      family: " 'Nunito Sans', 'sans-serif'",
+                    },
                   },
                 },
               },
@@ -206,6 +323,7 @@ class KeyspaceHistoriesChart extends Component {
                 },
                 grid: {
                   display: false,
+                  borderColor: "white",
                 },
               },
               y: {
@@ -216,6 +334,7 @@ class KeyspaceHistoriesChart extends Component {
                 },
                 grid: {
                   display: false,
+                  borderColor: "white",
                 },
                 ticks: {
                   major: {
@@ -229,18 +348,7 @@ class KeyspaceHistoriesChart extends Component {
               },
             },
           }}
-          style={{ backgroundColor: "black" }}></Line>
-        <KeyspaceChartFilterNav
-          getInitialData={this.getInitialData}
-          getMoreData={this.getMoreData}
-          setInt={this.setInt}
-          clearInt={this.clearInt}
-          intervalStart={this.state.intervalStart}
-          filterBy={this.state.filterBy}
-          resetState={this.resetState}
-          currInstance={this.props.currInstance}
-          currDatabase={this.props.currDatabase}
-        />
+          style={{ backgroundColor: "rgba(49, 51, 51)" }}></Line>
       </div>
     );
   }

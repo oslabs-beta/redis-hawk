@@ -139,9 +139,16 @@ class EventsChartFilter extends Component {
   //   setCategory('');
   // }
 
-  clearFilter() {
+  clearFilter(e) {
+    e.preventDefault();
+    document.getElementById('standard-secondary').value = "";
+    document.getElementById("event-type-filter").value = "";
+    this.props.clearInt();
+    this.props.resetState();
+    this.props.getInitialData();
+    this.props.getMoreData();
+    this.props.setInt();
     this.setState({
-      ...state,
       valueKey: "",
       valueEvent: "",
     });
@@ -162,20 +169,19 @@ class EventsChartFilter extends Component {
         </FormControl>
         <FormControl>
           <TextField
-            id='standard-secondary'
+            id='event-type-filter'
             label='event type filter'
             color='secondary'
             onChange={this.handleChangeEvent}
           />
         </FormControl>
-        <div
-          className='graph-filter-buttons-container'
-          >
+        <div className='graph-filter-buttons-container'>
           <Button onClick={this.clearFilter} color='default'>
             Clear Filter
           </Button>
           <Button
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               this.props.resetState();
               // e.preventDefault();
               console.log("this.props in onclick function", this.props);
