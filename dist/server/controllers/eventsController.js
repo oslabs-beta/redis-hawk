@@ -1,16 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-;
 var eventsController = {
     refreshEventLog: function (req, res, next) {
         var refreshData = req.query.refreshData;
-        if (refreshData === '0')
+        if (refreshData === "0")
             return next();
-        if (refreshData !== '1' && refreshData !== undefined)
+        if (refreshData !== "1" && refreshData !== undefined)
             return next({
-                log: 'Request included invalid refreshData query parameter',
+                log: "Request included invalid refreshData query parameter",
                 status: 400,
-                message: { err: 'Please provide a valid refreshData value: 1 or 0' }
+                message: { err: "Please provide a valid refreshData value: 1 or 0" },
             });
         var dbIndex = +req.params.dbIndex;
         if (dbIndex >= 0) {
@@ -46,7 +45,7 @@ var eventsController = {
                 });
             }
             var eventTotal = eventLogSnapshot.length;
-            var startIndex = ((validatedPageNum - 1) * validatedPageSize);
+            var startIndex = (validatedPageNum - 1) * validatedPageSize;
             var endIndex = validatedPageNum * validatedPageSize;
             return [eventTotal, eventLogSnapshot.slice(startIndex, endIndex)];
         };
@@ -58,7 +57,7 @@ var eventsController = {
                 eventTotal: eventTotal,
                 pageSize: validatedPageSize,
                 pageNum: validatedPageNum,
-                data: paginatedData
+                data: paginatedData,
             };
         }
         else {
@@ -74,13 +73,13 @@ var eventsController = {
                         eventTotal: eventTotal,
                         pageSize: validatedPageSize,
                         pageNum: validatedPageNum,
-                        data: paginatedData
+                        data: paginatedData,
                     });
                     idx += 1;
                 }
                 eventsResponse.data.push({
                     instanceId: monitor.instanceId,
-                    keyspaces: eventsData
+                    keyspaces: eventsData,
                 });
             }
             res.locals.events = eventsResponse;
@@ -88,12 +87,14 @@ var eventsController = {
         return next();
     },
     validateRequestType: function (req, res, next) {
-        if ((req.query.timeInterval && req.query.eventTotal)
-            || (!req.query.timeInterval && !req.query.eventTotal)) {
+        if ((req.query.timeInterval && req.query.eventTotal) ||
+            (!req.query.timeInterval && !req.query.eventTotal)) {
             return next({
-                log: 'Request did not provide valid timeInterval or eventTotal query parameters',
+                log: "Request did not provide valid timeInterval or eventTotal query parameters",
                 status: 400,
-                message: { err: 'Please make sure to pass either the timeInterval or eventTotal query parameter, but not both' }
+                message: {
+                    err: "Please make sure to pass either the timeInterval or eventTotal query parameter, but not both",
+                },
             });
         }
         return next();
@@ -104,36 +105,43 @@ var eventsController = {
         var timeInterval = +req.query.timeInterval;
         if (req.query.timeInterval && isNaN(timeInterval))
             return next({
-                log: 'Client provided an invalid timeInterval query parameter value',
+                log: "Client provided an invalid timeInterval query parameter value",
                 status: 400,
-                message: { err: 'Please provide a valid timeInterval value - a positive integer' }
+                message: {
+                    err: "Please provide a valid timeInterval value - a positive integer",
+                },
             });
         var responseData = {
             eventTotal: eventLog.eventTotal,
-            eventTotals: []
+            eventTotals: [],
         };
         var intervalData = {
             start_time: Date.now() - timeInterval,
             end_time: Date.now(),
-            eventCount: 0
+            eventCount: 0,
         };
         var current = eventLog.tail;
-        var keynameFilter = req.query.keynameFilter ? req.query.keynameFilter.toString() : '';
-        var eventTypeFilters = req.query.eventTypes ? req.query.eventTypes.toString().split(',') : [];
+        var keynameFilter = req.query.keynameFilter
+            ? req.query.keynameFilter.toString()
+            : "";
+        var eventTypeFilters = req.query.eventTypes
+            ? req.query.eventTypes.toString().split(",")
+            : [];
         while (current) {
             while (current.timestamp < intervalData.start_time) {
                 responseData.eventTotals.push(intervalData);
                 intervalData = {
                     start_time: intervalData.start_time - timeInterval,
                     end_time: intervalData.start_time,
-                    eventCount: 0
+                    eventCount: 0,
                 };
             }
             if (eventTypeFilters.length === 0) {
                 if (current.key.includes(keynameFilter))
                     intervalData.eventCount += 1;
             }
-            else if (current.key.includes(keynameFilter) && eventTypeFilters.includes(current.event)) {
+            else if (current.key.includes(keynameFilter) &&
+                eventTypeFilters.includes(current.event)) {
                 intervalData.eventCount += 1;
             }
             current = current.previous;
@@ -146,25 +154,33 @@ var eventsController = {
         var dbIndex = +req.params.dbIndex;
         var eventLog = res.locals.monitors[0].keyspaces[dbIndex].eventLog;
         var eventTotalParam = +req.query.eventTotal;
-        if (eventTotalParam > eventLog.eventTotal
-            || (eventTotalParam && isNaN(eventTotalParam))) {
+        if (eventTotalParam > eventLog.eventTotal ||
+            (eventTotalParam && isNaN(eventTotalParam))) {
+            console.log("req.query", req.query);
             return next({
-                log: 'Client provided an invalid eventTotal query parameter value',
+                log: "Client provided an invalid eventTotal query parameter value",
                 status: 400,
-                message: { err: 'Please provide an valid eventTotal query parameter; utilize a value obtained from a previous response' }
+                message: {
+                    err: "Please provide an valid eventTotal query parameter; utilize a value obtained from a previous response",
+                },
             });
         }
         var eventCountToTraverse = eventLog.eventTotal - eventTotalParam;
         var eventCount = 0;
         var current = eventLog.tail;
-        var keynameFilter = req.query.keynameFilter ? req.query.keynameFilter.toString() : '';
-        var eventTypeFilters = req.query.eventTypes ? req.query.eventTypes.toString().split(',') : [];
+        var keynameFilter = req.query.keynameFilter
+            ? req.query.keynameFilter.toString()
+            : "";
+        var eventTypeFilters = req.query.eventTypes
+            ? req.query.eventTypes.toString().split(",")
+            : [];
         while (eventCountToTraverse > 0) {
             if (eventTypeFilters.length === 0) {
                 if (current.key.includes(keynameFilter))
                     eventCount += 1;
             }
-            else if (current.key.includes(keynameFilter) && eventTypeFilters.includes(current.event)) {
+            else if (current.key.includes(keynameFilter) &&
+                eventTypeFilters.includes(current.event)) {
                 eventCount += 1;
             }
             current = current.previous;
@@ -172,12 +188,14 @@ var eventsController = {
         }
         res.locals.eventTotals = {
             eventTotal: eventLog.eventTotal,
-            eventTotals: [{
+            eventTotals: [
+                {
                     end_time: Date.now(),
-                    eventCount: eventCount
-                }]
+                    eventCount: eventCount,
+                },
+            ],
         };
         return next();
-    }
+    },
 };
 exports.default = eventsController;

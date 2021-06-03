@@ -151,7 +151,7 @@ class EventsChartFilter extends Component {
     const newArea = [];
 
     return (
-      <div style={{ width: "75%", display: "flex", flexDirection: "column" }}>
+      <div className='graph-search-filters'>
         <FormControl>
           <TextField
             id='standard-secondary'
@@ -163,20 +163,16 @@ class EventsChartFilter extends Component {
         <FormControl>
           <TextField
             id='standard-secondary'
-            label='event-type filter'
+            label='event type filter'
             color='secondary'
             onChange={this.handleChangeEvent}
           />
         </FormControl>
         <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItem: "center",
-          }}>
+          className='graph-filter-buttons-container'
+          >
           <Button onClick={this.clearFilter} color='default'>
-            Clear
+            Clear Filter
           </Button>
           <Button
             onClick={() => {
@@ -210,9 +206,9 @@ class EventsChartFilter extends Component {
               );
             }}
             color='default'>
-            Filter
+            Apply Filter
           </Button>
-          <Button color='default'>+</Button>
+          {/* <Button color='default'>+</Button> */}
         </div>
         <div>{newArea}</div>
       </div>

@@ -2,6 +2,8 @@ import * as React from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 import { makeStyles } from '@material-ui/core/styles';
 
+import '../styles/tables.scss';
+
 function KeyspaceTable(props) {
   // console.log('props in keyspace table', props);
 
@@ -101,19 +103,19 @@ function KeyspaceTable(props) {
         columns={[
           {
             field: 'key',
-            width: 150,
             // headerAlign: 'center',
+            flex: 0.2,
             headerClassName: 'table-header',
           },
           {
             field: 'value',
-            width: 475,
+            flex: 0.63,
             // headerAlign: 'center',
             headerClassName: 'table-header',
           },
           {
             field: 'type',
-            width: 125,
+            flex: 0.17,
             // headerAlign: 'center',
             headerClassName: 'table-header',
           },
