@@ -1,7 +1,21 @@
 {
   "name": "redis-hawk",
   "version": "1.0.0",
-  "description": "",
+  "description": "granular redis monitoring",
+  "license": "MIT",
+  "contributors": [
+    "Abigail Gjurich",
+    "Arthur Sato",
+    "James Espy",
+    "Wesley Jia"
+  ],
+  "keywords": [
+    "redis",
+    "redis monitoring",
+    "monitoring",
+    "redis visualizer",
+    "redis GUI"
+  ],
   "main": "./client/index.js",
   "scripts": {
     "build": "webpack",
