@@ -10,7 +10,6 @@ redis-hawk is an easy-to-use monitoring and visualizing web application for unde
 It can be deployed locally on your desktop or on a server for continuous and remote monitoring of your Redis deployment.
 
 ## Table of Contents
----
 
 * [Features](##Features)
 * [Demo](##Demo)
@@ -19,7 +18,6 @@ It can be deployed locally on your desktop or on a server for continuous and rem
 * [Feature Roadmap](##feature-roadmap)
 
 ## Features
----
 
 redis-hawk allows you to monitor the keyspace and its events within all databases of any number of deployed instances.
 
@@ -29,7 +27,6 @@ redis-hawk allows you to monitor the keyspace and its events within all database
 * Utilize flexible filters to filter based on a keyname pattern, specific data type, and/or event type.
 
 ## Demo - TBD
----
 
 (screenshot initial state of app)
 
@@ -43,7 +40,6 @@ redis-hawk allows you to monitor the keyspace and its events within all database
 
 
 ## Installation
----
 
 redis-hawk is a web application that you can either run locally or deploy on a server for continuous and remote monitoring.
 
@@ -67,7 +63,6 @@ npm run dev
 
 Then, please configure your redis-hawk monitoring options as decribed in the subsequent [Configuration](##Configuration) section.
 ## Configuration
----
 
 Currently, configuration for your redis-hawk monitoring deployment must be managed via a `config.json`, located in the root directory of the repository. We will aim to support configuration directly via the web application in the near future.
 
@@ -102,7 +97,6 @@ The `config.json` defaults to monitoring the default local Redis instance via th
 
 <a name="feature-roadmap"></a>
 ## Feature Roadmap
----
 
 The development team intends to continue improving redis-hawk and adding more features. Future features will include:
 
