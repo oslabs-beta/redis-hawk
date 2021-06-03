@@ -8,15 +8,11 @@ var path_1 = __importDefault(require("path"));
 var app = express_1.default();
 var connectionsRouter_1 = __importDefault(require("./routers/connectionsRouter"));
 var eventsRouter_1 = __importDefault(require("./routers/eventsRouter"));
-var eventsRouter_v2_1 = __importDefault(require("./routers/eventsRouter-v2"));
 var keyspacesRouter_1 = __importDefault(require("./routers/keyspacesRouter"));
-var keyspacesRouter_v2_1 = __importDefault(require("./routers/keyspacesRouter-v2"));
 var PORT = +process.env.PORT || 3000;
 app.use('/api/connections', connectionsRouter_1.default);
-app.use('/api/events', eventsRouter_1.default);
-app.use('/api/v2/events', eventsRouter_v2_1.default);
-app.use('/api/keyspaces', keyspacesRouter_1.default);
-app.use('/api/v2/keyspaces', keyspacesRouter_v2_1.default);
+app.use('/api/v2/events', eventsRouter_1.default);
+app.use('/api/v2/keyspaces', keyspacesRouter_1.default);
 app.get('/dist/bundle.js', function (req, res) {
     res.status(200).sendFile(path_1.default.resolve(__dirname, '../bundle.js'));
 });

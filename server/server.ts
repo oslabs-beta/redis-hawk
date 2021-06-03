@@ -4,25 +4,16 @@ const app = express();
 
 import connectionsRouter from './routers/connectionsRouter';
 import eventsRouter from './routers/eventsRouter';
-import eventsRouterv2 from './routers/eventsRouter-v2';
 import keyspacesRouter from './routers/keyspacesRouter';
-import keyspacesRouterv2 from './routers/keyspacesRouter-v2';
 
 const PORT = +process.env.PORT || 3000;
 
-//connections routes
 app.use('/api/connections', connectionsRouter);
-//events routes
-app.use('/api/events', eventsRouter);
-app.use('/api/v2/events', eventsRouterv2);
-
-// app.use('/api/histories', historiesRouter);
-
-app.use('/api/keyspaces', keyspacesRouter);
-app.use('/api/v2/keyspaces', keyspacesRouterv2);
+app.use('/api/v2/events', eventsRouter);
+app.use('/api/v2/keyspaces', keyspacesRouter);
 
 app.get('/dist/bundle.js', (req: express.Request, res: express.Response): void => {
-  res.status(200).sendFile(path.resolve(__dirname, '../bundle.js')));
+  res.status(200).sendFile(path.resolve(__dirname, '../bundle.js'));
 })
 
 app.get('/', (req: express.Request, res: express.Response): void => {
