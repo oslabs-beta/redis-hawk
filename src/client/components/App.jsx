@@ -10,7 +10,7 @@ import { connect } from "react-redux";
 import * as actions from "../action-creators/connections";
 import * as keyspaceActions from "../action-creators/keyspaceConnections";
 import * as eventActions from "../action-creators/eventsConnections";
-import "../../node_modules/react-vis/dist/style.css";
+import "../../../node_modules/react-vis/dist/style.css";
 import Logo from '../redishawk-logo.svg';
 
 import './styles/app.global.scss';

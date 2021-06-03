@@ -3,12 +3,12 @@
     "target": "es5",
     "module": "CommonJS",
     "esModuleInterop": true,
-    "rootDir": "./server",
+    "rootDir": "src/server",
     "outDir": "./dist/server",
     "allowJs": true,
     "removeComments": true
   },
   "include": [
-    "./server"
+    "src/server"
   ]
 }

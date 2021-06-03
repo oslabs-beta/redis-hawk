@@ -1,4 +1,4 @@
-import eventSubject from "../../../client/reducers/eventsReducer";
+import eventSubject from "../../../src/client/reducers/eventsReducer";
 
 describe("events reducer", () => {
   let state;

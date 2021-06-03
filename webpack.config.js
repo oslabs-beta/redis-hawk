@@ -5,7 +5,7 @@ const webpack = require('webpack');
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 module.exports = {
-  entry: '/client/index.js',
+  entry: './src/client/index.js',
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, './dist'),
@@ -13,7 +13,7 @@ module.exports = {
   mode: isDevelopment ? 'development' : 'production',
   devServer: {
     publicPath: '/dist/',
-    contentBase: './server/assets',
+    contentBase: './src/server/assets',
     port: 8080,
     proxy: {
       '/api': 'http://localhost:3000/',

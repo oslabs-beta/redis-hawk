@@ -1,11 +1,11 @@
-import keyspaceSubject from "../../../client/reducers/keyspaceReducer";
-import databaseSubject from "../../../client/reducers/databaseReducer";
-import keygraphSubject from "../../../client/reducers/graphsReducer";
-import instanceInfoSubject from "../../../client/reducers/instanceInfoReducer";
-import currDisplaySubject from "../../../client/reducers/currentDisplayReducer";
-import pageSubject from "../../../client/reducers/pageReducer";
-import dataPageSubject from "../../../client/reducers/dataPageReducer";
-import instanceSubject from "../../../client/reducers/instanceReducer";
+import keyspaceSubject from "../../../src/client/reducers/keyspaceReducer";
+import databaseSubject from "../../../src/client/reducers/databaseReducer";
+import keygraphSubject from "../../../src/client/reducers/graphsReducer";
+import instanceInfoSubject from "../../../src/client/reducers/instanceInfoReducer";
+import currDisplaySubject from "../../../src/client/reducers/currentDisplayReducer";
+import pageSubject from "../../../src/client/reducers/pageReducer";
+import dataPageSubject from "../../../src/client/reducers/dataPageReducer";
+import instanceSubject from "../../../src/client/reducers/instanceReducer";
 // const keyspaceSubject = require('../../../client/reducers/keyspaceReducer.js');
 
 // const databaseSubject = require('../../../client/reducers/databaseReducer.js');

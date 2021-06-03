@@ -4,8 +4,8 @@ import {
   loadKeyspaceActionCreator,
   refreshKeyspaceActionCreator,
   changeKeyspacePageActionCreator,
-} from "../../../client/action-creators/keyspaceConnections";
-import * as actions from "../../../client/actions/actionTypes";
+} from "../../../src/client/action-creators/keyspaceConnections";
+import * as actions from "../../../src/client/actions/actionTypes";
 import fetchMock from "fetch-mock";
 import expect from "expect"; // You can use any testing library
 

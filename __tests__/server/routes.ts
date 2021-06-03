@@ -4,11 +4,11 @@ import { readFileSync } from 'fs';
 import * as redis from 'redis';
 import { promisify } from 'util'; //promisify some node-redis client functionality
 
-import app from '../../server/server';
-import redisMonitors from '../../server/redis-monitors/redis-monitors'
-import { recordKeyspaceHistory } from '../../server/redis-monitors/utils';
+import app from '../../src/server/server';
+import redisMonitors from '../../src/server/redis-monitors/redis-monitors'
+import { recordKeyspaceHistory } from '../../src/server/redis-monitors/utils';
 
-const testConnections = JSON.parse(readFileSync(resolve(__dirname, '../../server/tests-config/tests-config.json')).toString());
+const testConnections = JSON.parse(readFileSync(resolve(__dirname, '../../src/server/tests-config/tests-config.json')).toString());
 
 enum ENDPOINT_NAMES { KEYSPACES, KEYSPACE_HISTORIES, EVENTS, EVENT_TOTALS };
 

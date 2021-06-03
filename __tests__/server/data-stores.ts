@@ -1,4 +1,4 @@
-const { EventLog, KeyspaceEvent } = require('../../server/redis-monitors/models/data-stores');
+const { EventLog, KeyspaceEvent } = require('../../src/server/redis-monitors/models/data-stores');
 
 //These unit tests need to be updated based on changed data stores.
 //Route integration tests still provide coverage and are currently consistently passing.
