@@ -20,6 +20,7 @@ class EventsChartFilterNav extends Component {
           getInitialFilteredData={this.props.getInitialFilteredData}
           setIntFilter={this.props.setIntFilter}
           resetState={this.props.resetState}
+          totalEvents={this.props.totalEvents}
         />
         <button
           className='toggleInterval'

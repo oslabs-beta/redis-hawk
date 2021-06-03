@@ -189,21 +189,26 @@ class EventsChartFilter extends Component {
                 keynameFilter: this.state.valueKey,
                 eventTypes: this.state.valueEvent,
               };
-              function timeout() {
-                this.props.setIntFilter(
-                  this.props.currInstance,
-                  this.props.currDatabase,
-                  this.props.totalEvents,
-                  queryParams
-                );
-              }
+              // function timeout() {
+              //   this.props.setIntFilter(
+              //     this.props.currInstance,
+              //     this.props.currDatabase,
+              //     this.props.totalEvents,
+              //     queryParams
+              //   );
+              // }
 
               this.props.getInitialFilteredData(
                 this.props.currInstance,
                 this.props.currDatabase,
                 params
               );
-              setTimeout(timeout, 7000);
+              this.props.setIntFilter(
+                this.props.currInstance,
+                this.props.currDatabase,
+                this.props.totalEvents,
+                params
+              );
             }}
             color='default'>
             Filter

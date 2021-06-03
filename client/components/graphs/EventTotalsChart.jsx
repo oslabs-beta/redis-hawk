@@ -51,6 +51,7 @@ class EventTotalsChart extends Component {
       .then((res) => res.json())
       .then((response) => {
         const allEvents = response;
+        console.log("response in GETINIT FETCH", response);
         const dataCopy = Object.assign({}, this.state.data);
         dataCopy.labels = [];
 
@@ -85,7 +86,6 @@ class EventTotalsChart extends Component {
           .slice(16, 24);
         dataCopy.labels.push(time);
         dataCopy.datasets[0].data.push(eventCount);
-
         this.setState({
           ...this.state,
           totalEvents: eventTotal,
@@ -114,7 +114,7 @@ class EventTotalsChart extends Component {
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {
-        console.log("response in handleSubmit of Filter", response);
+        console.log("response in GETMOREFILTERED of Filter", response);
         const allEvents = response;
         const dataCopy = Object.assign({}, this.state.data);
         dataCopy.labels = [];
@@ -184,32 +184,40 @@ class EventTotalsChart extends Component {
   }
 
   setIntFilter(currInstance, currDatabase, totalEvents, queryParams) {
+    if (this.state.filterIntervalId){
+      this.clearIntFilter()
+    }
+    let self = this
     function getMoreFilteredData() {
-    // currInstance,
-    // currDatabase,
-    // totalEvents,
-    // queryParams
+      // currInstance,
+      // currDatabase,
+      // totalEvents,
+      // queryParams
       let URI;
       // if (queryParams) {
       if (queryParams.keynameFilter)
-        URI = `/api/v2/events/totals/${currInstance}/${currDatabase}/?totalEvents=${totalEvents}&keynameFilter=${queryParams.keynameFilter}`;
+        URI = `/api/v2/events/totals/${currInstance}/${currDatabase}/?eventTotal=${totalEvents}&keynameFilter=${queryParams.keynameFilter}`;
       if (queryParams.filterType)
-        URI = `/api/v2/events/totals/${currInstance}/${currDatabase}/?totalEvents=${totalEvents}&keynameFilter=${queryParams.filterType}`;
-      console.log("URI in handleSubmit FETCH", URI);
+        URI = `/api/v2/events/totals/${currInstance}/${currDatabase}/?eventTotal=${totalEvents}&keynameFilter=${queryParams.filterType}`;
+      console.log("URI in getMoreFiltered FETCH", URI);
       fetch(URI)
         .then((res) => res.json())
         .then((response) => {
           const eventTotal = response.eventTotal;
           const eventCount = response.eventTotals[0].eventCount;
-          const dataCopy = Object.assign({}, this.state.data);
-          const time = new Date(response.eventTotals[0].end_time)
-            .toString("MMddd")
-            .slice(16, 24);
-          dataCopy.labels.push(time);
-          dataCopy.datasets[0].data.push(eventCount);
+          console.log('this.state looking for DATA', self.state)
+          const dataCopy = Object.assign({}, self.state.data);
+          for (let i = response.eventTotals.length - 1; i >= 0; i--) {
+            const time = new Date(response.eventTotals[i].end_time)
+              .toString("MMddd")
+              .slice(16, 24);
 
-          this.setState({
-            ...this.state,
+            dataCopy.labels.push(time);
+            dataCopy.datasets[0].data.push(response.eventTotals[i].eventCount);
+          }
+          console.log('this.filterInterval')
+          self.setState({
+            ...self.state,
             totalEvents: eventTotal,
             data: dataCopy,
           });
@@ -225,7 +233,7 @@ class EventTotalsChart extends Component {
   }
 
   clearIntFilter() {
-    clearInterval(this.state.intervalId);
+    clearInterval(this.state.filterIntervalId);
     this.setState({
       intervalStart: false,
       filterIntervalId: 0,
@@ -235,11 +243,12 @@ class EventTotalsChart extends Component {
     // const newDatasets= [];
     // const newLabels = [];
     const newState = Object.assign({}, this.state);
-    newState.labels = [];
+    newState.data.labels = [];
     newState.data.datasets[0].data = [];
     this.setState({
-      newState,
+      ...newState,
     });
+    console.log("STATE AFTER RESET STATE", this.state)
   }
 
   render() {
@@ -334,7 +343,7 @@ class EventTotalsChart extends Component {
           resetState={this.resetState}
           currInstance={this.props.currInstance}
           currDatabase={this.props.currDatabase}
-          totalEvents={this.props.totalEvents}
+          totalEvents={this.state.totalEvents}
           getInitialFilteredData={this.getInitialFilteredData}
           getMoreFilteredData={this.getMoreFilteredData}
           setIntFilter={this.setIntFilter}

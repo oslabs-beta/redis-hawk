@@ -10,7 +10,7 @@ class KeyspaceHistoriesChart extends Component {
     super(props);
     this.state = {
       historyCount: 0,
-      filterBy: { eventTypes: "", keynameFilter: "" },
+      filterIntervalId: 0,
       data: {
         labels: [],
         datasets: [
@@ -38,7 +38,7 @@ class KeyspaceHistoriesChart extends Component {
   componentDidMount() {
     Chart.register(zoomPlugin);
     this.getInitialData();
-    setTimeout(setInterval(this.getMoreData, 20000), 10000);
+    setTimeout(this.setInt, 10000);
   }
 
   // if you want to test at a smaller interval, run npm run cp after changing
@@ -111,14 +111,14 @@ class KeyspaceHistoriesChart extends Component {
   setInt() {
     this.intervalID = setInterval(this.getMoreData, 7000);
     if (!this.state.intervalStart) {
-      // this.setState({
-      //   intervalStart: true,
-      // });
-          this.setState(()=>{
-            return{
-            intervalStart: true,
-          }
-        });
+      this.setState({
+        intervalStart: true,
+      });
+        //   this.setState(()=>{
+        //     return{
+        //     intervalStart: true,
+        //   }
+        // });
     }
   }
   clearInt() {
