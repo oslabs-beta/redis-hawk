@@ -9,13 +9,7 @@
     "James Espy",
     "Wesley Jia"
   ],
-  "keywords": [
-    "redis",
-    "redis monitoring",
-    "monitoring",
-    "redis visualizer",
-    "redis GUI"
-  ],
+  "keywords": [],
   "main": "./client/index.js",
   "scripts": {
     "build": "webpack",
@@ -44,9 +38,7 @@
     "type": "git",
     "url": "git+https://github.com/oslabs-beta/redis-hawk.git"
   },
-  "keywords": [],
   "author": "",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/oslabs-beta/redis-hawk/issues"
   },

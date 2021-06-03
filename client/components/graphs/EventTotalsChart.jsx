@@ -52,17 +52,16 @@ class EventTotalsChart extends Component {
   }
 
   getInitialData() {
-    console.log("interval count", this.state.intervals);
+    // console.log("interval count", this.state.intervals);
     const URI = `api/v2/events/totals/${this.props.currInstance}/${this.props.currDatabase}/?timeInterval=7000`;
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {
         const allEvents = response;
-        console.log("response in GETINIT FETCH", response);
+        // console.log("response in GETINIT FETCH", response);
         const dataCopy = Object.assign({}, this.state.data);
         dataCopy.labels = [];
         dataCopy.datasets[0].data = [];
-
         for (let i = response.eventTotals.length - 1; i >= 0; i--) {
           const time = new Date(response.eventTotals[i].end_time)
             .toString("MMddd")
@@ -81,7 +80,7 @@ class EventTotalsChart extends Component {
   }
 
   getMoreData() {
-    console.log("intervals count IN GET MORE DATA", this.state.intervals);
+    // console.log("intervals count IN GET MORE DATA", this.state.intervals);
     const URI = `api/v2/events/totals/${this.props.currInstance}/${this.props.currDatabase}/?eventTotal=${this.state.totalEvents}`;
     fetch(URI)
       .then((res) => res.json())
@@ -105,11 +104,11 @@ class EventTotalsChart extends Component {
 
   getInitialFilteredData(currInstance, currDatabase, queryParams) {
     // if (this.intervalID) {
-      console.log()
-      this.clearInt();
+    console.log();
+    this.clearInt();
     // }
     // if (this.filterIntID) {
-      this.clearFilterIntID();
+    this.clearFilterIntID();
     // }
     // this.resetState();
     // this.clearChart();
@@ -193,8 +192,8 @@ class EventTotalsChart extends Component {
   }
   setIntFilter(currInstance, currDatabase, totalEvents, queryParams) {
     console.log("props.intervalStart", this.state.intervalStart);
-    console.log('intervalID', this.intervalID)
-    console.log('filterIntID', this.filterIntID)
+    console.log("intervalID", this.intervalID);
+    console.log("filterIntID", this.filterIntID);
     // console.log("intervals count in SETINTFILTER", this.state.intervals);
     // const newInt = this.state.intervals + 1;
     // this.setState({
@@ -263,7 +262,6 @@ class EventTotalsChart extends Component {
     this.setState({
       ...newState,
     });
-    console.log("STATE AFTER RESET STATE", this.state);
   }
 
   render() {
