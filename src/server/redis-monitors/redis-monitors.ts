@@ -112,7 +112,10 @@ instances.forEach((instance: RedisInstance, idx: number): void => {
     port: instance.port,
     url: instance.url,
     keyspaces: [],
-    recordKeyspaceHistoryFrequency: instance.recordKeyspaceHistoryFrequency
+    recordKeyspaceHistoryFrequency: instance.recordKeyspaceHistoryFrequency,
+    maxKeyspaceHistoryCount: instance.maxKeyspaceHistoryCount,
+    eventGraphRefreshFrequency: instance.eventGraphRefreshFrequency,
+    maximumEventLogSize: instance.maximumEventLogSize
   }
 
   initMonitor(monitor);

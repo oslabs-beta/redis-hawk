@@ -8,7 +8,10 @@ export interface RedisInstance {
   readonly host?: string;
   readonly port?: number;
   readonly url?: string;
-  recordKeyspaceHistoryFrequency: number,
+  readonly recordKeyspaceHistoryFrequency: number,
+  readonly maxKeyspaceHistoryCount: number,
+  readonly eventGraphRefreshFrequency: number,
+  readonly maximumEventLogSize: number,
 };
 
 export interface RedisMonitor {
@@ -20,7 +23,10 @@ export interface RedisMonitor {
   url?: RedisInstance['url'];
   databases?: number; //Check property - should this be optional on object initialization?
   keyspaces: Keyspace[];
-  recordKeyspaceHistoryFrequency: RedisInstance['recordKeyspaceHistoryFrequency'],
+  readonly recordKeyspaceHistoryFrequency: RedisInstance['recordKeyspaceHistoryFrequency'];
+  readonly maxKeyspaceHistoryCount: RedisInstance['maxKeyspaceHistoryCount'];
+  readonly eventGraphRefreshFrequency: RedisInstance['eventGraphRefreshFrequency'];
+  readonly maximumEventLogSize: RedisInstance['maximumEventLogSize'];
 };
 
 export interface Keyspace {

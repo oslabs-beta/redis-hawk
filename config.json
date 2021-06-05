@@ -2,6 +2,9 @@
   {
     "host": "127.0.0.1",
     "port": 6379,
-    "recordKeyspaceHistoryFrequency": 60000
+    "recordKeyspaceHistoryFrequency": 300000,
+    "maxKeyspaceHistoryCount": 100,
+    "eventGraphRefreshFrequency": 10000,
+    "maximumEventLogSize": 500000
   }
 ]
