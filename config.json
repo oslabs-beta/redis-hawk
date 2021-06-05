@@ -5,6 +5,6 @@
     "recordKeyspaceHistoryFrequency": 300000,
     "maxKeyspaceHistoryCount": 100,
     "eventGraphRefreshFrequency": 10000,
-    "maximumEventLogSize": 500000
+    "maxEventLogSize": 500000
   }
 ]

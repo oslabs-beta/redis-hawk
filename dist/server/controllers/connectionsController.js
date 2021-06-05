@@ -17,7 +17,10 @@ var connectionsController = {
                     port: redisMonitor.port,
                     url: redisMonitor.url,
                     databases: redisMonitor.databases,
-                    recordKeyspaceHistoryFrequency: redisMonitor.recordKeyspaceHistoryFrequency
+                    recordKeyspaceHistoryFrequency: redisMonitor.recordKeyspaceHistoryFrequency,
+                    maxKeyspaceHistoryCount: redisMonitor.maxKeyspaceHistoryCount,
+                    eventGraphRefreshFrequency: redisMonitor.eventGraphRefreshFrequency,
+                    maxEventLogSize: redisMonitor.maxEventLogSize
                 };
                 connections.instances.push(instance);
             });

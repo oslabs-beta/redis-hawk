@@ -11,7 +11,7 @@ export interface RedisInstance {
   readonly recordKeyspaceHistoryFrequency: number,
   readonly maxKeyspaceHistoryCount: number,
   readonly eventGraphRefreshFrequency: number,
-  readonly maximumEventLogSize: number,
+  readonly maxEventLogSize: number,
 };
 
 export interface RedisMonitor {
@@ -26,7 +26,7 @@ export interface RedisMonitor {
   readonly recordKeyspaceHistoryFrequency: RedisInstance['recordKeyspaceHistoryFrequency'];
   readonly maxKeyspaceHistoryCount: RedisInstance['maxKeyspaceHistoryCount'];
   readonly eventGraphRefreshFrequency: RedisInstance['eventGraphRefreshFrequency'];
-  readonly maximumEventLogSize: RedisInstance['maximumEventLogSize'];
+  readonly maxEventLogSize: RedisInstance['maxEventLogSize'];
 };
 
 export interface Keyspace {

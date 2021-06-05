@@ -2,12 +2,21 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.KeyspaceHistory = exports.KeyspaceHistoriesLog = exports.KeyspaceEvent = exports.EventLog = void 0;
 var EventLog = (function () {
-    function EventLog() {
+    function EventLog(maxLength) {
+        if (!Number.isInteger(maxLength) || maxLength <= 0)
+            throw new TypeError('maxLength must be positive integer!');
         this.head = null;
         this.tail = null;
         this.eventTotal = 0;
+        this.length = 0;
+        this.maxLength = maxLength;
     }
     EventLog.prototype.add = function (key, event) {
+        if (this.length >= this.maxLength) {
+            this.head = this.head.next;
+            this.head.previous = null;
+            this.length -= 1;
+        }
         var newEvent = new KeyspaceEvent(key, event);
         this.eventTotal += 1;
         if (!this.head) {
@@ -24,8 +33,7 @@ var EventLog = (function () {
         this.head = null;
         this.tail = null;
         this.eventTotal = 0;
-    };
-    EventLog.prototype.removeManyViaTimestamp = function (timestamp) {
+        this.length = 0;
     };
     EventLog.prototype.returnLogAsArray = function (eventTotal) {
         if (eventTotal === void 0) { eventTotal = 0; }
@@ -64,12 +72,21 @@ var KeyspaceEvent = (function () {
 }());
 exports.KeyspaceEvent = KeyspaceEvent;
 var KeyspaceHistoriesLog = (function () {
-    function KeyspaceHistoriesLog() {
+    function KeyspaceHistoriesLog(maxLength) {
+        if (!Number.isInteger(maxLength) || maxLength <= 0)
+            throw new TypeError('maxLength must be positive integer!');
         this.head = null;
         this.tail = null;
         this.historiesCount = 0;
+        this.maxLength = maxLength;
+        this.length = 0;
     }
     KeyspaceHistoriesLog.prototype.add = function (keyDetails) {
+        if (this.length >= this.maxLength) {
+            this.head = this.head.next;
+            this.head.previous = null;
+            this.length -= 1;
+        }
         var newHistory = new KeyspaceHistory(keyDetails);
         this.historiesCount += 1;
         if (!this.head) {
@@ -86,6 +103,7 @@ var KeyspaceHistoriesLog = (function () {
         this.head = null;
         this.tail = null;
         this.historiesCount = 0;
+        this.length = 0;
     };
     KeyspaceHistoriesLog.prototype.returnLogAsArray = function (historiesCount) {
         if (historiesCount === void 0) { historiesCount = 0; }

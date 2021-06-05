@@ -100,7 +100,7 @@ var initMonitor = function (monitor) { return __awaiter(void 0, void 0, void 0, 
                     return __generator(this, function (_b) {
                         switch (_b.label) {
                             case 0:
-                                eventLog = new data_stores_1.EventLog();
+                                eventLog = new data_stores_1.EventLog(monitor.maxEventLogSize);
                                 monitor.keyspaceSubscriber.on('pmessage', function (channel, message, event) {
                                     if (+message.match(/[0-9]+/)[0] === dbIndex) {
                                         var key = message.replace(/__keyspace@[0-9]*__:/, '');
@@ -112,7 +112,7 @@ var initMonitor = function (monitor) { return __awaiter(void 0, void 0, void 0, 
                                 keyspaceSnapshot = _b.sent();
                                 keyspace = {
                                     eventLog: eventLog,
-                                    keyspaceHistories: new data_stores_1.KeyspaceHistoriesLog(),
+                                    keyspaceHistories: new data_stores_1.KeyspaceHistoriesLog(monitor.maxKeyspaceHistoryCount),
                                     keyspaceSnapshot: keyspaceSnapshot,
                                     eventLogSnapshot: []
                                 };
@@ -161,7 +161,10 @@ instances.forEach(function (instance, idx) {
         port: instance.port,
         url: instance.url,
         keyspaces: [],
-        recordKeyspaceHistoryFrequency: instance.recordKeyspaceHistoryFrequency
+        recordKeyspaceHistoryFrequency: instance.recordKeyspaceHistoryFrequency,
+        maxKeyspaceHistoryCount: instance.maxKeyspaceHistoryCount,
+        eventGraphRefreshFrequency: instance.eventGraphRefreshFrequency,
+        maxEventLogSize: instance.maxEventLogSize
     };
     initMonitor(monitor);
 });
