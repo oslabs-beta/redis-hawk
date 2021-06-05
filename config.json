@@ -2,10 +2,6 @@
   {
     "host": "127.0.0.1",
     "port": 6379,
-    "recordKeyspaceHistoryFrequency": 15000
-  },
-  {
-    "url": "redis://127.0.0.1:6380",
     "recordKeyspaceHistoryFrequency": 60000
   }
 ]
