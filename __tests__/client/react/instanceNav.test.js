@@ -4,8 +4,8 @@ import Adapter from "enzyme-adapter-react-16";
 import toJson from "enzyme-to-json";
 import renderer from "react-test-renderer";
 
-import InstanceNav from "../../../client/components/navbars/InstanceNav.jsx";
-import InstanceComponent from "../../../client/components/navbars/InstanceComponent.jsx";
+import InstanceNav from "../../../src/client/components/navbars/InstanceNav.jsx";
+import InstanceComponent from "../../../src/client/components/navbars/InstanceComponent.jsx";
 
 configure({ adapter: new Adapter() });
 

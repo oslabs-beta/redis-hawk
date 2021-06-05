@@ -13,8 +13,8 @@ import {
   LineSeries,
 } from "react-vis";
 
-import GraphComponent from "../../../client/components/graphs/GraphComponent.jsx";
-import GraphHolder from "../../../client/components/graphs/GraphComponent.jsx";
+import GraphComponent from "../../../src/client/components/graphs/GraphComponent.jsx";
+import GraphHolder from "../../../src/client/components/graphs/GraphComponent.jsx";
 
 configure({ adapter: new Adapter() });
 

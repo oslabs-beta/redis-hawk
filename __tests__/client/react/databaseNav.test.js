@@ -4,8 +4,8 @@ import Adapter from 'enzyme-adapter-react-16';
 import toJson from 'enzyme-to-json';
 import renderer from 'react-test-renderer';
 
-import DatabaseNav from '../../../client/components/navbars/DatabaseNav.jsx';
-import DatabaseComponent from '../../../client/components/navbars/DatabaseComponent.jsx';
+import DatabaseNav from '../../../src/client/components/navbars/DatabaseNav.jsx';
+import DatabaseComponent from '../../../src/client/components/navbars/DatabaseComponent.jsx';
 
 configure({ adapter: new Adapter() });
 

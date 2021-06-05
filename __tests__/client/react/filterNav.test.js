@@ -4,8 +4,8 @@ import Adapter from "enzyme-adapter-react-16";
 import toJson from "enzyme-to-json";
 import renderer from "react-test-renderer";
 
-import FilterNav from "../../../client/components/navbars/FilterNav.jsx";
-import SearchFilter from "../../../client/components/navbars/SearchFilter.jsx";
+import FilterNav from "../../../src/client/components/navbars/FilterNav.jsx";
+import SearchFilter from "../../../src/client/components/navbars/SearchFilter.jsx";
 
 configure({ adapter: new Adapter() });
 

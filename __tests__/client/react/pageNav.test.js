@@ -5,7 +5,7 @@ import toJson from "enzyme-to-json";
 import renderer from "react-test-renderer";
 import { Link } from 'react-router-dom'
 
-import PageNav from "../../../client/components/navbars/PageNav.jsx";
+import PageNav from "../../../src/client/components/navbars/PageNav.jsx";
 
 configure({ adapter: new Adapter() });
 

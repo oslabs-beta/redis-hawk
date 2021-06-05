@@ -10,7 +10,7 @@ import RedisServer from 'redis-server';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
-const testConnections = JSON.parse(readFileSync(resolve(__dirname, './server/tests-config/tests-config.json')).toString());
+const testConnections = JSON.parse(readFileSync(resolve(__dirname, './src/server/tests-config/tests-config.json')).toString());
 
 module.exports = async () => {
 

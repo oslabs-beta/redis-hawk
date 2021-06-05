@@ -6,8 +6,8 @@ import Adapter from 'enzyme-adapter-react-16';
 import toJson from 'enzyme-to-json';
 import renderer from 'react-test-renderer';
 
-import KeyspaceComponent from '../../../client/components/keyspace/KeyspaceComponent.jsx';
-import KeyspaceTable from '../../../client/components/keyspace/KeyspaceTable.jsx';
+import KeyspaceComponent from '../../../src/client/components/keyspace/KeyspaceComponent.jsx';
+import KeyspaceTable from '../../../src/client/components/keyspace/KeyspaceTable.jsx';
 
 configure({ adapter: new Adapter() });
 
