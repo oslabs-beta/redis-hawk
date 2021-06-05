@@ -22,7 +22,10 @@ const connectionsController: ConnectionsController = {
           port: redisMonitor.port,
           url: redisMonitor.url,
           databases: redisMonitor.databases,
-          recordKeyspaceHistoryFrequency: redisMonitor.recordKeyspaceHistoryFrequency
+          recordKeyspaceHistoryFrequency: redisMonitor.recordKeyspaceHistoryFrequency,
+          maxKeyspaceHistoryCount: redisMonitor.maxKeyspaceHistoryCount,
+          eventGraphRefreshFrequency: redisMonitor.eventGraphRefreshFrequency,
+          maximumEventLogSize: redisMonitor.maximumEventLogSize
         }
         connections.instances.push(instance);
       })
