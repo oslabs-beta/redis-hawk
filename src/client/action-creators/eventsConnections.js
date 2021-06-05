@@ -74,6 +74,9 @@ export const refreshEventsActionCreator =
             currDatabase: dbIndex,
           },
         });
+      })
+      .catch((e) => {
+        console.log('Error occured when fetching data: ', e);
       });
   };
 //change the page and handle the filters for EVENTS
@@ -123,7 +126,11 @@ export const changeEventsPageActionCreator =
             currDatabase: dbIndex,
           },
         });
+      })
+      .catch((e) => {
+        console.log('Error occured when fetching data: ', e);
       });
+      ;
   };
 
 ////////////////////////EVENT GRAPHS////////////////////////////////////
@@ -181,6 +188,9 @@ export const getTotalEventsActionCreator =
               currDatabase: dbIndex,
             },
           });
+        })
+        .catch((e) => {
+          console.log('Error occured when fetching data: ', e);
         });
     }
     // else {
@@ -264,5 +274,8 @@ export const getNextEventsActionCreator =
             currDatabase: dbIndex,
           },
         });
-      });
+      })
+      .catch((e) => {
+        console.log('Error occured when fetching data: ', e);
+      });;
   };

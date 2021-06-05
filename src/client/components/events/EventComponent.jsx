@@ -73,7 +73,12 @@ class EventComponent extends Component {
   }
 
   render() {
-    console.log('all the props in event component', this.props);
+    // console.log('all the props in event component', this.props);
+
+    const currDatabaseData = this.props.events[this.props.currInstance - 1]
+                                        .keyspaces[this.props.currDatabase];
+
+    const myCount = currDatabaseData ? currDatabaseData.eventTotal : 0;
 
     return (
       <div id='eventComponentContainer' className='EventComponent-Container'>
@@ -87,11 +92,7 @@ class EventComponent extends Component {
           changeEventsPage={this.props.changeEventsPage}
           pageNum={this.props.pageNum}
           pageSize={this.props.pageSize}
-          myCount={
-            this.props.events[this.props.currInstance - 1].keyspaces[
-              this.props.currDatabase
-            ].eventTotal
-          }
+          myCount={myCount}
         />
       </div>
     );

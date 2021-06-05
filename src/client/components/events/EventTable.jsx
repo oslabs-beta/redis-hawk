@@ -44,15 +44,16 @@ function EventTable(props) {
     }
   };
 
-  const data =
-    props.events[props.currInstance - 1].keyspaces[props.currDatabase].data;
+  let data = [];
+  if (props.myCount) {
 
-  console.log(' props in event table', props);
-  console.log('data in event table', data);
-
-  for (let i = 0; i < data.length; i += 1) {
-    data[i].id = i;
+    data = props.events[props.currInstance - 1]
+      .keyspaces[props.currDatabase].data;
+    for (let i = 0; i < data.length; i += 1) {
+      data[i].id = i;
+    }
   }
+
   const useStyles = makeStyles({
     dataGrid: {
       borderRadius: 3,
