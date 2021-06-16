@@ -29,10 +29,10 @@ import * as types from '../actions/actionTypes';
 // }
 
 export const loadAllEventsActionCreator = () => (dispatch) => {
-  fetch('api/v2/events/?pageSize=25')
+  fetch("api/v2/events/?pageSize=25")
     .then((res) => res.json())
     .then((response) => {
-      console.log('response in loadAllEventsActionCreator', response);
+      console.log("response in loadAllEventsActionCreator", response);
       let allEvents = response.data;
       dispatch({
         type: types.LOAD_ALL_EVENTS,
@@ -40,6 +40,9 @@ export const loadAllEventsActionCreator = () => (dispatch) => {
           events: allEvents,
         },
       });
+    })
+    .catch((err) => {
+      console.log("error in loadAllEventsActionCreator: ", err);
     });
 };
 

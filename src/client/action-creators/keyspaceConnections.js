@@ -1,4 +1,4 @@
-import * as types from '../actions/actionTypes';
+import * as types from "../actions/actionTypes";
 
 //called on initial load of app in App.jsx
 // no requirements in for the deployment of this action creator
@@ -25,7 +25,7 @@ import * as types from '../actions/actionTypes';
 //   ];
 // }
 export const loadKeyspaceActionCreator = () => (dispatch) => {
-  fetch('/api/v2/keyspaces/?pageSize=25&refreshScan=0')
+  fetch("/api/v2/keyspaces/?pageSize=25&refreshScan=0")
     .then((res) => res.json())
     .then((response) => {
       // console.log('response in loadKeyspaceActionCreator', response);
@@ -36,6 +36,9 @@ export const loadKeyspaceActionCreator = () => (dispatch) => {
           keyspace: fullKeyspace,
         },
       });
+    })
+    .catch((err) => {
+      console.log("error in loadKeyspaceActionCreator: ", err);
     });
 };
 
@@ -61,7 +64,7 @@ export const refreshKeyspaceActionCreator =
     )
       .then((res) => res.json())
       .then((response) => {
-        console.log('response in refreshKeyspaceActionCreator', response);
+        console.log("response in refreshKeyspaceActionCreator", response);
         let refreshKeyspace = response;
         dispatch({
           type: types.REFRESH_KEYSPACE,
@@ -71,6 +74,9 @@ export const refreshKeyspaceActionCreator =
             currDatabase: dbIndex,
           },
         });
+      })
+      .catch((err) => {
+        console.log("error in refreshKeyspaceActionCreator: ", err);
       });
   };
 //change the page and handle the filters for keyspace
@@ -102,12 +108,12 @@ export const changeKeyspacePageActionCreator =
     if (queryOptions.refreshScan !== undefined)
       URI += `&refreshScan=${queryOptions.refreshScan}`;
 
-    console.log('MY CHANGE KEYSPACE PAGE URI', URI);
+    console.log("MY CHANGE KEYSPACE PAGE URI", URI);
 
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {
-        console.log('response in changeKeyspaceActionCreator', response);
+        console.log("response in changeKeyspaceActionCreator", response);
         let nextPageKeyspace = response;
         dispatch({
           type: types.CHANGE_KEYSPACE_PAGE,
@@ -117,5 +123,8 @@ export const changeKeyspacePageActionCreator =
             currDatabase: dbIndex,
           },
         });
+      })
+      .catch((err) => {
+        console.log("error in changeKeyspacePageActionCreator: ", err);
       });
   };
