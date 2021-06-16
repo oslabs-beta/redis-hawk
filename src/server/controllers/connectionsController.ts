@@ -25,7 +25,8 @@ const connectionsController: ConnectionsController = {
           recordKeyspaceHistoryFrequency: redisMonitor.recordKeyspaceHistoryFrequency,
           maxKeyspaceHistoryCount: redisMonitor.maxKeyspaceHistoryCount,
           eventGraphRefreshFrequency: redisMonitor.eventGraphRefreshFrequency,
-          maxEventLogSize: redisMonitor.maxEventLogSize
+          maxEventLogSize: redisMonitor.maxEventLogSize,
+          notifyKeyspaceEvents: redisMonitor.notifyKeyspaceEvents
         }
         connections.instances.push(instance);
       })

@@ -74,14 +74,16 @@ var initMonitor = function (monitor) { return __awaiter(void 0, void 0, void 0, 
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
-                return [4, monitor.redisClient.config('SET', 'notify-keyspace-events', 'KEA')];
+                return [4, monitor.redisClient.config('SET', 'notify-keyspace-events', monitor.notifyKeyspaceEvents)];
             case 2:
                 _a.sent();
                 return [3, 4];
             case 3:
                 e_1 = _a.sent();
-                console.log("Could not configure client to publish keyspace event noficiations");
-                return [3, 4];
+                console.log('Could not configure client to publish keyspace event notifications.\n' +
+                    'This instance will not be monitored. Please check the notifyKeyspaceEvents setting ' +
+                    'in the config.json');
+                return [2];
             case 4:
                 _a.trys.push([4, 6, , 7]);
                 return [4, monitor.redisClient.config('GET', 'databases')];
@@ -164,7 +166,8 @@ instances.forEach(function (instance, idx) {
         recordKeyspaceHistoryFrequency: instance.recordKeyspaceHistoryFrequency,
         maxKeyspaceHistoryCount: instance.maxKeyspaceHistoryCount,
         eventGraphRefreshFrequency: instance.eventGraphRefreshFrequency,
-        maxEventLogSize: instance.maxEventLogSize
+        maxEventLogSize: instance.maxEventLogSize,
+        notifyKeyspaceEvents: instance.notifyKeyspaceEvents
     };
     initMonitor(monitor);
 });

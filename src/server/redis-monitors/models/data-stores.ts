@@ -61,6 +61,7 @@ export class EventLog {
 
     const newEvent = new KeyspaceEvent(key, event);
     this.eventTotal += 1;
+    this.length += 1;
     if (!this.head) {
       this.head = newEvent;
       this.tail = newEvent;
@@ -84,9 +85,17 @@ export class EventLog {
     if (eventTotal < 0 || eventTotal >= this.eventTotal) return [];
 
     const logAsArray: KeyspaceEventElement[] = [];
+    
+  
     let count = this.eventTotal - eventTotal;
-    let current = this.tail;
+    /* 
+      In cases where some events have been dropped from the event log,
+      Ensure that we do not try to return more events 
+      than are currently stored in the log
+    */
+    if (this.length < count) count = this.length;
 
+    let current = this.tail;
     while (count > 0) {
       const event = {
         key: current.key,
@@ -179,6 +188,7 @@ export class KeyspaceHistoriesLog {
 
     const newHistory = new KeyspaceHistory(keyDetails);
     this.historiesCount += 1;
+    this.length += 1;
     if (!this.head) {
       this.head = newHistory;
       this.tail = newHistory
@@ -202,7 +212,14 @@ export class KeyspaceHistoriesLog {
     if (historiesCount < 0 || historiesCount >= this.historiesCount) return [];
 
     const logAsArray: KeyspaceHistoryElement[] = [];
+
     let count = this.historiesCount - historiesCount;
+    /* 
+      In cases where some events have been dropped from the event log,
+      Ensure that we do not try to return more events 
+      than are currently stored in the log
+    */
+    if (this.length < count) count = this.length;
     let current = this.tail;
 
     while (count > 0) {

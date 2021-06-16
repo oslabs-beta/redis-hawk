@@ -19,6 +19,7 @@ var EventLog = (function () {
         }
         var newEvent = new KeyspaceEvent(key, event);
         this.eventTotal += 1;
+        this.length += 1;
         if (!this.head) {
             this.head = newEvent;
             this.tail = newEvent;
@@ -41,6 +42,8 @@ var EventLog = (function () {
             return [];
         var logAsArray = [];
         var count = this.eventTotal - eventTotal;
+        if (this.length < count)
+            count = this.length;
         var current = this.tail;
         while (count > 0) {
             var event_1 = {
@@ -89,6 +92,7 @@ var KeyspaceHistoriesLog = (function () {
         }
         var newHistory = new KeyspaceHistory(keyDetails);
         this.historiesCount += 1;
+        this.length += 1;
         if (!this.head) {
             this.head = newHistory;
             this.tail = newHistory;
@@ -111,6 +115,8 @@ var KeyspaceHistoriesLog = (function () {
             return [];
         var logAsArray = [];
         var count = this.historiesCount - historiesCount;
+        if (this.length < count)
+            count = this.length;
         var current = this.tail;
         while (count > 0) {
             var history_1 = {

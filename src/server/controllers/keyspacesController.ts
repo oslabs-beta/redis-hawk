@@ -181,7 +181,6 @@ const keyspacesController: KeyspacesController = {
     and constructs a response body with aggregated keyCount and memoryUsage metrics
     for each logged history.
   */ 
-
     const dbIndex = +req.params.dbIndex;
     //grab the keyspace histories log for the given monitor
     const historiesLog: KeyspaceHistoriesLog = res.locals.monitors[0].keyspaces[dbIndex].keyspaceHistories;
@@ -202,15 +201,15 @@ const keyspacesController: KeyspacesController = {
       histories: []
     }
 
-    //Determine the proper count of histories to grab based on query param
+    //Determine the proper count of histories to grab based on query param; cannot exceed log length
     let count = requestHistoryCount ? historiesLog.historiesCount - requestHistoryCount : historiesLog.historiesCount;
-    //Traverse the histories log backwards (so newest histories are at the front of the response body)
+    count = count > historiesLog.length ? historiesLog.length : count
 
+    //Traverse the histories log backwards (so newest histories are at the front of the response body)
     let current: KeyspaceHistoryNode = historiesLog.tail;
     const keynameFilter = req.query.keynameFilter
 
     while (count > 0) {
-
       //Filters keynames (if there is a filter parameter)
       const filteredKeys = keynameFilter ? current.keys.filter((el: HistoryKeyDetails): boolean => {
         return el.key.includes(keynameFilter.toString());
@@ -227,7 +226,7 @@ const keyspacesController: KeyspacesController = {
         keyCount: filteredKeys.length,
         memoryUsage: totalMemoryUsage
       });
-      
+
       //Move onto next (older) history
       current = current.previous;
       count -= 1;

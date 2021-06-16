@@ -30,9 +30,12 @@ const initMonitor = async (monitor: RedisMonitor): Promise<void> => {
   redisMonitors.push(monitor);
   //Subscribe to all keyspace events
   try {
-    await monitor.redisClient.config('SET', 'notify-keyspace-events', 'KEA');
+    await monitor.redisClient.config('SET', 'notify-keyspace-events', monitor.notifyKeyspaceEvents);
   } catch (e) {
-    console.log(`Could not configure client to publish keyspace event noficiations`);
+    console.log('Could not configure client to publish keyspace event notifications.\n' + 
+                'This instance will not be monitored. Please check the notifyKeyspaceEvents setting ' +
+                'in the config.json');
+    return;
   }
 
   let res;
@@ -115,7 +118,8 @@ instances.forEach((instance: RedisInstance, idx: number): void => {
     recordKeyspaceHistoryFrequency: instance.recordKeyspaceHistoryFrequency,
     maxKeyspaceHistoryCount: instance.maxKeyspaceHistoryCount,
     eventGraphRefreshFrequency: instance.eventGraphRefreshFrequency,
-    maxEventLogSize: instance.maxEventLogSize
+    maxEventLogSize: instance.maxEventLogSize,
+    notifyKeyspaceEvents: instance.notifyKeyspaceEvents
   }
 
   initMonitor(monitor);

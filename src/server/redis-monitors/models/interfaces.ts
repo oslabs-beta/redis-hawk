@@ -8,10 +8,11 @@ export interface RedisInstance {
   readonly host?: string;
   readonly port?: number;
   readonly url?: string;
-  readonly recordKeyspaceHistoryFrequency: number,
-  readonly maxKeyspaceHistoryCount: number,
-  readonly eventGraphRefreshFrequency: number,
-  readonly maxEventLogSize: number,
+  readonly recordKeyspaceHistoryFrequency: number;
+  readonly maxKeyspaceHistoryCount: number;
+  readonly eventGraphRefreshFrequency: number;
+  readonly maxEventLogSize: number;
+  readonly notifyKeyspaceEvents: string;
 };
 
 export interface RedisMonitor {
@@ -27,6 +28,7 @@ export interface RedisMonitor {
   readonly maxKeyspaceHistoryCount: RedisInstance['maxKeyspaceHistoryCount'];
   readonly eventGraphRefreshFrequency: RedisInstance['eventGraphRefreshFrequency'];
   readonly maxEventLogSize: RedisInstance['maxEventLogSize'];
+  readonly notifyKeyspaceEvents: RedisInstance['notifyKeyspaceEvents'];
 };
 
 export interface Keyspace {
@@ -44,6 +46,8 @@ export interface EventLog {
   head: null | KeyspaceEventNode;
   tail: null | KeyspaceEventNode;
   eventTotal: number;
+  maxLength: number;
+  length: number;
   add: (key: string, event: string) => void;
   reset: () => void;
   returnLogAsArray: (eventTotal: number) => KeyspaceEvent[];
@@ -63,6 +67,8 @@ export interface KeyspaceHistoriesLog {
   head: null | KeyspaceHistoryNode;
   tail: null | KeyspaceHistoryNode;
   historiesCount: number;
+  maxLength: number;
+  length: number;
   add: (keyDetails: KeyDetails[]) => void;
   reset: () => void;
   returnLogAsArray: (historiesCount: number) => KeyspaceHistory[];

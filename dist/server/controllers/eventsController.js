@@ -156,7 +156,7 @@ var eventsController = {
         var eventTotalParam = +req.query.eventTotal;
         if (eventTotalParam > eventLog.eventTotal ||
             (eventTotalParam && isNaN(eventTotalParam))) {
-            console.log("req.query", req.query);
+            console.log("req.query", req.query, eventLog.eventTotal);
             return next({
                 log: "Client provided an invalid eventTotal query parameter value",
                 status: 400,
@@ -166,6 +166,8 @@ var eventsController = {
             });
         }
         var eventCountToTraverse = eventLog.eventTotal - eventTotalParam;
+        if (eventCountToTraverse > eventLog.length)
+            eventCountToTraverse = eventLog.length;
         var eventCount = 0;
         var current = eventLog.tail;
         var keynameFilter = req.query.keynameFilter
