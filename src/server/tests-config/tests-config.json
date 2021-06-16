@@ -5,7 +5,8 @@
     "recordKeyspaceHistoryFrequency": 300000,
     "maxKeyspaceHistoryCount": 100,
     "eventGraphRefreshFrequency": 10000,
-    "maxEventLogSize": 500000
+    "maxEventLogSize": 500000,
+    "notifyKeyspaceEvents": "KEA"
   },
   {
     "url": "redis://127.0.0.1:49153",
@@ -13,6 +14,7 @@
     "recordKeyspaceHistoryFrequency": 300000,
     "maxKeyspaceHistoryCount": 100,
     "eventGraphRefreshFrequency": 10000,
-    "maxEventLogSize": 500000
+    "maxEventLogSize": 500000,
+    "notifyKeyspaceEvents": "KEA"
   }
 ]
