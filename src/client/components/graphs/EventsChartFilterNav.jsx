@@ -53,7 +53,7 @@ class EventsChartFilterNav extends Component {
               this.props.clearInt();
               this.props.clearFilterIntID();
               this.props.resetState();
-              // this.props.getInitialData()
+              // this.props.getInitialData();
               this.props.getMoreData();
               this.props.setInt();
             }}>

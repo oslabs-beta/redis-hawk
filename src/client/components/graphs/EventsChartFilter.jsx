@@ -115,7 +115,6 @@ class EventsChartFilter extends Component {
       fetch(URI)
         .then((res) => res.json())
         .then((response) => {
-          
           const eventTotal = response.eventTotal;
           const eventCount = response.eventTotals[0].eventCount;
           const dataCopy = Object.assign({}, this.state.data);
@@ -142,7 +141,7 @@ class EventsChartFilter extends Component {
 
   clearFilter(e) {
     e.preventDefault();
-    document.getElementById('standard-secondary').value = "";
+    document.getElementById("standard-secondary").value = "";
     document.getElementById("event-type-filter").value = "";
     this.props.clearInt();
     this.props.clearFilterIntID();

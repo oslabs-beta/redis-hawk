@@ -45,7 +45,7 @@ class KeyspaceChartFilterNav extends Component {
             id='refreshButton'
             onClick={(e) => {
               e.preventDefault();
-              
+
               document.getElementById("my-text-field").value = "";
               this.props.clearInt();
               this.props.clearFilterIntID();

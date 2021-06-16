@@ -103,22 +103,9 @@ export default function KeyspaceChartFilter(props) {
           onClick={(e) => {
             e.preventDefault();
             props.resetState();
-
-            // e.preventDefault();
-            console.log("props in onclick function", props);
-            console.log("valueKey", valueKey);
             const params = {
               keynameFilter: valueKey,
             };
-            // function timeout() {
-            //   this.props.setIntFilter(
-            //     this.props.currInstance,
-            //     this.props.currDatabase,
-            //     this.props.totalEvents,
-            //     queryParams
-            //   );
-            // }
-
             props.getInitialFilteredData(
               props.currInstance,
               props.currDatabase,
