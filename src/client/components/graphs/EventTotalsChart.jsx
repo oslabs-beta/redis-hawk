@@ -39,16 +39,12 @@ class EventTotalsChart extends Component {
     this.resetState = this.resetState.bind(this);
     this.getInitialFilteredData = this.getInitialFilteredData.bind(this);
     this.setIntFilter = this.setIntFilter.bind(this);
-    this.clearChart = this.clearInt.bind(this);
     this.clearFilterIntID = this.clearFilterIntID.bind(this);
   }
-  chartReference = {};
   componentDidMount() {
     Chart.register(zoomPlugin);
     this.getInitialData();
-    setTimeout(this.setInt, 10000);
-
-    console.log("chartRef", this.chartReference);
+    setTimeout(this.setInt, 7000);
   }
 
   getInitialData() {
@@ -85,6 +81,7 @@ class EventTotalsChart extends Component {
     fetch(URI)
       .then((res) => res.json())
       .then((response) => {
+        console.log("response in getMoreData Events Chart fetch", response);
         const eventTotal = response.eventTotal;
         const eventCount = response.eventTotals[0].eventCount;
         const dataCopy = Object.assign({}, this.state.data);
@@ -150,46 +147,42 @@ class EventTotalsChart extends Component {
   setInt() {
     console.log("intervalStart", this.state.intervalStart);
     console.log("INTERVALSCOUNT IN SETINT", this.state.intervals);
-
-    if (!this.state.intervalStart) {
-      this.intervalID = setInterval(this.getMoreData, 7000);
-      const newInt = this.state.intervals + 1;
-      this.setState({
-        ...this.state,
-        intervalStart: true,
-        intervals: newInt,
-      });
-    }
+    // if (!this.state.intervalStart) {
+    this.intervalID = setInterval(this.getMoreData, 7000);
+    const newInt = this.state.intervals + 1;
+    this.setState({
+      ...this.state,
+      intervalStart: true,
+      intervals: newInt,
+    });
+    // }
   }
 
   clearInt() {
-    console.log("INTERVALS STATE IN CLEARINT", this.state.intervals);
-    console.log("intervalStart", this.state.intervalStart);
+    console.log("intervalStart prop in clearInt", this.state.intervalStart);
     console.log("clearing IntervalID:", this.intervalID);
-    if (this.intervalID) {
-      const newInt = this.state.intervals - 1;
-      clearInterval(this.intervalID);
-      this.setState({
-        ...this.state,
-        intervalStart: false,
-        intervals: newInt,
-      });
-    }
+    console.log("INTERVALS STATE IN CLEARINT", this.state.intervals);
+    // if (this.state.intervalStart) {
+    const newInt = this.state.intervals - 1;
+    clearInterval(this.intervalID);
+    this.setState({
+      ...this.state,
+      intervalStart: false,
+      intervals: newInt,
+    });
+    // }
   }
   clearFilterIntID() {
-    if (this.filterIntID) {
-      ("console.log clearing FILTER_INT_ID");
-      clearInterval(this.filterIntID);
-      this.setState({
-        ...this.state,
-        intervalFilterStart: false,
-      });
-    }
+    // if (this.filterIntID) {
+    ("console.log clearing FILTER_INT_ID");
+    clearInterval(this.filterIntID);
+    this.setState({
+      ...this.state,
+      intervalFilterStart: false,
+    });
+    // }
   }
-  clearChart() {
-    let lineChart = this.reference.chartInstance;
-    lineChart.resetState();
-  }
+
   setIntFilter(currInstance, currDatabase, totalEvents, queryParams) {
     console.log("props.intervalStart", this.state.intervalStart);
     console.log("intervalID", this.intervalID);
@@ -200,12 +193,12 @@ class EventTotalsChart extends Component {
     //   ...this.state,
     //   intervals: newInt
     // })
-    if (this.intervalID) {
-      this.clearInt();
-    }
-    if (this.filterIntID) {
-      this.clearFilterIntID();
-    }
+    // if (this.intervalID) {
+    this.clearInt();
+    // }
+    // if (this.filterIntID) {
+    this.clearFilterIntID();
+    // }
     let self = this;
     function getMoreFilteredData() {
       // console.log("intervals count in GETMOREFILTEREDDATA", self.state.intervals);

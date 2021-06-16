@@ -232,22 +232,22 @@ class KeyspaceHistoriesChart extends Component {
     });
   }
   setInt() {
-    if (!this.state.intervalStart) {
-      this.intervalID = setInterval(this.getMoreData, 10000);
-      this.setState({
-        ...this.state,
-        intervalStart: true,
-      });
-    }
+    // if (!this.state.intervalStart) {
+    this.intervalID = setInterval(this.getMoreData, 10000);
+    this.setState({
+      ...this.state,
+      intervalStart: true,
+    });
+    // }
   }
   clearInt() {
-    if (this.state.intervalStart) {
-      clearInterval(this.intervalID);
-      this.setState({
-        ...this.state,
-        intervalStart: false,
-      });
-    }
+    // if (this.state.intervalStart) {
+    clearInterval(this.intervalID);
+    this.setState({
+      ...this.state,
+      intervalStart: false,
+    });
+    // }
   }
   clearFilterIntID() {
     if (this.filterIntID) {
@@ -290,8 +290,8 @@ class KeyspaceHistoriesChart extends Component {
   render() {
     let zoomMax;
     if (this.state.data.datasets[0].data) {
-      const max = Math.max(...this.state.data.datasets[0].data)
-      zoomMax = Math.round(max + max*.15)
+      const max = Math.max(...this.state.data.datasets[0].data);
+      zoomMax = Math.round(max + max * 0.15);
     } else {
       zoomMax = null;
     }
