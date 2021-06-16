@@ -228,6 +228,7 @@ var keyspacesController = {
             histories: []
         };
         var count = requestHistoryCount ? historiesLog.historiesCount - requestHistoryCount : historiesLog.historiesCount;
+        count = count > historiesLog.length ? historiesLog.length : count;
         var current = historiesLog.tail;
         var keynameFilter = req.query.keynameFilter;
         while (count > 0) {

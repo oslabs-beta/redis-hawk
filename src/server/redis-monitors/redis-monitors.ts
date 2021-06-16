@@ -30,9 +30,12 @@ const initMonitor = async (monitor: RedisMonitor): Promise<void> => {
   redisMonitors.push(monitor);
   //Subscribe to all keyspace events
   try {
-    await monitor.redisClient.config('SET', 'notify-keyspace-events', 'KEA');
+    await monitor.redisClient.config('SET', 'notify-keyspace-events', monitor.notifyKeyspaceEvents);
   } catch (e) {
-    console.log(`Could not configure client to publish keyspace event noficiations`);
+    console.log('Could not configure client to publish keyspace event notifications.\n' + 
+                'This instance will not be monitored. Please check the notifyKeyspaceEvents setting ' +
+                'in the config.json');
+    return;
   }
 
   let res;
@@ -51,7 +54,7 @@ const initMonitor = async (monitor: RedisMonitor): Promise<void> => {
   //Additionally auto-saves keyspace histories with frequency in JSON config
   //This should be futher modularized for readability and maintanability
   for (let dbIndex = 0; dbIndex < monitor.databases; dbIndex++) {
-    const eventLog = new EventLog();
+    const eventLog = new EventLog(monitor.maxEventLogSize);
     monitor.keyspaceSubscriber.on('pmessage', (channel: string, message: string, event: string): void => {
       if (+message.match(/[0-9]+/)[0] === dbIndex) {
         const key = message.replace(/__keyspace@[0-9]*__:/, '');
@@ -62,7 +65,7 @@ const initMonitor = async (monitor: RedisMonitor): Promise<void> => {
     const keyspaceSnapshot = await getKeyspace(monitor.redisClient, dbIndex);
     const keyspace: Keyspace = {
       eventLog: eventLog,
-      keyspaceHistories: new KeyspaceHistoriesLog(),
+      keyspaceHistories: new KeyspaceHistoriesLog(monitor.maxKeyspaceHistoryCount),
       keyspaceSnapshot: keyspaceSnapshot,
       eventLogSnapshot: []
     }
@@ -112,7 +115,11 @@ instances.forEach((instance: RedisInstance, idx: number): void => {
     port: instance.port,
     url: instance.url,
     keyspaces: [],
-    recordKeyspaceHistoryFrequency: instance.recordKeyspaceHistoryFrequency
+    recordKeyspaceHistoryFrequency: instance.recordKeyspaceHistoryFrequency,
+    maxKeyspaceHistoryCount: instance.maxKeyspaceHistoryCount,
+    eventGraphRefreshFrequency: instance.eventGraphRefreshFrequency,
+    maxEventLogSize: instance.maxEventLogSize,
+    notifyKeyspaceEvents: instance.notifyKeyspaceEvents
   }
 
   initMonitor(monitor);

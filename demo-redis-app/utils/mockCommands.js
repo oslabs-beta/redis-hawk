@@ -51,6 +51,7 @@ mockCommands.delString = async (client) => {
     if (!err) console.log(`Key DEL: ${key}`);
     if (err) console.log(`Failed to DELETE ${key}: ${err}`);
   });
+
 }
 
 /* <<<<< Lists >>>>> */

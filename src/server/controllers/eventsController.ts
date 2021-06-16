@@ -255,7 +255,7 @@ const eventsController: EventsController = {
       eventTotalParam > eventLog.eventTotal ||
       (eventTotalParam && isNaN(eventTotalParam))
     ) {
-      console.log("req.query", req.query);
+      console.log("req.query", req.query, eventLog.eventTotal);
       return next({
         log: "Client provided an invalid eventTotal query parameter value",
         status: 400,
@@ -268,8 +268,11 @@ const eventsController: EventsController = {
     //Traverse backwards through the event log until we've reached the event the client is aware of
     //Only aggregate event counts for events that meet filter criteria
     let eventCountToTraverse = eventLog.eventTotal - eventTotalParam;
+    if (eventCountToTraverse > eventLog.length) eventCountToTraverse = eventLog.length;
+
     let eventCount = 0;
     let current: KeyspaceEventNode = eventLog.tail;
+
     const keynameFilter: string = req.query.keynameFilter
       ? req.query.keynameFilter.toString()
       : "";
